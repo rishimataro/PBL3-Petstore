@@ -45,36 +45,36 @@ public class LoginForm {
 
         if(isAuthenticated){
             msgText.setFill(Color.GREEN);
-            msgText.setText("Login Successful!");
+            msgText.setText("Đăng nhập thành công!");
         } else {
             msgText.setFill(Color.RED);
-            msgText.setText("Incorrect username or password!");
+            msgText.setText("Mật khẩu hoặc tên đăng nhập sai !");
         }
     }
     private Text title() {
-        Text title = new Text("Sign in");
+        Text title = new Text("Đăng nhập ");
         title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 28));
         title.setFill(Color.web("#404040"));
         return title;
     }
     private Label userLabel() {
-        Label userLabel = new Label("Username");
+        Label userLabel = new Label("Tên đăng nhập :");
         userLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
         userField = new TextField();
-        userField.setPromptText("Enter your username");
+        userField.setPromptText("Nhập tên đăng nhập ");
         userField.setPrefWidth(250);
         return userLabel;
     }
     private Label passLabel() {
-        Label passLabel = new Label("Password");
+        Label passLabel = new Label("Mật khẩu :");
         passLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
         passField = new PasswordField();
-        passField.setPromptText("Enter your password");
+        passField.setPromptText("Nhập mật khẩu");
         passField.setPrefWidth(250);
         return passLabel;
     }
     private Button loginBtn() {
-        Button loginBtn = new Button("LOGIN");
+        Button loginBtn = new Button("Đăng nhập");
         loginBtn.setPrefWidth(250);
         loginBtn.setStyle("-fx-background-color: #3D6EF7; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
         loginBtn.setEffect(new DropShadow(5, Color.gray(0.5)));
