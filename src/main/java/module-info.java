@@ -12,4 +12,5 @@ module com.store.app.petstore {
 
     opens com.store.app.petstore to javafx.fxml;
     exports com.store.app.petstore;
+    exports com.store.app.petstore.view;
 }
