@@ -6,6 +6,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+
 public class PetStoreApplication extends Application {
 
     @Override
@@ -20,8 +22,7 @@ public class PetStoreApplication extends Application {
     }
 
     public static void main(String[] args) {
-        ConnectJDBC connectJDBC = new ConnectJDBC();
-        connectJDBC.connect();
+        Connection connectJDBC = ConnectJDBC.connect();
 //        launch(args);
     }
 }

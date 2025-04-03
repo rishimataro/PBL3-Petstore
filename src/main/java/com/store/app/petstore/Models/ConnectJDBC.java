@@ -5,14 +5,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectJDBC {
-    private String hostName = "localhost:3306";
-    private String dbName = "petstoredb";
-    private String username = "root";
-    private String password = "Benyxinh123@";
+    final static private String hostName = "127.0.0.1:3306";
+    final static private String dbName = "petstore";
+    final static private String username = "root";
+    final static private String password = "123@Thang";
 
-    private String connectionURL = "jdbc:mysql://"+hostName+"/"+dbName;
+    private static String connectionURL = "jdbc:mysql://"+hostName+"/"+dbName+"?useSSL=false";
 
-    public Connection connect(){
+    public static Connection connect(){
         //Tạo đối tượng Connection
         Connection conn = null;
 
@@ -25,5 +25,16 @@ public class ConnectJDBC {
 
         return conn;
     }
+    public static void disconnect(Connection conn) {
+        if (conn != null) {
+            try {
+                conn.close();
+                System.out.println("Disconnected from MySQL!");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
 
