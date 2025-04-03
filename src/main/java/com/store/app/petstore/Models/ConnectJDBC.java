@@ -5,12 +5,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectJDBC {
-    final static private String hostName = "127.0.0.1:3306";
-    final static private String dbName = "petstore";
-    final static private String username = "root";
-    final static private String password = "123@Thang";
+    final static private String hostName = "125.212.231.184:6969";
+    final static private String dbName = "PetStoreDB";
+    final static private String username = "mintori09";
+    final static private String password = "Mintory09@96";
 
-    private static String connectionURL = "jdbc:mysql://"+hostName+"/"+dbName+"?useSSL=false";
+    private static String connectionURL = "jdbc:mysql://"+hostName+"/"+dbName+"?useSSL=false&allowPublicKeyRetrieval=true";
 
     public static Connection connect(){
         //Tạo đối tượng Connection
