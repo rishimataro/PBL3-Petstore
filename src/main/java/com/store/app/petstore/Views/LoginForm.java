@@ -1,4 +1,4 @@
-package com.store.app.petstore.view;
+package com.store.app.petstore.Views;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

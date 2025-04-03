@@ -9,8 +9,10 @@ module com.store.app.petstore {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
+    requires java.sql;
+    requires mysql.connector.java;
 
     opens com.store.app.petstore to javafx.fxml;
     exports com.store.app.petstore;
-    exports com.store.app.petstore.view;
+    exports com.store.app.petstore.Views;
 }
