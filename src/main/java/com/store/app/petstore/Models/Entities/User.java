@@ -1,4 +1,4 @@
-package com.store.app.petstore.entities;
+package com.store.app.petstore.Models.Entities;
 
 import java.time.LocalDateTime;
 

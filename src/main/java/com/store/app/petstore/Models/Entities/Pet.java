@@ -1,4 +1,4 @@
-package com.store.app.petstore.entities;
+package com.store.app.petstore.Models.Entities;
 
 public class Pet {
     private int petId;
