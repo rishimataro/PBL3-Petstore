@@ -23,6 +23,8 @@ public class PetStoreApplication extends Application {
 
     public static void main(String[] args) {
         Connection connectJDBC = ConnectJDBC.connect();
+        ConnectJDBC.disconnect(connectJDBC);
 //        launch(args);
+        System.exit(0);
     }
 }
