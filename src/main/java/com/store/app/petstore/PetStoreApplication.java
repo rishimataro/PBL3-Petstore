@@ -1,6 +1,6 @@
 package com.store.app.petstore;
 
-import com.store.app.petstore.Models.ConnectJDBC;
+import com.store.app.petstore.Models.DatabaseManager;
 import com.store.app.petstore.Views.LoginForm;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -22,7 +22,8 @@ public class PetStoreApplication extends Application {
     }
 
     public static void main(String[] args) {
-        Connection connectJDBC = ConnectJDBC.connect();
+        Connection connectJDBC = DatabaseManager.connect();
+        DatabaseManager.closeConnection(connectJDBC);
 //        launch(args);
     }
 }
