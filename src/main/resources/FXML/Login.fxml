@@ -1,14 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.store.app.petstore.Controllers.LoginController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="720.0" stylesheets="@../Styles/Login.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.LoginController">
+   <children>
+      <ImageView fitHeight="512.0" fitWidth="348.0" layoutX="372.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/sidebar.png" />
+         </image>
+      </ImageView>
+      <AnchorPane prefHeight="512.0" prefWidth="372.0" styleClass="sidebar-left">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="22.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="40.0">
+               <image>
+                  <Image url="@../Images/logo.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="40.0" layoutY="137.0" styleClass="titleLogin" text="ĐĂNG NHẬP" />
+            <Label layoutX="38.0" layoutY="172.0" prefHeight="15.0" prefWidth="305.0" styleClass="lblHello" text="Chào mừng bạn quay trở lại! Hãy đăng nhập vào tài khoản của bạn!" />
+            <TextField layoutX="40.0" layoutY="235.0" prefHeight="26.0" prefWidth="277.0" promptText="Nhập tên tài khoản" styleClass="txtField" />
+            <PasswordField fx:id="passwordField" layoutX="40.0" layoutY="308.0" prefHeight="26.0" prefWidth="278.0" promptText="Nhập mật khẩu" styleClass="txtField" />
+            <Label layoutX="41.0" layoutY="213.0" styleClass="lbl" text="Tên tài khoản" />
+            <Label layoutX="41.0" layoutY="286.0" styleClass="lbl" text="Mật khẩu" />
+            <FontAwesomeIcon fx:id="icon" glyphName="EYE_SLASH" layoutX="296.0" layoutY="331.0" styleClass="eyeIcon">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></FontAwesomeIcon>
+            <Hyperlink layoutX="230.0" layoutY="354.0" styleClass="linkForgotPassword" text="Quên mật khẩu?" />
+            <Button layoutX="39.0" layoutY="377.0" mnemonicParsing="false" styleClass="btnLogin" text="Đăng nhập" />
+         </children>
+      </AnchorPane>
+   </children>
 </AnchorPane>
