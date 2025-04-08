@@ -11,6 +11,7 @@ module com.store.app.petstore {
     requires java.sql;
     requires mysql.connector.java;
     requires de.jensd.fx.glyphs.fontawesome;
+    requires java.desktop;
 
     opens com.store.app.petstore to javafx.fxml;
     exports com.store.app.petstore;
