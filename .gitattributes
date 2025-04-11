@@ -1,0 +1,22 @@
+*.java text eol=lf
+
+*.fxml text eol=lf
+
+*.css text eol=lf
+
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.svg binary
+
+* text=auto
+
+*.java text eol=lf working-tree-encoding=UTF-8
+*.fxml text eol=lf working-tree-encoding=UTF-8
+*.css text eol=lf working-tree-encoding=UTF-8
