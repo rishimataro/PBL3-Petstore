@@ -11,7 +11,7 @@ public class DatabaseSeeder {
     }
 
     public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {new DatabaseSeeder();});
-        SwingUtilities.invokeLater(() -> {new UserTableSeeder();});
+        SwingUtilities.invokeLater(() -> {new DatabaseSeeder();});
+//        SwingUtilities.invokeLater(() -> {new UserTableSeeder();});
     }
 }

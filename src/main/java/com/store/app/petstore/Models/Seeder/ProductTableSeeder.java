@@ -20,11 +20,7 @@ public class ProductTableSeeder {
         Faker faker = new Faker(new Locale("vi"));
         Random random = new Random();
 
-        String[] categories = {"accessory", "food", "toy"};
-
-        String jdbcURL = "jdbc:mysql://localhost:3306/test_db";
-        String username = "root";
-        String password = "your_password";
+        String[] categories = {"phụ kiện", "thức ăn", "đồ chơi"};
 
         try (Connection conn = DatabaseManager.connect()) {
             String sql = "INSERT INTO Products (name, category, stock, description, image_url) VALUES (?, ?, ?, ?, ?)";
