@@ -1,0 +1,63 @@
+* {
+    -fx-font-family: "Inter";
+    -fx-background-color: #FFFFFF;
+}
+.header{
+    -fx-background-color: #017FCB;
+}
+.bg1{
+    -fx-background-color: #F9F9F9;
+    -fx-background-radius: 15;
+}
+.bg2{
+    -fx-background-color: #F3F3F3;
+    -fx-background-radius: 15;
+}
+.lblCustomerInfo{
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #017FCB;
+    -fx-background-color: transparent;
+
+}
+.pane-shadow1 {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 8, 0.3, 0, 2);
+    -fx-background-radius: 8;
+}
+.lblFormCMD{
+    -fx-font-size: 12px;
+    -fx-text-fill: #017FCB;
+    -fx-padding: 5 0 8 10;
+    -fx-background-color: transparent;
+}
+.gridForm{
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 5 10 15 0;
+    -fx-pref-width: 400px;
+    -fx-pref-height: 120px;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.1, 0, 3);
+
+}
+.vbox_textField_cst_form{
+    -fx-padding: 0 0 0 10;
+    /*-fx-pref-height: 20;*/
+    -fx-max-width: Infinity;
+    -fx-max-height: Infinity;
+    -fx-background-color: transparent;
+}
+.text-field_customerForm{
+    /*-fx-pref-height: 20;*/
+    -fx-border-radius: 5;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1;
+    /*-fx-max-width: Infinity;*/
+    /*-fx-max-height: Infinity;*/
+}
+.text-field-customer_search{
+    -fx-padding: 0 30 0 30;
+    -fx-border-color: #F3F3F3;
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+
+}
