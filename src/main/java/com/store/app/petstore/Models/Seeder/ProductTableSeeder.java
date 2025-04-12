@@ -29,7 +29,7 @@ public class ProductTableSeeder {
             for (int i = 1; i <= 50; i++) {
                 String name = "Sản phẩm " + faker.animal().name();
                 String category = categories[random.nextInt(categories.length)];
-                int stock = random.nextInt(50); // luôn >= 0
+                int stock = random.nextInt(50);
                 String description = faker.lorem().sentence(10);
                 String imageUrl = "https://example.com/images/product-" + i + ".jpg";
 
