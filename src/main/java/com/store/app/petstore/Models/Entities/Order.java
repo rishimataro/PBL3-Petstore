@@ -1,14 +1,16 @@
 package com.store.app.petstore.Models.Entities;
 
+import com.store.app.petstore.Models.BaseModel;
+
 import java.time.LocalDateTime;
 
-public class Order {
+public class Order extends BaseModel {
     private int orderId;
     private int customerId;
     private int staffId;
     private double totalPrice;
     private LocalDateTime orderDate;
-    private String status; // "pending", "completed", "canceled"
+    private String status;
 
     public Order(int orderId, int customerId, int staffId, double totalPrice, LocalDateTime orderDate, String status) {
         this.orderId = orderId;

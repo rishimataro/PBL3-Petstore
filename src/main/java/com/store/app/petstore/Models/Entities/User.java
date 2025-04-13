@@ -1,12 +1,14 @@
 package com.store.app.petstore.Models.Entities;
 
+import com.store.app.petstore.Models.BaseModel;
+
 import java.time.LocalDateTime;
 
-public class User {
+public class User extends BaseModel {
     private int userId;
     private String username;
     private String password;
-    private String role; // "admin" hoặc "staff"
+    private String role;
     private LocalDateTime createdAt;
     private boolean isActive;
 

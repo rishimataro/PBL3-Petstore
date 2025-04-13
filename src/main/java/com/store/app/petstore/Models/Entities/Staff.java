@@ -1,8 +1,10 @@
 package com.store.app.petstore.Models.Entities;
 
+import com.store.app.petstore.Models.BaseModel;
+
 import java.time.LocalDate;
 
-public class Staff {
+public class Staff extends BaseModel {
     private int staffId;
     private int userId;
     private String fullName;

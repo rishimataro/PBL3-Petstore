@@ -1,11 +1,13 @@
 package com.store.app.petstore.Models.Entities;
 
+import com.store.app.petstore.Models.BaseModel;
+
 import java.time.LocalDate;
 
-public class Discount {
+public class Discount extends BaseModel {
     private int discountId;
     private String code;
-    private String discountType; // "percent" hoặc "fixed"
+    private String discountType;
     private double value;
     private LocalDate startDate;
     private LocalDate endDate;

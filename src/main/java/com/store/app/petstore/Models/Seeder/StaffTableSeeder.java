@@ -2,8 +2,6 @@ package com.store.app.petstore.Models.Seeder;
 
 import com.github.javafaker.Faker;
 import com.store.app.petstore.Models.DatabaseManager;
-import org.mindrot.jbcrypt.BCrypt;
-
 import java.sql.*;
 import java.util.HashSet;
 import java.util.Locale;
@@ -14,7 +12,6 @@ public class StaffTableSeeder {
     public StaffTableSeeder() {
         Faker faker = new Faker(new Locale("vi"));
         String[] roles = {"thu ngân", "bán hàng", "chăm sóc thú cưng", "tư vấn"};
-
         String sql = "INSERT INTO Staffs (user_id, full_name, phone, email, salary, hire_date, role, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseManager.connect();
@@ -53,7 +50,4 @@ public class StaffTableSeeder {
         }
     }
 
-    public static void main(String[] args) {
-        new StaffTableSeeder();
-    }
 }

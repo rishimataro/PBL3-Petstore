@@ -26,5 +26,7 @@ module com.store.app.petstore {
     opens com.store.app.petstore.Models to javafx.fxml;
     opens com.store.app.petstore.Controllers.Admin to javafx.fxml;
     opens com.store.app.petstore.Controllers.Staff to javafx.fxml;
+    exports com.store.app.petstore.Models.Seeder;
+    opens com.store.app.petstore.Models.Seeder to javafx.fxml;
 
 }

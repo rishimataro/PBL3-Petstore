@@ -1,15 +1,18 @@
-package com.store.app.petstore.Models;
+package com.store.app.petstore.Models.Seeder;
+
+import com.store.app.petstore.Models.DatabaseManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Random;
 
-public class OrderDetailSeeder {
-    public static void seedOrderDetails(int count) {
+public class OrderDetailTableSeeder {
+    public OrderDetailTableSeeder() {
+        int count = 50;
         Random rand = new Random();
 
-        try (Connection conn = ConnectJDBC.connect()) {
+        try (Connection conn = DatabaseManager.connect()) {
             String sql = "INSERT INTO Orderdetails (order_id, item_type, item_id, quantity, unit_price) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
 

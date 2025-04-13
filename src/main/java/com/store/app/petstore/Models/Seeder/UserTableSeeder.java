@@ -2,18 +2,15 @@ package com.store.app.petstore.Models.Seeder;
 
 import com.github.javafaker.Faker;
 import com.store.app.petstore.Models.DatabaseManager;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.HashSet;
 import java.util.Set;
 
 public class UserTableSeeder {
-    public UserTableSeeder() {
-        try (
-            Connection conn = DatabaseManager.connect();) {
+    public UserTableSeeder()  {
+        try (Connection conn = DatabaseManager.connect();) {
             String sql = "INSERT INTO Customers (customer_id, full_name, phone) VALUES (?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             Faker faker = new Faker();

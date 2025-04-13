@@ -1,6 +1,8 @@
 package com.store.app.petstore.Models.Entities;
 
-public class Customer {
+import com.store.app.petstore.Models.BaseModel;
+
+public class Customer extends BaseModel {
     private int customerId;
     private String fullName;
     private String phone;

@@ -4,16 +4,10 @@ import com.github.javafaker.Faker;
 import com.store.app.petstore.Models.DatabaseManager;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-
-record productRecord(int productId, String name, String category, int stock, String description, String imageUrl) {
-};
 
 public class ProductTableSeeder {
     public ProductTableSeeder() {
@@ -43,6 +37,7 @@ public class ProductTableSeeder {
             }
 
             System.out.println("✅ Seeder thành công: đã thêm 50 sản phẩm hợp lệ.");
+            DatabaseManager.closeConnection(conn);
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("❌ Lỗi khi chèn dữ liệu: " + e.getMessage());
