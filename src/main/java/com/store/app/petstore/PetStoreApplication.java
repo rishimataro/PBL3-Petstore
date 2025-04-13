@@ -1,31 +1,30 @@
 package com.store.app.petstore;
 
+import com.store.app.petstore.Models.ConnectJDBC;
+import com.store.app.petstore.Views.LoginForm;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.Objects;
+import java.sql.Connection;
 
 public class PetStoreApplication extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/Order.fxml"));
-        AnchorPane root = loader.load();
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Login");
 
-        Scene scene = new Scene(root, 990, 512);
+        LoginForm loginFormView = new LoginForm();
 
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Order.css")).toExternalForm());
-
-        primaryStage.setTitle("Order");
+        Scene scene = new Scene(loginFormView.getView(), 450, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     public static void main(String[] args) {
-        launch(args);
+        Connection connectJDBC = ConnectJDBC.connect();
+        ConnectJDBC.disconnect(connectJDBC);
+//        launch(args);
+        System.exit(0);
     }
 }
