@@ -1,0 +1,57 @@
+.card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 1, 2);
+    -fx-border-radius: 10;
+}
+
+.infor-container {
+    -fx-padding: 5 5 0 0;
+    -fx-spacing: 4;
+}
+
+.pet-name {
+    -fx-font-weight: bold;
+    -fx-font-size: 10px;
+}
+
+.category-label {
+    -fx-font-size: 7px;
+    -fx-hgap: 2;
+}
+
+.label-type, .label-breed, .label-sex {
+    -fx-pref-width: 27px;
+    -fx-pref-height: 15px;
+    -fx-alignment: center;
+    -fx-padding: 2px 0;
+    -fx-text-fill: white;
+}
+
+.label-type {
+    -fx-background-color: #00BCD4;
+}
+
+.label-breed {
+    -fx-background-color: #FFC107;
+}
+
+.label-sex {
+    -fx-background-color: #B39DDB;
+}
+
+.price-box {
+    -fx-font-size: 12px;
+    -fx-text-fill: #8D6E63;
+    -fx-font-weight: bold;
+}
+
+.icon-button {
+    -fx-cursor: hand;
+    -fx-fill: #01C4DA;
+}
+
+.icon-button:hover{
+    -fx-fill: #A9E44D;
+    -glyph-size: 15;
+}

@@ -13,19 +13,16 @@ public class PetStoreApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Login.fxml"));
-        AnchorPane root = loader.load();  // Tải FXML vào AnchorPane
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/Order.fxml"));
+        AnchorPane root = loader.load();
 
-        // Thiết lập Scene với AnchorPane đã tải từ FXML
-        Scene scene = new Scene(root, 720, 512);
+        Scene scene = new Scene(root, 990, 512);
 
-        // Thêm CSS nếu có
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Login.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Order.css")).toExternalForm());
 
-        // Thiết lập Stage (cửa sổ)
-        primaryStage.setTitle("Login");
+        primaryStage.setTitle("Order");
         primaryStage.setScene(scene);
-        primaryStage.show();  // Hiển thị cửa sổ
+        primaryStage.show();
     }
 
     public static void main(String[] args) {

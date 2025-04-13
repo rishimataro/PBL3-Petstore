@@ -20,6 +20,7 @@ module com.store.app.petstore {
     exports com.store.app.petstore.Views;
     exports com.store.app.petstore.Controllers;
     exports com.store.app.petstore.Models;
+    exports com.store.app.petstore.Models.Entities;
     opens com.store.app.petstore.Controllers to javafx.fxml;
     opens com.store.app.petstore.Views to javafx.fxml;
     opens com.store.app.petstore.Models to javafx.fxml;
