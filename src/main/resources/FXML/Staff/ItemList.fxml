@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="170.0" prefWidth="110.0" styleClass="card" stylesheets="@../../Styles/ItemList.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.ItemListController">
+<AnchorPane  prefHeight="170.0" prefWidth="110.0" styleClass="card" stylesheets="@../../Styles/ItemList.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.ItemListController">
    <children>
       <ImageView fx:id="imgPet" fitHeight="90.0" fitWidth="90.0" layoutX="10.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
          <image>
