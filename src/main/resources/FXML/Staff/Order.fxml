@@ -10,34 +10,15 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="990.0" styleClass="root" stylesheets="@../../Styles/Order.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.OrderController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../Styles/Order.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.OrderController">
    <children>
-      <AnchorPane layoutX="-1.0" prefHeight="70.0" prefWidth="990.0" styleClass="nav-container" AnchorPane.bottomAnchor="441.6" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <ImageView fitHeight="40.0" fitWidth="153.0" layoutX="14.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
-               <image>
-                  <Image url="@../../Images/logo-nav.png" />
-               </image>
-            </ImageView>
-            <FontAwesomeIconView fx:id="menuIcon" fill="WHITE" glyphName="BARS" layoutX="781.0" layoutY="51.0" size="25">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></FontAwesomeIconView>
-            <Label layoutX="854.0" layoutY="22.0" styleClass="label-username" text="dothang13" />
-            <Label layoutX="817.0" layoutY="39.0" styleClass="label-name" text="Nguyễn Đỗ Thắng" />
-            <Circle fx:id="userImage" fill="DODGERBLUE" layoutX="943.0" layoutY="36.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" styleClass="user-image" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="18.0" />
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutX="550.0" layoutY="70.0" prefHeight="442.0" prefWidth="440.0">
+      <AnchorPane layoutX="550.0" layoutY="70.0" prefHeight="442.0" prefWidth="440.0" AnchorPane.topAnchor="0.0">
          <children>
             <TabPane layoutX="10.0" layoutY="14.0" prefHeight="280.0" prefWidth="410.0" styleClass="tab-container" tabClosingPolicy="UNAVAILABLE" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="15.0">
               <tabs>
@@ -61,11 +42,11 @@
                 </Tab>
               </tabs>
             </TabPane>
-            <GridPane hgap="10.0" layoutX="10.0" layoutY="295.0" prefHeight="80.0" prefWidth="410.0" AnchorPane.topAnchor="300.0">
+            <GridPane hgap="10.0" layoutX="10.0" layoutY="295.0" prefHeight="80.0" prefWidth="410.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="300.0">
               <columnConstraints>
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="143.26669921875" minWidth="10.0" prefWidth="108.06668701171876" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="207.4000244140625" minWidth="10.0" prefWidth="162.73331298828126" />
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="219.40003662109373" minWidth="10.0" prefWidth="139.46665039062498" />
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="143.0" minWidth="10.0" prefWidth="108.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="205.0" minWidth="10.0" prefWidth="162.0" />
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="220.0" minWidth="10.0" prefWidth="140.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -84,7 +65,7 @@
             </GridPane>
             <Button layoutX="368.0" layoutY="386.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="Xác nhận" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
          </children></AnchorPane>
-      <AnchorPane layoutY="70.0" prefHeight="442.0" prefWidth="550.0">
+      <AnchorPane layoutY="70.0" prefHeight="442.0" prefWidth="550.0" AnchorPane.topAnchor="0.0">
          <children>
             <TextField layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm sản phẩm" styleClass="find-textfield" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="15.0" />
             <FontAwesomeIconView glyphName="SEARCH" layoutX="32.0" layoutY="35.0" size="13" styleClass="icon" />
@@ -92,7 +73,7 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></FontAwesomeIconView>
-            <ChoiceBox layoutX="306.0" layoutY="14.0" prefWidth="110.0" style="-fx-border-color: #FFB500;" AnchorPane.topAnchor="15.0" />
+            <ChoiceBox layoutX="306.0" layoutY="14.0" prefWidth="110.0" style="-fx-border-color: #FFB500;" AnchorPane.leftAnchor="305.0" AnchorPane.topAnchor="15.0" />
             <ChoiceBox layoutX="425.0" layoutY="16.0" prefWidth="110.0" style="-fx-border-color: #017FCB;" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
             <ScrollPane fx:id="scrollPane" layoutX="32.8" layoutY="70.4" prefHeight="370.0" prefWidth="515.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0">
                <content>
