@@ -6,6 +6,7 @@ import com.store.app.petstore.Models.DatabaseManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class CustomerTableSeeder {
@@ -13,7 +14,7 @@ public class CustomerTableSeeder {
         try (Connection conn = DatabaseManager.connect();) {
             String sql = "INSERT INTO Customers (customer_id, full_name, phone) VALUES (?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            Faker faker = new Faker();
+            Faker faker = new Faker(new Locale("vi"));
             Set<String> generatedPhones = new HashSet<>();
             int customerId = 2;
             while (customerId <= 10) {
