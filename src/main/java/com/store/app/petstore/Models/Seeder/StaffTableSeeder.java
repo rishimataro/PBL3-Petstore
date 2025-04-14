@@ -2,6 +2,7 @@ package com.store.app.petstore.Models.Seeder;
 
 import com.github.javafaker.Faker;
 import com.store.app.petstore.Models.DatabaseManager;
+
 import java.sql.*;
 import java.util.HashSet;
 import java.util.Locale;
@@ -27,7 +28,7 @@ public class StaffTableSeeder {
                 } while (!usedPhones.add(phone));
 
                 String email = faker.internet().emailAddress();
-                double salary = faker.number().randomDouble(2, 5000, 20000);
+                double salary = faker.number().randomDouble(2, 50000, 1000000);
                 Date hireDate = new Date(faker.date().past(2000, TimeUnit.DAYS).getTime());
                 String role = roles[faker.random().nextInt(roles.length)];
                 int isActive = faker.bool().bool() ? 1 : 0;
@@ -37,7 +38,7 @@ public class StaffTableSeeder {
                 stmt.setString(3, phone);
                 stmt.setString(4, email);
                 stmt.setDouble(5, salary);
-                stmt.setDate(6,  hireDate);
+                stmt.setDate(6, hireDate);
                 stmt.setString(7, role);
                 stmt.setInt(8, isActive);
 

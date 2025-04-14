@@ -2,5 +2,6 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/java/com/store/app/petstore/Models/Seeder/CustomerTableSeeder.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/store/app/petstore/Models/Seeder/UserTableSeeder.java" dialect="GenericSQL" />
   </component>
 </project>

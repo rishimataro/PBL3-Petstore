@@ -21,8 +21,8 @@ public class ProductTableSeeder {
             PreparedStatement stmt = conn.prepareStatement(sql);
 
             for (int i = 1; i <= 50; i++) {
-                String name = "Sản phẩm " + faker.animal().name();
-                String category = categories[random.nextInt(categories.length)];
+                String name = "Sản phẩm cho " + faker.animal().name();
+                String category = "Miêu tả sản phẩm " + i;
                 int stock = random.nextInt(50);
                 String description = faker.lorem().sentence(10);
                 String imageUrl = "https://example.com/images/product-" + i + ".jpg";
@@ -32,15 +32,15 @@ public class ProductTableSeeder {
                 stmt.setInt(3, stock);
                 stmt.setString(4, description);
                 stmt.setString(5, imageUrl);
-
+                System.out.println(stmt.toString());
                 stmt.executeUpdate();
             }
 
-            System.out.println("✅ Seeder thành công: đã thêm 50 sản phẩm hợp lệ.");
+            System.out.println("Seeder thành công: đã thêm 50 sản phẩm hợp lệ.");
             DatabaseManager.closeConnection(conn);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("❌ Lỗi khi chèn dữ liệu: " + e.getMessage());
+            System.out.println("Lỗi khi chèn dữ liệu: " + e.getMessage());
         }
 
     }

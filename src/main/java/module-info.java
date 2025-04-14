@@ -14,6 +14,7 @@ module com.store.app.petstore {
     requires java.desktop;
     requires javafaker;
     requires jbcrypt;
+    requires io.github.cdimascio.dotenv.java;
 
     opens com.store.app.petstore to javafx.fxml;
     exports com.store.app.petstore;

@@ -7,14 +7,14 @@ import javax.swing.*;
 
 public class DatabaseSeeder {
     public DatabaseSeeder() {
-        new CustomerTableSeeder();
+//        new CustomerTableSeeder();
 //        new OrderTableSeeder();
 //        new PetTableSeeder();
 //        new DiscountTableSeeder();
 //        new OrderDetailTableSeeder();
 //        new ProductTableSeeder();
 //        new StaffTableSeeder();
-//        new UserTableSeeder();
+        new UserTableSeeder();
     }
 
     public static void main(String[] args) {

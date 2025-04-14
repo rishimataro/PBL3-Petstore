@@ -2,34 +2,48 @@ package com.store.app.petstore.Models.Seeder;
 
 import com.github.javafaker.Faker;
 import com.store.app.petstore.Models.DatabaseManager;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class UserTableSeeder {
-    public UserTableSeeder()  {
-        try (Connection conn = DatabaseManager.connect();) {
-            String sql = "INSERT INTO Customers (customer_id, full_name, phone) VALUES (?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            Faker faker = new Faker();
-            Set<String> generatedPhones = new HashSet<>();
-            int customerId = 1;
-            while (customerId <= 10) {
-                String fullName = faker.name().fullName();
+    public UserTableSeeder() {
+        String sql = "INSERT INTO Users ( username, password, role, created_at, isActive) VALUES ( ?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseManager.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+            Faker faker = new Faker(new Locale("vi"));
+            {
+                String username = faker.name().firstName().toLowerCase() + faker.number().numberBetween(100, 999);
+                String password = BCrypt.hashpw("o3Trjrndn8Fqb", BCrypt.gensalt());
+                Date date = new Date(System.currentTimeMillis());
+                String role = "quản trị viên";
 
-                String phone;
-                do {
-                    phone = "0" + faker.number().digits(10);
-                } while (!generatedPhones.add(phone));
-
-                stmt.setInt(1, customerId);
-                stmt.setString(2, fullName);
-                stmt.setString(3, phone);
+                stmt.setString(1, username);
+                stmt.setString(2, password);
+                stmt.setString(3, role);
+                stmt.setDate(4, date);
+                stmt.setInt(5, 1);
                 stmt.executeUpdate();
+            }
 
-                customerId++;
+            {
+                String username = faker.name().firstName().toLowerCase() + faker.number().numberBetween(100, 999);
+                String password = BCrypt.hashpw("FKBw5saUi5q6M", BCrypt.gensalt());
+                Date date = new Date(System.currentTimeMillis());
+                String role = "nhân viên";
+
+                stmt.setString(1, username);
+                stmt.setString(2, password);
+                stmt.setString(3, role);
+                stmt.setDate(4, date);
+                stmt.setInt(5, 1);
+                stmt.executeUpdate();
             }
 
             System.out.println("✅ Created customers successfully.");

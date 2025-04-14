@@ -1,16 +1,19 @@
 package com.store.app.petstore.Models;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.*;
 
 public class DatabaseManager {
-    final static private String hostName = "125.212.231.184:6969";
-    final static private String dbName = "PetStoreDB";
-    final static private String username = "mintori09";
-    final static private String password = "Mintory09@96";
+    public static Connection connect() {
+        Dotenv dotenv = Dotenv.load();
+        final String hostName = dotenv.get("DB_HOST_NAME");
+        final String dbName = dotenv.get("DB_NAME");
+        final String username = dotenv.get("DB_USER");
+        final String password = dotenv.get("DB_PASSWORD");
+        final String connectionURL = "jdbc:mysql://" + hostName + "/" + dbName + "?useSSL=false&allowPublicKeyRetrieval=true";
 
-    final private static String connectionURL = "jdbc:mysql://"+hostName+"/"+dbName+"?useSSL=false&allowPublicKeyRetrieval=true";
-
-    public static Connection connect(){
+        System.out.println("Connecting to database...");
         Connection conn = null;
 
         try {
@@ -22,6 +25,7 @@ public class DatabaseManager {
 
         return conn;
     }
+
     public static void closeConnection(Connection conn) {
         if (conn != null) {
             try {
@@ -32,6 +36,7 @@ public class DatabaseManager {
             }
         }
     }
+
     public static void closeConnection(ResultSet rs) {
         try {
             if (rs != null && !rs.isClosed()) {
