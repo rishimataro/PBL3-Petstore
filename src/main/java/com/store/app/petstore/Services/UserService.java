@@ -7,7 +7,7 @@ import java.sql.*;
 
 public class UserService {
     public User getUserById(int userId) {
-        String sql = "SELECT * FROM users WHERE user_id = ?";
+        String sql = "SELECT * FROM Users WHERE user_id = ?";
         try (Connection conn = DatabaseManager.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -31,7 +31,7 @@ public class UserService {
     }
 
     public void updateUser(User user) {
-        String sql = "UPDATE users SET username = ?, password = ?, role = ?, isActive = ? WHERE user_id = ?";
+        String sql = "UPDATE Users SET username = ?, password = ?, role = ?, isActive = ? WHERE user_id = ?";
         try (Connection conn = DatabaseManager.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 

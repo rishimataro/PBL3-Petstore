@@ -13,8 +13,8 @@ public class DatabaseSeeder {
 //        new DiscountTableSeeder();
 //        new OrderDetailTableSeeder();
 //        new ProductTableSeeder();
-//        new StaffTableSeeder();
         new UserTableSeeder();
+        new StaffTableSeeder();
     }
 
     public static void main(String[] args) {

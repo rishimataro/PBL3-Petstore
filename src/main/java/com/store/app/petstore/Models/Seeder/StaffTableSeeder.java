@@ -20,13 +20,9 @@ public class StaffTableSeeder {
 
             Set<String> usedPhones = new HashSet<>();
             for (int i = 11; i < 50; i++) {
-                int userId = faker.random().nextInt(10);
+                int userId = 2;
                 String fullName = faker.name().fullName();
-                String phone;
-                do {
-                    phone = "0" + faker.number().digits(10);
-                } while (!usedPhones.add(phone));
-
+                String phone = faker.phoneNumber().phoneNumber();
                 String email = faker.internet().emailAddress();
                 double salary = faker.number().randomDouble(2, 50000, 1000000);
                 Date hireDate = new Date(faker.date().past(2000, TimeUnit.DAYS).getTime());
@@ -50,5 +46,6 @@ public class StaffTableSeeder {
             e.printStackTrace();
         }
     }
+
 
 }
