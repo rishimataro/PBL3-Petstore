@@ -13,6 +13,10 @@ public class Customer extends BaseModel {
         this.fullName = fullName;
         this.phone = phone;
     }
+    public Customer(String fullName, String phone) {
+        this.fullName = fullName;
+        this.phone = phone;
+    }
 
     public int getCustomerId() {
         return customerId;

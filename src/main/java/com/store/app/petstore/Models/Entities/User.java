@@ -13,6 +13,13 @@ public class User extends BaseModel {
     private boolean isActive;
     public User() {}
 
+    public User( String username, String password, String role, LocalDateTime createdAt, boolean isActive) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.createdAt = createdAt;
+        this.isActive = isActive;
+    }
     public User(int userId, String username, String password, String role, LocalDateTime createdAt, boolean isActive) {
         this.userId = userId;
         this.username = username;

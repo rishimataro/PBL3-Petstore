@@ -15,6 +15,14 @@ public class Order extends BaseModel {
     public Order() {
     }
 
+    public Order(int customerId, int staffId, double totalPrice, LocalDateTime orderDate, int discountId) {
+        this.customerId = customerId;
+        this.staffId = staffId;
+        this.totalPrice = totalPrice;
+        this.orderDate = orderDate;
+        this.discountId = discountId;
+    }
+
     public Order(int orderId, int customerId, int staffId, double totalPrice, LocalDateTime orderDate, int discountId) {
         this.orderId = orderId;
         this.customerId = customerId;

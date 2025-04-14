@@ -11,6 +11,14 @@ public class Product extends BaseModel {
     private String description;
     private String imageUrl;
 
+    public Product( String name, String category, int stock, int price, String description, String imageUrl) {
+        this.name = name;
+        this.category = category;
+        this.stock = stock;
+        this.price = price;
+        this.description = description;
+        this.imageUrl = imageUrl;
+    }
     public Product(int productId, String name, String category, int stock, int price, String description, String imageUrl) {
         this.productId = productId;
         this.name = name;

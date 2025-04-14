@@ -16,6 +16,17 @@ public class Staff extends BaseModel {
     private String role;
     private boolean isActive;
 
+    public Staff( int userId, String fullName, String phone, String email, double salary,
+                 LocalDateTime hireDate, String role, boolean isActive) {
+        this.userId = userId;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.email = email;
+        this.salary = salary;
+        this.hireDate = hireDate;
+        this.role = role;
+        this.isActive = isActive;
+    }
     public Staff(int staffId, int userId, String fullName, String phone, String email, double salary,
                  LocalDateTime hireDate, String role, boolean isActive) {
         this.staffId = staffId;

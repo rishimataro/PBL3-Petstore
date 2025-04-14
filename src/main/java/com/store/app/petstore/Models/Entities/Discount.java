@@ -13,7 +13,19 @@ public class Discount extends BaseModel {
     private LocalDate endDate;
     private double minOrderValue;
     private double maxDiscountValue;
-    public Discount() {}
+
+    public Discount() {
+    }
+
+    public Discount(String code, String discountType, double value, LocalDate startDate, LocalDate endDate, double minOrderValue, double maxDiscountValue) {
+        this.code = code;
+        this.discountType = discountType;
+        this.value = value;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.minOrderValue = minOrderValue;
+        this.maxDiscountValue = maxDiscountValue;
+    }
 
     public Discount(int discountId, String code, String discountType, double value, LocalDate startDate, LocalDate endDate, double minOrderValue, double maxDiscountValue) {
         this.discountId = discountId;

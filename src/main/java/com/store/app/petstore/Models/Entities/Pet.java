@@ -27,6 +27,16 @@ public class Pet extends BaseModel {
         this.price = 0;
     }
 
+    public Pet( String name, String type, String breed, int age, String gender, String description, String imageUrl, long price, String sex) {
+        this.name = name;
+        this.type = type;
+        this.breed = breed;
+        setAge(age); // Đảm bảo age >= 0
+        this.gender = gender;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.price = price;
+    }
     public Pet(int petId, String name, String type, String breed, int age, String gender, String description, String imageUrl, long price, String sex) {
         this.petId = petId;
         this.name = name;

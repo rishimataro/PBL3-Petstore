@@ -10,6 +10,13 @@ public class OrderDetail extends BaseModel {
     private int quantity;
     private double unitPrice;
 
+    public OrderDetail( int orderId, String itemType, int itemId, int quantity, double unitPrice) {
+        this.orderId = orderId;
+        this.itemId = itemId;
+        this.itemType = itemType;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
 
     public OrderDetail(int orderDetailId, int orderId, String itemType, int itemId, int quantity, double unitPrice) {
         this.orderDetailId = orderDetailId;
