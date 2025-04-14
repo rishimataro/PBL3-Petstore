@@ -42,7 +42,7 @@ public class StaffTableSeeder {
                 stmt.executeUpdate();
             }
 
-            System.out.println("✅ Inserted fake staff records successfully.");
+            System.out.println("Inserted fake staff records successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -11,6 +11,7 @@ public class User extends BaseModel {
     private String role;
     private LocalDateTime createdAt;
     private boolean isActive;
+    public User() {}
 
     public User(int userId, String username, String password, String role, LocalDateTime createdAt, boolean isActive) {
         this.userId = userId;

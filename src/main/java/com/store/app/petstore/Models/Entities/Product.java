@@ -5,22 +5,33 @@ import com.store.app.petstore.Models.BaseModel;
 public class Product extends BaseModel {
     private int productId;
     private String name;
-    private String category; // "accessory", "food", "toy"
+    private String category;
     private int stock;
+    private int price;
     private String description;
     private String imageUrl;
 
-    public Product(int productId, String name, String category, int stock, String description, String imageUrl) {
+    public Product(int productId, String name, String category, int stock, int price, String description, String imageUrl) {
         this.productId = productId;
         this.name = name;
         this.category = category;
         this.stock = stock;
+        this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
     }
+    public Product() {}
 
     public String getCategory() {
         return category;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public void setCategory(String category) {
