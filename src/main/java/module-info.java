@@ -12,6 +12,9 @@ module com.store.app.petstore {
     requires mysql.connector.java;
     requires de.jensd.fx.glyphs.fontawesome;
     requires java.desktop;
+    requires javafaker;
+    requires jbcrypt;
+    requires io.github.cdimascio.dotenv.java;
 
     opens com.store.app.petstore to javafx.fxml;
     exports com.store.app.petstore;
@@ -24,5 +27,7 @@ module com.store.app.petstore {
     opens com.store.app.petstore.Models to javafx.fxml;
     opens com.store.app.petstore.Controllers.Admin to javafx.fxml;
     opens com.store.app.petstore.Controllers.Staff to javafx.fxml;
+    exports com.store.app.petstore.Models.Seeder;
+    opens com.store.app.petstore.Models.Seeder to javafx.fxml;
 
 }

@@ -1,6 +1,8 @@
 package com.store.app.petstore.Models.Entities;
 
-public class OrderDetail {
+import com.store.app.petstore.Models.BaseModel;
+
+public class OrderDetail extends BaseModel {
     private int orderDetailId;
     private int orderId;
     private int itemId;

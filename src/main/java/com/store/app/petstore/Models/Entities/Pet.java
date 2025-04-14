@@ -1,6 +1,8 @@
 package com.store.app.petstore.Models.Entities;
 
-public class Pet {
+import com.store.app.petstore.Models.BaseModel;
+
+public class Pet extends BaseModel {
     private int petId;
     private String name;
     private String type;

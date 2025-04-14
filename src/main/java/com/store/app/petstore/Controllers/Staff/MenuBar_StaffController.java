@@ -63,22 +63,33 @@ public class MenuBar_StaffController implements Initializable {
         }
     }
 
-    private void setMenu() {
+    private ContextMenu contextMenuItem() {
+        ContextMenu contextMenu = new ContextMenu();
         MenuItem orderItem = new MenuItem("Đặt hàng");
         MenuItem billItem = new MenuItem("Lịch sử hóa đơn");
         MenuItem infoItem = new MenuItem("Thông tin tài khoản");
         MenuItem logoutItem = new MenuItem("Đăng xuất");
 
-        contextMenu = new ContextMenu();
-        contextMenu.getItems().addAll(orderItem, billItem, infoItem, logoutItem);
+        contextMenu.setStyle(
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 14px;" +
+                "-fx-background-color: white;" +
+                "-fx-border-radius: 10;" +
+                "-fx-background-radius: 6;"
+        );
 
         orderItem.setOnAction(event -> System.out.println("Đặt hàng"));
         billItem.setOnAction(event -> System.out.println("Lịch sử hóa đơn"));
         infoItem.setOnAction(e -> System.out.println("Xem thông tin tài khoản"));
         logoutItem.setOnAction(e -> System.out.println("Đăng xuất"));
 
+        contextMenu.getItems().addAll(orderItem, billItem, infoItem, logoutItem);
         contextMenu.setAutoHide(true);
+        return contextMenu;
+    }
 
+    private void setMenu() {
+        contextMenu = contextMenuItem();
         menuIcon.setOnMouseClicked(this::showContextMenu);
 
         menuIcon.setOnMouseEntered(event -> {
