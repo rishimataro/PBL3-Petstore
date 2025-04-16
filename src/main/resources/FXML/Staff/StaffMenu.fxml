@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="root" prefHeight="70.0" prefWidth="990.0" styleClass="nav-container" stylesheets="@../../Styles/MenuBar_Staff.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.MenuBar_StaffController">
+<AnchorPane fx:id="root" prefHeight="70.0" prefWidth="990.0" styleClass="nav-container" stylesheets="@../../Styles/StaffMenu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.StaffMenuController">
    <children>
       <ImageView fitHeight="40.0" fitWidth="153.0" layoutX="24.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
          <image>
