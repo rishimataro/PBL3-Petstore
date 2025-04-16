@@ -18,6 +18,7 @@ public class AuthService {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
+                System.out.println("Login Successful!");
                 String hashedPassword = rs.getString("password");
                 System.out.println(hashedPassword);
                 System.out.println(password);
@@ -29,6 +30,7 @@ public class AuthService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("Login Failed!");
         return false;
     }
 

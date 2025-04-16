@@ -5,6 +5,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -13,6 +14,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
+    @FXML
+    private TextField usernameField;
 
     @FXML
     private FontAwesomeIconView eyeIcon;
@@ -22,6 +25,10 @@ public class LoginController implements Initializable {
 
     @FXML
     private PasswordField passwordField;
+    @FXML
+    private FontAwesomeIconView loginButton;
+    @FXML
+    private FontAwesomeIconView registerButton;
 
     private double x, y;
 
@@ -66,7 +73,20 @@ public class LoginController implements Initializable {
                 eyeIcon.setIcon(FontAwesomeIcon.EYE_SLASH);
             }
         });
-
-
+    }
+    @FXML
+    private void handleLogin() {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        System.out.println(username + " " + password);
+       if (authService.login(username, password)) {
+           //
+       } else {
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Login Failed");
+           alert.setHeaderText(null);
+           alert.setContentText("Tên đăng nhập hoặc mật khẩu không đúng!");
+           alert.showAndWait();
+       }
     }
 }
