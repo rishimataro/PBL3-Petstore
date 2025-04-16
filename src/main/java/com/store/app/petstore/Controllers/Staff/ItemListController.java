@@ -49,7 +49,7 @@ public class ItemListController {
         namePet.setText(p.getName());
         pricePet.setText(p.getPrice() + "");
         tagBreed.setText(p.getBreed());
-        tagGender.setText(p.getGender());
+        tagGender.setText(p.getSex());
         tagType.setText(p.getType());
 
         Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream(p.getImageUrl())));
