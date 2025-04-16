@@ -1,5 +1,6 @@
 package com.store.app.petstore.Controllers;
 
+import com.store.app.petstore.Services.AuthService;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
@@ -23,6 +24,12 @@ public class LoginController implements Initializable {
     private PasswordField passwordField;
 
     private double x, y;
+
+    private final AuthService authService;
+
+    public LoginController() {
+        authService = new AuthService();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
