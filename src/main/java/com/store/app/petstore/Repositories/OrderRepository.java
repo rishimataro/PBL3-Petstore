@@ -84,4 +84,21 @@ public class OrderRepository {
         }
         return false;
     }
+
+    public long getRevenueToday() {
+        String sql = """
+                SELECT SUM(OrderDetails.unit_price * OrderDetails.quantity) AS total_price
+                FROM OrderDetails
+                INNER JOIN Orders O ON OrderDetails.order_id = O.order_id
+                WHERE DATE(O.order_date) = CURDATE();
+                """;
+        try (Connection conn = DatabaseManager.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            return rs.getLong("total_price");
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
