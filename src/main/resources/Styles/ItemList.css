@@ -1,8 +1,9 @@
 .card {
     -fx-background-color: #ffffff;
     -fx-background-radius: 10;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 1, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 1, 2);
     -fx-border-radius: 10;
+    -fx-cursor: hand;
 }
 
 .infor-container {
@@ -53,5 +54,4 @@
 
 .icon-button:hover{
     -fx-fill: #A9E44D;
-    -glyph-size: 15;
 }

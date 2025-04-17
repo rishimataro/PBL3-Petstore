@@ -1,0 +1,103 @@
+.root{
+    -fx-background-color: white;
+}
+
+.nav-pane{
+    -fx-background-color: #017FCB;
+}
+
+.title{
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.grid-btn{
+    -fx-hgap: 5;
+    -fx-vgap: 5;
+}
+
+.btn-add, .btn-delete, .btn-fix, .btn-save, .btn-add1, .btn-delete1 {
+    -fx-text-fill: white;
+    -fx-background-radius: 0;
+    -fx-max-width: 95;
+    -fx-max-height: 25;
+}
+
+.btn-add, .btn-delete {
+    -fx-background-color: #C1C1C1;
+}
+
+.btn-add1{
+    -fx-background-color: #A9E44D;
+    -fx-cursor: hand;
+}
+
+.btn-add1:hover{
+    -fx-background-color: #95CA43;
+}
+
+.btn-delete1{
+    -fx-background-color: #FB4141;
+    -fx-cursor: hand;
+}
+
+.btn-delete1:hover{
+    -fx-background-color: #CE3434;
+}
+
+.btn-fix {
+    -fx-background-color: #34D0E1;
+    -fx-cursor: hand;
+}
+
+.btn-fix:hover {
+    -fx-background-color: #1FAFBF;
+}
+
+.btn-save{
+    -fx-background-color: #FFC534;
+    -fx-cursor: hand;
+}
+
+.btn-save:hover {
+    -fx-background-color: #ECB630;
+}
+
+.btn-dog, .btn-cat {
+    -fx-background-color: white;
+    -fx-text-fill: #FFC534;
+    -fx-font-weight: bold;
+    -fx-border-color: #FFC534;
+    -fx-border-radius: 3;
+    -fx-max-width: 95;
+    -fx-max-height: 25;
+    -fx-cursor: hand;
+}
+
+.btn-dog:hover, .btn-cat:hover{
+    -fx-background-color: #FFC534;
+    -fx-text-fill: white;
+}
+
+.btn-dog:pressed, .btn-cat:pressed{
+    -fx-background-color: #ECB630;
+    -fx-border-color: #ECB630;
+    -fx-text-fill: white;
+}
+
+.choice-box{
+    -fx-background-radius: 5;
+    -fx-border-radius: 3;
+    -fx-background-color: white;
+    -fx-cursor: hand;
+    -fx-border-color: #C1C1C1;
+}
+
+.lblInfor{
+    -fx-font-weight: bold;
+    -fx-text-fill: #017FCB;
+}
+
+.shape-img{
+    -fx-stroke-width: 0;
+}
