@@ -10,7 +10,7 @@ public class PetStoreApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        ModelView.getInstance().getViewFactory().showOrderWindow();
+        ModelView.getInstance().getViewFactory().showLoginWindow();
     }
 
     public static void main(String[] args) {

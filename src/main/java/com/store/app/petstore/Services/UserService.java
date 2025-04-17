@@ -2,6 +2,7 @@ package com.store.app.petstore.Services;
 
 import com.store.app.petstore.Models.DatabaseManager;
 import com.store.app.petstore.Models.Entities.User;
+import com.store.app.petstore.Utils.ParserModel;
 import javafx.application.Platform;
 
 import java.sql.*;
@@ -17,14 +18,7 @@ public class UserService {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return new User(
-                        rs.getInt("user_id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("role"),
-                        rs.getTimestamp("created_at").toLocalDateTime(),
-                        rs.getInt("isActive") > 0
-                );
+                return ParserModel.getUser(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();

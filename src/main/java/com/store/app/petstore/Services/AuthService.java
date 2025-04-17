@@ -10,7 +10,7 @@ import java.sql.*;
 
 public class AuthService {
     public boolean login(String username, String password) {
-        String sql = "SELECT * FROM users WHERE username = ?";
+        String sql = "SELECT * FROM Users WHERE username = ?";
         try (Connection conn = DatabaseManager.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -18,16 +18,19 @@ public class AuthService {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
+                System.out.println("Login Successful!");
                 String hashedPassword = rs.getString("password");
+                System.out.println(hashedPassword);
+                System.out.println(password);
                 if (BCrypt.checkpw(password, hashedPassword)) {
                     User user = UserMapper.fromResultSet(rs);
-                    SessionManager.setCurrentUser(user);
                     return true;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("Login Failed!");
         return false;
     }
 
