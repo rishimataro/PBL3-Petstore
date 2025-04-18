@@ -1,0 +1,176 @@
+.root {
+    -fx-background-color: #ffffff;
+    -fx-font-family: "Inter";
+}
+/*.button. {*/
+/*    -fx-background-color: #0078D7;*/
+/*    -fx-text-fill: white;*/
+/*    -fx-font-weight: bold;*/
+/*    -fx-background-radius: 5;*/
+/*    -fx-cursor: hand;*/
+/*}*/
+.button:hover {
+    -fx-background-color: #005cb2;
+}
+.find-textfield {
+    -fx-background-radius: 5;
+    -fx-background-color: #F3F3F3;
+    -fx-border-radius: 5;
+    -fx-padding: 0 0 0 30;
+    -fx-text-fill: #6C6C6C;
+}
+.choice-box {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-background-color: white;
+    -fx-cursor: hand;
+}
+.icon{
+    -fx-fill: #AAAAAA;
+}
+.tab-container {
+    -fx-tab-min-width: 50px;
+}
+.tab-pane .tab {
+    -fx-background-color: #ECECEC;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 0 0 1px 0;
+    -fx-background-radius: 5 5 0 0;
+}
+.tab-pane .tab:selected {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5 5 0 0;
+    -fx-font-weight: bold;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-insets: 0;
+}
+.tab-pane .tab:hover {
+    -fx-background-color: #F9F9F9;
+    -fx-cursor: hand;
+}
+
+.tab {
+    -fx-background-radius: 5px;
+    -fx-background-insets: 0;
+    -fx-padding: 5 15;
+}
+
+.hbox-order {
+    -fx-spacing: 2px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dddddd;
+    -fx-border-radius: 0 0 5 5;
+}
+
+.scrollbar {
+    -fx-pref-width: 10px;
+    -fx-background-color: #F1F1F1;
+}
+
+.scrollbar .thumb {
+    -fx-background-color: #C1C1C1;
+    -fx-background-radius: 5px;
+}
+
+.scrollbar .track {
+    -fx-background-color: transparent;
+    -fx-background-radius: 5px;
+}
+
+.code-textfield{
+    -fx-background-radius: 5;
+    -fx-background-color: #F3F3F3;
+    -fx-border-radius: 5;
+    -fx-text-fill: #6C6C6C;
+}
+
+.infomoney-label {
+    -fx-font-weight: bold;
+}
+
+.money-label{
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+    -fx-text-fill: #017FCB;
+}
+
+.table-view {
+    -fx-background-color: #F9F9F9;
+    /*-fx-border-color: #FFB701;*/
+    -fx-border-width: 1px;
+    -fx-table-cell-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #FFB701;
+    -fx-border-color: #FFB701;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-size: 17.5px;
+    -fx-border-width: 0 1px 0 0;
+    -fx-border-color: white;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 8px;
+    -fx-alignment: CENTER;
+}
+
+/* Dòng bình thường */
+.table-row-cell {
+    -fx-background-color: #F9F9F9;
+    -fx-font-size: 13px;
+    -fx-border-color: transparent;
+}
+
+/* Hover */
+.table-row-cell:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+/* Dòng được chọn */
+.table-row-cell:filled:selected {
+    -fx-background-color: #FFB701;
+    -fx-text-fill: white;
+}
+
+.button.crud_func{
+    -fx-border-radius: 0;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+}
+.edit-btn{
+    -fx-background-color: #34D0E1;
+}
+.save-btn{
+    -fx-background-color: #FFC534;
+}
+.delete-btn{
+    -fx-background-color: #FB4141;
+}
+.export-pdf-btn{
+    -fx-background-color: #01C4DA;
+}
+
+.anchor-pane-invoice-id{
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-background-color: #F9F9F9;
+}
+.label.invoice-id{
+    -fx-text-fill: #8D6E63;
+    -fx-font-family: Inter;
+    -fx-font-weight: bold;
+    -fx-font-size: 12;
+}
+.func_icon{
+    -fx-fill: #FFFFFF;
+}
