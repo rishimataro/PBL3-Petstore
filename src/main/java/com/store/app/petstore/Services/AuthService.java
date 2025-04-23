@@ -3,6 +3,7 @@ package com.store.app.petstore.Services;
 import com.store.app.petstore.Models.DatabaseManager;
 import com.store.app.petstore.Models.Entities.User;
 import com.store.app.petstore.Sessions.SessionManager;
+import com.store.app.petstore.Utils.Mappers.UserMapper;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
@@ -19,14 +20,7 @@ public class AuthService {
             if (rs.next()) {
                 String hashedPassword = rs.getString("password");
                 if (BCrypt.checkpw(password, hashedPassword)) {
-                    User user = new User(
-                            rs.getInt("user_id"),
-                            rs.getString("username"),
-                            hashedPassword,
-                            rs.getString("role"),
-                            rs.getTimestamp("created_at").toLocalDateTime(),
-                            rs.getInt("isActive") > 0
-                    );
+                    User user = UserMapper.fromResultSet(rs);
                     SessionManager.setCurrentUser(user);
                     return true;
                 }

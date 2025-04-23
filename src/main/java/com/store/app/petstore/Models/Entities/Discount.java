@@ -12,29 +12,69 @@ public class Discount extends BaseModel {
     private LocalDate startDate;
     private LocalDate endDate;
     private double minOrderValue;
+    private double maxDiscountValue;
 
-    public Discount(int discountId, String code, String discountType, double value, LocalDate startDate, LocalDate endDate, double minOrderValue) {
+    public Discount() {
+    }
+
+    public Discount(String code, String discountType, double value, LocalDate startDate, LocalDate endDate, double minOrderValue, double maxDiscountValue) {
+        this.code = code;
+        this.discountType = discountType;
+        this.value = value;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.minOrderValue = minOrderValue;
+        this.maxDiscountValue = maxDiscountValue;
+    }
+
+    public Discount(int discountId, String code, String discountType, double value, LocalDate startDate, LocalDate endDate, double minOrderValue, double maxDiscountValue) {
         this.discountId = discountId;
         this.code = code;
-        setDiscountType(discountType); // Kiểm tra giá trị hợp lệ
-        setValue(value); // Kiểm tra giá trị hợp lệ
+        setDiscountType(discountType);
+        setValue(value);
         this.startDate = startDate;
-        setEndDate(endDate); // Kiểm tra end_date >= start_date
-        this.minOrderValue = Math.max(minOrderValue, 0); // min_order_value >= 0
+        setEndDate(endDate);
+        this.minOrderValue = Math.max(minOrderValue, 0);
+        this.maxDiscountValue = maxDiscountValue;
     }
 
     // Getters
-    public int getDiscountId() { return discountId; }
-    public String getCode() { return code; }
-    public String getDiscountType() { return discountType; }
-    public double getValue() { return value; }
-    public LocalDate getStartDate() { return startDate; }
-    public LocalDate getEndDate() { return endDate; }
-    public double getMinOrderValue() { return minOrderValue; }
+    public int getDiscountId() {
+        return discountId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDiscountType() {
+        return discountType;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public double getMinOrderValue() {
+        return minOrderValue;
+    }
 
     // Setters
-    public void setDiscountId(int discountId) { this.discountId = discountId; }
-    public void setCode(String code) { this.code = code; }
+    public void setDiscountId(int discountId) {
+        this.discountId = discountId;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public void setDiscountType(String discountType) {
         if (discountType.equals("percent") || discountType.equals("fixed")) {
@@ -68,4 +108,11 @@ public class Discount extends BaseModel {
         this.minOrderValue = Math.max(minOrderValue, 0); // Đảm bảo >= 0
     }
 
+    public double getMaxDiscountValue() {
+        return maxDiscountValue;
+    }
+
+    public void setMaxDiscountValue(double maxDiscountValue) {
+        this.maxDiscountValue = maxDiscountValue;
+    }
 }

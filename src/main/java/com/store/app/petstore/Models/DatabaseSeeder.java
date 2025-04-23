@@ -12,9 +12,9 @@ public class DatabaseSeeder {
 //        new PetTableSeeder();
 //        new DiscountTableSeeder();
 //        new OrderDetailTableSeeder();
-//        new ProductTableSeeder();
-        new UserTableSeeder();
-        new StaffTableSeeder();
+        new ProductTableSeeder();
+//        new UserTableSeeder();
+//        new StaffTableSeeder();
     }
 
     public static void main(String[] args) {

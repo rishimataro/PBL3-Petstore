@@ -17,21 +17,23 @@ public class ProductTableSeeder {
         String[] categories = {"phụ kiện", "thức ăn", "đồ chơi"};
 
         try (Connection conn = DatabaseManager.connect()) {
-            String sql = "INSERT INTO Products (name, category, stock, description, image_url) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Products (name, category, stock, price, description, image_url) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
 
             for (int i = 1; i <= 50; i++) {
                 String name = "Sản phẩm cho " + faker.animal().name();
-                String category = "Miêu tả sản phẩm " + i;
+                String category = categories[random.nextInt(categories.length)];
                 int stock = random.nextInt(50);
-                String description = faker.lorem().sentence(10);
+                int price = random.nextInt(50000,200000);
+                String description = "Miêu tả sản phẩm " + i;
                 String imageUrl = "https://example.com/images/product-" + i + ".jpg";
 
                 stmt.setString(1, name);
                 stmt.setString(2, category);
                 stmt.setInt(3, stock);
-                stmt.setString(4, description);
-                stmt.setString(5, imageUrl);
+                stmt.setInt(4, price);
+                stmt.setString(5, description);
+                stmt.setString(6, imageUrl);
                 System.out.println(stmt.toString());
                 stmt.executeUpdate();
             }

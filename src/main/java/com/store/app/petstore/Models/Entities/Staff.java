@@ -3,6 +3,7 @@ package com.store.app.petstore.Models.Entities;
 import com.store.app.petstore.Models.BaseModel;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Staff extends BaseModel {
     private int staffId;
@@ -11,12 +12,23 @@ public class Staff extends BaseModel {
     private String phone;
     private String email;
     private double salary;
-    private LocalDate hireDate;
+    private LocalDateTime hireDate;
     private String role;
     private boolean isActive;
 
+    public Staff( int userId, String fullName, String phone, String email, double salary,
+                 LocalDateTime hireDate, String role, boolean isActive) {
+        this.userId = userId;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.email = email;
+        this.salary = salary;
+        this.hireDate = hireDate;
+        this.role = role;
+        this.isActive = isActive;
+    }
     public Staff(int staffId, int userId, String fullName, String phone, String email, double salary,
-            LocalDate hireDate, String role, boolean isActive) {
+                 LocalDateTime hireDate, String role, boolean isActive) {
         this.staffId = staffId;
         this.userId = userId;
         this.fullName = fullName;
@@ -26,6 +38,9 @@ public class Staff extends BaseModel {
         this.hireDate = hireDate;
         this.role = role;
         this.isActive = isActive;
+    }
+
+    public Staff() {
     }
 
     public int getStaffId() {
@@ -76,11 +91,11 @@ public class Staff extends BaseModel {
         this.salary = salary;
     }
 
-    public LocalDate getHireDate() {
+    public LocalDateTime getHireDate() {
         return hireDate;
     }
 
-    public void setHireDate(LocalDate hireDate) {
+    public void setHireDate(LocalDateTime hireDate) {
         this.hireDate = hireDate;
     }
 

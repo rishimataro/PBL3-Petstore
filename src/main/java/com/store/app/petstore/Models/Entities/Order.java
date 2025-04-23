@@ -7,18 +7,29 @@ import java.time.LocalDateTime;
 public class Order extends BaseModel {
     private int orderId;
     private int customerId;
-    private int staffId;
     private double totalPrice;
     private LocalDateTime orderDate;
-    private String status;
+    private int staffId;
+    private int discountId;
 
-    public Order(int orderId, int customerId, int staffId, double totalPrice, LocalDateTime orderDate, String status) {
+    public Order() {
+    }
+
+    public Order(int customerId, int staffId, double totalPrice, LocalDateTime orderDate, int discountId) {
+        this.customerId = customerId;
+        this.staffId = staffId;
+        this.totalPrice = totalPrice;
+        this.orderDate = orderDate;
+        this.discountId = discountId;
+    }
+
+    public Order(int orderId, int customerId, int staffId, double totalPrice, LocalDateTime orderDate, int discountId) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.staffId = staffId;
         this.totalPrice = totalPrice;
         this.orderDate = orderDate;
-        this.status = status;
+        this.discountId = discountId;
     }
 
     public int getOrderId() {
@@ -61,11 +72,11 @@ public class Order extends BaseModel {
         this.orderDate = orderDate;
     }
 
-    public String getStatus() {
-        return status;
+    public int getDiscountId() {
+        return discountId;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setDiscountId(int discountId) {
+        this.discountId = discountId;
     }
 }

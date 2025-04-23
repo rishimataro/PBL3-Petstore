@@ -6,9 +6,14 @@ public class Customer extends BaseModel {
     private int customerId;
     private String fullName;
     private String phone;
+    public Customer() {}
 
     public Customer(int customerId, String fullName, String phone) {
         this.customerId = customerId;
+        this.fullName = fullName;
+        this.phone = phone;
+    }
+    public Customer(String fullName, String phone) {
         this.fullName = fullName;
         this.phone = phone;
     }
