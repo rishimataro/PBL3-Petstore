@@ -13,7 +13,7 @@ public class UserMapper {
         user.setPassword(rs.getString("password"));
         user.setRole(rs.getString("role"));
         user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        user.setActive(rs.getBoolean("active"));
+        user.setActive(rs.getBoolean("isActive"));
         return user;
     }
 }
