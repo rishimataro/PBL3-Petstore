@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
@@ -6,23 +7,18 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="350.0" prefWidth="475.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.ProductInforController">
+<AnchorPane prefHeight="350.0" prefWidth="475.0" styleClass="root" stylesheets="@../../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.ProductInforController">
     <children>
-        <AnchorPane prefHeight="30.0" prefWidth="475.0" styleClass="nav-pane">
+        <AnchorPane prefHeight="30.0" prefWidth="600.0" styleClass="nav-pane">
             <children>
-                <Label layoutX="192.0" layoutY="7.0" styleClass="title" text="Thông tin chi tiết" />
+                <Label layoutX="251.0" layoutY="7.0" styleClass="title" text="Thông tin chi tiết" />
             </children>
         </AnchorPane>
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="210.0" layoutX="24.0" layoutY="38.0" stroke="BLACK" strokeType="INSIDE" styleClass="shape-img" width="200.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0" />
@@ -42,10 +38,10 @@
                 <Button mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             </children>
         </GridPane>
-        <GridPane layoutX="238.0" layoutY="50.0" prefHeight="201.0" prefWidth="220.0">
+        <GridPane layoutX="238.0" layoutY="50.0" prefHeight="200.0" prefWidth="340.0" vgap="2.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="103.5999755859375" minWidth="10.0" prefWidth="66.79998779296875" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.20001220703125" minWidth="10.0" prefWidth="153.20001220703125" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -67,7 +63,7 @@
                 <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
             </children>
         </GridPane>
-        <VBox layoutX="238.0" layoutY="260.0" prefHeight="69.0" prefWidth="220.0">
+        <VBox layoutX="238.0" layoutY="260.0" prefHeight="70.0" prefWidth="340.0">
             <children>
                 <Label styleClass="lblInfor" text="Mô tả:">
                     <VBox.margin>

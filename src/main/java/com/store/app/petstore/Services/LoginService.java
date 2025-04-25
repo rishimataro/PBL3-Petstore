@@ -13,9 +13,11 @@ import java.sql.SQLException;
 public class LoginService {
     private static LoginService instance;
     private final AuthService authService;
+    private final Connection conn;
 
     private LoginService() {
         this.authService = new AuthService();
+        this.conn = DatabaseManager.connect();
     }
 
     public static LoginService getInstance() {
@@ -27,9 +29,7 @@ public class LoginService {
 
     public User authenticate(String username, String password) {
         String sql = "SELECT * FROM Users WHERE username = ? AND isActive = 1";
-        try (Connection conn = DatabaseManager.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
 
@@ -47,9 +47,7 @@ public class LoginService {
 
     public boolean isUsernameExists(String username) {
         String sql = "SELECT COUNT(*) FROM Users WHERE username = ?";
-        try (Connection conn = DatabaseManager.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
 
@@ -64,9 +62,7 @@ public class LoginService {
 
     public boolean isAccountActive(String username) {
         String sql = "SELECT isActive FROM Users WHERE username = ?";
-        try (Connection conn = DatabaseManager.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
 
@@ -81,9 +77,7 @@ public class LoginService {
 
     public String getUserRole(String username) {
         String sql = "SELECT role FROM Users WHERE username = ?";
-        try (Connection conn = DatabaseManager.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
 

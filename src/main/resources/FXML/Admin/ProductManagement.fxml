@@ -4,51 +4,15 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="442.0" prefWidth="990.0" stylesheets="@../../Styles/Admin/AdminCommon.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXML.Admin.ProductManagement">
+<AnchorPane prefHeight="442.0" prefWidth="990.0" stylesheets="@../../Styles/Admin/AdminCommon.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.ProductManagementController">
    <children>
-      <MenuBar prefHeight="40.0" prefWidth="990.0" styleClass="top-nav">
-        <menus>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Thú cưng">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Sản phẩm">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Khuyến mãi">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Khách hàng">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Action 1" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Nhân viên">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Action 1" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Tài khoản">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Action 1" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <AnchorPane layoutY="42.0" prefHeight="400.0" prefWidth="990.0" styleClass="search-section">
+      <fx:include source="AdminMenu.fxml" />
+      <AnchorPane layoutY="70.0" prefHeight="372.0" prefWidth="990.0" styleClass="search-section">
          <children>
             <TextField layoutX="13.0" layoutY="15.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm sản phẩm" styleClass="find-textfield" />
             <FontAwesomeIconView glyphName="SEARCH" layoutX="24.0" layoutY="34.0" size="13" styleClass="icon" />

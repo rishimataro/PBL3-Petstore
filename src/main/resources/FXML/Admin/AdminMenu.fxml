@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane fx:id="root" prefHeight="70.0" prefWidth="990.0" styleClass="nav-container" stylesheets="@../../Styles/Admin/AdminMenu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.AdminMenuController">
+   <children>
+      <ImageView fitHeight="40.0" fitWidth="153.0" layoutX="24.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
+         <image>
+            <Image url="@../../Images/logo1.png" />
+         </image>
+      </ImageView>
+      <FontAwesomeIconView fx:id="menuIcon" fill="WHITE" glyphName="BARS" layoutX="787.0" layoutY="50.0" size="25">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </FontAwesomeIconView>
+      <Label layoutX="858.0" layoutY="21.0" styleClass="label-username" text="dothang13" />
+      <Label layoutX="821.0" layoutY="38.0" styleClass="label-name" text="Nguyễn Đỗ Thắng" />
+      <Circle fx:id="userImage" fill="DODGERBLUE" layoutX="956.0" layoutY="35.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" styleClass="user-image" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="18.0" />
+      <MenuBar layoutX="338.0" layoutY="26.0" prefHeight="30.0" prefWidth="378.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Thống kê">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Tổng quan" />
+              <MenuItem mnemonicParsing="false" text="Doanh thu" />
+              <MenuItem mnemonicParsing="false" text="Bán chạy" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Quản lý">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Thú cưng" />
+              <MenuItem mnemonicParsing="false" text="Sản phẩm" />
+              <MenuItem mnemonicParsing="false" text="Khuyến mãi" />
+              <MenuItem mnemonicParsing="false" text="Khách hàng" />
+              <MenuItem mnemonicParsing="false" text="Nhân viên" />
+              <MenuItem mnemonicParsing="false" text="Tài khoản" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Doanh thu">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Doanh thu ngày" />
+              <MenuItem mnemonicParsing="false" text="Doanh thu tháng" />
+              <MenuItem mnemonicParsing="false" text="Doanh thu năm" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Báo cáo">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Báo cáo bán hàng" />
+              <MenuItem mnemonicParsing="false" text="Báo cáo tồn kho" />
+              <MenuItem mnemonicParsing="false" text="Báo cáo nhân viên" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </children>
+</AnchorPane>
