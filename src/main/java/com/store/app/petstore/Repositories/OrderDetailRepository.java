@@ -2,6 +2,7 @@ package com.store.app.petstore.Repositories;
 
 import com.store.app.petstore.Models.DatabaseManager;
 import com.store.app.petstore.Models.Entities.OrderDetail;
+import com.store.app.petstore.Models.Records.TotalTodayRecord;
 import com.store.app.petstore.Utils.Mappers.OrderDetailMapper;
 
 import java.sql.*;
@@ -98,5 +99,28 @@ public class OrderDetailRepository {
             e.printStackTrace();
         }
         return false;
+    }
+
+
+    public TotalTodayRecord getTotalTodayRecord() {
+        String sql = """
+            SELECT
+                SUM(OrderDetails.unit_price * OrderDetails.quantity) AS total_price,
+                SUM(CASE WHEN OrderDetails.item_type = 'pet' THEN OrderDetails.quantity ELSE 0 END) AS total_pet,
+                SUM(CASE WHEN OrderDetails.item_type = 'product' THEN OrderDetails.quantity ELSE 0 END) AS total_product
+            FROM
+                OrderDetails
+                    INNER JOIN
+                Orders O ON OrderDetails.order_id = O.order_id
+            WHERE
+                DATE(O.order_date) = CURDATE();
+            """;
+        try (Connection conn = DatabaseManager.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            return new TotalTodayRecord(rs.getLong("total_price"), rs.getInt("total_pet"), rs.getString("total_product"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
