@@ -1,6 +1,4 @@
-package com.store.app.petstore.Models.Seeder;
-
-import com.store.app.petstore.Models.DatabaseManager;
+package com.store.app.petstore.Models;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,14 +7,13 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.Random;
 
-public class DiscountTableSeeder {
-    public DiscountTableSeeder() {
-        int count = 50;
+public class DiscountSeeder {
+    public static void seedDiscounts(int count) {
         String[] codes = {"SUMMER", "WINTER", "WELCOME", "VIP", "SALE", "LOVE", "PETDAY", "XMAS", "NEWYEAR", "LUCKY"};
         String[] types = {"phần trăm", "cố định"};
         String[] statuses = {"sắp diễn ra", "đang hoạt động", "kết thúc"};
 
-        try (Connection conn = DatabaseManager.connect()) {
+        try (Connection conn = ConnectJDBC.connect()) {
             String sql = "INSERT INTO Discounts (code, discount_type, value, status, start_date, end_date, min_order_value) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
