@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class MenuBar_StaffController implements Initializable {
+public class StaffMenuController implements Initializable {
 
     @FXML
     private FontAwesomeIconView menuIcon;

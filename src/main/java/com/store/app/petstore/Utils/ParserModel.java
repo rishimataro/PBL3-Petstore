@@ -3,6 +3,7 @@ package com.store.app.petstore.Utils;
 import com.store.app.petstore.Models.Entities.*;
 import com.store.app.petstore.Utils.Mappers.*;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -37,5 +38,9 @@ public class ParserModel {
 
     public static Customer getCustomer(ResultSet rs) throws SQLException {
         return CustomerMapper.fromResultSet(rs);
+    }
+
+    public static void setProduct(PreparedStatement stmt, Product product) throws SQLException {
+        ProductMapper.bindProductParams(stmt, product);
     }
 }

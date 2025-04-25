@@ -32,6 +32,7 @@ public class Order extends BaseModel {
         this.discountId = discountId;
     }
 
+
     public int getOrderId() {
         return orderId;
     }
