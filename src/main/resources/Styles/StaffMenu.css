@@ -1,0 +1,32 @@
+.nav-container{
+    -fx-background-color: #017FCB;
+}
+
+.user-image{
+    -fx-stroke: white;
+    -fx-stroke-width: 2;
+}
+
+.label-username, .label-name{
+    -fx-text-fill: white;
+}
+
+.label-username{
+    -fx-font-weight: bold;
+}
+
+.context-menu {
+    -fx-background-color: white;
+    -fx-cursor: hand;
+}
+
+.menu-item {
+    -fx-padding: 6px 14px;
+    -fx-font-size: 5px;
+    -fx-cursor: hand;
+}
+
+.menu-item:hover {
+    -fx-background-color: #eeeeee;
+    -fx-cursor: hand;
+}

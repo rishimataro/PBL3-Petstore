@@ -19,7 +19,7 @@ public class PetSeeder {
                 "https://example.com/dog2.jpg", "https://example.com/cat2.jpg"
         };
 
-        try (Connection conn = ConnectJDBC.connect()) {
+        try (Connection conn = conn.connect()) {
             String sql = "INSERT INTO Pets (name, type, breed, age, description, image_url) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
 

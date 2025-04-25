@@ -1,30 +1,19 @@
 package com.store.app.petstore;
 
-import com.store.app.petstore.Models.ConnectJDBC;
-import com.store.app.petstore.Views.LoginForm;
+import com.store.app.petstore.Views.ModelView;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
+import java.io.IOException;
 
 public class PetStoreApplication extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Login");
-
-        LoginForm loginFormView = new LoginForm();
-
-        Scene scene = new Scene(loginFormView.getView(), 450, 400);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+    public void start(Stage primaryStage) throws IOException {
+        ModelView.getInstance().getViewFactory().showOrderWindow();
     }
 
     public static void main(String[] args) {
-        Connection connectJDBC = ConnectJDBC.connect();
-        ConnectJDBC.disconnect(connectJDBC);
-//        launch(args);
-        System.exit(0);
+        launch(args);
     }
 }
