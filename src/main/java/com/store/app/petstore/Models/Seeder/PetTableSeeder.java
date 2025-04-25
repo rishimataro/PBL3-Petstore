@@ -1,11 +1,13 @@
-package com.store.app.petstore.Models;
+package com.store.app.petstore.Models.Seeder;
+
+import com.store.app.petstore.Models.DatabaseManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Random;
 
-public class PetSeeder {
+public class PetTableSeeder {
     public static void seedPets(int count) {
         String[] petNames = {"Milo", "Luna", "Coco", "Buddy", "Charlie", "Bella", "Max", "Lucy", "Rocky", "Daisy"};
         String[] types = {"chó", "mèo"};
@@ -22,7 +24,7 @@ public class PetSeeder {
                 "https://example.com/dog2.jpg", "https://example.com/cat2.jpg"
         };
 
-        try (Connection conn = ConnectJDBC.connect()) {
+        try (Connection conn = DatabaseManager.connect()) {
             String sql = "INSERT INTO Pets (name, type, breed, sex, age, price, description, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
 

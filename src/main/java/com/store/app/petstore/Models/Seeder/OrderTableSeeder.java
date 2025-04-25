@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class OrderSeeder {
+public class OrderTableSeeder {
     public static void seedOrders(int count) {
         Random rand = new Random();
 
-        try (Connection conn = ConnectJDBC.connect()) {
+        try (Connection conn = DatabaseManager.connect()) {
             // Lấy danh sách discount_id có thật từ bảng Discounts
             List<Integer> discountIds = new ArrayList<>();
             Statement stmt = conn.createStatement();

@@ -152,7 +152,7 @@ public class PetDAOImpl implements PetDAO {
         pet.setType(rs.getString("type"));
         pet.setBreed(rs.getString("breed"));
         pet.setAge(rs.getInt("age"));
-        pet.setGender(rs.getString("gender"));
+        pet.setSex(rs.getString("gender"));
         pet.setDescription(rs.getString("description"));
         pet.setImageUrl(rs.getString("imageUrl"));
         pet.setPrice(rs.getLong("price"));
@@ -165,7 +165,7 @@ public class PetDAOImpl implements PetDAO {
         pstmt.setString(2, pet.getType());
         pstmt.setString(3, pet.getBreed());
         pstmt.setInt(4, pet.getAge());
-        pstmt.setString(5, pet.getGender());
+        pstmt.setString(5, pet.getSex());
         pstmt.setString(6, pet.getDescription());
         pstmt.setString(7, pet.getImageUrl());
         pstmt.setLong(8, pet.getPrice());

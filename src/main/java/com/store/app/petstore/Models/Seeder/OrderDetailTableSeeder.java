@@ -1,15 +1,17 @@
-package com.store.app.petstore.Models;
+package com.store.app.petstore.Models.Seeder;
+
+import com.store.app.petstore.Models.DatabaseManager;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class OrderDetailSeeder {
+public class OrderDetailTableSeeder {
     public static void seedOrderDetails(int count) {
         Random rand = new Random();
 
-        try (Connection conn = ConnectJDBC.connect()) {
+        try (Connection conn = DatabaseManager.connect()) {
             // Lấy danh sách order_id có thật trong bảng Orders
             List<Integer> orderIds = new ArrayList<>();
             Statement orderStmt = conn.createStatement();
