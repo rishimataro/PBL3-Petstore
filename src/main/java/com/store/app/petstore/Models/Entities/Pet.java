@@ -8,7 +8,6 @@ public class Pet extends BaseModel {
     private String type;
     private String breed;
     private int age;
-//    private String gender;
     private String description;
     private String imageUrl;
     private String sex;
@@ -20,30 +19,27 @@ public class Pet extends BaseModel {
         this.type = "";
         this.breed = "";
         this.age = 0;
-//        this.gender = "";
         this.description = "";
         this.imageUrl = "";
         this.sex = "";
         this.price = 0;
     }
 
-    public Pet( String name, String type, String breed, int age, String description, String imageUrl, long price, String sex) {
+    public Pet( String name, String type, String breed, int age,  String description, String imageUrl, long price, String sex) {
         this.name = name;
         this.type = type;
         this.breed = breed;
         setAge(age); // Đảm bảo age >= 0
-//        this.gender = gender;
         this.description = description;
         this.imageUrl = imageUrl;
         this.price = price;
     }
-    public Pet(int petId, String name, String type, String breed, int age, String description, String imageUrl, long price, String sex) {
+    public Pet(int petId, String name, String type, String breed, int age,  String description, String imageUrl, long price, String sex) {
         this.petId = petId;
         this.name = name;
         this.type = type;
         this.breed = breed;
         setAge(age); // Đảm bảo age >= 0
-//        this.gender = gender;
         this.description = description;
         this.imageUrl = imageUrl;
         this.price = price;
@@ -78,9 +74,6 @@ public class Pet extends BaseModel {
         return age;
     }
 
-//    public String getGender() {
-//        return gender;
-//    }
 
     public String getDescription() {
         return description;
@@ -119,9 +112,6 @@ public class Pet extends BaseModel {
         }
     }
 
-//    public void setGender(String gender) {
-//        this.gender = gender;
-//    }
 
     public void setDescription(String description) {
         this.description = description;
