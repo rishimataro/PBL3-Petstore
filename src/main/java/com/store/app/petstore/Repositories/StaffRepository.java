@@ -59,7 +59,7 @@ public class StaffRepository implements BaseRepository<Staff> {
             @Override
             protected Boolean call() throws Exception {
                 String query = """
-                        INSERT INTO Staffs( full_name, phone, email, salary, hire_date, role, isActive)
+                        INSERT INTO Staffs(full_name, phone, email, salary, hire_date, role, isActive)
                         VALUES (?, ?, ?, ?, ?, ?, ?)
                         """;
                 try (Connection conn = DatabaseManager.connect();

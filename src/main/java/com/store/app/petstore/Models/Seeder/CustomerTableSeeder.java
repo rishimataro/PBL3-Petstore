@@ -13,21 +13,17 @@ import java.util.Set;
 public class CustomerTableSeeder {
     public CustomerTableSeeder() {
         try (Connection conn = DatabaseManager.connect();) {
-            String sqlDelete = "TRUNCATE TABLE Customers";
+            String sqlDelete = "DELETE FROM Customers";
             Statement stmt2 = conn.createStatement();
             stmt2.execute(sqlDelete);
             String sql = "INSERT INTO Customers (customer_id, full_name, phone) VALUES (?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             Faker faker = new Faker(new Locale("vi"));
             Set<String> generatedPhones = new HashSet<>();
-            int customerId = 2;
+            int customerId = 1;
             while (customerId <= 10) {
                 String fullName = faker.name().fullName();
-
-                String phone;
-                do {
-                    phone = "0" + faker.number().digits(10);
-                } while (!generatedPhones.add(phone));
+                String phone = faker.phoneNumber().cellPhone().replaceAll("[^0-9]", "");
 
                 stmt.setInt(1, customerId);
                 stmt.setString(2, fullName);

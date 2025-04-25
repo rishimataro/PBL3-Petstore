@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <fx:include source="StaffMenu.fxml" />
+        <AnchorPane prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../Styles/PersonalInfo.css">
+   <children>
+                <!-- Left side - Profile Image and Basic Info -->
+                <AnchorPane layoutX="0.0" prefHeight="442.0" prefWidth="400.0">
+         <children>
+             <StackPane layoutX="90.5" layoutY="63.5">
+                            <children>
+                                <ImageView fitHeight="191.0" fitWidth="191.0" preserveRatio="false">
+                     <image>
+                         <Image url="@../../Images/dog.png" />
+                     </image>
+                 </ImageView>
+                                <Pane fx:id="profileMask" styleClass="circle-mask" />
+                            </children>
+             </StackPane>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="15.0" layoutY="281.0" prefWidth="350.0" styleClass="fullName-label" text="NGUYỄN ĐỖ THẮNG" />
+                        <Label layoutX="82.5" layoutY="317.0" styleClass="role-label" text="Thu Ngân" />
+            <Label layoutX="237.5" layoutY="317.0" styleClass="staffID-label" text="102230103" />
+         </children>
+      </AnchorPane>
+
+                <!-- Right side - Personal Info and Password Change -->
+                <AnchorPane layoutX="400.0" prefHeight="442.0" prefWidth="592.0">
+         <children>
+                        <!-- Personal Information Section -->
+                        <Label layoutY="28.0" styleClass="main-label" text="THÔNG TIN CÁ NHÂN" />
+            <GridPane layoutY="53.5" prefHeight="210.0" prefWidth="520.0" styleClass="gridForm">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="311.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="254.85711669921875" minWidth="10.0" prefWidth="208.1428571428571" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="35.857121058872764" minHeight="17.571437290736608" prefHeight="32.57143729073661" />
+                <RowConstraints maxHeight="23.71430315290179" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                                <Label styleClass="secondary-label" text="Mã nhân viên:" />
+                  <Label styleClass="secondary-label" text="Tên nhân viên:" GridPane.rowIndex="2" />
+                  <Label styleClass="secondary-label" text="Địa chỉ:" GridPane.rowIndex="4" />
+                  <Label styleClass="secondary-label" text="Chức vụ:" GridPane.columnIndex="1" />
+                  <Label styleClass="secondary-label" text="Số điện thoại:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label styleClass="secondary-label" text="Email:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                
+                                <VBox styleClass="textField_cst_form" GridPane.rowIndex="1">
+                     <children>
+                                        <TextField fx:id="staff_id" prefHeight="20.0" prefWidth="280.0" promptText="Mã nhân viên" styleClass="txtField" />
+                     </children>
+                  </VBox>
+                  <VBox styleClass="textField_cst_form" GridPane.rowIndex="3">
+                     <children>
+                                        <TextField fx:id="staff_name" prefHeight="20.0" prefWidth="280.0" promptText="Tên nhân viên" styleClass="txtField" />
+                     </children>
+                  </VBox>
+                  <VBox styleClass="textField_cst_form" GridPane.rowIndex="5">
+                     <children>
+                                        <TextField fx:id="staff_address" prefHeight="20.0" prefWidth="280.0" promptText="Địa chỉ" styleClass="txtField" />
+                     </children>
+                  </VBox>
+                  <VBox styleClass="textField_cst_form" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                                        <TextField fx:id="staff_role" prefHeight="20.0" prefWidth="280.0" promptText="Chức vụ" styleClass="txtField" />
+                     </children>
+                  </VBox>
+                  <VBox styleClass="textField_cst_form" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <children>
+                                        <TextField fx:id="staff_phone" prefHeight="20.0" prefWidth="280.0" promptText="Số điện thoại" styleClass="txtField" />
+                     </children>
+                  </VBox>
+                  <VBox styleClass="textField_cst_form" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                     <children>
+                                        <TextField fx:id="staff_email" prefHeight="20.0" prefWidth="280.0" promptText="Email" styleClass="txtField" />
+                     </children>
+                  </VBox>
+                  <Pane GridPane.columnIndex="1" GridPane.rowIndex="6">
+                     <children>
+                                        <Button fx:id="info_save_btn" layoutX="109.0" layoutY="10.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="89.0" text="Lưu">
+                           <styleClass>
+                              <String fx:value="crud_func" />
+                              <String fx:value="save-btn" />
+                           </styleClass>
+                           <graphic>
+                              <FontAwesomeIconView glyphName="SAVE" styleClass="icon" />
+                           </graphic>
+                        </Button>
+                     </children>
+                  </Pane>
+               </children>
+            </GridPane>
+
+                        <!-- Password Change Section -->
+                        <Label layoutY="278.0" styleClass="main-label" text="ĐỔI MẬT KHẨU" />
+            <GridPane layoutY="303.5" prefHeight="110.0" prefWidth="520.0" styleClass="gridForm">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="250.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="254.85711669921875" minWidth="10.0" prefWidth="208.1428571428571" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="35.857121058872764" minHeight="17.571437290736608" prefHeight="32.57143729073661" />
+                  <RowConstraints maxHeight="23.71430315290179" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                                <Label styleClass="secondary-label" text="Mật khẩu cũ:" />
+                  <Label styleClass="secondary-label" text="Mật khẩu mới" GridPane.columnIndex="1" />
+                                <VBox styleClass="textField_cst_form" GridPane.rowIndex="1">
+                     <children>
+                                        <TextField fx:id="old_pwd" prefHeight="20.0" prefWidth="250.0" promptText="Mật khẩu cũ" styleClass="txtField" />
+                     </children>
+                  </VBox>
+                  <VBox styleClass="textField_cst_form" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                                        <TextField fx:id="new_pwd" prefHeight="20.0" prefWidth="280.0" promptText="Mật khẩu mới" styleClass="txtField" />
+                     </children>
+                  </VBox>
+                  <Pane GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                                        <Button fx:id="pwd_save_btn" layoutX="139.0" layoutY="10.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="89.0" text="Lưu">
+                           <styleClass>
+                              <String fx:value="crud_func" />
+                              <String fx:value="save-btn" />
+                           </styleClass>
+                           <graphic>
+                              <FontAwesomeIconView glyphName="SAVE" styleClass="icon" />
+                           </graphic>
+                        </Button>
+                     </children>
+                  </Pane>
+               </children>
+            </GridPane>
+   </children>
+</AnchorPane>
+   </children>
+</AnchorPane>
+    </children>
+</VBox>
