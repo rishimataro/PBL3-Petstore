@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../../Styles/StaffDashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.StaffDashboardController">
+<AnchorPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../../Styles/Staff/StaffDashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.StaffDashboardController">
    <children>
       <!-- Top Navigation Bar -->
       <fx:include source="StaffMenu.fxml" />

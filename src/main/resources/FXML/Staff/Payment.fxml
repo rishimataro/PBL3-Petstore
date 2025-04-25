@@ -9,7 +9,7 @@
 <VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <fx:include source="StaffMenu.fxml" />
-        <AnchorPane prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../Styles/Payment.css">
+        <AnchorPane prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../Styles/Staff/Payment.css">
             <children>
                 <!-- LEFT SECTION -->
                 <AnchorPane layoutY="70.0" prefHeight="442.0" prefWidth="550.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0">

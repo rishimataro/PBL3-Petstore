@@ -1,4 +1,4 @@
-package com.store.app.petstore.Controllers.Staff;
+package com.store.app.petstore.Controllers.Admin;
 
 import com.store.app.petstore.Models.Entities.Product;
 import javafx.fxml.FXML;
@@ -119,4 +119,4 @@ public class ProductInforController {
         descriptionArea.clear();
         productImage.setImage(null);
     }
-}
+} 

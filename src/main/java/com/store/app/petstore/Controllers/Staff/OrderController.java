@@ -89,7 +89,7 @@ public class OrderController implements Initializable {
             p.setName("LUCKY");
             p.setType("Chó");
             p.setBreed("Shiba");
-            p.setGender("Đực");
+            p.setSex("Đực");
             p.setImageUrl("/Images/dog.png");
             pets.add(p);
         }

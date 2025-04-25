@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="442.0" prefWidth="990.0" stylesheets="@../../Styles/Admin/AdminCommon.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXML.Admin.StaffManagement">
+   <children>
+      <MenuBar prefHeight="40.0" prefWidth="990.0" styleClass="top-nav">
+        <menus>
+          <Menu mnemonicParsing="false" styleClass="nav-button" text="Thú cưng">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" styleClass="nav-button" text="Sản phẩm">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" styleClass="nav-button" text="Khuyến mãi">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" styleClass="nav-button" text="Khách hàng">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Action 1" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" styleClass="nav-button" text="Nhân viên">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Action 1" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" styleClass="nav-button" text="Tài khoản">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Action 1" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <AnchorPane layoutY="42.0" prefHeight="400.0" prefWidth="990.0" styleClass="search-section">
+         <children>
+            <TextField layoutX="13.0" layoutY="15.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm nhân viên" styleClass="find-textfield" />
+            <FontAwesomeIconView glyphName="SEARCH" layoutX="24.0" layoutY="34.0" size="13" styleClass="icon" />
+            <FontAwesomeIconView glyphName="CLOSE" layoutX="262.0" layoutY="35.0" styleClass="icon" text="">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </FontAwesomeIconView>
+            <ChoiceBox layoutX="305.0" layoutY="15.0" prefWidth="110.0" styleClass="filter-combo-box" />
+            <TableView layoutX="13.0" layoutY="53.0" prefHeight="340.0" prefWidth="965.0">
+              <columns>
+                <TableColumn prefWidth="37.599976539611816" styleClass="stt-column" text="ID" />
+                <TableColumn prefWidth="200.0" text="Tên nhân viên" />
+                <TableColumn prefWidth="150.0" text="Số điện thoại" />
+                <TableColumn prefWidth="200.0" text="Email" />
+                <TableColumn prefWidth="150.0" text="Chức vụ" />
+                <TableColumn prefWidth="127.20001220703125" text="Tình trạng" />
+              </columns>
+            </TableView>
+            <Button layoutX="543.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Thêm nhân viên" />
+            <Button layoutX="649.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Xem chi tiết" />
+            <ChoiceBox layoutX="424.0" layoutY="14.0" prefWidth="110.0" styleClass="filter-combo-box" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -25,7 +25,7 @@
     <children>
         <fx:include source="StaffMenu.fxml" />
 
-        <AnchorPane prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../Styles/Invoice.css">
+        <AnchorPane prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../Styles/Staff/Invoice.css">
             <children>
 
                 <!-- Bảng hóa đơn bên trái -->

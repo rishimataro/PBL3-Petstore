@@ -14,7 +14,7 @@
                     prefHeight="442.0"
                     prefWidth="990.0"
                     styleClass="root"
-                    stylesheets="@../../Styles/Order.css">
+                    stylesheets="@../../Styles/Staff/Order.css">
             <children>
 
                 <!-- Right pane - Đơn hàng -->
