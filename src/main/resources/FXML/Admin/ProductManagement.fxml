@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="442.0" prefWidth="990.0" stylesheets="@../../Styles/Admin/AdminCommon.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.ProductManagementController">
+   <children>
+      <fx:include source="AdminMenu.fxml" />
+      <AnchorPane layoutY="70.0" prefHeight="372.0" prefWidth="990.0" styleClass="search-section">
+         <children>
+            <TextField layoutX="13.0" layoutY="15.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm sản phẩm" styleClass="find-textfield" />
+            <FontAwesomeIconView glyphName="SEARCH" layoutX="24.0" layoutY="34.0" size="13" styleClass="icon" />
+            <FontAwesomeIconView glyphName="CLOSE" layoutX="262.0" layoutY="35.0" styleClass="icon" text="">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </FontAwesomeIconView>
+            <ChoiceBox layoutX="305.0" layoutY="15.0" prefWidth="110.0" styleClass="filter-combo-box" />
+            <ChoiceBox layoutX="424.0" layoutY="14.0" prefWidth="110.0" styleClass="filter-combo-box" />
+            <TableView layoutX="13.0" layoutY="53.0" prefHeight="340.0" prefWidth="965.0">
+              <columns>
+                <TableColumn prefWidth="37.599976539611816" styleClass="stt-column" text="ID" />
+                <TableColumn prefWidth="275.2000427246094" text="Tên sản phẩm" />
+                <TableColumn prefWidth="156.80001831054688" text="Loại" />
+                <TableColumn prefWidth="187.2000732421875" text="Giá tiền" />
+                <TableColumn prefWidth="103.20001220703125" text="Số lượng" />
+                <TableColumn prefWidth="108.79998779296875" text="Tình trạng" />
+              </columns>
+            </TableView>
+            <Button layoutX="665.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Thêm sản phẩm" />
+            <Button layoutX="771.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Xem chi tiết" />
+            <ChoiceBox layoutX="542.0" layoutY="14.0" prefWidth="110.0" styleClass="price-filter" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane> 

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane prefHeight="350.0" prefWidth="475.0" styleClass="root" stylesheets="@../../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.ProductInforController">
+    <children>
+        <AnchorPane prefHeight="30.0" prefWidth="600.0" styleClass="nav-pane">
+            <children>
+                <Label layoutX="251.0" layoutY="7.0" styleClass="title" text="Thông tin chi tiết" />
+            </children>
+        </AnchorPane>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="210.0" layoutX="24.0" layoutY="38.0" stroke="BLACK" strokeType="INSIDE" styleClass="shape-img" width="200.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0" />
+        <GridPane layoutX="25.0" layoutY="268.0" styleClass="grid-btn" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="270.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Button mnemonicParsing="false" styleClass="btn-add" text="Thêm" />
+                <Button mnemonicParsing="false" styleClass="btn-delete" text="Xóa" GridPane.rowIndex="1" />
+                <Button mnemonicParsing="false" styleClass="btn-fix" text="Sửa" GridPane.columnIndex="1" />
+                <Button mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            </children>
+        </GridPane>
+        <GridPane layoutX="238.0" layoutY="50.0" prefHeight="200.0" prefWidth="340.0" vgap="2.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="103.5999755859375" minWidth="10.0" prefWidth="66.79998779296875" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label styleClass="lblInfor" text="Mã số:" />
+                <Label styleClass="lblInfor" text="Tên:" GridPane.rowIndex="1" />
+                <Label styleClass="lblInfor" text="Danh mục:" GridPane.rowIndex="2" />
+                <Label styleClass="lblInfor" text="Số lượng:" GridPane.rowIndex="3" />
+                <Label styleClass="lblInfor" text="Giá:" GridPane.rowIndex="4" />
+                <TextField editable="false" GridPane.columnIndex="1" />
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            </children>
+        </GridPane>
+        <VBox layoutX="238.0" layoutY="260.0" prefHeight="70.0" prefWidth="340.0">
+            <children>
+                <Label styleClass="lblInfor" text="Mô tả:">
+                    <VBox.margin>
+                        <Insets bottom="5.0" />
+                    </VBox.margin></Label>
+                <TextArea prefHeight="200.0" prefWidth="200.0" />
+            </children>
+        </VBox>
+        <FontAwesomeIconView accessibleRole="BUTTON" fill="WHITE" glyphName="REFRESH" layoutX="200.0" layoutY="254.0" size="20">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </FontAwesomeIconView>
+    </children>
+</AnchorPane>

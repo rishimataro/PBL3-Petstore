@@ -101,3 +101,64 @@
 .shape-img{
     -fx-stroke-width: 0;
 }
+
+.radio-button {
+    -fx-cursor: hand;
+}
+
+.radio-button .radio {
+    -fx-background-color: white;
+    -fx-border-color: #C1C1C1;
+    -fx-border-radius: 50%;
+    -fx-border-width: 2;
+}
+
+.radio-button:selected .radio {
+    -fx-border-color: #017FCB;
+}
+
+.radio-button .dot {
+    -fx-background-radius: 50%;
+    -fx-padding: 4px;
+}
+
+.radio-button:selected .dot {
+    -fx-background-color: #017FCB;
+}
+
+.radio-button .text {
+    -fx-fill: #333333;
+}
+
+.radio-button:hover .radio {
+    -fx-border-color: #017FCB;
+}
+
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #C1C1C1;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-padding: 5 10;
+    -fx-font-size: 12px;
+    -fx-text-fill: #333333;
+}
+
+.text-field:focused {
+    -fx-border-color: #017FCB;
+    -fx-border-width: 2;
+}
+
+.text-field:hover {
+    -fx-border-color: #017FCB;
+}
+
+.text-field:disabled {
+    -fx-background-color: #F5F5F5;
+    -fx-text-fill: #999999;
+    -fx-opacity: 1;
+}
+
+.text-field .prompt-text {
+    -fx-fill: #999999;
+}

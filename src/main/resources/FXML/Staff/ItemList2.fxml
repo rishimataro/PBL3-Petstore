@@ -6,7 +6,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="50.0" prefWidth="390.0" styleClass="card" stylesheets="@../../Styles/ItemList2.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.ItemList2Controller">
+<AnchorPane prefHeight="50.0" prefWidth="390.0" styleClass="card" stylesheets="@../../Styles/Staff/ItemList2.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.ItemList2Controller">
    <children>
       <ImageView fx:id="imgPet" fitHeight="40.0" fitWidth="40.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" styleClass="img" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <image>

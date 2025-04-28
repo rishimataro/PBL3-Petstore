@@ -23,7 +23,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <fx:include source="StaffMenu.fxml" />
+<!--        <fx:include source="StaffMenu.fxml" />-->
 
         <AnchorPane prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../Styles/Staff/Invoice.css">
             <children>
@@ -41,7 +41,7 @@
 
                         <VBox layoutX="19.0" layoutY="57.0" prefHeight="370.0" prefWidth="515.0" styleClass="bg1">
                             <children>
-                                <TableView prefHeight="360.0" prefWidth="515.0">
+                                <TableView prefHeight="330.0" prefWidth="515.0">
                                     <columns>
                                         <TableColumn prefWidth="43.0" styleClass="column-header-background" text="STT" />
                                         <TableColumn prefWidth="153.0" styleClass="column-header-background" text="Mã hóa đơn" />
@@ -50,6 +50,15 @@
                                         <TableColumn prefWidth="114.2" styleClass="column-header-background" text="Tổng hóa đơn" />
                                     </columns>
                                 </TableView>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="41.0" prefWidth="515.0" spacing="10.0">
+                           <children>
+                              <Label styleClass="revenue-label" text="Tổng doanh thu: " />
+                              <TextField styleClass="revenue-text-field" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
                             </children>
                         </VBox>
                   <DatePicker layoutX="283.0" layoutY="14.0" prefHeight="30.0" prefWidth="120.0" promptText="Ngày bắt đầu" />

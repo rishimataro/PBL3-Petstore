@@ -31,9 +31,8 @@
     -fx-pref-height: 37px;
     -fx-font-size: 12px;
     -fx-text-fill: #017FCB;
-    -fx-font-weight: nomal;
+    -fx-font-weight: normal;
     -fx-border-radius: 5px;
-
 }
 
 .txtField:focused{
@@ -59,7 +58,6 @@
     -fx-pref-width: 100px;
     -fx-pref-height: 37px;
     -fx-cursor: hand;
-
     -fx-background-radius: 5px;
 }
 
@@ -86,4 +84,10 @@
     -fx-cursor: hand;
     -fx-underline: true;
     -fx-font-style: italic;
+}
+
+.error-label {
+    -fx-text-fill: #FF0000;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
 }
