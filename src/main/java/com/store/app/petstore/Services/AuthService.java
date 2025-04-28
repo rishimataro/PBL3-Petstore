@@ -4,6 +4,7 @@ import com.store.app.petstore.Models.DatabaseManager;
 import com.store.app.petstore.Models.Entities.User;
 import com.store.app.petstore.Sessions.SessionManager;
 import com.store.app.petstore.Utils.Mappers.UserMapper;
+import javafx.concurrent.Task;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
@@ -27,6 +28,7 @@ public class AuthService {
                 System.out.println(password);
                 if (BCrypt.checkpw(password, hashedPassword)) {
                     User user = UserMapper.fromResultSet(rs);
+                    SessionManager.setCurrentUser(user);
                     return true;
                 }
             }
@@ -35,6 +37,40 @@ public class AuthService {
         }
         System.out.println("Login Failed!");
         return false;
+    }
+
+    public Task<Boolean> loginAsync(String username, String password) {
+        return new Task<>() {
+            @Override
+            protected Boolean call() {
+                String sql = "SELECT * FROM Users WHERE username = ?";
+                try (Connection conn = DatabaseManager.connect();
+                     PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                    stmt.setString(1, username);
+                    ResultSet rs = stmt.executeQuery();
+
+                    if (rs.next()) {
+                        System.out.println("Login Successful!");
+                        String hashedPassword = rs.getString("password");
+                        System.out.println("Hashed password: " + hashedPassword);
+                        System.out.println("Entered password: " + password);
+
+                        if (BCrypt.checkpw(password, hashedPassword)) {
+                            User user = UserMapper.fromResultSet(rs);
+                            SessionManager.setCurrentUser(user);
+                            return true;
+                        }
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("Login Failed!");
+                return false;
+            }
+        };
     }
 
     public void logout() {

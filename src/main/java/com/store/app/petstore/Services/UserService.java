@@ -52,17 +52,5 @@ public class UserService {
             e.printStackTrace();
         }
     }
-
-    public CompletableFuture<User> getUserByIdAsync(int userId) {
-        return CompletableFuture.supplyAsync(() -> getUserById(userId));
-    }
-
-    public CompletableFuture<Void> updateUserAsync(User user) {
-        return CompletableFuture.runAsync(() -> updateUser(user));
-    }
-
-    public CompletableFuture<Void> deleteUserAsync(int userId) {
-        return CompletableFuture.runAsync(() -> deleteUser(userId));
-    }
 }
 
