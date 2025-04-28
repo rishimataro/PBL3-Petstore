@@ -1,7 +1,7 @@
 package com.store.app.petstore.Controllers;
 
 import com.store.app.petstore.Services.AuthService;
-import com.store.app.petstore.Views.StaffView;
+import com.store.app.petstore.Views.ViewFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -111,7 +111,7 @@ public class ForgotPasswordController implements Initializable {
                         javafx.application.Platform.runLater(() -> {
                             Stage stage = (Stage) resetButton.getScene().getWindow();
                             stage.close();
-                            StaffView.getInstance().showWindow("login");
+                            ViewFactory.getInstance().showWindow("login");
                         });
                     }
                 },
