@@ -1,4 +1,6 @@
-package com.store.app.petstore.Models;
+package com.store.app.petstore.Models.Seeder;
+
+import com.store.app.petstore.Models.DatabaseManager;
 
 import java.sql.*;
 import java.util.ArrayList;
