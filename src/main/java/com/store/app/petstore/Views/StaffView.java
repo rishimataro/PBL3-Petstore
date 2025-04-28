@@ -1,5 +1,7 @@
 package com.store.app.petstore.Views;
 
+import com.store.app.petstore.Controllers.LoginController;
+import com.store.app.petstore.Controllers.Staff.StaffController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,26 +11,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
 
-public class StaffView {
-    private static StaffView instance;
+public class ViewFactory {
+    private static ViewFactory instance;
     private final String LOGIN_FXML = "/FXML/Login.fxml";
     private final String STAFF_FXML = "/FXML/Staff/StaffDashboard.fxml";
     private final String FORGOT_PASSWORD_FXML = "/FXML/ForgotPassword.fxml";
     private final String ORDER_FXML = "/FXML/Staff/Order.fxml";
     private final String PERSONAL_INFOR_FXML = "/FXML/Staff/PersonalInformation.fxml";
-    private final String INVOICE_FXML = "/FXML/Staff/Invoice.fxml";
 
     private final Map<String, AnchorPane> views;
     private final Map<String, Stage> stages;
     
-    StaffView() {
+    ViewFactory() {
         this.views = new HashMap<>();
         this.stages = new HashMap<>();
     }
     
-    public static synchronized StaffView getInstance() {
+    public static synchronized ViewFactory getInstance() {
         if (instance == null) {
-            instance = new StaffView();
+            instance = new ViewFactory();
         }
         return instance;
     }
@@ -71,10 +72,6 @@ public class StaffView {
                     root = loadFXML(PERSONAL_INFOR_FXML);
                     stage.setTitle("Personal Information");
                     break;
-                case "invoice":
-                    root = loadFXML(INVOICE_FXML);
-                    stage.setTitle("Invoice History");
-                    break;
                 default:
                     System.err.println("Unknown FXML file: " + fxmlName);
                     return;
@@ -109,8 +106,6 @@ public class StaffView {
                 return ORDER_FXML;
             case "forgotpassword":
                 return FORGOT_PASSWORD_FXML;
-            case "invoice":
-                return INVOICE_FXML;
             // Add more cases as needed
             default:
                 throw new IllegalArgumentException("Unknown view: " + viewName);

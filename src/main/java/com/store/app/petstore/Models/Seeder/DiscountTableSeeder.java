@@ -10,8 +10,7 @@ import java.util.Calendar;
 import java.util.Random;
 
 public class DiscountTableSeeder {
-    public DiscountTableSeeder() {
-        int count = 50;
+    public static void seedDiscounts(int count) {
         String[] codes = {"SUMMER", "WINTER", "WELCOME", "VIP", "SALE", "LOVE", "PETDAY", "XMAS", "NEWYEAR", "LUCKY"};
         String[] types = {"phần trăm", "cố định"};
         String[] statuses = {"sắp diễn ra", "đang hoạt động", "kết thúc"};
