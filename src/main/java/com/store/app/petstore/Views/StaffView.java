@@ -1,7 +1,5 @@
 package com.store.app.petstore.Views;
 
-import com.store.app.petstore.Controllers.LoginController;
-import com.store.app.petstore.Controllers.Staff.StaffController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
 
-public class ViewFactory {
-    private static ViewFactory instance;
+public class StaffView {
+    private static StaffView instance;
     private final String LOGIN_FXML = "/FXML/Login.fxml";
     private final String STAFF_FXML = "/FXML/Staff/StaffDashboard.fxml";
     private final String FORGOT_PASSWORD_FXML = "/FXML/ForgotPassword.fxml";
@@ -22,14 +20,14 @@ public class ViewFactory {
     private final Map<String, AnchorPane> views;
     private final Map<String, Stage> stages;
     
-    ViewFactory() {
+    StaffView() {
         this.views = new HashMap<>();
         this.stages = new HashMap<>();
     }
     
-    public static synchronized ViewFactory getInstance() {
+    public static synchronized StaffView getInstance() {
         if (instance == null) {
-            instance = new ViewFactory();
+            instance = new StaffView();
         }
         return instance;
     }
