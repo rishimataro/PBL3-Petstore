@@ -1,6 +1,6 @@
 package com.store.app.petstore.Controllers.Staff;
 
-import com.store.app.petstore.Repositories.PetRepository;import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -13,7 +13,6 @@ import com.store.app.petstore.Models.Entities.Pet;
 import java.util.Objects;
 
 public class ItemListController {
-    private PetRepository petRepository;
 
     @FXML
     private FontAwesomeIconView addIcon;
@@ -44,9 +43,6 @@ public class ItemListController {
 
     @FXML
     private Pet p;
-    public ItemListController() {
-        petRepository = new PetRepository();
-    }
 
     public void setData(Pet p) {
         this.p = p;
