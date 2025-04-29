@@ -17,9 +17,7 @@ public class DatabaseManager {
                 final String password = dotenv.get("DB_PASSWORD");
                 final String connectionURL = "jdbc:mysql://" + hostName + "/" + dbName + "?useSSL=false&allowPublicKeyRetrieval=true";
 
-                System.out.println("Connecting to database...");
                 connection = DriverManager.getConnection(connectionURL, username, password);
-                System.out.println("Kết nối thành công");
             }
         } catch (SQLException e) {
             e.printStackTrace();
