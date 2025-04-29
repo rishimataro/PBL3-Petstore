@@ -1,7 +1,7 @@
 package com.store.app.petstore.Models.Records;
 
-import com.store.app.petstore.Repositories.OrderDetailRepository;
-import com.store.app.petstore.Repositories.OrderRepository;
+// import com.store.app.petstore.Repositories.OrderDetailRepository;
+// import com.store.app.petstore.Repositories.OrderRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -5,31 +5,32 @@ import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.*;
 
 public class DatabaseManager {
+    private static Connection connection = null;
+
     public static Connection connect() {
-        Dotenv dotenv = Dotenv.load();
-        final String hostName = dotenv.get("DB_HOST_NAME");
-        final String dbName = dotenv.get("DB_NAME");
-        final String username = dotenv.get("DB_USER");
-        final String password = dotenv.get("DB_PASSWORD");
-        final String connectionURL = "jdbc:mysql://" + hostName + "/" + dbName + "?useSSL=false&allowPublicKeyRetrieval=true";
-
-        System.out.println("Connecting to database...");
-        Connection conn = null;
-
         try {
-            conn = DriverManager.getConnection(connectionURL, username, password);
-            System.out.println("Kết nối thành công");
+            if (connection == null || connection.isClosed()) {
+                Dotenv dotenv = Dotenv.load();
+                final String hostName = dotenv.get("DB_HOST_NAME");
+                final String dbName = dotenv.get("DB_NAME");
+                final String username = dotenv.get("DB_USER");
+                final String password = dotenv.get("DB_PASSWORD");
+                final String connectionURL = "jdbc:mysql://" + hostName + "/" + dbName + "?useSSL=false&allowPublicKeyRetrieval=true";
+
+                System.out.println("Connecting to database...");
+                connection = DriverManager.getConnection(connectionURL, username, password);
+                System.out.println("Kết nối thành công");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return conn;
+        return connection;
     }
 
-    public static void closeConnection(Connection conn) {
-        if (conn != null) {
+    public static void closeConnection() {
+        if (connection != null) {
             try {
-                conn.close();
+                connection.close();
                 System.out.println("Disconnected from MySQL!");
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -37,33 +38,34 @@ public class DatabaseManager {
         }
     }
 
-    public static void closeConnection(ResultSet rs) {
-        try {
-            if (rs != null && !rs.isClosed()) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void closeConnection(PreparedStatement ps) {
+    public static void closeStatement(PreparedStatement ps) {
         try {
             if (ps != null && !ps.isClosed()) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                ps.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public static void closeStatement(Statement stmt) {
+        try {
+            if (stmt != null && !stmt.isClosed()) {
+                stmt.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void closeResultSet(ResultSet rs) {
+        try {
+            if (rs != null && !rs.isClosed()) {
+                rs.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

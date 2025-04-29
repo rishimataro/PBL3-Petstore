@@ -1,7 +1,6 @@
 package com.store.app.petstore.Controllers;
 
 import com.store.app.petstore.Models.Entities.User;
-import com.store.app.petstore.Services.LoginService;
 import com.store.app.petstore.Sessions.SessionManager;
 import com.store.app.petstore.Views.ModelView;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -41,14 +40,12 @@ public class LoginController implements Initializable {
     @FXML
     private Hyperlink forgotPasswordLink;
 
-    private final LoginService loginService = LoginService.getInstance();
     private double x, y;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupPasswordVisibility();
-        setupLoginButton();
-        setupForgotPasswordLink();
+
     }
 
     private void setupPasswordVisibility() {
@@ -67,61 +64,6 @@ public class LoginController implements Initializable {
                 eyeIcon.setIcon(FontAwesomeIcon.EYE_SLASH);
             }
         });
-    }
-
-    private void setupLoginButton() {
-        loginButton.setOnAction(event -> handleLogin());
-    }
-
-    private void setupForgotPasswordLink() {
-        forgotPasswordLink.setOnAction(event -> handleForgotPassword());
-    }
-
-    private void handleForgotPassword() {
-        // Close the current login window
-        Stage stage = (Stage) forgotPasswordLink.getScene().getWindow();
-        stage.close();
-        
-        // Show the forgot password window
-        ModelView.getInstance().getViewFactory().showWindow("forgotpassword");
-    }
-
-    private void handleLogin() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-
-        if (username.isEmpty() || password.isEmpty()) {
-            errorLabel.setText("Vui lòng nhập đầy đủ thông tin");
-            errorLabel.setVisible(true);
-            return;
-        }
-
-        if (!loginService.isUsernameExists(username)) {
-            errorLabel.setText("Tên đăng nhập không tồn tại");
-            errorLabel.setVisible(true);
-            return;
-        }
-
-        if (!loginService.isAccountActive(username)) {
-            errorLabel.setText("Tài khoản đã bị khóa");
-            errorLabel.setVisible(true);
-            return;
-        }
-
-        User user = loginService.authenticate(username, password);
-        if (user != null) {
-            errorLabel.setVisible(false);
-            // Set current user in session
-            SessionManager.setCurrentUser(user);
-            // Close login window
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-            stage.close();
-            // Show order view
-            ModelView.getInstance().getViewFactory().showWindow("order");
-        } else {
-            errorLabel.setText("Mật khẩu không đúng");
-            errorLabel.setVisible(true);
-        }
     }
 
     @FXML

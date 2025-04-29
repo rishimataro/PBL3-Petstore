@@ -39,7 +39,7 @@ public class ProductTableSeeder {
             }
 
             System.out.println("Seeder thành công: đã thêm 50 sản phẩm hợp lệ.");
-            DatabaseManager.closeConnection(conn);
+            DatabaseManager.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Lỗi khi chèn dữ liệu: " + e.getMessage());
