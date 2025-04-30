@@ -28,7 +28,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import com.store.app.petstore.Models.Entities.Pet;
+import com.store.app.petstore.Models.Entities.Order;
+import com.store.app.petstore.DAO.OrderDAO;
 
 public class OrderController implements Initializable {
     private final GridPane grid = new GridPane();
@@ -36,7 +37,7 @@ public class OrderController implements Initializable {
     @FXML
     private ScrollPane scrollPane;
 
-    private final List<Pet> pets = new ArrayList<>();
+    private final List<Order> pets = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -80,10 +81,11 @@ public class OrderController implements Initializable {
             scrollPane.setContent(grid);
         }
     }
-    private ArrayList<Pet> getPets() {
-        ArrayList<Pet> pets = new ArrayList<>();
 
+    private ArrayList<Order> getPets() {
+        ArrayList<Order> pets = new ArrayList<>();
+        OrderDAO orderDAO = OrderDAO.getInstance();
+        pets.addAll(orderDAO.findAll());
         return pets;
     }
-
 }
