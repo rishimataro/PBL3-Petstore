@@ -64,7 +64,7 @@ public class OrderController implements Initializable {
                 int petIndex = i; // used for lambda capture
                 petPane.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY) {
-                        tabManager.openTab("pet_" + pet.getPetId());
+                        tabManager.openTab("pet_" + pet.getPetId(), "Pet " + pet.getPetId(), () -> createPetTabContent(pet));
                     }
                 });
 
@@ -86,6 +86,14 @@ public class OrderController implements Initializable {
         AnchorPane pane = loader.load();
         ItemListController controller = loader.getController();
         controller.setData(pet);
+        return pane;
+    }
+
+    private AnchorPane createPetTabContent(Pet pet) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/PetTab.fxml"));
+        AnchorPane pane = loader.load();
+        PetTabController controller = loader.getController();
+        controller.setPet(pet);
         return pane;
     }
 

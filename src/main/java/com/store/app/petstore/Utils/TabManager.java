@@ -4,10 +4,16 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.function.Supplier;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 
 public class TabManager {
     private final Map<String, Tab> openTabs = new HashMap<>();
+    private final TabPane tabPane;
+
+    public TabManager(TabPane tabPane) {
+        this.tabPane = tabPane;
+    }
 
     /**
      * Opens a new tab with the given ID, title, and content.
@@ -19,14 +25,14 @@ public class TabManager {
      */
     public void openTab(String tabId, String tabTitle, Supplier<AnchorPane> contentSupplier) {
         if (openTabs.containsKey(tabId)) {
-            // Tab already exists, switch to it (implementation of switching depends on TabPane)
+            // Tab already exists, switch to it
             Tab existingTab = openTabs.get(tabId);
-            // Note: Actual switching logic (e.g., selecting the tab in a TabPane) is not included here
-            // and should be handled externally or extended in a subclass.
+            existingTab.select();
         } else {
             Tab newTab = new Tab(tabTitle);
             newTab.setContent(contentSupplier.get());
             openTabs.put(tabId, newTab);
+            tabPane.getTabs().add(newTab);
         }
     }
 
@@ -36,7 +42,10 @@ public class TabManager {
      * @param tabId The unique identifier of the tab to close.
      */
     public void closeTab(String tabId) {
-        openTabs.remove(tabId);
+        if (openTabs.containsKey(tabId)) {
+            Tab tab = openTabs.remove(tabId);
+            tabPane.getTabs().remove(tab);
+        }
     }
 
     /**
@@ -44,5 +53,6 @@ public class TabManager {
      */
     public void closeAllTabs() {
         openTabs.clear();
+        tabPane.getTabs().clear();
     }
 }
