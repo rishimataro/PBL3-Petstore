@@ -24,15 +24,15 @@
                                  styleClass="tab-container" tabClosingPolicy="UNAVAILABLE"
                                  AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="15.0">
                             <tabs>
-                                <Tab text="Đơn hàng 1">
-                                    <content>
-                                        <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox-order">
-                                            <children>
-                                                <ScrollBar orientation="VERTICAL" styleClass="scrollbar" />
-                                            </children>
-                                        </HBox>
-                                    </content>
-                                </Tab>
+<!--                                <Tab text="Đơn hàng 1">-->
+<!--                                    <content>-->
+<!--                                        <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox-order">-->
+<!--                                            <children>-->
+<!--                                                <ScrollBar orientation="VERTICAL" styleClass="scrollbar" />-->
+<!--                                            </children>-->
+<!--                                        </HBox>-->
+<!--                                    </content>-->
+<!--                                </Tab>-->
 <!--                                <Tab text="Đơn hàng 2">-->
 <!--                                    <content>-->
 <!--                                        <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox-order">-->
@@ -65,9 +65,9 @@
                                 <TextField promptText="Nhập code (nếu có)" styleClass="code-textfield"
                                            GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                                <Label styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" />
+                                <Label styleClass="money-label" text="0" GridPane.columnIndex="2" />
                                 <Label styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                <Label styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                <Label styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                             </children>
                         </GridPane>
 
