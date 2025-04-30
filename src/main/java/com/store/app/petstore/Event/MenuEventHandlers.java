@@ -49,7 +49,7 @@ public class MenuEventHandlers implements MenuActions {
     public void handleAccountInfo(ActionEvent event) {
         try {
             // Load the account info view
-            FXMLLoader loader = new FXMLLoader(MenuEventHandlers.class.getResource("/FXML/Staff/AccountInfo.fxml"));
+            FXMLLoader loader = new FXMLLoader(MenuEventHandlers.class.getResource("/FXML/Staff/APersonalInfo.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
