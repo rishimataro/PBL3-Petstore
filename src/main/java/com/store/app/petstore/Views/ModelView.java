@@ -2,10 +2,10 @@ package com.store.app.petstore.Views;
 
 public class ModelView {
     private static ModelView model;
-    private final StaffView viewFactory;
+    private final ViewFactory viewFactory;
 
     public ModelView() {
-        viewFactory = new StaffView();
+        viewFactory = new ViewFactory();
     }
 
     public static synchronized ModelView getInstance() {
@@ -15,7 +15,7 @@ public class ModelView {
         return model;
     }
 
-    public StaffView getViewFactory() {
+    public ViewFactory getViewFactory() {
         return viewFactory;
     }
 }

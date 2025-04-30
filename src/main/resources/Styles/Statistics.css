@@ -72,3 +72,6 @@
     -fx-background-radius: 2;
     -fx-background-color: #FFFFFF;
 }
+.choice-box-filter.cyan{
+    -fx-border-color: rgba(1, 196, 218, 1);
+}

@@ -1,7 +1,7 @@
 package com.store.app.petstore.Controllers;
 
 import com.store.app.petstore.Services.AuthService;
-import com.store.app.petstore.Views.StaffView;
+import com.store.app.petstore.Views.ViewFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -28,6 +28,9 @@ public class ForgotPasswordController implements Initializable {
     private Button resetButton;
 
     @FXML
+    private Button backButton;
+
+    @FXML
     private Label messageLabel;
 
     @FXML
@@ -46,8 +49,7 @@ public class ForgotPasswordController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupResetButton();
-        passwordFields.setVisible(false);
-        confirmPasswordFields.setVisible(false);
+        setupBackButton();
     }
 
     private void setupResetButton() {
@@ -57,6 +59,14 @@ public class ForgotPasswordController implements Initializable {
             } else {
                 handlePasswordReset();
             }
+        });
+    }
+
+    private void setupBackButton() {
+        backButton.setOnAction(event -> {
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            stage.close();
+            ViewFactory.getInstance().showWindow("login");
         });
     }
 
@@ -111,7 +121,7 @@ public class ForgotPasswordController implements Initializable {
                         javafx.application.Platform.runLater(() -> {
                             Stage stage = (Stage) resetButton.getScene().getWindow();
                             stage.close();
-                            StaffView.getInstance().showWindow("login");
+                            ViewFactory.getInstance().showWindow("login");
                         });
                     }
                 },
