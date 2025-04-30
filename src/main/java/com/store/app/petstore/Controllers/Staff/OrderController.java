@@ -18,6 +18,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.Tab;
 
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
@@ -31,13 +33,14 @@ import java.util.ResourceBundle;
 import com.store.app.petstore.Models.Entities.Pet;
 
 public class OrderController implements Initializable {
+    @FXML
+    private TabPane tabPane;
+
     private final GridPane grid = new GridPane();
-    private final ArrayList<Pet> orderList = new ArrayList<>();
+    private final ArrayList<Pet> pets = new ArrayList<>();
 
     @FXML
     private ScrollPane scrollPane;
-
-    private final ArrayList<Pet> pets = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -70,8 +73,16 @@ public class OrderController implements Initializable {
                 anchorPane.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY) {
                         Pet selectedPet = pets.get(index);
-                        orderList.add(selectedPet);
-                        System.out.println("Added to order: " + selectedPet.getName());
+
+                        // Create a new tab
+                        Tab newTab = new Tab("Đơn hàng " + (tabPane.getTabs().size() + 1));
+                        FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList.fxml"));
+                        AnchorPane tabContent = tabLoader.load();
+                        ItemListController tabController = tabLoader.getController();
+                        tabController.setData(selectedPet);
+
+                        newTab.setContent(tabContent);
+                        tabPane.getTabs().add(newTab);
                     }
                 });
 

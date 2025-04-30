@@ -20,7 +20,7 @@
                 <!-- Right pane - Đơn hàng -->
                 <AnchorPane layoutX="550.0" layoutY="70.0" prefHeight="442.0" prefWidth="440.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <TabPane layoutX="10.0" layoutY="14.0" prefHeight="280.0" prefWidth="410.0"
+                        <TabPane fx:id="tabPane" layoutX="10.0" layoutY="14.0" prefHeight="280.0" prefWidth="410.0"
                                  styleClass="tab-container" tabClosingPolicy="UNAVAILABLE"
                                  AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="15.0">
                             <tabs>
@@ -65,9 +65,9 @@
                                 <TextField promptText="Nhập code (nếu có)" styleClass="code-textfield"
                                            GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                                <Label styleClass="money-label" text="0" GridPane.columnIndex="2" />
+                                <Label styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" />
                                 <Label styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                <Label styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                <Label styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                             </children>
                         </GridPane>
 
