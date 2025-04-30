@@ -272,9 +272,11 @@
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Label prefHeight="21.0" prefWidth="270.0" styleClass="main-statistic-text" text="Tổng hóa đơn gần đây" />
-                        <ChoiceBox prefHeight="30.0" prefWidth="80.0" styleClass="choice-box-filter">
-                           
-                        </ChoiceBox>
+                        <ChoiceBox prefHeight="30.0" prefWidth="80.0">
+                           <styleClass>
+                              <String fx:value="choice-box-filter" />
+                              <String fx:value="yellow" />
+                           </styleClass></ChoiceBox>
                      </children>
                   </HBox>
                </children>

@@ -248,10 +248,16 @@
                   <HBox spacing="10.0">
                      <children>
                               <Label prefHeight="29.0" prefWidth="310.0" styleClass="main-statistic-text" text="Biểu đồ thống kê doanh thu" />
-                                <ChoiceBox prefHeight="30.0" prefWidth="110.0" styleClass="choice-box-filter">
-
-                                </ChoiceBox>
-                        <ChoiceBox prefHeight="30.0" prefWidth="110.0" styleClass="choice-box-filter" />
+                                <ChoiceBox prefHeight="30.0" prefWidth="110.0">
+                           <styleClass>
+                              <String fx:value="choice-box-filter" />
+                              <String fx:value="yellow" />
+                           </styleClass></ChoiceBox>
+                        <ChoiceBox prefHeight="30.0" prefWidth="110.0">
+                           <styleClass>
+                              <String fx:value="choice-box-filter" />
+                              <String fx:value="yellow" />
+                           </styleClass></ChoiceBox>
                      </children>
                   </HBox>
                     </children>
@@ -267,7 +273,11 @@
                               <String fx:value="cyan" />
                            </styleClass>
                         </ChoiceBox>
-                        <ChoiceBox prefHeight="30.0" prefWidth="80.0" styleClass="choice-box-filter" />
+                        <ChoiceBox prefHeight="30.0" prefWidth="80.0">
+                           <styleClass>
+                              <String fx:value="choice-box-filter" />
+                              <String fx:value="yellow" />
+                           </styleClass></ChoiceBox>
                             </children>
                         </HBox>
                     </children>
