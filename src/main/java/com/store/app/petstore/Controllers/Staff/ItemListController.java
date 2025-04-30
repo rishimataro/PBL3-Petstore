@@ -52,7 +52,7 @@ public class ItemListController {
         tagGender.setText(p.getSex());
         tagType.setText(p.getType());
 
-        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream(p.getImageUrl())));
+        Image img = new Image(getClass().getResourceAsStream(p.getImageUrl()));
         imgPet.setImage(img);
     }
 }

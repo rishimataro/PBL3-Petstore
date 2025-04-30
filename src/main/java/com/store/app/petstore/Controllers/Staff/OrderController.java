@@ -77,7 +77,12 @@ public class OrderController implements Initializable {
                         // Create a new tab
                         Tab newTab = new Tab("Đơn hàng " + (tabPane.getTabs().size() + 1));
                         FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList.fxml"));
-                        AnchorPane tabContent = tabLoader.load();
+                        AnchorPane tabContent = null;
+                        try {
+                            tabContent = tabLoader.load();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         ItemListController tabController = tabLoader.getController();
                         tabController.setData(selectedPet);
 
