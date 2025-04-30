@@ -2,6 +2,7 @@ package com.store.app.petstore.Controllers.Staff;
 
 import com.store.app.petstore.DAO.PetDAO;
 import com.store.app.petstore.Models.Entities.Pet;
+import com.store.app.petstore.Controllers.TabManager; // Assuming TabManager is in this package or imported
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,9 +30,11 @@ public class OrderController implements Initializable {
 
     private final GridPane grid = new GridPane();
     private final List<Pet> petList = new ArrayList<>();
+    private TabManager tabManager;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        tabManager = new TabManager(tabPane);
         loadPetList();
         configureGridLayout();
         populateGridWithPets();
@@ -61,7 +64,7 @@ public class OrderController implements Initializable {
                 int petIndex = i; // used for lambda capture
                 petPane.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY) {
-                        createNewTab();
+                        tabManager.openTab("pet_" + pet.getId());
                     }
                 });
 
@@ -84,25 +87,6 @@ public class OrderController implements Initializable {
         ItemListController controller = loader.getController();
         controller.setData(pet);
         return pane;
-    }
-
-    private void createNewTab() {
-        Tab newTab = new Tab("Đơn hàng " + (tabPane.getTabs().size() + 1));
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList.fxml"));
-            AnchorPane content = loader.load();
-            ItemListController controller = loader.getController();
-            newTab.setContent(content);
-            tabPane.getTabs().add(newTab);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load tab content", e);
-        }
-    }
-
-    @FXML
-    private void handleCreateNewTab() {
-        createNewTab();
     }
 
     private void configureGridLayout() {
