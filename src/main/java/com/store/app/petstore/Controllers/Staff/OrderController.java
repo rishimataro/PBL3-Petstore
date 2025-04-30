@@ -2,7 +2,7 @@ package com.store.app.petstore.Controllers.Staff;
 
 import com.store.app.petstore.DAO.PetDAO;
 import com.store.app.petstore.Models.Entities.Pet;
-import com.store.app.petstore.Controllers.TabManager; // Assuming TabManager is in this package or imported
+import com.store.app.petstore.Utils.TabManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -64,7 +64,7 @@ public class OrderController implements Initializable {
                 int petIndex = i; // used for lambda capture
                 petPane.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY) {
-                        tabManager.openTab("pet_" + pet.getId());
+                        tabManager.openTab("pet_" + pet.getPetId());
                     }
                 });
 
