@@ -25,10 +25,13 @@ public class OrderController implements Initializable {
     private TabPane tabPane;
 
     private final GridPane grid = new GridPane();
-    private final ArrayList<Pet> petList= new ArrayList<>();
+    private final ArrayList<Pet> petList = new ArrayList<>();
 
     @FXML
     private ScrollPane scrollPane;
+
+    @FXML
+    private Button createNewTabButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -102,5 +105,10 @@ public class OrderController implements Initializable {
     private ArrayList<Pet> getPets() {
         PetDAO petDAO = PetDAO.getInstance();
         return new ArrayList<>(petDAO.findAll());
+    }
+
+    @FXML
+    private void handleCreateNewTab() {
+        createNewTab(null);
     }
 }
