@@ -1,5 +1,6 @@
 package com.store.app.petstore.Controllers.Staff;
 
+import com.store.app.petstore.DAO.PetDAO;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -84,7 +85,7 @@ public class OrderController implements Initializable {
 
     private ArrayList<Order> getPets() {
         ArrayList<Order> pets = new ArrayList<>();
-        OrderDAO orderDAO = OrderDAO.getInstance();
+        PetDAO orderDAO = PetDAO.getInstance();
         pets.addAll(orderDAO.findAll());
         return pets;
     }
