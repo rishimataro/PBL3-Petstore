@@ -24,6 +24,7 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -35,7 +36,7 @@ public class OrderController implements Initializable {
     @FXML
     private ScrollPane scrollPane;
 
-    private final ArrayList<Pet> pets = new ArrayList<>();
+    private final List<Pet> pets = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,20 +80,8 @@ public class OrderController implements Initializable {
             scrollPane.setContent(grid);
         }
     }
-
     private ArrayList<Pet> getPets() {
         ArrayList<Pet> pets = new ArrayList<>();
-        Pet p;
-
-        for(int i = 0; i < 16; i++) {
-            p = new Pet();
-            p.setName("LUCKY");
-            p.setType("Chó");
-            p.setBreed("Shiba");
-            p.setSex("Đực");
-            p.setImageUrl("/Images/dog.png");
-            pets.add(p);
-        }
 
         return pets;
     }
