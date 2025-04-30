@@ -1,86 +1,84 @@
 package com.store.app.petstore.Controllers.Staff;
 
-import com.store.app.petstore.Controllers.Staff.ItemListController;
 import com.store.app.petstore.DAO.PetDAO;
+import com.store.app.petstore.Models.Entities.Pet;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
-import com.store.app.petstore.Models.Entities.Pet;
-
 public class OrderController implements Initializable {
-    @FXML
-    private TabPane tabPane;
+
+    @FXML private TabPane tabPane;
+    @FXML private ScrollPane scrollPane;
+    @FXML private Button createNewTabButton;
 
     private final GridPane grid = new GridPane();
-    private final ArrayList<Pet> petList = new ArrayList<>();
-
-    @FXML
-    private ScrollPane scrollPane;
-
-    @FXML
-    private Button createNewTabButton;
+    private final List<Pet> petList = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        petList.addAll(getPets());
-
-        setupGrid();
-        setupScrollPane();
+        loadPetList();
+        configureGridLayout();
+        populateGridWithPets();
+        configureScrollPane();
     }
 
-    private void setupGrid() {
+    private void loadPetList() {
+        petList.addAll(PetDAO.getInstance().findAll());
+    }
+
+    private void configureScrollPane() {
+        grid.setMinSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        grid.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        grid.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        scrollPane.setContent(grid);
+    }
+
+    private void populateGridWithPets() {
+        int column = 0;
         int row = 0;
-        int col = 0;
 
         for (int i = 0; i < petList.size(); i++) {
-            final int index = i;
+            Pet pet = petList.get(i);
             try {
-                AnchorPane itemPane = loadItemView(petList.get(i));
-                itemPane.setOnMouseClicked(event -> {
+                AnchorPane petPane = createPetItemPane(pet);
+
+                int petIndex = i; // used for lambda capture
+                petPane.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY) {
-                        createNewTab(petList.get(index));
+                        createNewTab();
                     }
                 });
 
-                if (col == 4) {
+                if (column == 4) {
+                    column = 0;
                     row++;
-                    col = 0;
                 }
 
-                grid.add(itemPane, col++, row);
-                GridPane.setMargin(itemPane, new Insets(7));
+                grid.add(petPane, column++, row);
+                GridPane.setMargin(petPane, new Insets(7));
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("Failed to load pet item view: " + e.getMessage());
             }
         }
     }
 
-    private void setupScrollPane() {
-        grid.setMinWidth(Region.USE_COMPUTED_SIZE);
-        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
-        grid.setMaxWidth(Double.MAX_VALUE);
-
-        grid.setMinHeight(Region.USE_COMPUTED_SIZE);
-        grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        grid.setMaxHeight(Double.MAX_VALUE);
-
-        scrollPane.setContent(grid);
-    }
-
-    private AnchorPane loadItemView(Pet pet) throws IOException {
+    private AnchorPane createPetItemPane(Pet pet) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList.fxml"));
         AnchorPane pane = loader.load();
         ItemListController controller = loader.getController();
@@ -88,13 +86,13 @@ public class OrderController implements Initializable {
         return pane;
     }
 
-    private void createNewTab(Pet pet) {
+    private void createNewTab() {
         Tab newTab = new Tab("Đơn hàng " + (tabPane.getTabs().size() + 1));
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList.fxml"));
             AnchorPane content = loader.load();
             ItemListController controller = loader.getController();
-            controller.setData(pet);
             newTab.setContent(content);
             tabPane.getTabs().add(newTab);
         } catch (IOException e) {
@@ -102,13 +100,13 @@ public class OrderController implements Initializable {
         }
     }
 
-    private ArrayList<Pet> getPets() {
-        PetDAO petDAO = PetDAO.getInstance();
-        return new ArrayList<>(petDAO.findAll());
-    }
-
     @FXML
     private void handleCreateNewTab() {
-        createNewTab(null);
+        createNewTab();
+    }
+
+    private void configureGridLayout() {
+        grid.setHgap(0);
+        grid.setVgap(0);
     }
 }
