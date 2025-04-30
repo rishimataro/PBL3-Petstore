@@ -11,15 +11,24 @@ public class User extends BaseModel {
     private String role;
     private LocalDateTime createdAt;
     private boolean isActive;
+    private String imageUrl;
+
+    public static final String ROLE_USER = "nhân viên";
+    public static final String ROLE_ADMIN = "quản trị viên";
+
+    public static final boolean ACTIVE = true;
+    public static final boolean NO_ACTIVE = false;
+
     public User() {}
 
-    public User( String username, String password, String role, LocalDateTime createdAt, boolean isActive) {
+    public User(String username, String password, String role, LocalDateTime createdAt, boolean isActive) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.createdAt = createdAt;
         this.isActive = isActive;
     }
+
     public User(int userId, String username, String password, String role, LocalDateTime createdAt, boolean isActive) {
         this.userId = userId;
         this.username = username;
@@ -37,6 +46,7 @@ public class User extends BaseModel {
         this.createdAt = LocalDateTime.now();
         this.isActive = isActive;
     }
+
     // Getters
     public int getUserId() { return userId; }
     public String getUsername() { return username; }
@@ -44,6 +54,7 @@ public class User extends BaseModel {
     public String getRole() { return role; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public boolean isActive() { return isActive; }
+    public String getImageUrl() { return imageUrl; }
 
     // Setters
     public void setUserId(int userId) { this.userId = userId; }
@@ -52,4 +63,5 @@ public class User extends BaseModel {
     public void setRole(String role) { this.role = role; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     public void setActive(boolean active) { isActive = active; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }

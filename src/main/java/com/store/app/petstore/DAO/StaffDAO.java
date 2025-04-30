@@ -1,50 +1,120 @@
 package com.store.app.petstore.DAO;
 
 import com.store.app.petstore.Models.Entities.Staff;
-import java.sql.*;
+import com.store.app.petstore.Utils.Mappers.StaffMapper;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class StaffDAO implements BaseDAO<Staff, Integer> {
-    public static StaffDAO getInstance() { 
-        return new StaffDAO(); 
+    private static StaffDAO instance;
+
+    public static StaffDAO getInstance() {
+        if (instance == null) {
+            instance = new StaffDAO();
+        }
+        return instance;
     }
 
     @Override
-    public int insert(Staff entity) {
+    public Staff findById(Integer id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
         try {
             conn = DatabaseUtil.getConnection();
+            String sql = "SELECT * FROM Staffs WHERE staff_id = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return StaffMapper.fromResutlSet(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DatabaseUtil.closeResources(rs, stmt, conn);
+        }
+        return null;
+    }
+
+    public Staff findByUserId(Integer userId) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = DatabaseUtil.getConnection();
+            String sql = "SELECT * FROM Staffs WHERE user_id = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return StaffMapper.fromResutlSet(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DatabaseUtil.closeResources(rs, stmt, conn);
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<Staff> findByCondition(String condition) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Staff> staffs = new ArrayList<>();
+        
+        try {
+            conn = DatabaseUtil.getConnection();
+            String sql = "SELECT * FROM Staffs WHERE " + condition;
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                staffs.add(StaffMapper.fromResutlSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DatabaseUtil.closeResources(rs, stmt, conn);
+        }
+        return staffs;
+    }
+
+    @Override
+    public int insert(Staff entity) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        
+        try {
+            conn = DatabaseUtil.getConnection();
             String sql = "INSERT INTO Staffs (user_id, full_name, phone, email, salary, hire_date, role, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt = conn.prepareStatement(sql);
             
             stmt.setInt(1, entity.getUserId());
             stmt.setString(2, entity.getFullName());
             stmt.setString(3, entity.getPhone());
             stmt.setString(4, entity.getEmail());
             stmt.setDouble(5, entity.getSalary());
-            stmt.setTimestamp(6, Timestamp.valueOf(entity.getHireDate()));
+            stmt.setTimestamp(6, java.sql.Timestamp.valueOf(entity.getHireDate()));
             stmt.setString(7, entity.getRole());
-            stmt.setInt(8, entity.isActive() ? 1 : 0);
+            stmt.setBoolean(8, entity.isActive());
             
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                return 0;
-            }
-            
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
-                }
-            }
-            return 0;
+            return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             return 0;
         } finally {
-            DatabaseUtil.closeResources(rs, stmt, conn);
+            DatabaseUtil.closeResources(stmt, conn);
         }
     }
 
@@ -55,18 +125,17 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
         
         try {
             conn = DatabaseUtil.getConnection();
-            String sql = "UPDATE Staffs SET user_id = ?, full_name = ?, phone = ?, email = ?, salary = ?, hire_date = ?, role = ?, isActive = ? WHERE staff_id = ?";
+            String sql = "UPDATE Staffs SET full_name = ?, phone = ?, email = ?, salary = ?, hire_date = ?, role = ?, isActive = ? WHERE staff_id = ?";
             stmt = conn.prepareStatement(sql);
             
-            stmt.setInt(1, entity.getUserId());
-            stmt.setString(2, entity.getFullName());
-            stmt.setString(3, entity.getPhone());
-            stmt.setString(4, entity.getEmail());
-            stmt.setDouble(5, entity.getSalary());
-            stmt.setTimestamp(6, Timestamp.valueOf(entity.getHireDate()));
-            stmt.setString(7, entity.getRole());
-            stmt.setInt(8, entity.isActive() ? 1 : 0);
-            stmt.setInt(9, entity.getStaffId());
+            stmt.setString(1, entity.getFullName());
+            stmt.setString(2, entity.getPhone());
+            stmt.setString(3, entity.getEmail());
+            stmt.setDouble(4, entity.getSalary());
+            stmt.setTimestamp(5, java.sql.Timestamp.valueOf(entity.getHireDate()));
+            stmt.setString(6, entity.getRole());
+            stmt.setBoolean(7, entity.isActive());
+            stmt.setInt(8, entity.getStaffId());
             
             return stmt.executeUpdate();
         } catch (SQLException e) {
@@ -86,7 +155,6 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
             conn = DatabaseUtil.getConnection();
             String sql = "DELETE FROM Staffs WHERE staff_id = ?";
             stmt = conn.prepareStatement(sql);
-            
             stmt.setInt(1, entity.getStaffId());
             
             return stmt.executeUpdate();
@@ -108,74 +176,6 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "SELECT * FROM Staffs";
-            stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
-            
-            while (rs.next()) {
-                Staff staff = new Staff();
-                staff.setStaffId(rs.getInt("staff_id"));
-                staff.setUserId(rs.getInt("user_id"));
-                staff.setFullName(rs.getString("full_name"));
-                staff.setPhone(rs.getString("phone"));
-                staff.setEmail(rs.getString("email"));
-                staff.setSalary(rs.getDouble("salary"));
-                staff.setHireDate(rs.getTimestamp("hire_date").toLocalDateTime());
-                staff.setRole(rs.getString("role"));
-                staff.setActive(rs.getInt("isActive") == 1);
-                staffs.add(staff);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseUtil.closeResources(rs, stmt, conn);
-        }
-        return staffs;
-    }
-
-    @Override
-    public Staff findById(Integer id) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        
-        try {
-            conn = DatabaseUtil.getConnection();
-            String sql = "SELECT * FROM Staffs WHERE staff_id = ?";
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, id);
-            rs = stmt.executeQuery();
-            
-            if (rs.next()) {
-                Staff staff = new Staff();
-                staff.setStaffId(rs.getInt("staff_id"));
-                staff.setUserId(rs.getInt("user_id"));
-                staff.setFullName(rs.getString("full_name"));
-                staff.setPhone(rs.getString("phone"));
-                staff.setEmail(rs.getString("email"));
-                staff.setSalary(rs.getDouble("salary"));
-                staff.setHireDate(rs.getTimestamp("hire_date").toLocalDateTime());
-                staff.setRole(rs.getString("role"));
-                staff.setActive(rs.getInt("isActive") == 1);
-                return staff;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseUtil.closeResources(rs, stmt, conn);
-        }
-        return null;
-    }
-
-    @Override
-    public ArrayList<Staff> findByCondition(String condition) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        ArrayList<Staff> staffs = new ArrayList<>();
-        
-        try {
-            conn = DatabaseUtil.getConnection();
-            String sql = "SELECT * FROM Staffs WHERE " + condition;
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
             

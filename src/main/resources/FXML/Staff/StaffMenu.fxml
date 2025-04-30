@@ -20,8 +20,8 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </FontAwesomeIconView>
-      <Label layoutX="858.0" layoutY="21.0" styleClass="label-username" text="dothang13" />
-      <Label layoutX="821.0" layoutY="38.0" styleClass="label-name" text="Nguyễn Đỗ Thắng" />
+      <Label fx:id="usernameLabel" layoutX="858.0" layoutY="21.0" styleClass="label-username" text="dothang13" textAlignment="RIGHT" />
+      <Label fx:id="nameLabel" layoutX="821.0" layoutY="38.0" styleClass="label-name" text="Nguyễn Đỗ Thắng" textAlignment="RIGHT" />
       <Circle fx:id="userImage" fill="DODGERBLUE" layoutX="956.0" layoutY="35.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" styleClass="user-image" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="18.0" />
    </children>
 </AnchorPane>
