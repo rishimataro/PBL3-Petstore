@@ -1,33 +1,22 @@
+// #Ai
 package com.store.app.petstore.Controllers.Staff;
 
+import com.store.app.petstore.Controllers.Staff.ItemListController;
 import com.store.app.petstore.DAO.PetDAO;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tab;
-
-import javafx.scene.input.MouseEvent;
-import javafx.util.Duration;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 import com.store.app.petstore.Models.Entities.Pet;
@@ -70,28 +59,25 @@ public class OrderController implements Initializable {
                 GridPane.setMargin(anchorPane, new Insets(7));
 
                 // Add click handler to the pet item
+                // Get current Tab AI?
                 anchorPane.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY) {
                         Pet selectedPet = pets.get(index);
 
-                        // Check if a tab is selected
-                        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
-                        if (selectedTab != null) {
-                            // Get the tab's content
-                            AnchorPane tabContent = (AnchorPane) selectedTab.getContent();
-                            ItemListController tabController = fxmlLoader.getController();
-                            tabController.setData(selectedPet);
-                        } else {
-                            // Create a new tab
-                            Tab newTab = new Tab("Đơn hàng " + (tabPane.getTabs().size() + 1));
-                            FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList.fxml"));
-                            AnchorPane tabContent = tabLoader.load();
-                            ItemListController tabController = tabLoader.getController();
-                            tabController.setData(selectedPet);
-
-                            newTab.setContent(tabContent);
-                            tabPane.getTabs().add(newTab);
+                        // Create a new tab
+                        Tab newTab = new Tab("Đơn hàng " + (tabPane.getTabs().size() + 1));
+                        FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList.fxml"));
+                        AnchorPane tabContent = null;
+                        try {
+                            tabContent = tabLoader.load();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
+                        ItemListController tabController = tabLoader.getController();
+                        tabController.setData(selectedPet);
+
+                        newTab.setContent(tabContent);
+                        tabPane.getTabs().add(newTab);
                     }
                 });
 
