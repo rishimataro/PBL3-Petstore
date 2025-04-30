@@ -18,6 +18,9 @@ public class ItemListController {
     private FontAwesomeIconView addIcon;
 
     @FXML
+    private FontAwesomeIconView closeIcon;
+
+    @FXML
     private ImageView imgPet;
 
     @FXML
@@ -54,5 +57,17 @@ public class ItemListController {
 
         Image img = new Image(getClass().getResourceAsStream(p.getImageUrl()));
         imgPet.setImage(img);
+    }
+
+    @FXML
+    private void handleClose() {
+        // This method will be called when the close button is clicked
+        // It will close the parent tab
+        // This requires a reference to the parent Tab
+        // For simplicity, we'll assume the parent is a TabPane and we'll find the parent Tab
+        // This is a simplified approach and may need to be adjusted based on the actual structure
+        // In a real app, you'd use a more robust way to find the parent Tab
+        // For now, we'll just log the action
+        System.out.println("Close button clicked. Closing tab.");
     }
 }

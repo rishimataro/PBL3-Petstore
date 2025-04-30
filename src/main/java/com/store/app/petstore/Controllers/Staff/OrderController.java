@@ -74,20 +74,24 @@ public class OrderController implements Initializable {
                     if (event.getButton() == MouseButton.PRIMARY) {
                         Pet selectedPet = pets.get(index);
 
-                        // Create a new tab
-                        Tab newTab = new Tab("Đơn hàng " + (tabPane.getTabs().size() + 1));
-                        FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList.fxml"));
-                        AnchorPane tabContent = null;
-                        try {
-                            tabContent = tabLoader.load();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        ItemListController tabController = tabLoader.getController();
-                        tabController.setData(selectedPet);
+                        // Check if a tab is selected
+                        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+                        if (selectedTab != null) {
+                            // Get the tab's content
+                            AnchorPane tabContent = (AnchorPane) selectedTab.getContent();
+                            ItemListController tabController = fxmlLoader.getController();
+                            tabController.setData(selectedPet);
+                        } else {
+                            // Create a new tab
+                            Tab newTab = new Tab("Đơn hàng " + (tabPane.getTabs().size() + 1));
+                            FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList.fxml"));
+                            AnchorPane tabContent = tabLoader.load();
+                            ItemListController tabController = tabLoader.getController();
+                            tabController.setData(selectedPet);
 
-                        newTab.setContent(tabContent);
-                        tabPane.getTabs().add(newTab);
+                            newTab.setContent(tabContent);
+                            tabPane.getTabs().add(newTab);
+                        }
                     }
                 });
 
