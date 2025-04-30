@@ -12,7 +12,8 @@ public class PetStoreApplication extends Application {
         DatabaseManager.connect();
         
         // Show login window
-        ModelView.getInstance().getViewFactory().showWindow("login");
+//        ModelView.getInstance().getViewFactory().showWindow("login");
+        ModelView.getInstance().getViewFactory().showWindow("order");
     }
 
     public static void main(String[] args) {

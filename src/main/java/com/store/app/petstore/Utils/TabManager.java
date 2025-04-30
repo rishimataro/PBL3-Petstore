@@ -27,7 +27,7 @@ public class TabManager {
         if (openTabs.containsKey(tabId)) {
             // Tab already exists, switch to it
             Tab existingTab = openTabs.get(tabId);
-            existingTab.select();
+            existingTab.selectedProperty();
         } else {
             Tab newTab = new Tab(tabTitle);
             newTab.setContent(contentSupplier.get());

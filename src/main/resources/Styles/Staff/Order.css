@@ -113,3 +113,15 @@
     -fx-font-size: 15;
     -fx-text-fill: #017FCB;
 }
+.smooth-scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.smooth-scroll-pane .scroll-bar:vertical {
+    -fx-background-color: derive(-fx-base, -20%);
+}
+
+.smooth-scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: derive(-fx-base, 20%);
+    -fx-background-radius: 4px;
+}
