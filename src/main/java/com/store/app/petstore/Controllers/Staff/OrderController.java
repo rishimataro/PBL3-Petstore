@@ -1,6 +1,6 @@
 package com.store.app.petstore.Controllers.Staff;
 
-import com.store.app.petstore.DAO.OrderDAO;
+import com.store.app.petstore.DAO.PetDAO;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -25,11 +25,10 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import com.store.app.petstore.Models.Entities.Order;
+import com.store.app.petstore.Models.Entities.Pet;
 
 public class OrderController implements Initializable {
     private final GridPane grid = new GridPane();
@@ -37,7 +36,7 @@ public class OrderController implements Initializable {
     @FXML
     private ScrollPane scrollPane;
 
-    private final List<Order> pets = new ArrayList<>();
+    private final ArrayList<Pet> pets = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -82,10 +81,8 @@ public class OrderController implements Initializable {
         }
     }
 
-    private ArrayList<Order> getPets() {
-        ArrayList<Order> pets = new ArrayList<>();
-        OrderDAO orderDAO = OrderDAO.getInstance();
-        pets.addAll(orderDAO.findAll());
-        return pets;
+    private ArrayList<Pet> getPets() {
+        PetDAO petDAO = PetDAO.getInstance();
+        return new ArrayList<>(petDAO.findAll());
     }
 }
