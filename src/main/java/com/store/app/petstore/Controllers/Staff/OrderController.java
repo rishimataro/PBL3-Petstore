@@ -92,10 +92,10 @@ public class OrderController {
         totalLabel.getStyleClass().add("infomoney-label");
         Label voucherLabel = new Label("Voucher:");
         voucherLabel.getStyleClass().add("infomoney-label");
-        voucherLabel.setGridPaneRowIndex(1);
+        GridPane.setRowIndex(voucherLabel, 1); // Corrected static call
         Label customerPayLabel = new Label("Khách cần trả:");
         customerPayLabel.getStyleClass().add("infomoney-label");
-        customerPayLabel.setGridPaneRowIndex(2);
+        GridPane.setRowIndex(customerPayLabel, 2); // Corrected static call
 
         TextField codeField = new TextField();
         codeField.setPromptText("Nhập code (nếu có)");
