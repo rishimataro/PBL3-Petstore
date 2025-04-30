@@ -1,6 +1,6 @@
 package com.store.app.petstore.Controllers.Staff;
 
-import com.store.app.petstore.DAO.PetDAO;
+import com.store.app.petstore.DAO.OrderDAO;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -30,7 +30,6 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 import com.store.app.petstore.Models.Entities.Order;
-import com.store.app.petstore.DAO.OrderDAO;
 
 public class OrderController implements Initializable {
     private final GridPane grid = new GridPane();
@@ -85,7 +84,7 @@ public class OrderController implements Initializable {
 
     private ArrayList<Order> getPets() {
         ArrayList<Order> pets = new ArrayList<>();
-        PetDAO orderDAO = PetDAO.getInstance();
+        OrderDAO orderDAO = OrderDAO.getInstance();
         pets.addAll(orderDAO.findAll());
         return pets;
     }
