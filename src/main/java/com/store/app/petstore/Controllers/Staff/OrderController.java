@@ -32,6 +32,7 @@ import com.store.app.petstore.Models.Entities.Pet;
 
 public class OrderController implements Initializable {
     private final GridPane grid = new GridPane();
+    private final ArrayList<Pet> orderList = new ArrayList<>();
 
     @FXML
     private ScrollPane scrollPane;
@@ -45,8 +46,8 @@ public class OrderController implements Initializable {
         pets.addAll(getPets());
 
         for (int i = 0; i < pets.size(); i++) {
+            final int index = i; // Make index final for use in lambda
             try {
-
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("/FXML/Staff/ItemList.fxml"));
                 AnchorPane anchorPane = fxmlLoader.load();
@@ -65,20 +66,29 @@ public class OrderController implements Initializable {
                 grid.add(anchorPane, col++, row);
                 GridPane.setMargin(anchorPane, new Insets(7));
 
+                // Add click handler to the pet item
+                anchorPane.setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.PRIMARY) {
+                        Pet selectedPet = pets.get(index);
+                        orderList.add(selectedPet);
+                        System.out.println("Added to order: " + selectedPet.getName());
+                    }
+                });
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            grid.setMinWidth(Region.USE_COMPUTED_SIZE);
-            grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
-            grid.setMaxWidth(Double.MAX_VALUE);
-
-            grid.setMinHeight(Region.USE_COMPUTED_SIZE);
-            grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            grid.setMaxHeight(Double.MAX_VALUE);
-
-            scrollPane.setContent(grid);
         }
+
+        grid.setMinWidth(Region.USE_COMPUTED_SIZE);
+        grid.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        grid.setMaxWidth(Double.MAX_VALUE);
+
+        grid.setMinHeight(Region.USE_COMPUTED_SIZE);
+        grid.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        grid.setMaxHeight(Double.MAX_VALUE);
+
+        scrollPane.setContent(grid);
     }
 
     private ArrayList<Pet> getPets() {
