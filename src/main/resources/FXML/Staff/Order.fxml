@@ -24,17 +24,17 @@
                                  styleClass="tab-container" tabClosingPolicy="UNAVAILABLE"
                                  AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="15.0">
                             <tabs>
-                                <Tab text="Đơn hàng 1">
-                                    <content>
-                                        <ScrollPane styleClass="scroll-pane">
-                                            <content>
-                                                <VBox styleClass="tab-content">
-                                                    <!-- Content will be dynamically added by the controller -->
-                                                </VBox>
-                                            </content>
-                                        </ScrollPane>
-                                    </content>
-                                </Tab>
+<!--                                <Tab text="Đơn hàng 1">-->
+<!--                                    <content>-->
+<!--                                        <ScrollPane styleClass="scroll-pane">-->
+<!--                                            <content>-->
+<!--                                                <VBox styleClass="tab-content">-->
+<!--                                                    &lt;!&ndash; Content will be dynamically added by the controller &ndash;&gt;-->
+<!--                                                </VBox>-->
+<!--                                            </content>-->
+<!--                                        </ScrollPane>-->
+<!--                                    </content>-->
+<!--                                </Tab>-->
                             </tabs>
                         </TabPane>
 

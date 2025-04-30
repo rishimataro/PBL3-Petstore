@@ -25,14 +25,14 @@ public class OrderController implements Initializable {
     private TabPane tabPane;
 
     private final GridPane grid = new GridPane();
-    private final ArrayList<Pet> pets = new ArrayList<>();
+    private final ArrayList<Pet> petList= new ArrayList<>();
 
     @FXML
     private ScrollPane scrollPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        pets.addAll(getPets());
+        petList.addAll(getPets());
 
         setupGrid();
         setupScrollPane();
@@ -42,13 +42,13 @@ public class OrderController implements Initializable {
         int row = 0;
         int col = 0;
 
-        for (int i = 0; i < pets.size(); i++) {
+        for (int i = 0; i < petList.size(); i++) {
             final int index = i;
             try {
-                AnchorPane itemPane = loadItemView(pets.get(i));
+                AnchorPane itemPane = loadItemView(petList.get(i));
                 itemPane.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY) {
-                        createNewTab(pets.get(index));
+                        createNewTab(petList.get(index));
                     }
                 });
 
