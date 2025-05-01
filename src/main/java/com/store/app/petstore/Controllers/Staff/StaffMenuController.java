@@ -9,9 +9,7 @@ import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -24,6 +22,7 @@ import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class StaffMenuController implements Initializable {
@@ -112,6 +111,7 @@ public class StaffMenuController implements Initializable {
 
     private ContextMenu contextMenuItem() {
         ContextMenu contextMenu = new ContextMenu();
+        MenuItem dashboardItem = new MenuItem("Trang chủ");
         MenuItem orderItem = new MenuItem("Đặt hàng");
         MenuItem billItem = new MenuItem("Lịch sử hóa đơn");
         MenuItem infoItem = new MenuItem("Thông tin tài khoản");
@@ -122,8 +122,15 @@ public class StaffMenuController implements Initializable {
                 "-fx-font-size: 14px;" +
                 "-fx-background-color: white;" +
                 "-fx-border-radius: 10;" +
-                "-fx-background-radius: 6;"
+                "-fx-background-radius: 6;" +
+                        "-fx-cursor: hand;"
         );
+
+        dashboardItem.setOnAction(event -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            currentStage.close();
+            ViewFactory.getInstance().showWindow("dashboard");
+        });
 
         orderItem.setOnAction(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
@@ -144,13 +151,10 @@ public class StaffMenuController implements Initializable {
         });
 
         logoutItem.setOnAction(event -> {
-            sessionManager.clear();
-            Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("login");
+            confirmLogout();
         });
 
-        contextMenu.getItems().addAll(orderItem, billItem, infoItem, logoutItem);
+        contextMenu.getItems().addAll(dashboardItem, orderItem, billItem, infoItem, logoutItem);
         contextMenu.setAutoHide(true);
         return contextMenu;
     }
@@ -183,5 +187,35 @@ public class StaffMenuController implements Initializable {
         if (event.getButton() == MouseButton.PRIMARY) {
             contextMenu.show(menuIcon, event.getScreenX(), event.getScreenY());
         }
+    }
+
+    private void confirmLogout() {
+        if (showConfirmationAndWait("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
+            sessionManager.clear();
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            currentStage.close();
+            ViewFactory.getInstance().showWindow("login");
+        }
+        else {
+            showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đăng xuất không thành công");
+        }
+    }
+
+    private boolean showConfirmationAndWait(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
+    }
+
+    // show popup error
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

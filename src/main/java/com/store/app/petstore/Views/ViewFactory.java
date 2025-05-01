@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
@@ -14,10 +15,12 @@ import java.io.IOException;
 public class ViewFactory {
     private static ViewFactory instance;
     private final String LOGIN_FXML = "/FXML/Login.fxml";
-    private final String STAFF_FXML = "/FXML/Staff/StaffDashboard.fxml";
+    private final String DASHBOAR_FXML = "/FXML/Staff/StaffDashboard.fxml";
     private final String FORGOT_PASSWORD_FXML = "/FXML/ForgotPassword.fxml";
     private final String ORDER_FXML = "/FXML/Staff/Order.fxml";
     private final String PERSONAL_INFOR_FXML = "/FXML/Staff/PersonalInformation.fxml";
+    private final String BILL_HISTORY_FXML = "/FXML/Staff/BillHistory.fxml";
+    private final String CUSTOMER_POPUP = "/FXML/Staff/CustomerInfor.fxml";
 
     private final Map<String, AnchorPane> views;
     private final Map<String, Stage> stages;
@@ -56,8 +59,8 @@ public class ViewFactory {
                     root = loadFXML(LOGIN_FXML);
                     stage.setTitle("Login");
                     break;
-                case "staff":
-                    root = loadFXML(STAFF_FXML);
+                case "dashboard":
+                    root = loadFXML(DASHBOAR_FXML);
                     stage.setTitle("Staff Dashboard");
                     break;
                 case "forgotpassword":
@@ -68,9 +71,13 @@ public class ViewFactory {
                     root = loadFXML(ORDER_FXML);
                     stage.setTitle("Order Management");
                     break;
-                case "personalinfo":
+                case "profile":
                     root = loadFXML(PERSONAL_INFOR_FXML);
                     stage.setTitle("Personal Information");
+                    break;
+                case "billhistory":
+                    root = loadFXML(BILL_HISTORY_FXML);
+                    stage.setTitle("Bill History");
                     break;
                 default:
                     System.err.println("Unknown FXML file: " + fxmlName);
@@ -96,17 +103,20 @@ public class ViewFactory {
     
     private String getFxmlPath(String viewName) {
         switch (viewName.toLowerCase()) {
-            case "staff":
-                return STAFF_FXML;
+            case "dashboard":
+                return DASHBOAR_FXML;
             case "login":
                 return LOGIN_FXML;
-            case "personalinfo":
+            case "profile":
                 return PERSONAL_INFOR_FXML;
             case "order":
                 return ORDER_FXML;
+            case "billhistory":
+                return BILL_HISTORY_FXML;
             case "forgotpassword":
                 return FORGOT_PASSWORD_FXML;
-            // Add more cases as needed
+            case "addcustomer":
+                return CUSTOMER_POPUP;
             default:
                 throw new IllegalArgumentException("Unknown view: " + viewName);
         }
@@ -114,16 +124,18 @@ public class ViewFactory {
     
     private String getWindowTitle(String windowName) {
         switch (windowName.toLowerCase()) {
-            case "staff":
-                return "Staff Management";
+            case "dashboard":
+                return "Staff Dashboard";
             case "login":
                 return "Login";
-            case "personalinfo":
+            case "profile":
                 return "Personal Information";
             case "order":
                 return "Order Management";
             case "forgotpassword":
                 return "Forgot Password";
+            case "billhistory":
+                return "Bill History";
             default:
                 return windowName;
         }
@@ -137,5 +149,36 @@ public class ViewFactory {
     private Parent loadFXML(String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         return loader.load();
+    }
+
+    public void showPopup(String fxmlName, Stage popupStage) {
+        Parent root = null;
+        try {
+            switch (fxmlName.toLowerCase()) {
+                case "customerpopup":
+                    root = loadFXML(CUSTOMER_POPUP);
+                    popupStage.setTitle("Thêm khách hàng");
+                    break;
+                default:
+                    System.err.println("Unknown popup FXML file: " + fxmlName);
+                    return;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Scene scene = new Scene(root);
+        popupStage.setScene(scene);
+        popupStage.initStyle(StageStyle.DECORATED);
+        popupStage.show();
+    }
+
+    public void hidePopup() {
+        for (Stage stage : stages.values()) {
+            if (stage.isShowing()) {
+                stage.hide();
+            }
+        }
     }
 }
