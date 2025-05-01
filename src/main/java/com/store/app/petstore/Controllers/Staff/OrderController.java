@@ -76,7 +76,7 @@ public class OrderController {
 
     private AnchorPane createRightPane() {
         AnchorPane rightPane = new AnchorPane();
-        rightPane.setPrefSize(440, 442);
+        rightPane.setPrefWidth(440);
         rightPane.getStyleClass().add("right-pane");
 
         // Configure tab pane with scroll behavior
@@ -105,6 +105,7 @@ public class OrderController {
         // Add action buttons right below the summary
         HBox actionButtons = createActionButtons();
         summarySection.getChildren().addAll(orderSummary, actionButtons);
+        summarySection.setPadding(new Insets(100, 10, 10, 10));
 
         // Position the combined summary and buttons
         AnchorPane.setTopAnchor(summarySection, 300.0);
@@ -398,11 +399,16 @@ public class OrderController {
     }
 
     private void handleCreateNewTab() {
+        tabPane.setPadding(new Insets(10,10,10,20));
         Tab newTab = new Tab("Đơn hàng mới");
         VBox content = new VBox(10);
+        content.setAlignment(Pos.CENTER);
         content.getStyleClass().add("tab-content");
+        content.setPadding(new Insets(10,10,10,20));
         ScrollPane scrollPane = new ScrollPane(content);
-        scrollPane.setFitToWidth(true);
+
+        scrollPane.setPrefHeight(300);
+        scrollPane.setPrefWidth(430);
         newTab.setContent(scrollPane);
         tabPane.getTabs().add(newTab);
         tabPane.getSelectionModel().select(newTab);

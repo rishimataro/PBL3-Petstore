@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.Objects;
-
 public class ItemList2Controller {
     @FXML
     private FontAwesomeIconView downIcon;
@@ -42,7 +41,6 @@ public class ItemList2Controller {
     public double getTotal() {
         return Double.parseDouble(total.getText().isEmpty() ? "0.0" : total.getText());
     }
-
     public void AddItem(int amount) {
         int currentAmount = Integer.parseInt(quantity.getText().isEmpty() ? "0" : quantity.getText());
         int newAmount = currentAmount + amount;
