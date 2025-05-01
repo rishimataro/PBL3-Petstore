@@ -11,27 +11,29 @@ public class Order extends BaseModel {
     private LocalDateTime orderDate;
     private int staffId;
     private int discountId;
+    private boolean isDeleted;
 
     public Order() {
     }
 
-    public Order(int customerId, int staffId, double totalPrice, LocalDateTime orderDate, int discountId) {
+    public Order(int customerId, int staffId, double totalPrice, LocalDateTime orderDate, int discountId, boolean isDeleted) {
         this.customerId = customerId;
         this.staffId = staffId;
         this.totalPrice = totalPrice;
         this.orderDate = orderDate;
         this.discountId = discountId;
+        this.isDeleted = isDeleted;
     }
 
-    public Order(int orderId, int customerId, int staffId, double totalPrice, LocalDateTime orderDate, int discountId) {
+    public Order(int orderId, int customerId, int staffId, double totalPrice, LocalDateTime orderDate, int discountId, boolean isDeleted) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.staffId = staffId;
         this.totalPrice = totalPrice;
         this.orderDate = orderDate;
         this.discountId = discountId;
+        this.isDeleted = isDeleted;
     }
-
 
     public int getOrderId() {
         return orderId;
@@ -79,5 +81,12 @@ public class Order extends BaseModel {
 
     public void setDiscountId(int discountId) {
         this.discountId = discountId;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }

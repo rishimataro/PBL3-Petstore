@@ -18,7 +18,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
         
         try {
             conn = DatabaseUtil.getConnection();
-            String sql = "INSERT INTO Orders (customer_id, staff_id, total_price, order_date, discount_id) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Orders (customer_id, staff_id, total_price, order_date, discount_id, isDelete) VALUES (?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             
             stmt.setInt(1, entity.getCustomerId());
@@ -26,6 +26,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
             stmt.setDouble(3, entity.getTotalPrice());
             stmt.setTimestamp(4, Timestamp.valueOf(entity.getOrderDate()));
             stmt.setInt(5, entity.getDiscountId());
+            stmt.setBoolean(6, entity.isDeleted());
             
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -53,7 +54,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
         
         try {
             conn = DatabaseUtil.getConnection();
-            String sql = "UPDATE Orders SET customer_id = ?, staff_id = ?, total_price = ?, order_date = ?, discount_id = ? WHERE order_id = ?";
+            String sql = "UPDATE Orders SET customer_id = ?, staff_id = ?, total_price = ?, order_date = ?, discount_id = ?, isDelete = ? WHERE order_id = ?";
             stmt = conn.prepareStatement(sql);
             
             stmt.setInt(1, entity.getCustomerId());
@@ -62,6 +63,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
             stmt.setTimestamp(4, Timestamp.valueOf(entity.getOrderDate()));
             stmt.setInt(5, entity.getDiscountId());
             stmt.setInt(6, entity.getOrderId());
+            stmt.setBoolean(7, entity.isDeleted());
             
             return stmt.executeUpdate();
         } catch (SQLException e) {
@@ -114,6 +116,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
                 order.setTotalPrice(rs.getDouble("total_price"));
                 order.setOrderDate(rs.getTimestamp("order_date").toLocalDateTime());
                 order.setDiscountId(rs.getInt("discount_id"));
+                order.setDeleted(rs.getBoolean("isDelete"));
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -145,6 +148,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
                 order.setTotalPrice(rs.getDouble("total_price"));
                 order.setOrderDate(rs.getTimestamp("order_date").toLocalDateTime());
                 order.setDiscountId(rs.getInt("discount_id"));
+                order.setDeleted(rs.getBoolean("isDelete"));
                 return order;
             }
         } catch (SQLException e) {
@@ -176,6 +180,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
                 order.setTotalPrice(rs.getDouble("total_price"));
                 order.setOrderDate(rs.getTimestamp("order_date").toLocalDateTime());
                 order.setDiscountId(rs.getInt("discount_id"));
+                order.setDeleted(rs.getBoolean("isDelete"));
                 orders.add(order);
             }
         } catch (SQLException e) {
