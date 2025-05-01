@@ -16,6 +16,7 @@ module com.store.app.petstore {
     requires jbcrypt;
     requires io.github.cdimascio.dotenv.java;
     requires junit;
+    requires org.testng;
 
     opens com.store.app.petstore to javafx.fxml;
     exports com.store.app.test to junit;
@@ -31,5 +32,5 @@ module com.store.app.petstore {
     opens com.store.app.petstore.Controllers.Staff to javafx.fxml;
     exports com.store.app.petstore.Models.Seeder;
     opens com.store.app.petstore.Models.Seeder to javafx.fxml;
-
+    opens com.store.app.test to org.testng; // Added to allow TestNG access
 }

@@ -124,4 +124,9 @@ public class Pet extends BaseModel {
     public void setPrice(long price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return petId + name + type + breed + age;
+    }
 }
