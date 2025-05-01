@@ -287,7 +287,10 @@ public class OrderController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList2.fxml"));
         AnchorPane pane = loader.load();
         ItemList2Controller controller = loader.getController();
-        controller.setData(pet);
+        if (controller != null) {
+            controller.setData(pet);
+            pane.getProperties().put("controller", controller);
+        }
         return pane;
     }
 
@@ -302,35 +305,40 @@ public class OrderController {
         return false;
     }
     private void createOrderTab(Pet pet) throws IOException {
-        if (pet == null) return;
+        if (pet == null) {
+            return;
+        }
 
         Tab tab = tabPane.getSelectionModel().getSelectedItem();
-        if (tab == null) return;
+        if (tab == null || !(tab.getContent() instanceof ScrollPane)) {
+            return;
+        }
 
         ScrollPane scrollPane = (ScrollPane) tab.getContent();
+        if (!(scrollPane.getContent() instanceof VBox)) {
+            return;
+        }
+
         VBox tabContent = (VBox) scrollPane.getContent();
 
-        // Kiểm tra pet đã tồn tại chưa
-        if (isPetAlreadyInTab(pet, tabContent)) {
-            // Nếu đã có, tìm node và gọi AddItem
-            for (Node node : tabContent.getChildren()) {
-                if (node instanceof AnchorPane pane) {
-                    if (pane.getUserData() != null && pane.getUserData().equals(pet.getPetId())) {
-                        ItemList2Controller controller = (ItemList2Controller) pane.getProperties().get("controller");
-                        System.out.println(pane.getProperties());
-                        if (controller != null) {
-
-                            controller.AddItem(1);
-                        }
-                        return;
-                    }
+        // Check if pet already exists in tab
+        for (Node node : tabContent.getChildren()) {
+            if (node instanceof AnchorPane pane && 
+                pane.getUserData() != null && 
+                pane.getUserData().equals(pet.getPetId())) {
+                
+                Object controllerObj = pane.getProperties().get("controller");
+                if (controllerObj instanceof ItemList2Controller controller) {
+                    controller.AddItem(1);
                 }
+                return;
             }
-        } else {
-            AnchorPane itemPane = createPetItemOrderPane(pet);
-            itemPane.setUserData(pet.getPetId());
-            tabContent.getChildren().add(itemPane);
         }
+
+        // Add new pet item to tab
+        AnchorPane itemPane = createPetItemOrderPane(pet);
+        itemPane.setUserData(pet.getPetId());
+        tabContent.getChildren().add(itemPane);
     }
 
     private void handleCreateNewTab() {
@@ -346,22 +354,28 @@ public class OrderController {
 
     private void calcAmount() {
         tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
-            if (newTab != null) {
-                ScrollPane scrollPane = (ScrollPane) newTab.getContent();
-                VBox tabContent = (VBox) scrollPane.getContent();
+            if (newTab == null || !(newTab.getContent() instanceof ScrollPane)) {
+                return;
+            }
 
-                double total = 0;
-                for (Node node : tabContent.getChildren()) {
-                    if (node instanceof AnchorPane pane) {
-                        ItemList2Controller controller = (ItemList2Controller) pane.getProperties().get("controller");
-                        if (controller != null) {
-                            total += controller.getTotal();
-                        }
+            ScrollPane scrollPane = (ScrollPane) newTab.getContent();
+            if (!(scrollPane.getContent() instanceof VBox)) {
+                return;
+            }
+
+            VBox tabContent = (VBox) scrollPane.getContent();
+            double total = 0;
+
+            for (Node node : tabContent.getChildren()) {
+                if (node instanceof AnchorPane pane) {
+                    Object controllerObj = pane.getProperties().get("controller");
+                    if (controllerObj instanceof ItemList2Controller controller) {
+                        total += controller.getTotal();
                     }
                 }
-
-                totalAmount.setText(String.format("%.0f", total));
             }
+
+            totalAmount.setText(String.format("%.0f", total));
         });
     }
 }
