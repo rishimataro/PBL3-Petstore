@@ -57,82 +57,125 @@ public class OrderController {
     }
 
     private void setupLayout() {
+        setupRootPane();
+        setupContentPane();
+        addMainContentPanes();
+    }
+
+    private void setupRootPane() {
         root.getChildren().add(createMenu());
         root.getChildren().add(contentPane);
-        contentPane.setPrefSize(990, 442); // Adjust content pane size
+    }
+
+    private void setupContentPane() {
+        contentPane.setPrefSize(990, 442);
         contentPane.getStyleClass().add("root");
         contentPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Staff/Order.css")).toExternalForm());
+    }
 
+    private void addMainContentPanes() {
         AnchorPane rightPane = createRightPane();
-        AnchorPane.setTopAnchor(rightPane, 0.0);
-        AnchorPane.setRightAnchor(rightPane, 0.0);
-
         AnchorPane leftPane = createLeftPane();
-        AnchorPane.setTopAnchor(leftPane, 0.0);
-        AnchorPane.setLeftAnchor(leftPane, 0.0);
-
+        setupPanePositions(rightPane, leftPane);
         contentPane.getChildren().addAll(leftPane, rightPane);
     }
 
+    private void setupPanePositions(AnchorPane rightPane, AnchorPane leftPane) {
+        AnchorPane.setTopAnchor(rightPane, 0.0);
+        AnchorPane.setRightAnchor(rightPane, 0.0);
+        AnchorPane.setTopAnchor(leftPane, 0.0);
+        AnchorPane.setLeftAnchor(leftPane, 0.0);
+    }
+
     private AnchorPane createRightPane() {
+        AnchorPane rightPane = setupRightPane();
+        setupTabPane(rightPane);
+        GridPane infoGrid = createInfoGrid();
+        setupButtons(rightPane);
+        return rightPane;
+    }
+
+    private AnchorPane setupRightPane() {
         AnchorPane rightPane = new AnchorPane();
         rightPane.setPrefSize(440, 442);
+        return rightPane;
+    }
+
+    private void setupTabPane(AnchorPane rightPane) {
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         tabPane.getStyleClass().add("tab-container");
+        tabPane.setPrefSize(410, 280);
         AnchorPane.setTopAnchor(tabPane, 15.0);
         AnchorPane.setRightAnchor(tabPane, 20.0);
-        tabPane.setPrefSize(410, 280);
+        rightPane.getChildren().add(tabPane);
+    }
 
+    private GridPane createInfoGrid() {
         GridPane infoGrid = new GridPane();
         infoGrid.setHgap(10);
         infoGrid.setPrefSize(410, 80);
         AnchorPane.setTopAnchor(infoGrid, 300.0);
         AnchorPane.setRightAnchor(infoGrid, 20.0);
-        infoGrid.getColumnConstraints().addAll(new ColumnConstraints(108), new ColumnConstraints(162), new ColumnConstraints(140));
-        infoGrid.getRowConstraints().addAll(new RowConstraints(30), new RowConstraints(30), new RowConstraints(30));
+        setupGridConstraints(infoGrid);
+        addGridComponents(infoGrid);
+        return infoGrid;
+    }
 
-        Label totalLabel = new Label("Tổng tiền:");
-        totalLabel.getStyleClass().add("infomoney-label");
-        Label voucherLabel = new Label("Voucher:");
-        voucherLabel.getStyleClass().add("infomoney-label");
-        GridPane.setRowIndex(voucherLabel, 1);
-        Label customerPayLabel = new Label("Khách cần trả:");
-        customerPayLabel.getStyleClass().add("infomoney-label");
-        GridPane.setRowIndex(customerPayLabel, 2);
+    private void setupGridConstraints(GridPane grid) {
+        grid.getColumnConstraints().addAll(
+            new ColumnConstraints(108),
+            new ColumnConstraints(162),
+            new ColumnConstraints(140));
+        grid.getRowConstraints().addAll(
+            new RowConstraints(30),
+            new RowConstraints(30),
+            new RowConstraints(30));
+    }
 
-        TextField codeField = new TextField();
-        codeField.setPromptText("Nhập code (nếu có)");
-        codeField.getStyleClass().add("code-textfield");
-        GridPane.setColumnIndex(codeField, 1);
-        GridPane.setRowIndex(codeField, 1);
+    private void addGridComponents(GridPane grid) {
+        grid.getChildren().addAll(
+            createLabel("Tổng tiền:", "infomoney-label"),
+            createLabel("Voucher:", "infomoney-label"),
+            createLabel("Khách cần trả:", "infomoney-label"),
+            createCodeField(),
+            totalAmount = createMoneyLabel("0"),
+            voucherDiscount = createMoneyLabel("0"),
+            finalAmount = createMoneyLabel("0")
+        );
+    }
 
-        totalAmount = new Label("0");
-        totalAmount.getStyleClass().add("money-label");
-        GridPane.setColumnIndex(totalAmount, 2);
-        voucherDiscount = new Label("0");
-        voucherDiscount.getStyleClass().add("money-label");
-        GridPane.setColumnIndex(voucherDiscount, 2);
-        GridPane.setRowIndex(voucherDiscount, 1);
-        finalAmount = new Label("0");
-        finalAmount.getStyleClass().add("money-label");
-        GridPane.setColumnIndex(finalAmount, 2);
-        GridPane.setRowIndex(finalAmount, 2);
+    private Label createLabel(String text, String styleClass) {
+        Label label = new Label(text);
+        label.getStyleClass().add(styleClass);
+        return label;
+    }
 
-        infoGrid.getChildren().addAll(totalLabel, voucherLabel, customerPayLabel, codeField, totalAmount, voucherDiscount, finalAmount);
+    private TextField createCodeField() {
+        TextField field = new TextField();
+        field.setPromptText("Nhập code (nếu có)");
+        field.getStyleClass().add("code-textfield");
+        return field;
+    }
 
-        Button confirmButton = new Button("Xác nhận");
-        confirmButton.setPrefSize(119, 26);
-        AnchorPane.setBottomAnchor(confirmButton, 20.0);
-        AnchorPane.setRightAnchor(confirmButton, 20.0);
+    private Label createMoneyLabel(String text) {
+        Label label = new Label(text);
+        label.getStyleClass().add("money-label");
+        return label;
+    }
 
-        createNewTabButton = new Button("Tạo đơn hàng mới");
-        createNewTabButton.setPrefSize(119, 26);
-        AnchorPane.setBottomAnchor(createNewTabButton, 50.0);
-        AnchorPane.setRightAnchor(createNewTabButton, 20.0);
+    private void setupButtons(AnchorPane rightPane) {
+        Button confirmButton = createButton("Xác nhận", 20.0);
+        createNewTabButton = createButton("Tạo đơn hàng mới", 50.0);
         createNewTabButton.setOnAction(e -> handleCreateNewTab());
+        rightPane.getChildren().addAll(confirmButton, createNewTabButton);
+    }
 
-        rightPane.getChildren().addAll(tabPane, infoGrid, confirmButton, createNewTabButton);
-        return rightPane;
+    private Button createButton(String text, double bottomMargin) {
+        Button button = new Button(text);
+        button.setPrefSize(119, 26);
+        AnchorPane.setBottomAnchor(button, bottomMargin);
+        AnchorPane.setRightAnchor(button, 20.0);
+        return button;
     }
 
     private AnchorPane createLeftPane() {
