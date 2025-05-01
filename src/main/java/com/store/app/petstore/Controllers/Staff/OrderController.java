@@ -1,4 +1,3 @@
-
 package com.store.app.petstore.Controllers.Staff;
 
 import javafx.animation.PauseTransition;
