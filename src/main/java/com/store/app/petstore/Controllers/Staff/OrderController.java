@@ -34,15 +34,21 @@ public class OrderController {
     private Button createNewTabButton;
 
     public void show(Stage stage) {
+        initializeUIComponents();
+        setupStage(stage);
+    }
+
+    private void initializeUIComponents() {
         setupLayout();
-        loadPetList(stage);
         configureGridLayout();
-        setupGridColumnBinding(stage);
         configureScrollPane();
         calcAmount();
+    }
+
+    private void setupStage(Stage stage) {
         Scene scene = new Scene(root, 990, 512);
-        stage.setScene(scene);
         scrollPane.maxHeightProperty().bind(scene.heightProperty());
+        stage.setScene(scene);
         stage.show();
     }
 
