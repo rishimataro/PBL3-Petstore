@@ -18,7 +18,7 @@ public class ViewFactory {
     private final String DASHBOAR_FXML = "/FXML/Staff/StaffDashboard.fxml";
     private final String FORGOT_PASSWORD_FXML = "/FXML/ForgotPassword.fxml";
     private final String ORDER_FXML = "/FXML/Staff/Order.fxml";
-    private final String PERSONAL_INFOR_FXML = "/FXML/Staff/PersonalInformation.fxml";
+    private final String PERSONAL_INFOR_FXML = "/FXML/Staff/PersonalInfo.fxml";
     private final String BILL_HISTORY_FXML = "/FXML/Staff/BillHistory.fxml";
     private final String CUSTOMER_POPUP = "/FXML/Staff/CustomerInfor.fxml";
 
