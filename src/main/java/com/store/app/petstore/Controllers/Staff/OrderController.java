@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 public class OrderController {
     private int currentColumnCount = 0;
     private final PauseTransition resizeDebouncer = new PauseTransition(Duration.millis(300));
-    private Map<Pet, AnchorPane> petPaneCache = new HashMap<>();
+    private final Map<Pet, AnchorPane> petPaneCache = new HashMap<>();
     private final VBox root = new VBox();
     private Label totalAmount;
     private Label finalAmount;
@@ -62,9 +62,10 @@ public class OrderController {
     private void setupLayout() {
         root.getChildren().add(createMenu());
         root.getChildren().add(contentPane);
-        contentPane.setPrefSize(990, 442); // Adjust content pane size
+        contentPane.setPrefSize(990, 442);
         contentPane.getStyleClass().add("root");
-        contentPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Staff/Order.css")).toExternalForm());
+        contentPane.getStylesheets()
+                .add(Objects.requireNonNull(getClass().getResource("/Styles/Staff/Order.css")).toExternalForm());
 
         AnchorPane rightPane = createRightPane();
         AnchorPane.setTopAnchor(rightPane, 0.0);
@@ -82,35 +83,30 @@ public class OrderController {
         rightPane.setPrefWidth(440);
         rightPane.getStyleClass().add("right-pane");
 
-        // Configure tab pane with scroll behavior
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
         tabPane.getStyleClass().add("modern-tab-pane");
         tabPane.setTabMinWidth(100);
         tabPane.setTabMaxWidth(200);
-        
+
         ScrollPane tabScrollPane = new ScrollPane(tabPane);
         tabScrollPane.setFitToWidth(true);
         tabScrollPane.setFitToHeight(true);
         tabScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         tabScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        
+
         AnchorPane.setTopAnchor(tabScrollPane, 15.0);
         AnchorPane.setRightAnchor(tabScrollPane, 20.0);
         AnchorPane.setBottomAnchor(tabScrollPane, 15.0);
 
-        // Create order summary section
         VBox summarySection = new VBox(10);
         summarySection.getStyleClass().add("summary-section");
 
-        // Add order summary grid
         GridPane orderSummary = createOrderSummary();
 
-        // Add action buttons right below the summary
         HBox actionButtons = createActionButtons();
         summarySection.getChildren().addAll(orderSummary, actionButtons);
         summarySection.setPadding(new Insets(100, 10, 10, 10));
 
-        // Position the combined summary and buttons
         AnchorPane.setTopAnchor(summarySection, 300.0);
         AnchorPane.setRightAnchor(summarySection, 20.0);
 
@@ -125,7 +121,6 @@ public class OrderController {
         summaryGrid.setVgap(10);
         summaryGrid.setPadding(new Insets(15));
 
-        // Column setup
         ColumnConstraints labelCol = new ColumnConstraints();
         labelCol.setHgrow(Priority.NEVER);
         ColumnConstraints fieldCol = new ColumnConstraints();
@@ -133,7 +128,6 @@ public class OrderController {
         ColumnConstraints amountCol = new ColumnConstraints(100);
         summaryGrid.getColumnConstraints().addAll(labelCol, fieldCol, amountCol);
 
-        // Add summary rows
         addSummaryRow(summaryGrid, 0, "Tổng tiền:", totalAmount = createAmountLabel());
         addSummaryRow(summaryGrid, 1, "Voucher:", createVoucherField(), voucherDiscount = createAmountLabel());
         addSummaryRow(summaryGrid, 2, "Khách cần trả:", finalAmount = createAmountLabel("total-amount"));
@@ -282,7 +276,8 @@ public class OrderController {
     }
 
     private void updateGridColumns(int newColumnCount) {
-        if (newColumnCount == currentColumnCount) return;
+        if (newColumnCount == currentColumnCount)
+            return;
         currentColumnCount = newColumnCount;
         rearrangeGridItems();
     }
@@ -339,7 +334,6 @@ public class OrderController {
         return pane;
     }
 
-
     private VBox getCurrentTabContent() {
         Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
         if (selectedTab != null && selectedTab.getContent() instanceof ScrollPane) {
@@ -350,6 +344,7 @@ public class OrderController {
         }
         return null;
     }
+
     private Consumer<AnchorPane> createDeleteCallback() {
         return paneToRemove -> {
             VBox tabContent = getCurrentTabContent();
@@ -427,12 +422,12 @@ public class OrderController {
     }
 
     private void handleCreateNewTab() {
-        tabPane.setPadding(new Insets(10,10,10,20));
+        tabPane.setPadding(new Insets(10, 10, 10, 20));
         Tab newTab = new Tab("Đơn hàng mới");
         VBox content = new VBox(10);
         content.setAlignment(Pos.CENTER);
         content.getStyleClass().add("tab-content");
-        content.setPadding(new Insets(10,10,10,20));
+        content.setPadding(new Insets(10, 10, 10, 20));
         ScrollPane scrollPane = new ScrollPane(content);
 
         scrollPane.setPrefHeight(300);
@@ -466,7 +461,8 @@ public class OrderController {
 
         totalAmount.setText(String.format("%.0f", total));
 
-        double finalAmountNumber = Double.parseDouble(totalAmount.getText()) - Double.parseDouble(voucherDiscount.getText());
+        double finalAmountNumber = Double.parseDouble(totalAmount.getText())
+                - Double.parseDouble(voucherDiscount.getText());
 
         finalAmount.setText(String.format("%.0f", finalAmountNumber));
     }
