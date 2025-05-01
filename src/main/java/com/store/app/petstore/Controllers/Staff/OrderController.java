@@ -82,8 +82,8 @@ public class OrderController {
         // Configure tab pane to resize with window
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
         tabPane.getStyleClass().add("modern-tab-pane");
-        tabPane.prefWidthProperty().bind(rightPane.widthProperty().subtract(40));
-        tabPane.prefHeightProperty().bind(rightPane.heightProperty().subtract(100));
+        tabPane.setPrefWidth(450);
+
         AnchorPane.setTopAnchor(tabPane, 15.0);
         AnchorPane.setRightAnchor(tabPane, 20.0);
         AnchorPane.setBottomAnchor(tabPane, 15.0);
@@ -413,14 +413,10 @@ public class OrderController {
 
         VBox tabContent = (VBox) scrollPane.getContent();
         double total = 0;
-        System.out.println("SEtp0");
         for (Node node : tabContent.getChildren()) {
-            System.out.println("Step1");
             if (node instanceof AnchorPane pane) {
-                System.out.println("Step2");
                 Object controllerObj = pane.getProperties().get("controller");
 
-                System.out.println("Step3");
                 if (controllerObj instanceof ItemList2Controller controller) {
                     total += controller.getTotal();
                 }
@@ -429,9 +425,9 @@ public class OrderController {
 
         totalAmount.setText(String.format("%.0f", total));
 
-        int finalAmountNumber = Integer.parseInt(totalAmount.getText()) - Integer.parseInt(voucherDiscount.getText());
+        double finalAmountNumber = Double.parseDouble(totalAmount.getText()) - Double.parseDouble(voucherDiscount.getText());
 
-        finalAmount.setText(String.format("%.0f", total));
+        finalAmount.setText(String.format("%.0f", finalAmountNumber));
     }
 
     private void calcAmount() {
