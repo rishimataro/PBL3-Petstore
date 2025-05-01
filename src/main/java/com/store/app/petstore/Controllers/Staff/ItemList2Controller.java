@@ -27,6 +27,8 @@ public class ItemList2Controller {
     private FontAwesomeIconView upIcon;
     @FXML
     private Pet p;
+    
+    private Runnable onDeleteCallback;
 
     public void setData(Pet p) {
         this.p = p;
@@ -37,6 +39,14 @@ public class ItemList2Controller {
         Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream(p.getImageUrl())));
         imgPet.setImage(img);
         
+        setupTrashIconListener();
+    }
+
+    public void setOnDeleteCallback(Runnable callback) {
+        this.onDeleteCallback = callback;
+    }
+
+    private void setupTrashIconListener() {
         trashIcon.setOnMouseClicked(e -> {
             if (onDeleteCallback != null) {
                 onDeleteCallback.run();
