@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.BillHistoryController">
     <children>
         <fx:include source="StaffMenu.fxml" />
 
@@ -29,7 +29,7 @@
             <children>
 
                 <!-- Bảng hóa đơn bên trái -->
-                <AnchorPane layoutY="3.0" prefWidth="550.0">
+                <AnchorPane layoutY="3.0">
                     <children>
                         <TextField fx:id="searchInvoice" layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm hóa đơn" styleClass="find-textfield" />
                         <FontAwesomeIconView glyphName="SEARCH" layoutX="32.0" layoutY="35.0" size="13" styleClass="icon" />
@@ -41,13 +41,13 @@
 
                         <VBox layoutX="19.0" layoutY="57.0" prefHeight="370.0" prefWidth="515.0" styleClass="bg1">
                             <children>
-                                <TableView prefHeight="374.0" prefWidth="515.0">
+                                <TableView fx:id="invoice_table" prefHeight="374.0" prefWidth="515.0">
                                     <columns>
-                                        <TableColumn prefWidth="43.0" styleClass="column-header-background" text="STT" />
-                                        <TableColumn prefWidth="153.0" styleClass="column-header-background" text="Mã hóa đơn" />
-                                        <TableColumn prefWidth="101.5" styleClass="column-header-background" text="Khách hàng" />
-                                        <TableColumn prefWidth="101.5" styleClass="column-header-background" text="Thời gian" />
-                                        <TableColumn prefWidth="114.2" styleClass="column-header-background" text="Tổng hóa đơn" />
+                                        <TableColumn fx:id="sttCol" prefWidth="43.0" styleClass="column-header-background" text="STT" />
+                                        <TableColumn fx:id="invoice_idCol" prefWidth="153.0" styleClass="column-header-background" text="Mã hóa đơn" />
+                                        <TableColumn fx:id="invoice_customerCol" prefWidth="101.5" styleClass="column-header-background" text="Khách hàng" />
+                                        <TableColumn fx:id="invoice_timeCol" prefWidth="101.5" styleClass="column-header-background" text="Thời gian" />
+                                        <TableColumn fx:id="invoice_totalBillCol" prefWidth="114.2" styleClass="column-header-background" text="Tổng hóa đơn" />
                                     </columns>
                                 </TableView>
                             </children>
@@ -59,7 +59,7 @@
                 </AnchorPane>
 
                 <!-- Chi tiết hóa đơn bên phải -->
-                <AnchorPane layoutX="550.0" prefWidth="440.0">
+                <AnchorPane layoutX="550.0">
                     <children>
                         <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="144.0" styleClass="anchor-pane-invoice-id">
                             <children>
