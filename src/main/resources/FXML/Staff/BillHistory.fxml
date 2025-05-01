@@ -5,7 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.Tab?>
@@ -18,6 +18,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
@@ -25,144 +26,148 @@
     <children>
         <fx:include source="StaffMenu.fxml" />
 
-        <AnchorPane prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../Styles/Staff/Invoice.css">
+        <AnchorPane id="main_anchor" styleClass="root" stylesheets="@../../Styles/Staff/Invoice.css" VBox.vgrow="ALWAYS">
             <children>
-
-                <!-- Bảng hóa đơn bên trái -->
-                <AnchorPane layoutY="3.0">
-                    <children>
-                        <TextField fx:id="searchInvoice" layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm hóa đơn" styleClass="find-textfield" />
-                        <FontAwesomeIconView glyphName="SEARCH" layoutX="32.0" layoutY="35.0" size="13" styleClass="icon" />
-                        <FontAwesomeIconView glyphName="CLOSE" layoutX="266.0" layoutY="34.0" styleClass="icon" text="">
-                            <cursor>
-                                <Cursor fx:constant="HAND" />
-                            </cursor>
-                        </FontAwesomeIconView>
-
-                        <VBox layoutX="19.0" layoutY="57.0" prefHeight="370.0" prefWidth="515.0" styleClass="bg1">
-                            <children>
-                                <TableView fx:id="invoice_table" prefHeight="374.0" prefWidth="515.0">
-                                    <columns>
-                                        <TableColumn fx:id="sttCol" prefWidth="43.0" styleClass="column-header-background" text="STT" />
-                                        <TableColumn fx:id="invoice_idCol" prefWidth="153.0" styleClass="column-header-background" text="Mã hóa đơn" />
-                                        <TableColumn fx:id="invoice_customerCol" prefWidth="101.5" styleClass="column-header-background" text="Khách hàng" />
-                                        <TableColumn fx:id="invoice_timeCol" prefWidth="101.5" styleClass="column-header-background" text="Thời gian" />
-                                        <TableColumn fx:id="invoice_totalBillCol" prefWidth="114.2" styleClass="column-header-background" text="Tổng hóa đơn" />
-                                    </columns>
-                                </TableView>
-                            </children>
-                        </VBox>
-
-                        <ChoiceBox layoutX="306.0" layoutY="14.0" prefWidth="110.0" style="-fx-border-color: #FFB500;" />
-                        <ChoiceBox layoutX="425.0" layoutY="14.0" prefWidth="110.0" style="-fx-border-color: #017FCB;" />
-                    </children>
-                </AnchorPane>
-
-                <!-- Chi tiết hóa đơn bên phải -->
-                <AnchorPane layoutX="550.0">
-                    <children>
-                        <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="144.0" styleClass="anchor-pane-invoice-id">
-                            <children>
-                                <Label layoutX="33.0" layoutY="15.0" styleClass="invoice-id" text="[Mã hóa đơn]" textAlignment="CENTER" />
-                            </children>
+            <HBox spacing="20" styleClass="main-HBox" AnchorPane.bottomAnchor="22" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="2">
+               <children>
+      
+                      <!-- Bảng hóa đơn bên trái -->
+                      <AnchorPane id="left_pane" HBox.hgrow="ALWAYS">
+                          <children>
+                        <HBox alignment="CENTER" spacing="10" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="15.0">
+                           <children>
+                              <StackPane HBox.hgrow="ALWAYS">
+                                 <children>
+                                          <TextField id="search_invoice" fx:id="searchInvoice" minWidth="270.0" prefHeight="30.0" promptText="Tìm kiếm hóa đơn" styleClass="find-textfield" />
+                                    <AnchorPane pickOnBounds="false" StackPane.alignment="CENTER">
+                                       <children>
+                                                <FontAwesomeIconView glyphName="SEARCH" size="13" styleClass="icon" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="8.5" />
+                                                <FontAwesomeIconView glyphName="CLOSE" styleClass="icon" text="" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="8.5">
+                                                    <cursor>
+                                                        <Cursor fx:constant="HAND" />
+                                                    </cursor>
+                                                </FontAwesomeIconView>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </StackPane>
+                              <DatePicker prefWidth="115.0" promptText="Ngày bắt đầu" />
+                              <DatePicker prefWidth="115.0" promptText="Ngày kết thúc" />
+                              <Button mnemonicParsing="false" text="Tìm kiếm">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="SEARCH" styleClass="func_icon" />
+                                 </graphic>
+                                 <styleClass>
+                                    <String fx:value="edit-btn" />
+                                    <String fx:value="crud_func" />
+                                 </styleClass>
+                              </Button>
+                           </children>
+                        </HBox>
+      
+                              <VBox styleClass="bg1" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="50">
+                                  <children>
+                                      <TableView fx:id="invoice_table" VBox.vgrow="ALWAYS">
+                                          <columns>
+                                              <TableColumn fx:id="sttCol" styleClass="column-header-background" text="STT" />
+                                              <TableColumn fx:id="invoice_idCol" styleClass="column-header-background" text="Mã hóa đơn" />
+                                              <TableColumn fx:id="invoice_customerCol" styleClass="column-header-background" text="Khách hàng" />
+                                              <TableColumn fx:id="invoice_timeCol" styleClass="column-header-background" text="Thời gian" />
+                                              <TableColumn fx:id="invoice_totalBillCol" styleClass="column-header-background" text="Tổng hóa đơn" />
+                                          </columns>
+                                      </TableView>
+                                  </children>
+                              </VBox>
+                          </children>
+                      </AnchorPane>
+      
+                      <!-- Chi tiết hóa đơn bên phải -->
+                      <AnchorPane id="right_pane">
+                          <children>
+                              <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="144.0" styleClass="anchor-pane-invoice-id">
+                                  <children>
+                                      <Label layoutX="33.0" layoutY="15.0" styleClass="invoice-id" text="[Mã hóa đơn]" textAlignment="CENTER" />
+                                  </children>
+                              </AnchorPane>
+      
+                              <TabPane id="scroll_pane" prefWidth="410.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="135" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="52">
+                                  <tabs>
+                                      <Tab text="Đơn hàng 1">
+                                          <content>
+                                              <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox-order">
+                                                  <children>
+                                                      <ScrollBar orientation="VERTICAL" styleClass="scrollbar" />
+                                                  </children>
+                                              </HBox>
+                                          </content>
+                                      </Tab>
+                                      <Tab text="Đơn hàng 2">
+                                          <content>
+                                              <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox-order">
+                                                  <children>
+                                                      <ScrollBar orientation="VERTICAL" styleClass="scrollbar" />
+                                                  </children>
+                                              </HBox>
+                                          </content>
+                                      </Tab>
+                                  </tabs>
+                              </TabPane>
+      
+                              <GridPane hgap="10.0" prefHeight="80.0" prefWidth="410.0" AnchorPane.bottomAnchor="57" AnchorPane.leftAnchor="8.0">
+                                  <columnConstraints>
+                                      <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" prefWidth="108.0" />
+                                      <ColumnConstraints hgrow="SOMETIMES" prefWidth="162.0" />
+                                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="140.0" />
+                                  </columnConstraints>
+                                  <rowConstraints>
+                                      <RowConstraints prefHeight="30.0" />
+                                      <RowConstraints prefHeight="30.0" />
+                                      <RowConstraints prefHeight="30.0" />
+                                  </rowConstraints>
+                                  <children>
+                                      <Label styleClass="infomoney-label" text="Tổng tiền hàng:">
+                                          <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                      </Label>
+                                      <Label styleClass="infomoney-label" text="Giảm giá" GridPane.rowIndex="1">
+                                          <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                      </Label>
+                                      <Label styleClass="infomoney-label" text="Khách cần trả:" GridPane.rowIndex="2">
+                                          <padding>
+                                    <Insets left="5.0" />
+                                 </padding>
+                                      </Label>
+                                      <Label styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" />
+                                      <Label styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                      <Label styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                  </children>
+                              </GridPane>
+                        <AnchorPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="15.0">
+                           <children>
+            
+                                    <Button layoutX="227.0" layoutY="21.5" mnemonicParsing="false" prefHeight="30.0" prefWidth="175.0" text="">
+                                        <styleClass>
+                                            <String fx:value="crud_func" />
+                                            <String fx:value="delete-btn" />
+                                        </styleClass>
+                                        <graphic>
+                                            <HBox alignment="CENTER" spacing="5.0">
+                                                <children>
+                                                    <Text styleClass="func_icon" text="Huỷ hoá đơn" />
+                                                    <FontAwesomeIconView glyphName="TRASH" styleClass="func_icon" />
+                                                </children>
+                                            </HBox>
+                                        </graphic>
+                                    </Button>
+                           </children>
                         </AnchorPane>
-
-                        <TabPane layoutX="10.0" layoutY="52.0" prefHeight="243.0" prefWidth="410.0" tabClosingPolicy="UNAVAILABLE">
-                            <tabs>
-                                <Tab text="Đơn hàng 1">
-                                    <content>
-                                        <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox-order">
-                                            <children>
-                                                <ScrollBar orientation="VERTICAL" styleClass="scrollbar" />
-                                            </children>
-                                        </HBox>
-                                    </content>
-                                </Tab>
-                                <Tab text="Đơn hàng 2">
-                                    <content>
-                                        <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox-order">
-                                            <children>
-                                                <ScrollBar orientation="VERTICAL" styleClass="scrollbar" />
-                                            </children>
-                                        </HBox>
-                                    </content>
-                                </Tab>
-                            </tabs>
-                        </TabPane>
-
-                        <GridPane hgap="10.0" layoutX="8.0" layoutY="297.0" prefHeight="80.0" prefWidth="410.0">
-                            <columnConstraints>
-                                <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" prefWidth="108.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" prefWidth="162.0" />
-                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="140.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints prefHeight="30.0" />
-                                <RowConstraints prefHeight="30.0" />
-                                <RowConstraints prefHeight="30.0" />
-                            </rowConstraints>
-                            <children>
-                                <Label styleClass="infomoney-label" text="Tổng tiền hàng:">
-                                    <padding><Insets left="5.0" /></padding>
-                                </Label>
-                                <Label styleClass="infomoney-label" text="Giảm giá" GridPane.rowIndex="1">
-                                    <padding><Insets left="5.0" /></padding>
-                                </Label>
-                                <Label styleClass="infomoney-label" text="Khách cần trả:" GridPane.rowIndex="2">
-                                    <padding><Insets left="5.0" /></padding>
-                                </Label>
-                                <Label styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" />
-                                <Label styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                <Label styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                            </children>
-                        </GridPane>
-
-                        <Button layoutX="15.0" layoutY="379.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="89.0" text="Sửa">
-                            <styleClass>
-                                <String fx:value="crud_func" />
-                                <String fx:value="edit-btn" />
-                            </styleClass>
-                            <graphic>
-                                <FontAwesomeIconView glyphName="GEAR" styleClass="func_icon" />
-                            </graphic>
-                        </Button>
-
-                        <Button layoutX="15.0" layoutY="408.5" mnemonicParsing="false" prefHeight="22.0" prefWidth="89.0" text="Lưu">
-                            <styleClass>
-                                <String fx:value="crud_func" />
-                                <String fx:value="save-btn" />
-                            </styleClass>
-                            <graphic>
-                                <FontAwesomeIconView glyphName="SAVE" styleClass="func_icon" />
-                            </graphic>
-                        </Button>
-
-                        <Button layoutX="110.0" layoutY="408.5" mnemonicParsing="false" prefHeight="22.0" prefWidth="89.0" text="Xóa">
-                            <styleClass>
-                                <String fx:value="crud_func" />
-                                <String fx:value="delete-btn" />
-                            </styleClass>
-                            <graphic>
-                                <FontAwesomeIconView glyphName="TRASH" styleClass="func_icon" />
-                            </graphic>
-                        </Button>
-
-                        <Button layoutX="242.0" layoutY="400.5" mnemonicParsing="false" prefHeight="30.0" prefWidth="175.0" text="">
-                            <styleClass>
-                                <String fx:value="crud_func" />
-                                <String fx:value="export-pdf-btn" />
-                            </styleClass>
-                            <graphic>
-                                <HBox alignment="CENTER" spacing="5.0">
-                                    <children>
-                                        <Text styleClass="func_icon" text="Xuất hóa đơn PDF" />
-                                        <FontAwesomeIconView glyphName="ARROW_RIGHT" styleClass="func_icon" />
-                                    </children>
-                                </HBox>
-                            </graphic>
-                        </Button>
-                    </children>
-                </AnchorPane>
+                          </children>
+                      </AnchorPane>
+               </children>
+            </HBox>
             </children>
         </AnchorPane>
     </children>

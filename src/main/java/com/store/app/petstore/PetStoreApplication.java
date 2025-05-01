@@ -29,6 +29,7 @@ public class PetStoreApplication extends Application {
         }
         primaryStage.setTitle("Hoá đơn");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

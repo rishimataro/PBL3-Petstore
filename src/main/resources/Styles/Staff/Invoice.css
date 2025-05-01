@@ -1,6 +1,9 @@
 .root {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #FFFFFF;
     -fx-font-family: "Inter";
+}
+.main-HBox{
+    -fx-padding: 0 10 0 0;
 }
 /*.button. {*/
 /*    -fx-background-color: #0078D7;*/
