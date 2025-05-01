@@ -1,5 +1,6 @@
 package com.store.app.petstore.Controllers.Staff;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +18,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class OrderController {
     private int currentColumnCount = 0;
@@ -39,6 +41,7 @@ public class OrderController {
         configureGridLayout();
         setupGridColumnBinding(stage);
         configureScrollPane();
+        handleCreateNewTab();
         calcAmount();
         Scene scene = new Scene(root, 990, 512);
         stage.setScene(scene);
@@ -133,7 +136,7 @@ public class OrderController {
         // Add summary rows
         addSummaryRow(summaryGrid, 0, "Tổng tiền:", totalAmount = createAmountLabel());
         addSummaryRow(summaryGrid, 1, "Voucher:", createVoucherField(), voucherDiscount = createAmountLabel());
-        addSummaryRow(summaryGrid, 2, "Khách cần trả:", finalAmount = createAmountLabel("0", "total-amount"));
+        addSummaryRow(summaryGrid, 2, "Khách cần trả:", finalAmount = createAmountLabel("total-amount"));
 
         return summaryGrid;
     }
@@ -157,11 +160,11 @@ public class OrderController {
     }
 
     private Label createAmountLabel() {
-        return createAmountLabel("0", null);
+        return createAmountLabel(null);
     }
 
-    private Label createAmountLabel(String initialValue, String styleClass) {
-        Label label = new Label(initialValue);
+    private Label createAmountLabel(String styleClass) {
+        Label label = new Label("0");
         label.getStyleClass().add("amount-label");
         if (styleClass != null) {
             label.getStyleClass().add(styleClass);
@@ -336,43 +339,51 @@ public class OrderController {
         return pane;
     }
 
+
+    private VBox getCurrentTabContent() {
+        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+        if (selectedTab != null && selectedTab.getContent() instanceof ScrollPane) {
+            ScrollPane scrollPane = (ScrollPane) selectedTab.getContent();
+            if (scrollPane.getContent() instanceof VBox) {
+                return (VBox) scrollPane.getContent();
+            }
+        }
+        return null;
+    }
+    private Consumer<AnchorPane> createDeleteCallback() {
+        return paneToRemove -> {
+            VBox tabContent = getCurrentTabContent();
+            if (tabContent != null) {
+                FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), paneToRemove);
+                fadeTransition.setFromValue(1.0);
+                fadeTransition.setToValue(0.0);
+                fadeTransition.setOnFinished(e -> {
+                    tabContent.getChildren().remove(paneToRemove);
+                    Tab tab = tabPane.getSelectionModel().getSelectedItem();
+                    if (tab == null || !(tab.getContent() instanceof ScrollPane)) {
+                        return;
+                    }
+                    updateAmount(tab);
+                });
+                fadeTransition.play();
+            }
+        };
+    }
+
     private AnchorPane createPetItemOrderPane(Pet pet) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList2.fxml"));
         AnchorPane pane = loader.load();
         ItemList2Controller controller = loader.getController();
         if (controller != null) {
+            controller.setParentPane(pane);
+            controller.setOnDeleteCallback(createDeleteCallback());
+
             controller.setData(pet);
-            controller.setOnDeleteCallback(() -> {
-                VBox tabContent = getCurrentTabContent();
-                if (tabContent != null) {
-                    tabContent.getChildren().remove(pane);
-                    updateAmount();
-                }
-            });
+            pane.setUserData(pet.getPetId());
+
             pane.getProperties().put("controller", controller);
         }
         return pane;
-    }
-
-    private VBox getCurrentTabContent() {
-        Tab tab = tabPane.getSelectionModel().getSelectedItem();
-        if (tab != null && tab.getContent() instanceof ScrollPane scrollPane) {
-            if (scrollPane.getContent() instanceof VBox vbox) {
-                return vbox;
-            }
-        }
-        return null;
-    }
-
-    private boolean isPetAlreadyInTab(Pet pet, VBox tabContent) {
-        for (Node node : tabContent.getChildren()) {
-            if (node instanceof AnchorPane pane) {
-                if (pane.getUserData() != null && pane.getUserData().equals(pet.getPetId())) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private void createOrderTab(Pet pet) throws IOException {

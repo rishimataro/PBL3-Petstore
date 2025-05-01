@@ -2,12 +2,17 @@ package com.store.app.petstore.Controllers.Staff;
 
 import com.store.app.petstore.Models.Entities.Pet;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 import java.util.Objects;
+import java.util.function.Consumer;
+
 public class ItemList2Controller {
     @FXML
     private FontAwesomeIconView downIcon;
@@ -27,35 +32,15 @@ public class ItemList2Controller {
     private FontAwesomeIconView upIcon;
     @FXML
     private Pet p;
-    
-    private Runnable onDeleteCallback;
 
     public void setData(Pet p) {
         this.p = p;
         namePet.setText(p.getName());
-        unitPrice.setText(p.getPrice() + "");
+        unitPrice.setText((int)p.getPrice() + "");
         quantity.setText("1");
         updateTotal();
         Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream(p.getImageUrl())));
         imgPet.setImage(img);
-        
-        setupTrashIconListener();
-    }
-
-    public void setOnDeleteCallback(Runnable callback) {
-        this.onDeleteCallback = callback;
-    }
-
-    private void setupTrashIconListener() {
-        trashIcon.setOnMouseClicked(e -> {
-            if (onDeleteCallback != null) {
-                onDeleteCallback.run();
-            }
-        });
-    }
-
-    public void setOnDeleteCallback(Runnable callback) {
-        this.onDeleteCallback = callback;
     }
 
     public double getTotal() {
@@ -81,4 +66,24 @@ public class ItemList2Controller {
         double totalValue = price * quantityValue;
         total.setText(String.format("%.2f", totalValue));
     }
+
+
+    private Consumer<AnchorPane> onDeleteCallback; // Callback để xóa item
+    private AnchorPane parentPane; // Tham chiếu đến pane cha
+
+    @FXML
+    private void handleDelete(ActionEvent event) {
+        if (onDeleteCallback != null && parentPane != null) {
+            onDeleteCallback.accept(parentPane);
+        }
+    }
+
+    public void setOnDeleteCallback(Consumer<AnchorPane> callback) {
+        this.onDeleteCallback = callback;
+    }
+
+    public void setParentPane(AnchorPane pane) {
+        this.parentPane = pane;
+    }
+
 }

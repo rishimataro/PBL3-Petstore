@@ -1,6 +1,7 @@
 package com.store.app.petstore.Views;
 
 import com.store.app.petstore.Controllers.LoginController;
+import com.store.app.petstore.Controllers.Staff.OrderController;
 import com.store.app.petstore.Controllers.Staff.StaffController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.io.IOException;
 
 public class ViewFactory {
+    private static final String STAFF_FXML = "";
     private static ViewFactory instance;
     private final String LOGIN_FXML = "/FXML/Login.fxml";
     private final String DASHBOAR_FXML = "/FXML/Staff/StaffDashboard.fxml";
@@ -67,8 +69,9 @@ public class ViewFactory {
                     stage.setTitle("Forgot Password");
                     break;
                 case "order":
-                    root = loadFXML(ORDER_FXML);
-                    stage.setTitle("Order Management");
+                    OrderController orderController = new OrderController();
+                    stage.setTitle("Order");
+                    orderController.show(stage);
                     return;
                 case "personalinfo":
                     root = loadFXML(PERSONAL_INFOR_FXML);
@@ -143,5 +146,8 @@ public class ViewFactory {
     private Parent loadFXML(String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         return loader.load();
+    }
+
+    public void showPopup(String addcustomer, Stage popupStage) {
     }
 }
