@@ -79,12 +79,14 @@ public class OrderController {
         rightPane.setPrefSize(440, 442);
         rightPane.getStyleClass().add("right-pane");
 
-        // Configure tab pane
+        // Configure tab pane to resize with window
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
         tabPane.getStyleClass().add("modern-tab-pane");
+        tabPane.prefWidthProperty().bind(rightPane.widthProperty().subtract(40));
+        tabPane.prefHeightProperty().bind(rightPane.heightProperty().subtract(100));
         AnchorPane.setTopAnchor(tabPane, 15.0);
         AnchorPane.setRightAnchor(tabPane, 20.0);
-        tabPane.setPrefSize(410, 280);
+        AnchorPane.setBottomAnchor(tabPane, 15.0);
 
         // Create order summary section
         VBox summarySection = new VBox(10);
