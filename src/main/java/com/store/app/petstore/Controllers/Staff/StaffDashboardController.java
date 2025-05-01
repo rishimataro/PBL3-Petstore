@@ -1,67 +1,95 @@
 package com.store.app.petstore.Controllers.Staff;
 
+import com.store.app.petstore.Models.Entities.Staff;
+import com.store.app.petstore.Models.Entities.User;
+import com.store.app.petstore.Sessions.SessionManager;
+import com.store.app.petstore.Views.ViewFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.Modality;
+
 import java.net.URL;
-import java.text.NumberFormat;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class StaffDashboardController implements Initializable {
     @FXML
+    private VBox AccountCard;
+
+    @FXML
+    private VBox AddCustomerCard;
+
+    @FXML
+    private VBox BillHistoryCard;
+
+    @FXML
+    private VBox OrderCard;
+
+    @FXML
+    private Button btnLogout;
+
+    @FXML
+    private AnchorPane root;
+
+    @FXML
     private Label staffNameLabel;
-    
-    @FXML
-    private Label todayOrdersLabel;
-    
-    @FXML
-    private Label totalRevenueLabel;
-    
-    @FXML
-    private Label activeCustomersLabel;
-    
-    @FXML
-    private Label pendingTasksLabel;
-    
-    @FXML
-    private VBox recentActivitiesContainer;
-    
-    private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
-    
+
+    private SessionManager sessionManager;
+    private User currentUser;
+    private Staff currentStaff;
+
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // Initialize dashboard with staff name
-        // TODO: Get staff name from session or database
-        staffNameLabel.setText("Staff Name");
-        
-        // Initialize dashboard values
-        initializeDashboardValues();
-        
-        // Initialize recent activities
-        initializeRecentActivities();
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        sessionManager = new SessionManager();
+        currentUser = sessionManager.getCurrentUser();
+        currentStaff = sessionManager.getCurrentStaff();
+        setupStaffname();
+        setMenuCard();
     }
-    
-    private void initializeDashboardValues() {
-        // Set initial values
-        todayOrdersLabel.setText("0");
-        totalRevenueLabel.setText(currencyFormat.format(0.00));
-        activeCustomersLabel.setText("0");
-        pendingTasksLabel.setText("0");
-        
-        // TODO: Load actual values from database
+
+    private void setupStaffname() {
+        if(currentStaff != null) {
+            staffNameLabel.setText(currentStaff.getFullName());
+        } else {
+            staffNameLabel.setText("Chưa cập nhật thông tin");
+        }
     }
-    
-    private void initializeRecentActivities() {
-        // TODO: Load recent activities from database
-        // This is a placeholder for demonstration
-        Label noActivitiesLabel = new Label("No recent activities");
-        noActivitiesLabel.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 14px;");
-        recentActivitiesContainer.getChildren().add(noActivitiesLabel);
+
+    private void setMenuCard(){
+        AccountCard.setOnMouseClicked(event -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            currentStage.close();
+            ViewFactory.getInstance().showWindow("profile");
+        });
+
+        AddCustomerCard.setOnMouseClicked(event -> {
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.initOwner(root.getScene().getWindow());
+            ViewFactory.getInstance().showPopup("addcustomer", popupStage);
+        });
+
+        BillHistoryCard.setOnMouseClicked(event -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            currentStage.close();
+            ViewFactory.getInstance().showWindow("billhistory");
+        });
+
+        OrderCard.setOnMouseClicked(event -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            currentStage.close();
+            ViewFactory.getInstance().showWindow("order");
+        });
+
+        btnLogout.setOnMouseClicked(event -> {
+            sessionManager.clear();
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            currentStage.close();
+            ViewFactory.getInstance().showWindow("login");
+        });
     }
-    
-    // TODO: Add methods for handling quick action buttons
-    // TODO: Add methods for updating statistics
-    // TODO: Add methods for loading recent activities
-} 
+}

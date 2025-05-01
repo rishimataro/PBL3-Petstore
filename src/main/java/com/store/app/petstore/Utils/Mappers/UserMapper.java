@@ -14,6 +14,7 @@ public class UserMapper {
         user.setRole(rs.getString("role"));
         user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         user.setActive(rs.getBoolean("isActive"));
+        user.setImageUrl(rs.getString("image_url"));
         return user;
     }
 }
