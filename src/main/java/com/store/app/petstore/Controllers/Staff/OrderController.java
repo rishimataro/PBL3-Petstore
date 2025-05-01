@@ -24,11 +24,13 @@ public class OrderController {
     private final PauseTransition resizeDebouncer = new PauseTransition(Duration.millis(300));
     private Map<Pet, AnchorPane> petPaneCache = new HashMap<>();
     private final VBox root = new VBox();
+    private Label totalAmount;
+    private Label finalAmount;
+    private Label voucherDiscount;
     private final AnchorPane contentPane = new AnchorPane();
     private final TabPane tabPane = new TabPane();
     private final ScrollPane scrollPane = new ScrollPane();
     private final GridPane grid = new GridPane();
-    private final List<Pet> orderList = new ArrayList<>();
     private final List<Pet> petList = new ArrayList<>();
     private Button createNewTabButton;
 
@@ -38,6 +40,7 @@ public class OrderController {
         configureGridLayout();
         setupGridColumnBinding(stage);
         configureScrollPane();
+        calcAmount();
         Scene scene = new Scene(root, 990, 512);
         stage.setScene(scene);
         scrollPane.maxHeightProperty().bind(scene.heightProperty());
@@ -55,7 +58,7 @@ public class OrderController {
     }
 
     private void setupLayout() {
-        root.getChildren().add(createMenu()); // Add StaffMenu to the root
+        root.getChildren().add(createMenu());
         root.getChildren().add(contentPane);
         contentPane.setPrefSize(990, 442); // Adjust content pane size
         contentPane.getStyleClass().add("root");
@@ -104,19 +107,19 @@ public class OrderController {
         GridPane.setColumnIndex(codeField, 1);
         GridPane.setRowIndex(codeField, 1);
 
-        Label money1 = new Label("0");
-        money1.getStyleClass().add("money-label");
-        GridPane.setColumnIndex(money1, 2);
-        Label money2 = new Label("0");
-        money2.getStyleClass().add("money-label");
-        GridPane.setColumnIndex(money2, 2);
-        GridPane.setRowIndex(money2, 1);
-        Label money3 = new Label("0");
-        money3.getStyleClass().add("money-label");
-        GridPane.setColumnIndex(money3, 2);
-        GridPane.setRowIndex(money3, 2);
+        totalAmount = new Label("0");
+        totalAmount.getStyleClass().add("money-label");
+        GridPane.setColumnIndex(totalAmount, 2);
+        voucherDiscount = new Label("0");
+        voucherDiscount.getStyleClass().add("money-label");
+        GridPane.setColumnIndex(voucherDiscount, 2);
+        GridPane.setRowIndex(voucherDiscount, 1);
+        finalAmount = new Label("0");
+        finalAmount.getStyleClass().add("money-label");
+        GridPane.setColumnIndex(finalAmount, 2);
+        GridPane.setRowIndex(finalAmount, 2);
 
-        infoGrid.getChildren().addAll(totalLabel, voucherLabel, customerPayLabel, codeField, money1, money2, money3);
+        infoGrid.getChildren().addAll(totalLabel, voucherLabel, customerPayLabel, codeField, totalAmount, voucherDiscount, finalAmount);
 
         Button confirmButton = new Button("Xác nhận");
         confirmButton.setPrefSize(119, 26);
@@ -167,6 +170,7 @@ public class OrderController {
             protected List<Pet> call() {
                 return PetDAO.getInstance().findAll();
             }
+
             @Override
             protected void succeeded() {
                 petList.clear();
@@ -174,6 +178,7 @@ public class OrderController {
                 rearrangeGridItems(); // thêm dòng này
                 updateGridColumns(calculateOptimalColumnCount(stage.getWidth()));
             }
+
             @Override
             protected void failed() {
                 getException().printStackTrace();
@@ -217,7 +222,7 @@ public class OrderController {
 
     private int calculateOptimalColumnCount(double windowWidth) {
         double availableWidth = windowWidth - 600;
-        int columnCount = (int)Math.floor(availableWidth / 110);
+        int columnCount = (int) Math.floor(availableWidth / 110);
         return Math.min(9, Math.max(1, columnCount));
     }
 
@@ -278,6 +283,7 @@ public class OrderController {
         controller.setData(pet);
         return pane;
     }
+
     private AnchorPane createPetItemOrderPane(Pet pet) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList2.fxml"));
         AnchorPane pane = loader.load();
@@ -286,6 +292,16 @@ public class OrderController {
         return pane;
     }
 
+    private boolean isPetAlreadyInTab(Pet pet, VBox tabContent) {
+        for (Node node : tabContent.getChildren()) {
+            if (node instanceof AnchorPane pane) {
+                if (pane.getUserData() != null && pane.getUserData().equals(pet.getPetId())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     private void createOrderTab(Pet pet) throws IOException {
         if (pet == null) return;
 
@@ -295,17 +311,25 @@ public class OrderController {
         ScrollPane scrollPane = (ScrollPane) tab.getContent();
         VBox tabContent = (VBox) scrollPane.getContent();
 
-        // Kiểm tra xem pet đã có trong VBox chưa (dựa vào ID hoặc tên)
-        boolean exists = tabContent.getChildren().stream().anyMatch(node -> {
-            if (node instanceof AnchorPane pane) {
-                return pane.getUserData() != null && pane.getUserData().equals(pet.getPetId()); // Giả sử pet có getId()
-            }
-            return false;
-        });
+        // Kiểm tra pet đã tồn tại chưa
+        if (isPetAlreadyInTab(pet, tabContent)) {
+            // Nếu đã có, tìm node và gọi AddItem
+            for (Node node : tabContent.getChildren()) {
+                if (node instanceof AnchorPane pane) {
+                    if (pane.getUserData() != null && pane.getUserData().equals(pet.getPetId())) {
+                        ItemList2Controller controller = (ItemList2Controller) pane.getProperties().get("controller");
+                        System.out.println(pane.getProperties());
+                        if (controller != null) {
 
-        if (!exists) {
+                            controller.AddItem(1);
+                        }
+                        return;
+                    }
+                }
+            }
+        } else {
             AnchorPane itemPane = createPetItemOrderPane(pet);
-            itemPane.setUserData(pet.getPetId()); // Gắn ID để tránh thêm trùng
+            itemPane.setUserData(pet.getPetId());
             tabContent.getChildren().add(itemPane);
         }
     }
@@ -319,5 +343,26 @@ public class OrderController {
         newTab.setContent(scrollPane);
         tabPane.getTabs().add(newTab);
         tabPane.getSelectionModel().select(newTab);
+    }
+
+    private void calcAmount() {
+        tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+            if (newTab != null) {
+                ScrollPane scrollPane = (ScrollPane) newTab.getContent();
+                VBox tabContent = (VBox) scrollPane.getContent();
+
+                double total = 0;
+                for (Node node : tabContent.getChildren()) {
+                    if (node instanceof AnchorPane pane) {
+                        ItemList2Controller controller = (ItemList2Controller) pane.getProperties().get("controller");
+                        if (controller != null) {
+                            total += controller.getTotal();
+                        }
+                    }
+                }
+
+                totalAmount.setText(String.format("%.0f", total));
+            }
+        });
     }
 }
