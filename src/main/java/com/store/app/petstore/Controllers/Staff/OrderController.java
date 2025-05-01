@@ -77,62 +77,105 @@ public class OrderController {
     private AnchorPane createRightPane() {
         AnchorPane rightPane = new AnchorPane();
         rightPane.setPrefSize(440, 442);
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        tabPane.getStyleClass().add("tab-container");
+        rightPane.getStyleClass().add("right-pane");
+
+        // Configure tab pane
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
+        tabPane.getStyleClass().add("modern-tab-pane");
         AnchorPane.setTopAnchor(tabPane, 15.0);
         AnchorPane.setRightAnchor(tabPane, 20.0);
         tabPane.setPrefSize(410, 280);
 
-        GridPane infoGrid = new GridPane();
-        infoGrid.setHgap(10);
-        infoGrid.setPrefSize(410, 80);
-        AnchorPane.setTopAnchor(infoGrid, 300.0);
-        AnchorPane.setRightAnchor(infoGrid, 20.0);
-        infoGrid.getColumnConstraints().addAll(new ColumnConstraints(108), new ColumnConstraints(162), new ColumnConstraints(140));
-        infoGrid.getRowConstraints().addAll(new RowConstraints(30), new RowConstraints(30), new RowConstraints(30));
+        // Create order summary section
+        VBox summarySection = new VBox(10);
+        summarySection.getStyleClass().add("summary-section");
 
-        Label totalLabel = new Label("Tổng tiền:");
-        totalLabel.getStyleClass().add("infomoney-label");
-        Label voucherLabel = new Label("Voucher:");
-        voucherLabel.getStyleClass().add("infomoney-label");
-        GridPane.setRowIndex(voucherLabel, 1);
-        Label customerPayLabel = new Label("Khách cần trả:");
-        customerPayLabel.getStyleClass().add("infomoney-label");
-        GridPane.setRowIndex(customerPayLabel, 2);
+        // Add order summary grid
+        GridPane orderSummary = createOrderSummary();
 
-        TextField codeField = new TextField();
-        codeField.setPromptText("Nhập code (nếu có)");
-        codeField.getStyleClass().add("code-textfield");
-        GridPane.setColumnIndex(codeField, 1);
-        GridPane.setRowIndex(codeField, 1);
+        // Add action buttons right below the summary
+        HBox actionButtons = createActionButtons();
+        summarySection.getChildren().addAll(orderSummary, actionButtons);
 
-        totalAmount = new Label("0");
-        totalAmount.getStyleClass().add("money-label");
-        GridPane.setColumnIndex(totalAmount, 2);
-        voucherDiscount = new Label("0");
-        voucherDiscount.getStyleClass().add("money-label");
-        GridPane.setColumnIndex(voucherDiscount, 2);
-        GridPane.setRowIndex(voucherDiscount, 1);
-        finalAmount = new Label("0");
-        finalAmount.getStyleClass().add("money-label");
-        GridPane.setColumnIndex(finalAmount, 2);
-        GridPane.setRowIndex(finalAmount, 2);
+        // Position the combined summary and buttons
+        AnchorPane.setTopAnchor(summarySection, 300.0);
+        AnchorPane.setRightAnchor(summarySection, 20.0);
 
-        infoGrid.getChildren().addAll(totalLabel, voucherLabel, customerPayLabel, codeField, totalAmount, voucherDiscount, finalAmount);
+        rightPane.getChildren().addAll(tabPane, summarySection);
+        return rightPane;
+    }
 
-        Button confirmButton = new Button("Xác nhận");
-        confirmButton.setPrefSize(119, 26);
-        AnchorPane.setBottomAnchor(confirmButton, 20.0);
-        AnchorPane.setRightAnchor(confirmButton, 20.0);
+    private GridPane createOrderSummary() {
+        GridPane summaryGrid = new GridPane();
+        summaryGrid.getStyleClass().add("order-summary-grid");
+        summaryGrid.setHgap(15);
+        summaryGrid.setVgap(10);
+        summaryGrid.setPadding(new Insets(15));
 
-        createNewTabButton = new Button("Tạo đơn hàng mới");
-        createNewTabButton.setPrefSize(119, 26);
-        AnchorPane.setBottomAnchor(createNewTabButton, 50.0);
-        AnchorPane.setRightAnchor(createNewTabButton, 20.0);
+        // Column setup
+        ColumnConstraints labelCol = new ColumnConstraints();
+        labelCol.setHgrow(Priority.NEVER);
+        ColumnConstraints fieldCol = new ColumnConstraints();
+        fieldCol.setHgrow(Priority.ALWAYS);
+        ColumnConstraints amountCol = new ColumnConstraints(100);
+        summaryGrid.getColumnConstraints().addAll(labelCol, fieldCol, amountCol);
+
+        // Add summary rows
+        addSummaryRow(summaryGrid, 0, "Tổng tiền:", totalAmount = createAmountLabel());
+        addSummaryRow(summaryGrid, 1, "Voucher:", createVoucherField(), voucherDiscount = createAmountLabel());
+        addSummaryRow(summaryGrid, 2, "Khách cần trả:", finalAmount = createAmountLabel("0", "total-amount"));
+
+        return summaryGrid;
+    }
+
+    private void addSummaryRow(GridPane grid, int row, String labelText, Node... nodes) {
+        Label label = new Label(labelText);
+        label.getStyleClass().add("summary-label");
+        grid.add(label, 0, row);
+
+        for (int i = 0; i < nodes.length; i++) {
+            grid.add(nodes[i], i + 1, row);
+        }
+    }
+
+    private TextField createVoucherField() {
+        TextField field = new TextField();
+        field.getStyleClass().add("voucher-field");
+        field.setPromptText("Nhập mã giảm giá");
+        field.setPrefWidth(180);
+        return field;
+    }
+
+    private Label createAmountLabel() {
+        return createAmountLabel("0", null);
+    }
+
+    private Label createAmountLabel(String initialValue, String styleClass) {
+        Label label = new Label(initialValue);
+        label.getStyleClass().add("amount-label");
+        if (styleClass != null) {
+            label.getStyleClass().add(styleClass);
+        }
+        label.setAlignment(Pos.CENTER_RIGHT);
+        return label;
+    }
+
+    private HBox createActionButtons() {
+        HBox buttonContainer = new HBox(15);
+        buttonContainer.setAlignment(Pos.CENTER_RIGHT);
+        buttonContainer.setPadding(new Insets(10, 0, 0, 0));
+
+        createNewTabButton = new Button("TẠO ĐƠN MỚI");
+        createNewTabButton.getStyleClass().addAll("action-button", "secondary-button");
+        createNewTabButton.setPrefSize(150, 40);
         createNewTabButton.setOnAction(e -> handleCreateNewTab());
 
-        rightPane.getChildren().addAll(tabPane, infoGrid, confirmButton, createNewTabButton);
-        return rightPane;
+        Button confirmButton = new Button("XÁC NHẬN");
+        confirmButton.getStyleClass().addAll("action-button", "primary-button");
+        confirmButton.setPrefSize(150, 40);
+
+        buttonContainer.getChildren().addAll(createNewTabButton, confirmButton);
+        return buttonContainer;
     }
 
     private AnchorPane createLeftPane() {
@@ -304,6 +347,7 @@ public class OrderController {
         }
         return false;
     }
+
     private void createOrderTab(Pet pet) throws IOException {
         if (pet == null) {
             return;
@@ -323,14 +367,15 @@ public class OrderController {
 
         // Check if pet already exists in tab
         for (Node node : tabContent.getChildren()) {
-            if (node instanceof AnchorPane pane && 
-                pane.getUserData() != null && 
-                pane.getUserData().equals(pet.getPetId())) {
-                
+            if (node instanceof AnchorPane pane &&
+                    pane.getUserData() != null &&
+                    pane.getUserData().equals(pet.getPetId())) {
+
                 Object controllerObj = pane.getProperties().get("controller");
                 if (controllerObj instanceof ItemList2Controller controller) {
                     controller.AddItem(1);
                 }
+                updateAmount(tab);
                 return;
             }
         }
@@ -339,6 +384,8 @@ public class OrderController {
         AnchorPane itemPane = createPetItemOrderPane(pet);
         itemPane.setUserData(pet.getPetId());
         tabContent.getChildren().add(itemPane);
+
+        updateAmount(tab);
     }
 
     private void handleCreateNewTab() {
@@ -352,34 +399,43 @@ public class OrderController {
         tabPane.getSelectionModel().select(newTab);
     }
 
-    private void calcAmount() {
-        tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
-            if (newTab == null || !(newTab.getContent() instanceof ScrollPane)) {
-                return;
-            }
+    private void updateAmount(Tab newTab) {
+        if (newTab == null || !(newTab.getContent() instanceof ScrollPane)) {
+            return;
+        }
 
-            ScrollPane scrollPane = (ScrollPane) newTab.getContent();
-            if (!(scrollPane.getContent() instanceof VBox)) {
-                return;
-            }
+        ScrollPane scrollPane = (ScrollPane) newTab.getContent();
+        if (!(scrollPane.getContent() instanceof VBox)) {
+            return;
+        }
 
-            VBox tabContent = (VBox) scrollPane.getContent();
-            double total = 0;
-            System.out.println("SEtp0");
-            for (Node node : tabContent.getChildren()) {
-                System.out.println("Step1");
-                if (node instanceof AnchorPane pane) {
-                    System.out.println("Step2");
-                    Object controllerObj = pane.getProperties().get("controller");
+        VBox tabContent = (VBox) scrollPane.getContent();
+        double total = 0;
+        System.out.println("SEtp0");
+        for (Node node : tabContent.getChildren()) {
+            System.out.println("Step1");
+            if (node instanceof AnchorPane pane) {
+                System.out.println("Step2");
+                Object controllerObj = pane.getProperties().get("controller");
 
-                    System.out.println("Step3");
-                    if (controllerObj instanceof ItemList2Controller controller) {
-                        total += controller.getTotal();
-                    }
+                System.out.println("Step3");
+                if (controllerObj instanceof ItemList2Controller controller) {
+                    total += controller.getTotal();
                 }
             }
+        }
 
-            totalAmount.setText(String.format("%.0f", total));
+        totalAmount.setText(String.format("%.0f", total));
+
+        int finalAmountNumber = Integer.parseInt(totalAmount.getText()) - Integer.parseInt(voucherDiscount.getText());
+
+        finalAmount.setText(String.format("%.0f", total));
+    }
+
+    private void calcAmount() {
+        tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+            updateAmount(newTab);
         });
     }
+
 }
