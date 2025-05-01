@@ -342,9 +342,26 @@ public class OrderController {
         ItemList2Controller controller = loader.getController();
         if (controller != null) {
             controller.setData(pet);
+            controller.setOnDeleteCallback(() -> {
+                VBox tabContent = getCurrentTabContent();
+                if (tabContent != null) {
+                    tabContent.getChildren().remove(pane);
+                    updateAmount();
+                }
+            });
             pane.getProperties().put("controller", controller);
         }
         return pane;
+    }
+
+    private VBox getCurrentTabContent() {
+        Tab tab = tabPane.getSelectionModel().getSelectedItem();
+        if (tab != null && tab.getContent() instanceof ScrollPane scrollPane) {
+            if (scrollPane.getContent() instanceof VBox vbox) {
+                return vbox;
+            }
+        }
+        return null;
     }
 
     private boolean isPetAlreadyInTab(Pet pet, VBox tabContent) {

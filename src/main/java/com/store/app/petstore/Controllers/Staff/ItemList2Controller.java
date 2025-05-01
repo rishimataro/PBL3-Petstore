@@ -36,6 +36,16 @@ public class ItemList2Controller {
         updateTotal();
         Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream(p.getImageUrl())));
         imgPet.setImage(img);
+        
+        trashIcon.setOnMouseClicked(e -> {
+            if (onDeleteCallback != null) {
+                onDeleteCallback.run();
+            }
+        });
+    }
+
+    public void setOnDeleteCallback(Runnable callback) {
+        this.onDeleteCallback = callback;
     }
 
     public double getTotal() {
