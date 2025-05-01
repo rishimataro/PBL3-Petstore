@@ -79,14 +79,21 @@ public class OrderController {
         rightPane.setPrefSize(440, 442);
         rightPane.getStyleClass().add("right-pane");
 
-        // Configure tab pane to resize with window
+        // Configure tab pane with scroll behavior
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
         tabPane.getStyleClass().add("modern-tab-pane");
-        tabPane.setPrefWidth(450);
-
-        AnchorPane.setTopAnchor(tabPane, 15.0);
-        AnchorPane.setRightAnchor(tabPane, 20.0);
-        AnchorPane.setBottomAnchor(tabPane, 15.0);
+        tabPane.setTabMinWidth(100);
+        tabPane.setTabMaxWidth(200);
+        
+        ScrollPane tabScrollPane = new ScrollPane(tabPane);
+        tabScrollPane.setFitToWidth(true);
+        tabScrollPane.setFitToHeight(true);
+        tabScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        tabScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        
+        AnchorPane.setTopAnchor(tabScrollPane, 15.0);
+        AnchorPane.setRightAnchor(tabScrollPane, 20.0);
+        AnchorPane.setBottomAnchor(tabScrollPane, 15.0);
 
         // Create order summary section
         VBox summarySection = new VBox(10);
