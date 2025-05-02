@@ -15,9 +15,11 @@ import com.store.app.petstore.Models.Entities.Order;
 import com.store.app.petstore.DAO.OrderDAO;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -36,11 +38,17 @@ public class BillHistoryController {
     private TableColumn<Order, Double> invoice_totalBillCol;
 
     @FXML
+    private Button search_btn;
+    @FXML
+    private DatePicker start_datepicker;
+    @FXML
+    private DatePicker end_datepicker;
+    @FXML
     public void initialize() {
         sttCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.1));
         invoice_idCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.15));
-        invoice_customerCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.25));
-        invoice_timeCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.35));
+        invoice_customerCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.35));
+        invoice_timeCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.25));
         invoice_totalBillCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.15));
 
         sttCol.setCellValueFactory(col ->
@@ -103,6 +111,31 @@ public class BillHistoryController {
         ObservableList<Order> orders = FXCollections.observableArrayList(OrderDAO.getInstance().findAll());
         invoice_table.setItems(orders);
     }
+    @FXML
+    private void onSearchClicked(){
+        LocalDate start = start_datepicker.getValue();
+        LocalDate end = end_datepicker.getValue();
 
+        if (start == null || start == null) {
+            // Có thể hiện cảnh báo
+            System.out.println("Chọn cả hai ngày.");
+            return;
+        }
+        LocalDateTime startDateTime = start.atStartOfDay();
+        LocalDateTime endDateTime = end.atTime(23, 59, 59);
+
+        List<Order> filtered = OrderDAO.getInstance()
+                .findAll()
+                .stream()
+                .filter(order ->{
+                    LocalDateTime orderDate = order.getOrderDate();
+                    return (orderDate != null &&
+                            orderDate.isEqual(startDateTime) || orderDate.isAfter(startDateTime)
+                            && orderDate.isBefore(endDateTime) || orderDate.isEqual(endDateTime)
+                    );
+                })
+                .collect(Collectors.toList());
+        invoice_table.setItems(FXCollections.observableArrayList(filtered));
+    }
 
 }
