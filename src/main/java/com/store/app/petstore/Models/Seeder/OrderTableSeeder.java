@@ -20,7 +20,7 @@ public class OrderTableSeeder {
                 discountIds.add(rs.getInt("discount_id"));
             }
 
-            String sql = "INSERT INTO Orders (customer_id, total_price, order_date, staff_id, discount_id) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Orders (customer_id, total_price, order_date, staff_id, discount_id, isDelete) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
 
             for (int i = 0; i < count; i++) {
@@ -44,6 +44,7 @@ public class OrderTableSeeder {
                 } else {
                     ps.setNull(5, Types.INTEGER);
                 }
+                ps.setBoolean(6, false);
 
                 ps.executeUpdate();
             }

@@ -1,0 +1,80 @@
+.nav-container{
+    -fx-background-color: #017FCB;
+}
+
+.user-image{
+    -fx-stroke: white;
+    -fx-stroke-width: 2;
+}
+
+.label-username, .label-name{
+    -fx-text-fill: white;
+}
+
+.label-username{
+    -fx-font-weight: bold;
+}
+
+/* MenuBar styles */
+.menu-bar {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.menu-bar .menu {
+    -fx-padding: 8px 15px;
+    -fx-background-color: transparent;
+}
+
+.menu-bar .menu .label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.menu-bar .menu:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-bar .menu:showing {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Context menu styles */
+.context-menu {
+    -fx-background-color: white;
+    -fx-border-color: #dddddd;
+    -fx-border-width: 1px;
+    -fx-padding: 5px 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 2);
+    -fx-min-width: 150px;
+}
+
+/* MenuItem styles */
+.menu-item {
+    -fx-background-color: #017FCB;
+    -fx-padding: 8px 20px;
+    -fx-cursor: hand;
+}
+
+.menu-item .label {
+    -fx-text-fill: #017FCB;
+    -fx-font-size: 13px;
+    -fx-underline: false;
+}
+
+.menu-item:focused {
+    -fx-background-color: #017FCB;
+}
+
+.menu-item:focused .label {
+    -fx-text-fill: white;
+}
+
+.menu-item:hover {
+    -fx-background-color: #01C4DA;
+}
+
+.menu-item:hover .label {
+    -fx-text-fill: white;
+}

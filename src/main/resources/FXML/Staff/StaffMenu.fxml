@@ -26,8 +26,8 @@
             </FontAwesomeIconView>
             <VBox HBox.hgrow="ALWAYS">
                <children>
-                  <Label styleClass="label-username" text="dothang13" />
-                  <Label styleClass="label-name" text="Nguyễn Đỗ Thắng" />
+                  <Label fx:id="usernameLabel" styleClass="label-username" text="dothang13" />
+                  <Label fx:id="nameLabel" styleClass="label-name" text="Nguyễn Đỗ Thắng" />
                </children>
             </VBox>
          </children>

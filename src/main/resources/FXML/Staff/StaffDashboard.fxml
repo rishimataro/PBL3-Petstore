@@ -2,125 +2,72 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane fx:id="root" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../../Styles/Staff/StaffDashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.StaffDashboardController">
+<AnchorPane fx:id="root" prefHeight="512.0" prefWidth="990.0" stylesheets="@../../Styles/Staff/StaffDashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.StaffDashboardController">
    <children>
       <!-- Top Navigation Bar -->
       <fx:include source="StaffMenu.fxml" />
       
       <!-- Main Content Area -->
-      <ScrollPane fitToWidth="true" layoutY="70.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <content>
-            <VBox prefHeight="650.0" prefWidth="1280.0" spacing="20.0" styleClass="dashboard-container">
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
+      <AnchorPane layoutY="70.0" prefHeight="442.0" prefWidth="990.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <VBox prefHeight="442.0" prefWidth="990.0" spacing="10.0" styleClass="dashboard-container">
+            <padding>
+               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
 
-               
-               <!-- Welcome Section -->
-               <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1240.0" HBox.hgrow="ALWAYS">
-                  <Label styleClass="welcome-label" text="Welcome back, " />
-                  <Label fx:id="staffNameLabel" styleClass="welcome-label-name" text="Staff Name" />
-               </HBox>
-               
-               <!-- Quick Stats Section -->
-               <GridPane hgap="20" vgap="20" prefHeight="150.0" prefWidth="1240.0">
+            <!-- Welcome Section -->
+            <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="950.0" HBox.hgrow="ALWAYS">
+               <Label styleClass="welcome-label" text="Xin chào, " />
+               <Label fx:id="staffNameLabel" styleClass="welcome-label-name" text="Staff Name" />
+            </HBox>
+            <Separator prefWidth="200.0" />
+
+            <!-- Quick Actions Section -->
+            <VBox alignment="CENTER_RIGHT" prefHeight="181.0" prefWidth="950.0" spacing="20.0">
+               <GridPane hgap="20" prefHeight="150.0" prefWidth="950.0" vgap="20">
                   <columnConstraints>
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="250.0" prefWidth="300.0" />
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="250.0" prefWidth="300.0" />
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="250.0" prefWidth="300.0" />
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="250.0" prefWidth="300.0" />
+                     <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="225.0" />
+                     <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="225.0" />
+                     <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="225.0" />
+                     <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="225.0" />
                   </columnConstraints>
                   <rowConstraints>
                      <RowConstraints minHeight="150.0" prefHeight="150.0" vgrow="SOMETIMES" />
                   </rowConstraints>
-                  
-                  <!-- Today's Orders -->
-                  <VBox alignment="CENTER" prefHeight="150.0" prefWidth="300.0" styleClass="stat-card" GridPane.columnIndex="0">
-                     <Label fx:id="todayOrdersLabel" styleClass="stat-value" text="0" />
-                     <Label styleClass="stat-label" text="Today's Orders" />
-                     <FontAwesomeIconView glyphName="SHOPPING_CART" size="30" styleClass="stat-icon" />
+
+                  <VBox fx:id="OrderCard" alignment="CENTER" prefHeight="150.0" prefWidth="225.0" styleClass="action-card" GridPane.columnIndex="0">
+                     <FontAwesomeIconView glyphName="PLUS" size="30" styleClass="action-icon" />
+                     <Label styleClass="action-label" text="Đặt hàng" />
                   </VBox>
-                  
-                  <!-- Total Revenue -->
-                  <VBox alignment="CENTER" prefHeight="150.0" prefWidth="300.0" styleClass="stat-card" GridPane.columnIndex="1">
-                     <Label fx:id="totalRevenueLabel" styleClass="stat-value" text="0.00" />
-                     <Label styleClass="stat-label" text="Total Revenue" />
-                     <FontAwesomeIconView glyphName="DOLLAR" size="30" styleClass="stat-icon" />
+
+                  <VBox fx:id="AddCustomerCard" alignment="CENTER" prefHeight="150.0" prefWidth="225.0" styleClass="action-card" GridPane.columnIndex="1">
+                     <FontAwesomeIconView glyphName="USER_PLUS" size="30" styleClass="action-icon" />
+                     <Label styleClass="action-label" text="Thêm khách hàng" />
                   </VBox>
-                  
-                  <!-- Active Customers -->
-                  <VBox alignment="CENTER" prefHeight="150.0" prefWidth="300.0" styleClass="stat-card" GridPane.columnIndex="2">
-                     <Label fx:id="activeCustomersLabel" styleClass="stat-value" text="0" />
-                     <Label styleClass="stat-label" text="Active Customers" />
-                     <FontAwesomeIconView glyphName="USERS" size="30" styleClass="stat-icon" />
+
+                  <VBox fx:id="AccountCard" alignment="CENTER" prefHeight="150.0" prefWidth="225.0" styleClass="action-card" GridPane.columnIndex="3">
+                     <FontAwesomeIconView glyphName="USER" size="30" styleClass="action-icon" />
+                     <Label styleClass="action-label" text="Thông tin tài khoản" />
                   </VBox>
-                  
-                  <!-- Pending Tasks -->
-                  <VBox alignment="CENTER" prefHeight="150.0" prefWidth="300.0" styleClass="stat-card" GridPane.columnIndex="3">
-                     <Label fx:id="pendingTasksLabel" styleClass="stat-value" text="0" />
-                     <Label styleClass="stat-label" text="Pending Tasks" />
-                     <FontAwesomeIconView glyphName="TASKS" size="30" styleClass="stat-icon" />
+                  <VBox fx:id="BillHistoryCard" alignment="CENTER" prefHeight="150.0" prefWidth="225.0" styleClass="action-card" GridPane.columnIndex="2">
+                     <children>
+                        <FontAwesomeIconView glyphName="FILE_TEXT" size="30" styleClass="action-icon" />
+                        <Label styleClass="action-label" text="Lịch sử hóa đơn" />
+                     </children>
                   </VBox>
                </GridPane>
-               
-               <!-- Quick Actions Section -->
-               <VBox prefHeight="200.0" prefWidth="1240.0" spacing="10.0">
-                  <Label styleClass="section-title" text="Quick Actions" />
-                  <GridPane hgap="20" vgap="20" prefHeight="150.0" prefWidth="1240.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="200.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="200.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="200.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="200.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="150.0" prefHeight="150.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     
-                     <VBox alignment="CENTER" prefHeight="150.0" prefWidth="200.0" styleClass="action-card" GridPane.columnIndex="0">
-                        <FontAwesomeIconView glyphName="PLUS" size="30" styleClass="action-icon" />
-                        <Label styleClass="action-label" text="New Order" />
-                     </VBox>
-                     
-                     <VBox alignment="CENTER" prefHeight="150.0" prefWidth="200.0" styleClass="action-card" GridPane.columnIndex="1">
-                        <FontAwesomeIconView glyphName="USER_PLUS" size="30" styleClass="action-icon" />
-                        <Label styleClass="action-label" text="Add Customer" />
-                     </VBox>
-                     
-                     <VBox alignment="CENTER" prefHeight="150.0" prefWidth="200.0" styleClass="action-card" GridPane.columnIndex="2">
-                        <FontAwesomeIconView glyphName="PAW" size="30" styleClass="action-icon" />
-                        <Label styleClass="action-label" text="Add Pet" />
-                     </VBox>
-                     
-                     <VBox alignment="CENTER" prefHeight="150.0" prefWidth="200.0" styleClass="action-card" GridPane.columnIndex="3">
-                        <FontAwesomeIconView glyphName="FILE_TEXT" size="30" styleClass="action-icon" />
-                        <Label styleClass="action-label" text="View Reports" />
-                     </VBox>
-                  </GridPane>
-               </VBox>
-               
-               <!-- Recent Activities Section -->
-               <VBox prefHeight="200.0" prefWidth="1240.0" spacing="10.0" VBox.vgrow="ALWAYS">
-                  <Label styleClass="section-title" text="Recent Activities" />
-                  <VBox fx:id="recentActivitiesContainer" prefHeight="150.0" prefWidth="1240.0" spacing="10.0" styleClass="activities-container" VBox.vgrow="ALWAYS">
-                     <!-- Activities will be populated dynamically -->
-                  </VBox>
-               </VBox>
+               <Button fx:id="btnLogout" mnemonicParsing="false" text="Đăng xuất" />
             </VBox>
-         </content>
-      </ScrollPane>
+         </VBox>
+      </AnchorPane>
    </children>
-</AnchorPane> 
+</AnchorPane>
