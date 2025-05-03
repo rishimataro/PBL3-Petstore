@@ -1,8 +1,11 @@
 package com.store.app.petstore.DAO;
 
 import com.store.app.petstore.Models.Entities.Discount;
+import com.store.app.petstore.Utils.ControllerUtils;
 import java.sql.*;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class DiscountDAO implements BaseDAO<Discount, Integer> {
     public static DiscountDAO getInstance() { 
@@ -202,11 +205,80 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
     }
 
     public Discount findByCode(String code) {
-        ArrayList<Discount> discounts = findByCondition("code = '" + code + "'");
-        return discounts != null && !discounts.isEmpty() ? discounts.get(0) : null;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = DatabaseUtil.getConnection();
+            String sql = "SELECT * FROM Discounts WHERE code = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, code);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                String discountType = rs.getString("discount_type");
+                // Chuyển đổi từ tiếng Việt sang tiếng Anh
+                if (discountType.equals("phần trăm")) {
+                    discountType = "percent";
+                } else if (discountType.equals("cố định")) {
+                    discountType = "fixed";
+                }
+                
+                return new Discount(
+                    rs.getInt("discount_id"),
+                    rs.getString("code"),
+                    discountType,
+                    rs.getDouble("value"),
+                    rs.getDate("start_date").toLocalDate(),
+                    rs.getDate("end_date").toLocalDate(),
+                    rs.getDouble("min_order_value"),
+                    rs.getDouble("max_discount_value")
+                );
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            DatabaseUtil.closeResources(rs, stmt, conn);
+        }
     }
 
     public ArrayList<Discount> findActiveDiscounts() {
         return findByCondition("CURRENT_DATE BETWEEN start_date AND end_date");
+    }
+
+    public boolean isValidDiscount(Discount discount) {
+        if (discount == null) return false;
+        
+        LocalDate today = LocalDate.now();
+        return !today.isBefore(discount.getStartDate()) && 
+               !today.isAfter(discount.getEndDate());
+    }
+
+    public String validateDiscount(Discount discount, double orderTotal) {
+        if (discount == null) {
+            return "Mã giảm giá không tồn tại!";
+        }
+
+        LocalDate today = LocalDate.now();
+        
+        if (today.isBefore(discount.getStartDate())) {
+            return String.format("Mã giảm giá này sẽ có hiệu lực từ ngày %s", 
+                discount.getStartDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        }
+        
+        if (today.isAfter(discount.getEndDate())) {
+            return String.format("Mã giảm giá này đã hết hạn từ ngày %s", 
+                discount.getEndDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        }
+
+        if (orderTotal < discount.getMinOrderValue()) {
+            return String.format("Đơn hàng phải có giá trị tối thiểu %s để áp dụng mã giảm giá!", 
+                ControllerUtils.formatCurrency(discount.getMinOrderValue()));
+        }
+
+        return null; // null means valid
     }
 }

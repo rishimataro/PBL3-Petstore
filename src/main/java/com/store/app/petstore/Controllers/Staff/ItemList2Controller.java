@@ -7,6 +7,7 @@ import com.store.app.petstore.Utils.ControllerUtils;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -35,6 +36,11 @@ public class ItemList2Controller {
     private FontAwesomeIconView upIcon;
     @FXML
     private Item item;
+
+    @FXML
+    private void initialize() {
+        
+    }
 
     public void setData(Item item) {
         this.item = item;
@@ -66,11 +72,20 @@ public class ItemList2Controller {
         updateTotal();
     }
 
+    private Runnable onQuantityChanged;
+
+    public void setOnQuantityChanged(Runnable callback) {
+        this.onQuantityChanged = callback;
+    }
+
     private void updateTotal() {
         double price = ControllerUtils.parseCurrency(unitPrice.getText());
         int quantityValue = Integer.parseInt(quantity.getText());
         double totalValue = price * quantityValue;
         total.setText(ControllerUtils.formatCurrency(totalValue));
+        if (onQuantityChanged != null) {
+            onQuantityChanged.run();
+        }
     }
 
     private Consumer<AnchorPane> onDeleteCallback; // Callback để xóa item
@@ -89,5 +104,46 @@ public class ItemList2Controller {
 
     public void setParentPane(AnchorPane pane) {
         this.parentPane = pane;
+    }
+
+    @FXML
+    private void handleUpIcon() {
+        int currentAmount = Integer.parseInt(quantity.getText());
+        if (item instanceof Product product) {
+            if (currentAmount < product.getStock()) {
+                quantity.setText(String.valueOf(currentAmount + 1));
+                updateTotal();
+            }
+        } else {
+            showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Không thể tăng số lượng thú cưng!");
+        }
+    }
+
+    @FXML
+    private void handleDownIcon() {
+        if (item instanceof Product product) {
+            if (product.getStock() == 0) {
+                showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Sản phẩm đã hết hàng!");
+                return;
+            }
+            int currentAmount = Integer.parseInt(quantity.getText());
+            if (currentAmount > 1) {
+                quantity.setText(String.valueOf(currentAmount - 1));
+                updateTotal();
+            }
+        }
+        else {
+            showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Không thể giảm số lượng thú cưng!");
+        }
+
+    }
+
+    // show popup error
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

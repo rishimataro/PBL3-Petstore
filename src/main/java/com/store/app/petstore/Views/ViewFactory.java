@@ -18,6 +18,7 @@ public class ViewFactory {
     private final String ORDER_FXML = "/FXML/Staff/Order.fxml";
     private final String PERSONAL_INFOR_FXML = "/FXML/Staff/PersonalInfo.fxml";
     private final String BILL_HISTORY_FXML = "/FXML/Staff/BillHistory.fxml";
+    private final String PAYMENT_FXML = "/FXML/Staff/Payment.fxml";
     private final String CUSTOMER_POPUP = "/FXML/Staff/CustomerInfor.fxml";
 
     private final Map<String, AnchorPane> views;
@@ -77,6 +78,10 @@ public class ViewFactory {
                     root = loadFXML(BILL_HISTORY_FXML);
                     stage.setTitle("Bill History");
                     break;
+                case "payment":
+                    root = loadFXML(PAYMENT_FXML);
+                    stage.setTitle("Payment");
+                    break;
                 default:
                     System.err.println("Unknown FXML file: " + fxmlName);
                     return;
@@ -111,6 +116,10 @@ public class ViewFactory {
                 return ORDER_FXML;
             case "forgotpassword":
                 return FORGOT_PASSWORD_FXML;
+            case "billhistory":
+                return BILL_HISTORY_FXML;
+            case "payment":
+                return PAYMENT_FXML;
             // Add more cases as needed
             default:
                 throw new IllegalArgumentException("Unknown view: " + viewName);
@@ -129,6 +138,10 @@ public class ViewFactory {
                 return "Order Management";
             case "forgotpassword":
                 return "Forgot Password";
+            case "billhistory":
+                return "Bill History";
+            case "payment":
+                return "Payment";
             default:
                 return windowName;
         }
@@ -174,6 +187,10 @@ public class ViewFactory {
                 case "billhistory":
                     root = loadFXML(BILL_HISTORY_FXML);
                     currentStage.setTitle("Bill History");
+                    break;
+                case "payment":
+                    root = loadFXML(PAYMENT_FXML);
+                    currentStage.setTitle("Payment");
                     break;
                 default:
                     System.err.println("Unknown FXML file: " + fxmlName);

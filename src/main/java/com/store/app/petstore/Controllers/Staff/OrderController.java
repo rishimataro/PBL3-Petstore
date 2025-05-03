@@ -2,9 +2,11 @@ package com.store.app.petstore.Controllers.Staff;
 
 import com.store.app.petstore.DAO.PetDAO;
 import com.store.app.petstore.DAO.ProductDAO;
+import com.store.app.petstore.DAO.DiscountDAO;
 import com.store.app.petstore.Models.Entities.Item;
 import com.store.app.petstore.Models.Entities.Pet;
 import com.store.app.petstore.Models.Entities.Product;
+import com.store.app.petstore.Models.Entities.Discount;
 import com.store.app.petstore.Utils.ControllerUtils;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.FadeTransition;
@@ -25,6 +27,8 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -102,6 +106,7 @@ public class OrderController implements Initializable {
         handleCreateNewTab();
         calcAmount();
         setupClearSearchIcon();
+        setupDiscountHandling();
         
         // Add search functionality with debounce
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -113,6 +118,31 @@ public class OrderController implements Initializable {
         searchDebouncer.setOnFinished(event -> {
             handleSearch();
         });
+    }
+
+    private void setupConfirm() {
+        if (tabPane.getTabs().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng tạo đơn hàng trước khi xác nhận!");
+            return;
+        }
+        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+        if (selectedTab == null || !(selectedTab.getContent() instanceof ScrollPane)) {
+            showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng chọn đơn hàng để xác nhận!");
+            return;
+        }
+        ScrollPane tabScrollPane = (ScrollPane) selectedTab.getContent();
+        if (tabScrollPane.getContent() instanceof VBox) {
+            VBox tabContent = (VBox) tabScrollPane.getContent();
+            if (tabContent.getChildren().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Thông báo", "Đơn hàng không có sản phẩm nào!");
+                return;
+            }
+            // Handle order confirmation logic here
+            // For example, save the order to the database
+
+        } else {
+            showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng chọn đơn hàng để xác nhận!");
+        }
     }
 
     private void setupClearSearchIcon() {
@@ -134,6 +164,32 @@ public class OrderController implements Initializable {
 
         sortChoiceBox.getItems().addAll("Mới nhất", "Giá thấp đến cao", "Giá cao đến thấp");
         sortChoiceBox.setValue("Mới nhất");
+        sortChoiceBox.setOnAction(event -> {
+            String selectedSort = sortChoiceBox.getValue();
+            sortItems(selectedSort);
+        });
+    }
+
+    private void sortItems(String sortOption) {
+        if (itemList.isEmpty()) return;
+
+        Comparator<Item> priceComparator = (item1, item2) -> {
+            double price1 = item1 instanceof Pet ? ((Pet) item1).getPrice() : ((Product) item1).getPrice();
+            double price2 = item2 instanceof Pet ? ((Pet) item2).getPrice() : ((Product) item2).getPrice();
+            return Double.compare(price1, price2);
+        };
+
+        switch (sortOption) {
+            case "Giá thấp đến cao":
+                itemList.sort(priceComparator);
+                break;
+            case "Giá cao đến thấp":
+                itemList.sort(priceComparator.reversed());
+                break;
+            case "Mới nhất":
+                break;
+        }
+        rearrangeGridItems();
     }
 
     private void setupGridLayout() {
@@ -335,6 +391,7 @@ public class OrderController implements Initializable {
             controller.setParentPane(pane);
             controller.setOnDeleteCallback(createDeleteCallback());
             controller.setData(item);
+            controller.setOnQuantityChanged(() -> updateAmount(tabPane.getSelectionModel().getSelectedItem()));
             pane.setUserData(item.getId());
             pane.getProperties().put("controller", controller);
         }
@@ -494,5 +551,110 @@ public class OrderController implements Initializable {
         Thread searchThread = new Thread(currentSearchTask);
         searchThread.setDaemon(true);
         searchThread.start();
+    }
+
+    private void setupDiscountHandling() {
+        voucherTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() >= 3) {
+                handleDiscountCode(newValue);
+            } else {
+                voucherValueLabel.setText("0");
+                updateAmount(tabPane.getSelectionModel().getSelectedItem());
+            }
+        });
+    }
+
+    private boolean isValidDiscount(Discount discount) {
+        LocalDate today = LocalDate.now();
+        
+        if (today.isBefore(discount.getStartDate())) {
+            showAlert(Alert.AlertType.WARNING, "Thông báo", 
+                String.format("Mã giảm giá này sẽ có hiệu lực từ ngày %s", 
+                discount.getStartDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+            return false;
+        }
+        
+        if (today.isAfter(discount.getEndDate())) {
+            showAlert(Alert.AlertType.WARNING, "Thông báo", 
+                String.format("Mã giảm giá này đã hết hạn từ ngày %s", 
+                discount.getEndDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+            return false;
+        }
+        
+        return true;
+    }
+
+    private void handleDiscountCode(String code) {
+        Task<Discount> task = new Task<>() {
+            @Override
+            protected Discount call() {
+                try {
+                    return DiscountDAO.getInstance().findByCode(code);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw e;
+                }
+            }
+        };
+
+        task.setOnSucceeded(event -> {
+            try {
+                Discount discount = task.getValue();
+                double totalAmount = ControllerUtils.parseCurrency(totalMoneyValueLabel.getText());
+                String validationMessage = DiscountDAO.getInstance().validateDiscount(discount, totalAmount);
+                
+                if (validationMessage == null) {
+                    applyDiscount(discount);
+                } else {
+                    voucherValueLabel.setText("0");
+                    showAlert(Alert.AlertType.WARNING, "Thông báo", validationMessage);
+                }
+                updateAmount(tabPane.getSelectionModel().getSelectedItem());
+            } catch (Exception e) {
+                e.printStackTrace();
+                voucherValueLabel.setText("0");
+                showAlert(Alert.AlertType.ERROR, "Lỗi", "Có lỗi xảy ra khi xử lý mã giảm giá!");
+                updateAmount(tabPane.getSelectionModel().getSelectedItem());
+            }
+        });
+
+        task.setOnFailed(event -> {
+            Throwable exception = task.getException();
+            if (exception != null) {
+                exception.printStackTrace();
+            }
+            voucherValueLabel.setText("0");
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể kiểm tra mã giảm giá! Vui lòng thử lại sau.");
+            updateAmount(tabPane.getSelectionModel().getSelectedItem());
+        });
+
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    private void applyDiscount(Discount discount) {
+        double totalAmount = ControllerUtils.parseCurrency(totalMoneyValueLabel.getText());
+        double discountAmount;
+        
+        if (discount.getDiscountType().equals("percent")) {
+            discountAmount = totalAmount * (discount.getValue() / 100);
+            if (discount.getMaxDiscountValue() > 0) {
+                discountAmount = Math.min(discountAmount, discount.getMaxDiscountValue());
+            }
+        } else {
+            discountAmount = discount.getValue();
+        }
+
+        voucherValueLabel.setText(ControllerUtils.formatCurrency(discountAmount));
+    }
+
+    // show popup error
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
