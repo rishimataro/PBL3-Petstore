@@ -19,7 +19,8 @@ public class PetStoreApplication extends Application {
         // Show login window
 //        ModelView.getInstance().getViewFactory().showWindow("login");
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/BillHistory.fxml"));
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/BillHistory.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/PersonalInfo.fxml"));
         Parent root;
         try {
             root = loader.load();
