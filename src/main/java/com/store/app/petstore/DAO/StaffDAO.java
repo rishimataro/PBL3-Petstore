@@ -97,17 +97,18 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
         
         try {
             conn = DatabaseUtil.getConnection();
-            String sql = "INSERT INTO Staffs (user_id, full_name, phone, email, salary, hire_date, role, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Staffs (user_id, full_name, phone, email, address, salary, hire_date, role, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql);
             
             stmt.setInt(1, entity.getUserId());
             stmt.setString(2, entity.getFullName());
             stmt.setString(3, entity.getPhone());
             stmt.setString(4, entity.getEmail());
-            stmt.setDouble(5, entity.getSalary());
-            stmt.setTimestamp(6, java.sql.Timestamp.valueOf(entity.getHireDate()));
-            stmt.setString(7, entity.getRole());
-            stmt.setBoolean(8, entity.isActive());
+            stmt.setString(5, entity.getAddress());
+            stmt.setDouble(6, entity.getSalary());
+            stmt.setTimestamp(7, java.sql.Timestamp.valueOf(entity.getHireDate()));
+            stmt.setString(8, entity.getRole());
+            stmt.setBoolean(9, entity.isActive());
             
             return stmt.executeUpdate();
         } catch (SQLException e) {
@@ -125,17 +126,18 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
         
         try {
             conn = DatabaseUtil.getConnection();
-            String sql = "UPDATE Staffs SET full_name = ?, phone = ?, email = ?, salary = ?, hire_date = ?, role = ?, isActive = ? WHERE staff_id = ?";
+            String sql = "UPDATE Staffs SET full_name = ?, phone = ?, email = ?, address = ?, salary = ?, hire_date = ?, role = ?, isActive = ? WHERE staff_id = ?";
             stmt = conn.prepareStatement(sql);
             
             stmt.setString(1, entity.getFullName());
             stmt.setString(2, entity.getPhone());
             stmt.setString(3, entity.getEmail());
-            stmt.setDouble(4, entity.getSalary());
-            stmt.setTimestamp(5, java.sql.Timestamp.valueOf(entity.getHireDate()));
-            stmt.setString(6, entity.getRole());
-            stmt.setBoolean(7, entity.isActive());
-            stmt.setInt(8, entity.getStaffId());
+            stmt.setString(4, entity.getAddress());
+            stmt.setDouble(5, entity.getSalary());
+            stmt.setTimestamp(6, java.sql.Timestamp.valueOf(entity.getHireDate()));
+            stmt.setString(7, entity.getRole());
+            stmt.setBoolean(8, entity.isActive());
+            stmt.setInt(9, entity.getStaffId());
             
             return stmt.executeUpdate();
         } catch (SQLException e) {

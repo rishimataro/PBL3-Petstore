@@ -33,6 +33,8 @@ public class PersonalInforController {
    private TextField staff_email;
    @FXML
    private TextField staff_role;
+   @FXML
+   private TextField staff_address;
 
    @FXML
    private PasswordField old_pwd;
@@ -87,6 +89,7 @@ public class PersonalInforController {
                staff_phone.setText(staffRs.getString("phone"));
                staff_email.setText(staffRs.getString("email"));
                staff_role.setText(staffRs.getString("role"));
+               staff_address.setText(staffRs.getString("address"));
 
                // Cập nhật thông tin hiển thị
                fullNameLabel.setText(staffRs.getString("full_name"));
@@ -188,19 +191,21 @@ public class PersonalInforController {
    private void handleUpdateInfo() {
        // Kiểm tra các trường bắt buộc
        if (staff_name.getText().isEmpty() || staff_phone.getText().isEmpty() ||
-           staff_email.getText().isEmpty() || staff_role.getText().isEmpty()) {
+           staff_email.getText().isEmpty() || staff_role.getText().isEmpty() ||
+           staff_address.getText().isEmpty()) {
            showAlert("Lỗi", "Vui lòng điền đầy đủ thông tin!");
            return;
        }
 
        try (Connection conn = DatabaseManager.connect()) {
-           String sql = "UPDATE Staffs SET full_name = ?, phone = ?, email = ?, role = ? WHERE user_id = ?";
+           String sql = "UPDATE Staffs SET full_name = ?, phone = ?, email = ?, role = ?, address = ? WHERE user_id = ?";
            PreparedStatement stmt = conn.prepareStatement(sql);
            stmt.setString(1, staff_name.getText());
            stmt.setString(2, staff_phone.getText());
            stmt.setString(3, staff_email.getText());
            stmt.setString(4, staff_role.getText());
-           stmt.setInt(5, userId);
+           stmt.setString(5, staff_address.getText());
+           stmt.setInt(6, userId);
 
            int updated = stmt.executeUpdate();
            if (updated > 0) {
