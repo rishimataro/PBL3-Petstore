@@ -252,3 +252,6 @@
 .date_picker.cyan_border .text-field{
     -fx-control-inner-background: #01C4DA;
 }
+.vbox-invoice-detail{
+    -fx-padding: 10 10 10 10;
+}
