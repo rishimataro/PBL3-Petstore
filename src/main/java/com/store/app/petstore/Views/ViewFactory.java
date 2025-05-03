@@ -1,18 +1,20 @@
 package com.store.app.petstore.Views;
 
 import com.store.app.petstore.Controllers.LoginController;
+import com.store.app.petstore.Controllers.Staff.OrderController;
 import com.store.app.petstore.Controllers.Staff.StaffController;
+import com.store.app.petstore.Controllers.Staff.PersonalInforController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
 
 public class ViewFactory {
+    private static final String STAFF_FXML = "";
     private static ViewFactory instance;
     private final String LOGIN_FXML = "/FXML/Login.fxml";
     private final String DASHBOAR_FXML = "/FXML/Staff/StaffDashboard.fxml";
@@ -103,20 +105,18 @@ public class ViewFactory {
     
     private String getFxmlPath(String viewName) {
         switch (viewName.toLowerCase()) {
-            case "dashboard":
-                return DASHBOAR_FXML;
+            case "staff":
+                return STAFF_FXML;
             case "login":
                 return LOGIN_FXML;
             case "profile":
                 return PERSONAL_INFOR_FXML;
             case "order":
                 return ORDER_FXML;
-            case "billhistory":
-                return BILL_HISTORY_FXML;
             case "forgotpassword":
                 return FORGOT_PASSWORD_FXML;
-            case "addcustomer":
-                return CUSTOMER_POPUP;
+            case "billhistory":
+                return BILL_HISTORY_FXML;
             default:
                 throw new IllegalArgumentException("Unknown view: " + viewName);
         }
@@ -124,8 +124,8 @@ public class ViewFactory {
     
     private String getWindowTitle(String windowName) {
         switch (windowName.toLowerCase()) {
-            case "dashboard":
-                return "Staff Dashboard";
+            case "staff":
+                return "Staff Management";
             case "login":
                 return "Login";
             case "profile":
@@ -148,37 +148,17 @@ public class ViewFactory {
 
     private Parent loadFXML(String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-        return loader.load();
-    }
-
-    public void showPopup(String fxmlName, Stage popupStage) {
-        Parent root = null;
-        try {
-            switch (fxmlName.toLowerCase()) {
-                case "customerpopup":
-                    root = loadFXML(CUSTOMER_POPUP);
-                    popupStage.setTitle("Thêm khách hàng");
-                    break;
-                default:
-                    System.err.println("Unknown popup FXML file: " + fxmlName);
-                    return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
+        Parent root = loader.load();
+        
+        // Initialize PersonalInfoController if this is the personal info view
+        if (fxmlPath.equals(PERSONAL_INFOR_FXML)) {
+            PersonalInforController controller = loader.getController();
+            controller.setUserId(LoginController.idStaffCurrent);
         }
-
-        Scene scene = new Scene(root);
-        popupStage.setScene(scene);
-        popupStage.initStyle(StageStyle.DECORATED);
-        popupStage.show();
+        
+        return root;
     }
 
-    public void hidePopup() {
-        for (Stage stage : stages.values()) {
-            if (stage.isShowing()) {
-                stage.hide();
+    public void showPopup(String addcustomer, Stage popupStage) {
             }
         }
-    }
-}
