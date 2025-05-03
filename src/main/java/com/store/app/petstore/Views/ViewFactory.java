@@ -1,8 +1,5 @@
 package com.store.app.petstore.Views;
 
-import com.store.app.petstore.Controllers.LoginController;
-import com.store.app.petstore.Controllers.Staff.OrderController;
-import com.store.app.petstore.Controllers.Staff.StaffController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,19 +22,19 @@ public class ViewFactory {
 
     private final Map<String, AnchorPane> views;
     private final Map<String, Stage> stages;
-    
+
     ViewFactory() {
         this.views = new HashMap<>();
         this.stages = new HashMap<>();
     }
-    
+
     public static synchronized ViewFactory getInstance() {
         if (instance == null) {
             instance = new ViewFactory();
         }
         return instance;
     }
-    
+
     public AnchorPane getView(String viewName) {
         if (!views.containsKey(viewName)) {
             try {
@@ -50,7 +47,7 @@ public class ViewFactory {
         }
         return views.get(viewName);
     }
-    
+
     public void showWindow(String fxmlName) {
         Stage stage = new Stage();
         Parent root = null;
@@ -69,11 +66,10 @@ public class ViewFactory {
                     stage.setTitle("Forgot Password");
                     break;
                 case "order":
-                    OrderController orderController = new OrderController();
-                    stage.setTitle("Order");
-                    orderController.show(stage);
-                    return;
-                case "personalinfo":
+                    root = loadFXML(ORDER_FXML);
+                    stage.setTitle("Order Management");
+                    break;
+                case "profile":
                     root = loadFXML(PERSONAL_INFOR_FXML);
                     stage.setTitle("Personal Information");
                     break;
@@ -94,7 +90,7 @@ public class ViewFactory {
         stage.setScene(scene);
         stage.show();
     }
-    
+
     public void closeWindow(String windowName) {
         Stage stage = stages.get(windowName);
         if (stage != null) {
@@ -102,7 +98,7 @@ public class ViewFactory {
             stages.remove(windowName);
         }
     }
-    
+
     private String getFxmlPath(String viewName) {
         switch (viewName.toLowerCase()) {
             case "staff":
@@ -120,7 +116,7 @@ public class ViewFactory {
                 throw new IllegalArgumentException("Unknown view: " + viewName);
         }
     }
-    
+
     private String getWindowTitle(String windowName) {
         switch (windowName.toLowerCase()) {
             case "staff":
@@ -137,7 +133,7 @@ public class ViewFactory {
                 return windowName;
         }
     }
-    
+
     public void clearCache() {
         views.clear();
         stages.clear();
@@ -149,5 +145,46 @@ public class ViewFactory {
     }
 
     public void showPopup(String addcustomer, Stage popupStage) {
+    }
+
+    public void switchContent(String fxmlName, Stage currentStage) {
+        Parent root = null;
+        try {
+            switch (fxmlName.toLowerCase()) {
+                case "login":
+                    root = loadFXML(LOGIN_FXML);
+                    currentStage.setTitle("Login");
+                    break;
+                case "dashboard":
+                    root = loadFXML(DASHBOAR_FXML);
+                    currentStage.setTitle("Staff Dashboard");
+                    break;
+                case "forgotpassword":
+                    root = loadFXML(FORGOT_PASSWORD_FXML);
+                    currentStage.setTitle("Forgot Password");
+                    break;
+                case "order":
+                    root = loadFXML(ORDER_FXML);
+                    currentStage.setTitle("Order Management");
+                    break;
+                case "profile":
+                    root = loadFXML(PERSONAL_INFOR_FXML);
+                    currentStage.setTitle("Personal Information");
+                    break;
+                case "billhistory":
+                    root = loadFXML(BILL_HISTORY_FXML);
+                    currentStage.setTitle("Bill History");
+                    break;
+                default:
+                    System.err.println("Unknown FXML file: " + fxmlName);
+                    return;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Scene scene = new Scene(root);
+        currentStage.setScene(scene);
     }
 }

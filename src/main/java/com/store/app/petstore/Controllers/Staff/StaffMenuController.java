@@ -19,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.image.ImageView;
+import com.store.app.petstore.Utils.ControllerUtils;
 
 import java.net.URL;
 import java.util.Objects;
@@ -71,7 +72,6 @@ public class StaffMenuController implements Initializable {
     private void setupUserImage() {
         try {
             String userImagePath = currentUser.getImageUrl();
-            System.out.println("User image path: " + userImagePath);
 
             String imageUrl = null;
             if (userImagePath != null && !userImagePath.isEmpty()) {
@@ -128,26 +128,22 @@ public class StaffMenuController implements Initializable {
 
         dashboardItem.setOnAction(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("dashboard");
+            ViewFactory.getInstance().switchContent("dashboard", currentStage);
         });
 
         orderItem.setOnAction(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("order");
+            ViewFactory.getInstance().switchContent("order", currentStage);
         });
 
         billItem.setOnAction(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("billhistory");
+            ViewFactory.getInstance().switchContent("billhistory", currentStage);
         });
 
         infoItem.setOnAction(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("profile");
+            ViewFactory.getInstance().switchContent("profile", currentStage);
         });
 
         logoutItem.setOnAction(event -> {
@@ -193,11 +189,10 @@ public class StaffMenuController implements Initializable {
         if (showConfirmationAndWait("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
             sessionManager.clear();
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("login");
+            ViewFactory.getInstance().switchContent("login", currentStage);
         }
         else {
-            showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đăng xuất không thành công");
+            ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đăng xuất không thành công");
         }
     }
 
@@ -210,12 +205,4 @@ public class StaffMenuController implements Initializable {
         return result.isPresent() && result.get() == ButtonType.OK;
     }
 
-    // show popup error
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 }

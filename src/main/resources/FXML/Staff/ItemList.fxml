@@ -16,7 +16,7 @@
    <children>
       <ImageView fx:id="imgPet" fitHeight="90.0" fitWidth="90.0" layoutX="10.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
          <image>
-            <Image url="@../../Images/dog.png" />
+            <Image url="@../../Images/Pet/pet1.png" />
          </image>
       </ImageView>
       <VBox layoutX="10.0" layoutY="100.0" prefHeight="70.0" prefWidth="90.0" styleClass="infor-container" AnchorPane.topAnchor="100.0">

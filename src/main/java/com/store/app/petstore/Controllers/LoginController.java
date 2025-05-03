@@ -93,8 +93,7 @@ public class LoginController implements Initializable {
     private void setupForgotPasswordLink() {
         forgotPasswordLink.setOnAction(event -> {
             Stage currentStage = (Stage) usernameField.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("forgotpassword");
+            ViewFactory.getInstance().switchContent("forgotpassword", currentStage);
         });
     }
 
@@ -137,13 +136,11 @@ public class LoginController implements Initializable {
 
             sessionManager.setCurrentUser(user);
 
-            // Close current login window
             Stage currentStage = (Stage) usernameField.getScene().getWindow();
-            currentStage.close();
 
             if(user.getRole().equals(User.ROLE_ADMIN)) {
                 idAdminCurrent = user.getUserId();
-                ViewFactory.getInstance().showWindow("admin");
+                ViewFactory.getInstance().switchContent("admin", currentStage);
             } else if(user.getRole().equals(User.ROLE_USER)) {
                 idStaffCurrent = user.getUserId();
                 // Lấy thông tin Staff và lưu vào session
@@ -151,7 +148,7 @@ public class LoginController implements Initializable {
                 if (staff != null) {
                     sessionManager.setCurrentStaff(staff);
                 }
-                ViewFactory.getInstance().showWindow("order");
+                ViewFactory.getInstance().switchContent("order", currentStage);
             } else {
                 showAlert(Alert.AlertType.ERROR, "Lỗi", "Vai trò người dùng không hợp lệ");
                 sessionManager.clear();

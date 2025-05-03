@@ -12,6 +12,7 @@
 
 .icon{
     -fx-fill: #AAAAAA;
+    -fx-cursor: hand;
 }
 
 .choice-box {

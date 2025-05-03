@@ -62,8 +62,7 @@ public class StaffDashboardController implements Initializable {
     private void setMenuCard(){
         AccountCard.setOnMouseClicked(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("profile");
+            ViewFactory.getInstance().switchContent("profile", currentStage);
         });
 
         AddCustomerCard.setOnMouseClicked(event -> {
@@ -75,21 +74,18 @@ public class StaffDashboardController implements Initializable {
 
         BillHistoryCard.setOnMouseClicked(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("billhistory");
+            ViewFactory.getInstance().switchContent("billhistory", currentStage);
         });
 
         OrderCard.setOnMouseClicked(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("order");
+            ViewFactory.getInstance().switchContent("order", currentStage);
         });
 
         btnLogout.setOnMouseClicked(event -> {
             sessionManager.clear();
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("login");
+            ViewFactory.getInstance().switchContent("login", currentStage);
         });
     }
 }

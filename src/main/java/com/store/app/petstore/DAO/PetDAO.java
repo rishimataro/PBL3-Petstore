@@ -19,7 +19,7 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
 
         try {
             conn = DatabaseUtil.getConnection();
-            String sql = "INSERT INTO Pets (name, type, breed, age, description, image_url, sex, price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Pets (name, type, breed, age, description, image_url, sex, price, isSold) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             stmt.setString(1, entity.getName());
@@ -29,7 +29,8 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
             stmt.setString(5, entity.getDescription());
             stmt.setString(6, entity.getImageUrl());
             stmt.setString(7, entity.getSex());
-            stmt.setLong(8, entity.getPrice());
+            stmt.setInt(8, entity.getPrice());
+            stmt.setBoolean(9, entity.getIsSold());
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
@@ -59,7 +60,7 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
 
         try {
             conn = DatabaseUtil.getConnection();
-            String sql = "UPDATE Pets SET name = ?, type = ?, breed = ?, age = ?, description = ?, image_url = ?, sex = ?, price = ? WHERE pet_id = ?";
+            String sql = "UPDATE Pets SET name = ?, type = ?, breed = ?, age = ?, description = ?, image_url = ?, sex = ?, price = ?, isSold = ? WHERE pet_id = ?";
             stmt = conn.prepareStatement(sql);
 
             stmt.setString(1, entity.getName());
@@ -70,7 +71,8 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
             stmt.setString(6, entity.getImageUrl());
             stmt.setString(7, entity.getSex());
             stmt.setLong(8, entity.getPrice());
-            stmt.setInt(9, entity.getPetId());
+            stmt.setBoolean(9, entity.getIsSold());
+            stmt.setInt(10, entity.getPetId());
 
             return stmt.executeUpdate();
         } catch (SQLException e) {
@@ -121,11 +123,12 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
                         rs.getString("name"),
                         rs.getString("type"),
                         rs.getString("breed"),
+                        rs.getString("sex"),
                         rs.getInt("age"),
-                        rs.getString("description"),
+                        rs.getInt("price"),
                         rs.getString("image_url"),
-                        rs.getLong("price"),
-                        rs.getString("sex")
+                        rs.getString("description"),
+                        rs.getBoolean("isSold")
                 );
                 petList.add(pet);
             }
@@ -157,11 +160,12 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
                         rs.getString("name"),
                         rs.getString("type"),
                         rs.getString("breed"),
+                        rs.getString("sex"),
                         rs.getInt("age"),
-                        rs.getString("description"),
+                        rs.getInt("price"),
                         rs.getString("image_url"),
-                        rs.getLong("price"),
-                        rs.getString("sex")
+                        rs.getString("description"),
+                        rs.getBoolean("isSold")
                 );
             }
         } catch (SQLException e) {
@@ -214,9 +218,33 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
     }
 
     // tim kiem theo ten, loai, giong
-    public ArrayList<Pet> searchPets(String keyword) {
-        String searchPattern = "'%" + keyword + "%'";
-        return findByCondition("name LIKE " + searchPattern + " OR type LIKE " + searchPattern + " OR breed LIKE " + searchPattern);
+    public ArrayList<Pet> searchPets(String searchText, int limit) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        ArrayList<Pet> petList = new ArrayList<>();
+
+        try {
+            conn = DatabaseUtil.getConnection();
+            String sql = "SELECT * FROM Pets WHERE LOWER(name) LIKE ? LIMIT ?";
+            
+            stmt = conn.prepareStatement(sql);
+            String searchPattern = "%" + searchText.toLowerCase() + "%";
+            stmt.setString(1, searchPattern);
+            stmt.setInt(2, limit);
+            
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                petList.add(PetMapper.fromResutSet(rs));
+            }
+            return petList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            DatabaseUtil.closeResources(rs, stmt, conn);
+        }
     }
 
     // so luong thu cung

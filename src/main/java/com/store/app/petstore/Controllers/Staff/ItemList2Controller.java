@@ -1,6 +1,9 @@
 package com.store.app.petstore.Controllers.Staff;
 
+import com.store.app.petstore.Models.Entities.Item;
 import com.store.app.petstore.Models.Entities.Pet;
+import com.store.app.petstore.Models.Entities.Product;
+import com.store.app.petstore.Utils.ControllerUtils;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,21 +34,26 @@ public class ItemList2Controller {
     @FXML
     private FontAwesomeIconView upIcon;
     @FXML
-    private Pet p;
+    private Item item;
 
-    public void setData(Pet p) {
-        this.p = p;
-        namePet.setText(p.getName());
-        unitPrice.setText((int)p.getPrice() + "");
+    public void setData(Item item) {
+        this.item = item;
+        namePet.setText(item.getName());
+        unitPrice.setText(ControllerUtils.formatCurrency(item.getPrice()));
         quantity.setText("1");
         updateTotal();
-        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream(p.getImageUrl())));
+        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream(item.getImageUrl())));
         imgPet.setImage(img);
     }
 
-    public double getTotal() {
-        return Double.parseDouble(total.getText().isEmpty() ? "0.0" : total.getText());
+    public Item getItem() {
+        return item;
     }
+
+    public double getTotal() {
+        return ControllerUtils.parseCurrency(total.getText().isEmpty() ? "0" : total.getText());
+    }
+
     public void AddItem(int amount) {
         int currentAmount = Integer.parseInt(quantity.getText().isEmpty() ? "0" : quantity.getText());
         int newAmount = currentAmount + amount;
@@ -55,18 +63,15 @@ public class ItemList2Controller {
         }
 
         quantity.setText(String.valueOf(newAmount));
-        System.out.println(quantity.getText());
-
         updateTotal();
     }
 
     private void updateTotal() {
-        double price = Double.parseDouble(unitPrice.getText());
+        double price = ControllerUtils.parseCurrency(unitPrice.getText());
         int quantityValue = Integer.parseInt(quantity.getText());
         double totalValue = price * quantityValue;
-        total.setText(String.format("%.2f", totalValue));
+        total.setText(ControllerUtils.formatCurrency(totalValue));
     }
-
 
     private Consumer<AnchorPane> onDeleteCallback; // Callback để xóa item
     private AnchorPane parentPane; // Tham chiếu đến pane cha
@@ -85,5 +90,4 @@ public class ItemList2Controller {
     public void setParentPane(AnchorPane pane) {
         this.parentPane = pane;
     }
-
 }

@@ -8,7 +8,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
+import com.store.app.petstore.Models.Entities.Item;
 import com.store.app.petstore.Models.Entities.Pet;
+import com.store.app.petstore.Models.Entities.Product;
+import com.store.app.petstore.Utils.ControllerUtils;
 
 import java.util.Objects;
 
@@ -45,29 +48,44 @@ public class ItemListController {
     private Label tagType;
 
     @FXML
-    private Pet p;
+    private Item item;
 
-    public void setData(Pet p) {
-        this.p = p;
-        namePet.setText(p.getName());
-        pricePet.setText(p.getPrice() + "");
-        tagBreed.setText(p.getBreed());
-        tagGender.setText(p.getSex());
-        tagType.setText(p.getType());
+    public void setData(Item item) {
+        this.item = item;
+        namePet.setText(item.getName());
+        pricePet.setText(ControllerUtils.formatCurrency(item.getPrice()));
+        tagType.setText(item.getType());
 
-        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream(p.getImageUrl())));
-        imgPet.setImage(img);
+        if (item instanceof Pet pet) {
+            tagBreed.setText(pet.getBreed());
+            tagGender.setText(pet.getSex());
+        } else if (item instanceof Product product) {
+            tagBreed.setText(product.getCategory());
+            tagGender.setText(product.getStock() + "");
+        }
+
+        try {
+            var imageStream = getClass().getResourceAsStream(item.getImageUrl());
+            if (imageStream != null) {
+                Image img = new Image(imageStream);
+                imgPet.setImage(img);
+            } else {
+                Image defaultImg = new Image(getClass().getResourceAsStream("/images/logo.png"));
+                imgPet.setImage(defaultImg);
+            }
+        } catch (Exception e) {
+            System.err.println("Error loading image: " + e.getMessage());
+            try {
+                Image defaultImg = new Image(getClass().getResourceAsStream("/images/logo.png"));
+                imgPet.setImage(defaultImg);
+            } catch (Exception ex) {
+                System.err.println("Error loading default image: " + ex.getMessage());
+            }
+        }
     }
 
     @FXML
     private void handleClose() {
-        // This method will be called when the close button is clicked
-        // It will close the parent tab
-        // This requires a reference to the parent Tab
-        // For simplicity, we'll assume the parent is a TabPane and we'll find the parent Tab
-        // This is a simplified approach and may need to be adjusted based on the actual structure
-        // In a real app, you'd use a more robust way to find the parent Tab
-        // For now, we'll just log the action
-        System.out.println("Close button clicked. Closing tab.");
+
     }
 }
