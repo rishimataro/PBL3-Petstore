@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class PersonalInforController {
 
@@ -232,16 +233,23 @@ public class PersonalInforController {
            return;
        }
 
+       // Kiểm tra mật khẩu mới không được giống mật khẩu cũ
+       if (oldPassword.equals(newPassword)) {
+           showAlert("Lỗi", "Mật khẩu mới không được giống mật khẩu cũ!");
+           return;
+       }
+
        try (Connection conn = DatabaseManager.connect()) {
            // Kiểm tra mật khẩu cũ
-           String checkSql = "SELECT password FROM Users WHERE id = ?";
+           String checkSql = "SELECT password FROM Users WHERE user_id = ?";
            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
            checkStmt.setInt(1, userId);
            ResultSet rs = checkStmt.executeQuery();
 
            if (rs.next()) {
-               String currentPwd = rs.getString("password");
-               if (!currentPwd.equals(oldPassword)) {
+               String currentHashedPwd = rs.getString("password");
+               
+               if (!BCrypt.checkpw(oldPassword, currentHashedPwd)) {
                    showAlert("Lỗi", "Mật khẩu cũ không đúng!");
                    return;
                }
@@ -251,9 +259,9 @@ public class PersonalInforController {
            }
 
            // Cập nhật mật khẩu mới
-           String updateSql = "UPDATE Users SET password = ? WHERE id = ?";
+           String updateSql = "UPDATE Users SET password = ? WHERE user_id = ?";
            PreparedStatement updateStmt = conn.prepareStatement(updateSql);
-           updateStmt.setString(1, newPassword);
+           updateStmt.setString(1, BCrypt.hashpw(newPassword, BCrypt.gensalt()));
            updateStmt.setInt(2, userId);
 
            int updated = updateStmt.executeUpdate();
@@ -267,6 +275,7 @@ public class PersonalInforController {
            }
        } catch (Exception e) {
            showAlert("Lỗi", "Lỗi khi đổi mật khẩu: " + e.getMessage());
+           e.printStackTrace();
        }
    }
 
