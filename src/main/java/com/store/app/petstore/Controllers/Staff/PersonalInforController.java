@@ -89,7 +89,7 @@ public class PersonalInforController {
 
                // Cập nhật thông tin hiển thị
                fullNameLabel.setText(staffRs.getString("full_name"));
-               roleLabel.setText(staffRs.getString("role"));
+               roleLabel.setText(staffRs.getString("role").toUpperCase());
                staffIDLabel.setText(String.valueOf(staffRs.getInt("staff_id")));
            }
 
@@ -205,7 +205,7 @@ public class PersonalInforController {
            if (updated > 0) {
                // Cập nhật lại thông tin hiển thị
                fullNameLabel.setText(staff_name.getText());
-               roleLabel.setText(staff_role.getText());
+               roleLabel.setText(staff_role.getText().toUpperCase());
                showAlert("Thành công", "Cập nhật thông tin thành công!");
            } else {
                showAlert("Thông báo", "Không có thông tin nào được cập nhật.");
