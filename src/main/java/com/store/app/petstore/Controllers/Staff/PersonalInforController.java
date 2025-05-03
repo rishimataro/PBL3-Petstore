@@ -70,36 +70,44 @@ public class PersonalInforController {
        loadStaffInfo();
    }
 
-   // Load dữ liệu từ bảng Staffs
+   // Load dữ liệu từ bảng Staffs và Users
    private void loadStaffInfo() {
        try (Connection conn = DatabaseManager.connect()) {
-           String sql = "SELECT * FROM Staffs WHERE user_id = ?";
-           PreparedStatement stmt = conn.prepareStatement(sql);
-           stmt.setInt(1, userId);
-           ResultSet rs = stmt.executeQuery();
+           // Load thông tin từ bảng Staffs
+           String staffSql = "SELECT * FROM Staffs WHERE user_id = ?";
+           PreparedStatement staffStmt = conn.prepareStatement(staffSql);
+           staffStmt.setInt(1, userId);
+           ResultSet staffRs = staffStmt.executeQuery();
 
-           if (rs.next()) {
+           if (staffRs.next()) {
                // Cập nhật thông tin vào các trường nhập liệu
-               staff_id.setText(String.valueOf(rs.getInt("staff_id")));
-               staff_name.setText(rs.getString("full_name"));
-               staff_phone.setText(rs.getString("phone"));
-               staff_email.setText(rs.getString("email"));
-               staff_role.setText(rs.getString("role"));
+               staff_id.setText(String.valueOf(staffRs.getInt("staff_id")));
+               staff_name.setText(staffRs.getString("full_name"));
+               staff_phone.setText(staffRs.getString("phone"));
+               staff_email.setText(staffRs.getString("email"));
+               staff_role.setText(staffRs.getString("role"));
 
                // Cập nhật thông tin hiển thị
-               fullNameLabel.setText(rs.getString("full_name"));
-               roleLabel.setText(rs.getString("role"));
-               staffIDLabel.setText(String.valueOf(rs.getInt("staff_id")));
+               fullNameLabel.setText(staffRs.getString("full_name"));
+               roleLabel.setText(staffRs.getString("role"));
+               staffIDLabel.setText(String.valueOf(staffRs.getInt("staff_id")));
+           }
 
-               // Load ảnh đại diện
-               String imagePath = rs.getString("image_path");
-               if (imagePath != null && !imagePath.isEmpty()) {
+           // Load ảnh từ bảng Users
+           String userSql = "SELECT image_url FROM Users WHERE user_id = ?";
+           PreparedStatement userStmt = conn.prepareStatement(userSql);
+           userStmt.setInt(1, userId);
+           ResultSet userRs = userStmt.executeQuery();
+
+           if (userRs.next()) {
+               String imageUrl = userRs.getString("image_url");
+               if (imageUrl != null && !imageUrl.isEmpty()) {
                    try {
-                       File imageFile = new File(imagePath);
+                       File imageFile = new File(imageUrl);
                        if (imageFile.exists()) {
                            Image image = new Image(imageFile.toURI().toString());
                            profileImage.setImage(image);
-                           currentImagePath = imagePath;
+                           currentImagePath = imageUrl;
                        } else {
                            loadDefaultImage();
                        }
@@ -109,6 +117,8 @@ public class PersonalInforController {
                } else {
                    loadDefaultImage();
                }
+           } else {
+               loadDefaultImage();
            }
        } catch (Exception e) {
            showAlert("Lỗi", "Không thể tải thông tin: " + e.getMessage());
@@ -133,13 +143,13 @@ public class PersonalInforController {
        if (selectedFile != null) {
            try {
                // Tạo thư mục images nếu chưa tồn tại
-               File imagesDir = new File("src/main/resources/Images/Staff");
+               File imagesDir = new File("src/main/resources/Images/User");
                if (!imagesDir.exists()) {
                    imagesDir.mkdirs();
                }
 
-               // Tạo tên file mới dựa trên staff_id
-               String newFileName = "staff_" + staff_id.getText() + "_" + System.currentTimeMillis() + 
+               // Tạo tên file mới dựa trên user_id
+               String newFileName = "user_" + userId + "_" + System.currentTimeMillis() + 
                                    selectedFile.getName().substring(selectedFile.getName().lastIndexOf("."));
                File newFile = new File(imagesDir, newFileName);
 
@@ -163,7 +173,7 @@ public class PersonalInforController {
 
    private void updateImagePathInDatabase(String imagePath) {
        try (Connection conn = DatabaseManager.connect()) {
-           String sql = "UPDATE Staffs SET image_path = ? WHERE user_id = ?";
+           String sql = "UPDATE Users SET image_url = ? WHERE user_id = ?";
            PreparedStatement stmt = conn.prepareStatement(sql);
            stmt.setString(1, imagePath);
            stmt.setInt(2, userId);

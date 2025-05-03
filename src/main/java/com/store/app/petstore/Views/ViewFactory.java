@@ -26,19 +26,19 @@ public class ViewFactory {
 
     private final Map<String, AnchorPane> views;
     private final Map<String, Stage> stages;
-
+    
     ViewFactory() {
         this.views = new HashMap<>();
         this.stages = new HashMap<>();
     }
-
+    
     public static synchronized ViewFactory getInstance() {
         if (instance == null) {
             instance = new ViewFactory();
         }
         return instance;
     }
-
+    
     public AnchorPane getView(String viewName) {
         if (!views.containsKey(viewName)) {
             try {
@@ -51,7 +51,7 @@ public class ViewFactory {
         }
         return views.get(viewName);
     }
-
+    
     public void showWindow(String fxmlName) {
         Stage stage = new Stage();
         Parent root = null;
@@ -94,7 +94,7 @@ public class ViewFactory {
         stage.setScene(scene);
         stage.show();
     }
-
+    
     public void closeWindow(String windowName) {
         Stage stage = stages.get(windowName);
         if (stage != null) {
@@ -102,7 +102,7 @@ public class ViewFactory {
             stages.remove(windowName);
         }
     }
-
+    
     private String getFxmlPath(String viewName) {
         switch (viewName.toLowerCase()) {
             case "staff":
@@ -121,7 +121,7 @@ public class ViewFactory {
                 throw new IllegalArgumentException("Unknown view: " + viewName);
         }
     }
-
+    
     private String getWindowTitle(String windowName) {
         switch (windowName.toLowerCase()) {
             case "staff":
@@ -140,7 +140,7 @@ public class ViewFactory {
                 return windowName;
         }
     }
-
+    
     public void clearCache() {
         views.clear();
         stages.clear();
@@ -160,5 +160,5 @@ public class ViewFactory {
     }
 
     public void showPopup(String addcustomer, Stage popupStage) {
-    }
-}
+            }
+        }

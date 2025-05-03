@@ -36,8 +36,8 @@
                         </StackPane>
                         <Button fx:id="changeImageBtn" layoutX="161.0" layoutY="268.0" mnemonicParsing="false" onAction="#handleChangeImage" text="Đổi ảnh" />
                         <Label fx:id="fullNameLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="310.0" prefWidth="350.0" styleClass="fullName-label" />
-                        <Label fx:id="roleLabel" layoutX="82.5" layoutY="317.0" styleClass="role-label" />
-                        <Label fx:id="staffIDLabel" layoutX="237.5" layoutY="317.0" styleClass="staffID-label" />
+                        <Label fx:id="roleLabel" layoutX="90.0" layoutY="350.0" styleClass="role-label" />
+                        <Label fx:id="staffIDLabel" layoutX="250.0" layoutY="350.0" styleClass="staffID-label" />
                     </children>
                 </AnchorPane>
 
