@@ -53,9 +53,6 @@ public class OrderController implements Initializable {
     private Button confirmButton;
 
     @FXML
-    private Button createNewTabButton;
-
-    @FXML
     private Label finalMoneyLabel;
 
     @FXML
@@ -74,9 +71,6 @@ public class OrderController implements Initializable {
     private TextField searchTextField;
 
     @FXML
-    private TabPane tabPane;
-
-    @FXML
     private Label totalMoneyLabel;
 
     @FXML
@@ -90,6 +84,13 @@ public class OrderController implements Initializable {
 
     @FXML
     private Label voucherValueLabel;
+
+    @FXML
+    private AnchorPane orderContentPane;
+    private VBox orderVBox = new VBox(10);
+
+    @FXML
+    private ScrollPane orderScrollPane;
 
     private final FlowPane flowPane = new FlowPane();
     private Map<Item, AnchorPane> itemPaneCache = new HashMap<>();
@@ -109,20 +110,14 @@ public class OrderController implements Initializable {
         configureScrollPane();
         loadItemsByCategory("Thú cưng");
         setupGridColumnBinding();
-        handleCreateNewTab();
-        calcAmount();
         setupClearSearchIcon();
         setupDiscountHandling();
         setupButtonActions();
+        orderVBox.setAlignment(Pos.TOP_CENTER);
+        orderVBox.getStyleClass().add("tab-content");
+        orderVBox.setPadding(new Insets(10,3,10,20));
+        orderScrollPane.setContent(orderVBox);
         loadOrderFromSession();
-
-        // Kiểm tra và xóa tab đã thanh toán
-        Tab tabToRemove = SessionManager.getTabToRemove();
-        if (tabToRemove != null) {
-            tabPane.getTabs().remove(tabToRemove);
-            SessionManager.setTabToRemove(null);
-        }
-
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() >= 2 || newValue.isEmpty()) {
                 searchDebouncer.playFromStart();
@@ -137,36 +132,15 @@ public class OrderController implements Initializable {
         confirmButton.setOnAction(event -> {
             handleConfirmOrder();
         });
-
-        createNewTabButton.setOnAction(event -> {
-            handleCreateNewTab();
-        });
     }
 
     private void setupConfirm() {
-        if (tabPane.getTabs().isEmpty()) {
+        if (orderVBox.getChildren().isEmpty()) {
             ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng tạo đơn hàng trước khi xác nhận!");
             return;
         }
-        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
-        if (selectedTab == null || !(selectedTab.getContent() instanceof ScrollPane)) {
-            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng chọn đơn hàng để xác nhận!");
-            return;
-        }
-        ScrollPane tabScrollPane = (ScrollPane) selectedTab.getContent();
-        if (tabScrollPane.getContent() instanceof VBox) {
-            VBox tabContent = (VBox) tabScrollPane.getContent();
-            if (tabContent.getChildren().isEmpty()) {
-                ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", "Đơn hàng không có sản phẩm nào!");
-                return;
-            }
-
-            Stage currentStage = (Stage) root.getScene().getWindow();
-            ViewFactory.getInstance().switchContent("payment", currentStage);
-
-        } else {
-            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng chọn đơn hàng để xác nhận!");
-        }
+        Stage currentStage = (Stage) root.getScene().getWindow();
+        ViewFactory.getInstance().switchContent("payment", currentStage);
     }
 
     private void setupClearSearchIcon() {
@@ -290,10 +264,6 @@ public class OrderController implements Initializable {
         flowPane.getChildren().clear();
         for (Item item : itemList) {
             try {
-                if (item instanceof Pet pet && isPetInAnyOrderTab(pet)) {
-                    continue;
-                }
-
                 if (item instanceof Product product && product.getStock() <= 0) {
                     continue;
                 }
@@ -302,7 +272,7 @@ public class OrderController implements Initializable {
                 itemPane.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY) {
                         try {
-                            createOrderTab(item);
+                            addItemToOrder(item);
                             // If it's a pet, remove it from display immediately
                             if (item instanceof Pet) {
                                 flowPane.getChildren().remove(itemPane);
@@ -312,7 +282,10 @@ public class OrderController implements Initializable {
                         }
                     }
                 });
-                flowPane.getChildren().add(itemPane);
+                // Only add if not already present
+                if (!flowPane.getChildren().contains(itemPane)) {
+                    flowPane.getChildren().add(itemPane);
+                }
             } catch (IOException e) {
                 System.err.println("Error loading item: " + e.getMessage());
             }
@@ -336,47 +309,16 @@ public class OrderController implements Initializable {
         return pane;
     }
 
-    @FXML
-    public void handleCreateNewTab() {
-        Tab newTab = new Tab("Đơn hàng mới");
-        VBox content = new VBox(10);
-        content.setAlignment(Pos.CENTER);
-        content.getStyleClass().add("tab-content");
-        content.setPadding(new Insets(10,3,10,20));
-        ScrollPane tabScrollPane = new ScrollPane(content);
-        tabScrollPane.setPrefHeight(300);
-        tabScrollPane.setPrefWidth(430);
-        newTab.setContent(tabScrollPane);
-        tabPane.getTabs().add(newTab);
-        tabPane.getSelectionModel().select(newTab);
-    }
-
-    private VBox getCurrentTabContent() {
-        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
-        if (selectedTab != null && selectedTab.getContent() instanceof ScrollPane) {
-            ScrollPane tabScrollPane = (ScrollPane) selectedTab.getContent();
-            if (tabScrollPane.getContent() instanceof VBox) {
-                return (VBox) tabScrollPane.getContent();
-            }
-        }
-        return null;
-    }
-
     private Consumer<AnchorPane> createDeleteCallback() {
         return paneToRemove -> {
-            VBox tabContent = getCurrentTabContent();
+            VBox tabContent = orderVBox;
             if (tabContent != null) {
                 FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), paneToRemove);
                 fadeTransition.setFromValue(1.0);
                 fadeTransition.setToValue(0.0);
                 fadeTransition.setOnFinished(e -> {
                     tabContent.getChildren().remove(paneToRemove);
-                    Tab tab = tabPane.getSelectionModel().getSelectedItem();
-                    if (tab == null || !(tab.getContent() instanceof ScrollPane)) {
-                        return;
-                    }
-                    updateAmount(tab);
-                    
+                    updateAmount();
                     // If it was a pet, add it back to the display
                     Object controllerObj = paneToRemove.getProperties().get("controller");
                     if (controllerObj instanceof ItemList2Controller controller) {
@@ -387,7 +329,7 @@ public class OrderController implements Initializable {
                                 itemPane.setOnMouseClicked(event -> {
                                     if (event.getButton() == MouseButton.PRIMARY) {
                                         try {
-                                            createOrderTab(item);
+                                            addItemToOrder(item);
                                             flowPane.getChildren().remove(itemPane);
                                         } catch (IOException ex) {
                                             throw new RuntimeException(ex);
@@ -399,13 +341,12 @@ public class OrderController implements Initializable {
                                 System.err.println("Error adding pet back to display: " + ex.getMessage());
                             }
                         } else if (item instanceof Product product) {
-                            // Add product back to display with updated stock
                             try {
                                 AnchorPane itemPane = getOrCreateItemPane(product);
                                 itemPane.setOnMouseClicked(event -> {
                                     if (event.getButton() == MouseButton.PRIMARY) {
                                         try {
-                                            createOrderTab(product);
+                                            addItemToOrder(product);
                                         } catch (IOException ex) {
                                             throw new RuntimeException(ex);
                                         }
@@ -431,7 +372,7 @@ public class OrderController implements Initializable {
             controller.setParentPane(pane);
             controller.setOnDeleteCallback(createDeleteCallback());
             controller.setData(item);
-            controller.setOnQuantityChanged(() -> updateAmount(tabPane.getSelectionModel().getSelectedItem()));
+            controller.setOnQuantityChanged(() -> updateAmount());
             controller.setOnStockChanged(() -> {
                 if (item instanceof Product product) {
                     int quantity = controller.getQuantity();
@@ -456,77 +397,30 @@ public class OrderController implements Initializable {
         return pane;
     }
 
-    private boolean isPetInAnyOrderTab(Pet pet) {
-        return tabPane.getTabs().stream()
-            .map(tab -> (ScrollPane) tab.getContent())
-            .filter(scrollPane -> scrollPane.getContent() instanceof VBox)
-            .map(scrollPane -> (VBox) scrollPane.getContent())
-            .flatMap(vbox -> vbox.getChildren().stream())
-            .filter(node -> node instanceof AnchorPane)
-            .map(node -> (AnchorPane) node)
-            .map(pane -> (ItemList2Controller) pane.getProperties().get("controller"))
-            .filter(Objects::nonNull)
-            .map(ItemList2Controller::getItem)
-            .filter(item -> item instanceof Pet)
-            .anyMatch(item -> item.getId() == pet.getId());
-    }
-
-    private void createOrderTab(Item item) throws IOException {
-        if (item == null) {
-            return;
-        }
-
-        Tab tab = tabPane.getSelectionModel().getSelectedItem();
-        if (tab == null || !(tab.getContent() instanceof ScrollPane)) {
-            return;
-        }
-
-        ScrollPane scrollPane = (ScrollPane) tab.getContent();
-        if (!(scrollPane.getContent() instanceof VBox)) {
-            return;
-        }
-
-        VBox tabContent = (VBox) scrollPane.getContent();
-
-        if (item instanceof Pet pet) {
-            if (isPetInAnyOrderTab(pet)) {
-                return;
-            }
-        }
-
-        for (Node node : tabContent.getChildren()) {
+    private void addItemToOrder(Item item) throws IOException {
+        if (item == null) return;
+        // Check if item already exists in orderVBox
+        for (Node node : orderVBox.getChildren()) {
             if (node instanceof AnchorPane pane) {
                 Object controllerObj = pane.getProperties().get("controller");
                 if (controllerObj instanceof ItemList2Controller controller) {
                     if (controller.getItem().getId() == item.getId()) {
                         controller.AddItem(1);
-                        updateAmount(tab);
+                        updateAmount();
                         return;
                     }
                 }
             }
         }
-
         AnchorPane itemPane = createItemOrderPane(item);
         itemPane.setUserData(item.getId());
-        tabContent.getChildren().add(itemPane);
-
-        updateAmount(tab);
+        orderVBox.getChildren().add(itemPane);
+        updateAmount();
     }
 
-    private void updateAmount(Tab tab) {
-        if (tab == null || !(tab.getContent() instanceof ScrollPane)) {
-            return;
-        }
-
-        ScrollPane scrollPane = (ScrollPane) tab.getContent();
-        if (!(scrollPane.getContent() instanceof VBox)) {
-            return;
-        }
-
-        VBox tabContent = (VBox) scrollPane.getContent();
+    private void updateAmount() {
         double total = 0;
-        for (Node node : tabContent.getChildren()) {
+        for (Node node : orderVBox.getChildren()) {
             if (node instanceof AnchorPane pane) {
                 Object controllerObj = pane.getProperties().get("controller");
 
@@ -545,9 +439,7 @@ public class OrderController implements Initializable {
     }
 
     private void calcAmount() {
-        tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
-            updateAmount(newTab);
-        });
+        // This method is no longer used
     }
 
     private void handleSearch() {
@@ -617,7 +509,7 @@ public class OrderController implements Initializable {
                 handleDiscountCode(newValue);
             } else {
                 voucherValueLabel.setText("0");
-                updateAmount(tabPane.getSelectionModel().getSelectedItem());
+                updateAmount();
             }
         });
     }
@@ -667,12 +559,12 @@ public class OrderController implements Initializable {
                     voucherValueLabel.setText("0");
                     ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", validationMessage);
                 }
-                updateAmount(tabPane.getSelectionModel().getSelectedItem());
+                updateAmount();
             } catch (Exception e) {
                 e.printStackTrace();
                 voucherValueLabel.setText("0");
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Có lỗi xảy ra khi xử lý mã giảm giá!");
-                updateAmount(tabPane.getSelectionModel().getSelectedItem());
+                updateAmount();
             }
         });
 
@@ -683,7 +575,7 @@ public class OrderController implements Initializable {
             }
             voucherValueLabel.setText("0");
             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể kiểm tra mã giảm giá! Vui lòng thử lại sau.");
-            updateAmount(tabPane.getSelectionModel().getSelectedItem());
+            updateAmount();
         });
 
         Thread thread = new Thread(task);
@@ -709,35 +601,28 @@ public class OrderController implements Initializable {
 
     @FXML
     private void handleConfirmOrder() {
-        Tab currentTab = tabPane.getSelectionModel().getSelectedItem();
-        if (currentTab == null) {
-            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng chọn đơn hàng cần thanh toán!");
+        if (orderVBox.getChildren().isEmpty()) {
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng chọn ít nhất một sản phẩm!");
             return;
         }
 
-        // Lấy thông tin đơn hàng từ tab hiện tại
-        ScrollPane scrollPane = (ScrollPane) currentTab.getContent();
-        VBox tabContent = (VBox) scrollPane.getContent();
-        
-        // Tạo danh sách chi tiết đơn hàng
+        // Lấy thông tin đơn hàng từ orderVBox
         ArrayList<OrderDetail> orderDetails = new ArrayList<>();
         Map<Integer, Product> products = new HashMap<>();
         Map<Integer, Pet> pets = new HashMap<>();
         double totalAmount = 0;
 
-        for (Node node : tabContent.getChildren()) {
+        for (Node node : orderVBox.getChildren()) {
             if (node instanceof AnchorPane pane) {
                 Object controllerObj = pane.getProperties().get("controller");
                 if (controllerObj instanceof ItemList2Controller controller) {
                     Item item = controller.getItem();
                     int quantity = controller.getQuantity();
-                    
                     if (quantity > 0) {
                         OrderDetail detail = new OrderDetail();
                         detail.setItemId(item.getId());
                         detail.setQuantity(quantity);
                         detail.setUnitPrice(item.getPrice());
-                        
                         if (item instanceof Product product) {
                             detail.setItemType("product");
                             products.put(product.getProductId(), product);
@@ -745,7 +630,6 @@ public class OrderController implements Initializable {
                             detail.setItemType("pet");
                             pets.put(pet.getPetId(), pet);
                         }
-                        
                         orderDetails.add(detail);
                         totalAmount += item.getPrice() * quantity;
                     }
@@ -779,7 +663,6 @@ public class OrderController implements Initializable {
         SessionManager.setCurrentOrderProducts(products);
         SessionManager.setCurrentOrderPets(pets);
         SessionManager.setCurrentDiscount(discount);
-        SessionManager.setCurrentTab(currentTab); // Lưu tab hiện tại
 
         Stage currentStage = (Stage) root.getScene().getWindow();
         ViewFactory.getInstance().switchContent("payment", currentStage);
@@ -791,64 +674,30 @@ public class OrderController implements Initializable {
         Map<Integer, Product> products = SessionManager.getCurrentOrderProducts();
         Map<Integer, Pet> pets = SessionManager.getCurrentOrderPets();
         Discount discount = SessionManager.getCurrentDiscount();
-        Tab savedTab = SessionManager.getCurrentTab();
         
         if (order != null && orderDetails != null && products != null && pets != null) {
-            // Nếu có tab đã lưu, sử dụng tab đó
-            if (savedTab != null) {
-                tabPane.getSelectionModel().select(savedTab);
-                VBox tabContent = getCurrentTabContent();
-                if (tabContent != null) {
-                    tabContent.getChildren().clear();
-                    for (OrderDetail detail : orderDetails) {
-                        Item item = null;
-                        if ("product".equals(detail.getItemType())) {
-                            item = products.get(detail.getItemId());
-                        } else if ("pet".equals(detail.getItemType())) {
-                            item = pets.get(detail.getItemId());
-                        }
-                        if (item != null) {
-                            try {
-                                AnchorPane itemPane = createItemOrderPane(item);
-                                // Set lại số lượng
-                                Object controllerObj = itemPane.getProperties().get("controller");
-                                if (controllerObj instanceof ItemList2Controller controller) {
-                                    controller.AddItem(detail.getQuantity() - 1); // vì mặc định là 1
-                                }
-                                itemPane.setUserData(item.getId());
-                                tabContent.getChildren().add(itemPane);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
+            VBox tabContent = orderVBox;
+            if (tabContent != null) {
+                tabContent.getChildren().clear();
+                for (OrderDetail detail : orderDetails) {
+                    Item item = null;
+                    if ("product".equals(detail.getItemType())) {
+                        item = products.get(detail.getItemId());
+                    } else if ("pet".equals(detail.getItemType())) {
+                        item = pets.get(detail.getItemId());
                     }
-                }
-            } else {
-                // Nếu không có tab đã lưu, tạo tab mới
-                tabPane.getTabs().clear();
-                handleCreateNewTab();
-                VBox tabContent = getCurrentTabContent();
-                if (tabContent != null) {
-                    for (OrderDetail detail : orderDetails) {
-                        Item item = null;
-                        if ("product".equals(detail.getItemType())) {
-                            item = products.get(detail.getItemId());
-                        } else if ("pet".equals(detail.getItemType())) {
-                            item = pets.get(detail.getItemId());
-                        }
-                        if (item != null) {
-                            try {
-                                AnchorPane itemPane = createItemOrderPane(item);
-                                // Set lại số lượng
-                                Object controllerObj = itemPane.getProperties().get("controller");
-                                if (controllerObj instanceof ItemList2Controller controller) {
-                                    controller.AddItem(detail.getQuantity() - 1); // vì mặc định là 1
-                                }
-                                itemPane.setUserData(item.getId());
-                                tabContent.getChildren().add(itemPane);
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                    if (item != null) {
+                        try {
+                            AnchorPane itemPane = createItemOrderPane(item);
+                            // Set lại số lượng
+                            Object controllerObj = itemPane.getProperties().get("controller");
+                            if (controllerObj instanceof ItemList2Controller controller) {
+                                controller.AddItem(detail.getQuantity() - 1); // vì mặc định là 1
                             }
+                            itemPane.setUserData(item.getId());
+                            tabContent.getChildren().add(itemPane);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -868,7 +717,7 @@ public class OrderController implements Initializable {
                 }
                 voucherValueLabel.setText(ControllerUtils.formatCurrency(discountAmount));
             }
-            updateAmount(tabPane.getSelectionModel().getSelectedItem());
+            updateAmount();
         }
     }
 }

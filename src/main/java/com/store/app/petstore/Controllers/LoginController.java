@@ -155,7 +155,7 @@ public class LoginController implements Initializable {
                 if (staff != null) {
                     sessionManager.setCurrentStaff(staff);
                 }
-                ViewFactory.getInstance().switchContent("order", currentStage);
+                ViewFactory.getInstance().switchContent("dashboard", currentStage);
             } else {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vai trò người dùng không hợp lệ");
                 sessionManager.clear();
