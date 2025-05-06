@@ -33,8 +33,8 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" styleClass="btn-add" text="Thêm" />
-            <Button mnemonicParsing="false" styleClass="btn-delete" text="Xóa" GridPane.rowIndex="1" />
+            <Button mnemonicParsing="false" styleClass="btn-add1" text="Thêm" />
+            <Button mnemonicParsing="false" styleClass="btn-delete1" text="Xóa" GridPane.rowIndex="1" />
             <Button mnemonicParsing="false" styleClass="btn-fix" text="Sửa" GridPane.columnIndex="1" />
             <Button mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
