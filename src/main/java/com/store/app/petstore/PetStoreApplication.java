@@ -13,13 +13,10 @@ import java.io.IOException;
 public class PetStoreApplication extends Application {
     @Override
     public void start(Stage primaryStage) {
-        // Initialize database connection
         DatabaseManager.connect();
-        
-        // Show login window
-        ModelView.getInstance().getViewFactory().showWindow("login");
+        ModelView.getInstance().getViewFactory().showWindow("payment");
 
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/BillHistory.fxml"));
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/CustomerInfor.fxml"));
 //        Parent root;
 //        try {
 //            root = loader.load();

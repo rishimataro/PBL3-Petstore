@@ -67,12 +67,12 @@ public class ForgotPasswordController implements Initializable {
         String email = emailField.getText().trim();
         
         if (email.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập email của bạn");
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập email của bạn");
             return;
         }
 
         if(!checkFormEmail(email)) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Email không hợp lệ");
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Email không hợp lệ");
             return;
         }
 
@@ -80,7 +80,7 @@ public class ForgotPasswordController implements Initializable {
             // Kiểm tra email có tồn tại trong hệ thống không
             User user = userDAO.findByEmail(email);
             if (user == null) {
-                showAlert(Alert.AlertType.ERROR, "Lỗi", "Email không tồn tại trong hệ thống");
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Email không tồn tại trong hệ thống");
                 return;
             }
             
@@ -95,17 +95,17 @@ public class ForgotPasswordController implements Initializable {
         String confirmPassword = confirmPasswordField.getText();
 
         if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập đầy đủ mật khẩu mới");
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập đầy đủ mật khẩu mới");
             return;
         }
 
         if (!newPassword.equals(confirmPassword)) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Mật khẩu xác nhận không khớp");
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Mật khẩu xác nhận không khớp");
             return;
         }
 
         if (newPassword.length() < 6) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Mật khẩu phải có ít nhất 6 ký tự");
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Mật khẩu phải có ít nhất 6 ký tự");
             return;
         }
 
@@ -115,11 +115,11 @@ public class ForgotPasswordController implements Initializable {
             user.setPassword(newPassword);
             userDAO.update(user);
 
-            showAlert(Alert.AlertType.CONFIRMATION, "Thành công", "Mật khẩu đã được đặt lại thành công");
+            ControllerUtils.showAlert(Alert.AlertType.CONFIRMATION, "Thành công", "Mật khẩu đã được đặt lại thành công");
             handleBackToLogin();
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể đặt lại mật khẩu. Vui lòng thử lại sau");
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể đặt lại mật khẩu. Vui lòng thử lại sau");
         }
     }
 
@@ -141,13 +141,5 @@ public class ForgotPasswordController implements Initializable {
         passwordFields.setManaged(false);
         confirmPasswordFields.setVisible(false);
         confirmPasswordFields.setManaged(false);
-    }
-
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

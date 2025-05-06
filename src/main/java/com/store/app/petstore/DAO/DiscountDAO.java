@@ -1,7 +1,7 @@
 package com.store.app.petstore.DAO;
 
 import com.store.app.petstore.Models.Entities.Discount;
-import com.store.app.petstore.Utils.ControllerUtils;
+import com.store.app.petstore.Controllers.ControllerUtils;
 import java.sql.*;
 import java.util.ArrayList;
 import java.time.LocalDate;

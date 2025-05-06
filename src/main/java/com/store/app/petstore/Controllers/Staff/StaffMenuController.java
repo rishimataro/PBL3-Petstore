@@ -19,7 +19,8 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.image.ImageView;
-import com.store.app.petstore.Utils.ControllerUtils;
+import com.store.app.petstore.Controllers.ControllerUtils;
+import javafx.event.ActionEvent;
 
 import java.net.URL;
 import java.util.Objects;
@@ -147,7 +148,7 @@ public class StaffMenuController implements Initializable {
         });
 
         logoutItem.setOnAction(event -> {
-            confirmLogout();
+            handleLogout(null);
         });
 
         contextMenu.getItems().addAll(dashboardItem, orderItem, billItem, infoItem, logoutItem);
@@ -185,24 +186,18 @@ public class StaffMenuController implements Initializable {
         }
     }
 
-    private void confirmLogout() {
-        if (showConfirmationAndWait("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
+    @FXML
+    void handleLogout(ActionEvent event) {
+        Stage currentStage = (Stage) root.getScene().getWindow();
+        if (ControllerUtils.showConfirmationAndWait("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
             sessionManager.clear();
-            Stage currentStage = (Stage) root.getScene().getWindow();
             ViewFactory.getInstance().switchContent("login", currentStage);
-        }
-        else {
+        } else {
             ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đăng xuất không thành công");
         }
     }
 
-    private boolean showConfirmationAndWait(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        Optional<ButtonType> result = alert.showAndWait();
-        return result.isPresent() && result.get() == ButtonType.OK;
-    }
-
 }
+
+
+

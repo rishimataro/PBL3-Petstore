@@ -1,14 +1,12 @@
 package com.store.app.petstore.Controllers.Staff;
 
 import com.store.app.petstore.Models.Entities.Item;
-import com.store.app.petstore.Models.Entities.Pet;
 import com.store.app.petstore.Models.Entities.Product;
-import com.store.app.petstore.Utils.ControllerUtils;
+import com.store.app.petstore.Controllers.ControllerUtils;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -115,7 +113,7 @@ public class ItemList2Controller {
                 updateTotal();
             }
         } else {
-            showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Không thể tăng số lượng thú cưng!");
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Không thể tăng số lượng thú cưng!");
         }
     }
 
@@ -123,7 +121,7 @@ public class ItemList2Controller {
     private void handleDownIcon() {
         if (item instanceof Product product) {
             if (product.getStock() == 0) {
-                showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Sản phẩm đã hết hàng!");
+                ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Sản phẩm đã hết hàng!");
                 return;
             }
             int currentAmount = Integer.parseInt(quantity.getText());
@@ -133,17 +131,7 @@ public class ItemList2Controller {
             }
         }
         else {
-            showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Không thể giảm số lượng thú cưng!");
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Không thể giảm số lượng thú cưng!");
         }
-
-    }
-
-    // show popup error
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

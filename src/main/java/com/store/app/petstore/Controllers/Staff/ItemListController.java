@@ -11,9 +11,7 @@ import javafx.scene.layout.GridPane;
 import com.store.app.petstore.Models.Entities.Item;
 import com.store.app.petstore.Models.Entities.Pet;
 import com.store.app.petstore.Models.Entities.Product;
-import com.store.app.petstore.Utils.ControllerUtils;
-
-import java.util.Objects;
+import com.store.app.petstore.Controllers.ControllerUtils;
 
 public class ItemListController {
 

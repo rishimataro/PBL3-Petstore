@@ -7,13 +7,12 @@ import com.store.app.petstore.Models.Entities.Item;
 import com.store.app.petstore.Models.Entities.Pet;
 import com.store.app.petstore.Models.Entities.Product;
 import com.store.app.petstore.Models.Entities.Discount;
-import com.store.app.petstore.Utils.ControllerUtils;
+import com.store.app.petstore.Controllers.ControllerUtils;
+import com.store.app.petstore.Views.ViewFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,6 +23,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -120,28 +120,39 @@ public class OrderController implements Initializable {
         });
     }
 
+    private void setupButtonActions() {
+        confirmButton.setOnAction(event -> {
+            setupConfirm();
+        });
+
+        createNewTabButton.setOnAction(event -> {
+            handleCreateNewTab();
+        });
+    }
+
     private void setupConfirm() {
         if (tabPane.getTabs().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng tạo đơn hàng trước khi xác nhận!");
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng tạo đơn hàng trước khi xác nhận!");
             return;
         }
         Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
         if (selectedTab == null || !(selectedTab.getContent() instanceof ScrollPane)) {
-            showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng chọn đơn hàng để xác nhận!");
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng chọn đơn hàng để xác nhận!");
             return;
         }
         ScrollPane tabScrollPane = (ScrollPane) selectedTab.getContent();
         if (tabScrollPane.getContent() instanceof VBox) {
             VBox tabContent = (VBox) tabScrollPane.getContent();
             if (tabContent.getChildren().isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Thông báo", "Đơn hàng không có sản phẩm nào!");
+                ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", "Đơn hàng không có sản phẩm nào!");
                 return;
             }
-            // Handle order confirmation logic here
-            // For example, save the order to the database
+
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            ViewFactory.getInstance().switchContent("payment", currentStage);
 
         } else {
-            showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng chọn đơn hàng để xác nhận!");
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng chọn đơn hàng để xác nhận!");
         }
     }
 
@@ -266,11 +277,10 @@ public class OrderController implements Initializable {
         flowPane.getChildren().clear();
         for (Item item : itemList) {
             try {
-                // Skip pets that are in any order tab
                 if (item instanceof Pet pet && isPetInAnyOrderTab(pet)) {
                     continue;
                 }
-                // Skip products with no stock
+
                 if (item instanceof Product product && product.getStock() <= 0) {
                     continue;
                 }
@@ -568,14 +578,14 @@ public class OrderController implements Initializable {
         LocalDate today = LocalDate.now();
         
         if (today.isBefore(discount.getStartDate())) {
-            showAlert(Alert.AlertType.WARNING, "Thông báo", 
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", 
                 String.format("Mã giảm giá này sẽ có hiệu lực từ ngày %s", 
                 discount.getStartDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
             return false;
         }
         
         if (today.isAfter(discount.getEndDate())) {
-            showAlert(Alert.AlertType.WARNING, "Thông báo", 
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", 
                 String.format("Mã giảm giá này đã hết hạn từ ngày %s", 
                 discount.getEndDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
             return false;
@@ -607,13 +617,13 @@ public class OrderController implements Initializable {
                     applyDiscount(discount);
                 } else {
                     voucherValueLabel.setText("0");
-                    showAlert(Alert.AlertType.WARNING, "Thông báo", validationMessage);
+                    ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", validationMessage);
                 }
                 updateAmount(tabPane.getSelectionModel().getSelectedItem());
             } catch (Exception e) {
                 e.printStackTrace();
                 voucherValueLabel.setText("0");
-                showAlert(Alert.AlertType.ERROR, "Lỗi", "Có lỗi xảy ra khi xử lý mã giảm giá!");
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Có lỗi xảy ra khi xử lý mã giảm giá!");
                 updateAmount(tabPane.getSelectionModel().getSelectedItem());
             }
         });
@@ -624,7 +634,7 @@ public class OrderController implements Initializable {
                 exception.printStackTrace();
             }
             voucherValueLabel.setText("0");
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể kiểm tra mã giảm giá! Vui lòng thử lại sau.");
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể kiểm tra mã giảm giá! Vui lòng thử lại sau.");
             updateAmount(tabPane.getSelectionModel().getSelectedItem());
         });
 
@@ -647,14 +657,5 @@ public class OrderController implements Initializable {
         }
 
         voucherValueLabel.setText(ControllerUtils.formatCurrency(discountAmount));
-    }
-
-    // show popup error
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

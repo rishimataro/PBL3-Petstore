@@ -115,7 +115,7 @@ public class LoginController implements Initializable {
         String password = passwordField.getText();
 
         if(username.isEmpty() || password.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập tên đăng nhập và mật khẩu");
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập tên đăng nhập và mật khẩu");
             return;
         }
 
@@ -124,13 +124,19 @@ public class LoginController implements Initializable {
             User user = userDAO.findByUsername(username);
             
             if(user == null || user.getUsername() == null) {
-                showAlert(Alert.AlertType.ERROR, "Lỗi", "Tên đăng nhập không đúng");
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Tên đăng nhập không đúng");
                 return;
             }
 
-            // Kiểm tra mật khẩu bằng BCrypt
-            if(!UserDAO.verify(password, user.getPassword())) {
-                showAlert(Alert.AlertType.ERROR, "Lỗi", "Mật khẩu không đúng");
+            // Kiểm tra tên đăng nhập
+            if (!user.getUsername().equals(username)) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Tên đăng nhập không đúng");
+                return;
+            }
+
+            // Kiểm tra mật khẩu
+            if (!user.getPassword().equals(password)) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Mật khẩu không đúng");
                 return;
             }
 
@@ -150,21 +156,12 @@ public class LoginController implements Initializable {
                 }
                 ViewFactory.getInstance().switchContent("order", currentStage);
             } else {
-                showAlert(Alert.AlertType.ERROR, "Lỗi", "Vai trò người dùng không hợp lệ");
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vai trò người dùng không hợp lệ");
                 sessionManager.clear();
             }
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Đã xảy ra lỗi khi đăng nhập");
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Đã xảy ra lỗi khi đăng nhập");
         }
-    }
-
-    // show popup error
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

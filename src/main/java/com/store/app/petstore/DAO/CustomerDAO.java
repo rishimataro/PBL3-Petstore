@@ -207,4 +207,23 @@ public class CustomerDAO implements BaseDAO<Customer, Integer> {
             DatabaseUtil.closeResources(rs, stmt, conn);
         }
     }
+
+    public Customer findLatest() {
+        String sql = "SELECT * FROM CUSTOMER ORDER BY CUSTOMER_ID DESC FETCH FIRST 1 ROW ONLY";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            if (rs.next()) {
+                Customer customer = new Customer();
+                customer.setCustomerId(rs.getInt("CUSTOMER_ID"));
+                customer.setFullName(rs.getString("FULL_NAME"));
+                customer.setPhone(rs.getString("PHONE"));
+                return customer;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

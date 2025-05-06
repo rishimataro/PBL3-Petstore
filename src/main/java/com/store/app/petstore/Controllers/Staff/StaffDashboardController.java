@@ -66,10 +66,8 @@ public class StaffDashboardController implements Initializable {
         });
 
         AddCustomerCard.setOnMouseClicked(event -> {
-            Stage popupStage = new Stage();
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.initOwner(root.getScene().getWindow());
-            ViewFactory.getInstance().showPopup("addcustomer", popupStage);
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            ViewFactory.getInstance().showPopup("customer", currentStage, true);
         });
 
         BillHistoryCard.setOnMouseClicked(event -> {

@@ -9,13 +9,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.PaymentController">
     <children>
         <fx:include source="StaffMenu.fxml" />
-        <AnchorPane prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../Styles/Staff/Payment.css">
+
+        <AnchorPane fx:id="root" prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../Styles/Staff/Payment.css">
             <children>
                 <AnchorPane prefHeight="442.0" prefWidth="550.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
@@ -26,14 +28,18 @@
                                 <Cursor fx:constant="HAND" />
                             </cursor>
                         </FontAwesomeIconView>
-                        <VBox layoutX="20.0" layoutY="50.599999999999966" prefHeight="370.0" prefWidth="515.0" styleClass="bg1" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0">
+                        <VBox fx:id="customerInfoBox" layoutX="20.0" layoutY="50.599999999999966" prefHeight="370.0" prefWidth="515.0" styleClass="bg1" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0">
                             <children>
-                                <Label fx:id="customerInfoLabel" styleClass="lblCustomerInfo" text="THÔNG TIN KHÁCH HÀNG">
-                                    <VBox.margin>
-                                        <Insets left="15.0" top="15.0" />
-                                    </VBox.margin>
-                                </Label>
-                                <GridPane styleClass="gridForm">
+                                <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="515.0" styleClass="header-box">
+                                    <children>
+                                        <Label fx:id="customerInfoLabel" prefHeight="27.0" prefWidth="370.0" styleClass="lblCustomerInfo" text="THÔNG TIN KHÁCH HÀNG" />
+                                        <Button fx:id="fixCustomerbtn" mnemonicParsing="false" prefHeight="26.0" prefWidth="120.0" styleClass="btn-fix" text="Sửa thông tin" />
+                                    </children>
+                                    <padding>
+                                        <Insets left="15.0" right="15.0" top="15.0" />
+                                    </padding>
+                                </HBox>
+                                <GridPane fx:id="customerFormGrid" styleClass="gridForm">
                                     <VBox.margin>
                                         <Insets bottom="10" left="10" right="10" top="10" />
                                     </VBox.margin>
@@ -70,7 +76,7 @@
                                         <Insets left="15.0" top="10.0" />
                                     </VBox.margin>
                                 </Label>
-                                <GridPane styleClass="gridForm">
+                                <GridPane fx:id="staffFormGrid" styleClass="gridForm">
                                     <VBox.margin>
                                         <Insets bottom="10" left="10" right="10" top="10" />
                                     </VBox.margin>
@@ -87,31 +93,31 @@
                                     <children>
                                         <Label styleClass="lblFormCMD" text="Mã nhân viên:" />
                                         <VBox styleClass="vbox_textField_cst_form" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                                            <TextField fx:id="staffIdField" promptText="Mã nhân viên" styleClass="txtField" />
+                                            <TextField fx:id="staffIdField" editable="false" promptText="Mã nhân viên" styleClass="txtField" />
                                         </VBox>
 
                                         <Label styleClass="lblFormCMD" text="Tên nhân viên:" GridPane.rowIndex="2" />
                                         <VBox styleClass="vbox_textField_cst_form" GridPane.columnIndex="0" GridPane.rowIndex="3">
-                                            <TextField fx:id="staffNameField" promptText="Tên nhân viên" styleClass="txtField" />
+                                            <TextField fx:id="staffNameField" editable="false" promptText="Tên nhân viên" styleClass="txtField" />
                                         </VBox>
 
                                         <Label styleClass="lblFormCMD" text="Thời gian lập đơn:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                         <VBox styleClass="vbox_textField_cst_form" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                            <TextField fx:id="orderTimeField" promptText="Thời gian lập đơn" styleClass="txtField" />
+                                            <TextField fx:id="orderTimeField" editable="false" promptText="Thời gian lập đơn" styleClass="txtField" />
                                         </VBox>
                                     </children>
                                 </GridPane>
                             </children>
                         </VBox>
-                        <Button fx:id="addCustomerBtn" layoutX="388.79999999999995" layoutY="6.2" mnemonicParsing="false" prefHeight="26.0" prefWidth="146.0" text="Thêm khách hàng" AnchorPane.rightAnchor="15.200000000000045" AnchorPane.topAnchor="6.2" />
+                        <Button fx:id="addCustomerBtn" layoutX="388.79999999999995" layoutY="6.2" mnemonicParsing="false" prefHeight="26.0" prefWidth="146.0" styleClass="btn-add" text="Thêm khách hàng" AnchorPane.rightAnchor="15.200000000000045" AnchorPane.topAnchor="6.2" />
                     </children>
                 </AnchorPane>
 
                 <AnchorPane prefHeight="442.0" prefWidth="440.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <Button fx:id="backbtn" layoutX="28.0" layoutY="396.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="Quay lại" />
-                        <Button fx:id="paymentBtn" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="Thanh toán" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-                        <GridPane hgap="10.0" prefWidth="410.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="300.0">
+                        <Button fx:id="backbtn" layoutX="28.0" layoutY="396.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" styleClass="btn-back" text="Quay lại" />
+                        <Button fx:id="paymentBtn" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" styleClass="btn-payment" text="Thanh toán" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+                        <GridPane fx:id="paymentInfoGrid" hgap="10.0" prefWidth="410.0" styleClass="payment-info-grid" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="300.0">
                             <columnConstraints>
                                 <ColumnConstraints halignment="RIGHT" prefWidth="108.0" />
                                 <ColumnConstraints prefWidth="162.0" />
@@ -127,7 +133,7 @@
                                 <Label styleClass="infomoney-label" text="Voucher:" GridPane.rowIndex="1" />
                                 <Label styleClass="infomoney-label" text="Khách cần trả:" GridPane.rowIndex="2" />
 
-                                <TextField fx:id="voucherCodeField" promptText="Nhập code (nếu có)" styleClass="code-textfield" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <TextField fx:id="voucherCodeField" editable="false" promptText="Nhập code (nếu có)" styleClass="code-textfield" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                                 <Label fx:id="totalAmountLabel" styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" />
                                 <Label fx:id="discountAmountLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
