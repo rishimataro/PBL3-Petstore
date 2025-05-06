@@ -11,29 +11,33 @@ public class Staff extends BaseModel {
     private String fullName;
     private String phone;
     private String email;
+    private String address;
     private double salary;
     private LocalDateTime hireDate;
     private String role;
     private boolean isActive;
 
-    public Staff( int userId, String fullName, String phone, String email, double salary,
+    public Staff(int userId, String fullName, String phone, String email, String address, double salary,
                  LocalDateTime hireDate, String role, boolean isActive) {
         this.userId = userId;
         this.fullName = fullName;
         this.phone = phone;
         this.email = email;
+        this.address = address;
         this.salary = salary;
         this.hireDate = hireDate;
         this.role = role;
         this.isActive = isActive;
     }
-    public Staff(int staffId, int userId, String fullName, String phone, String email, double salary,
+
+    public Staff(int staffId, int userId, String fullName, String phone, String email, String address, double salary,
                  LocalDateTime hireDate, String role, boolean isActive) {
         this.staffId = staffId;
         this.userId = userId;
         this.fullName = fullName;
         this.phone = phone;
         this.email = email;
+        this.address = address;
         this.salary = salary;
         this.hireDate = hireDate;
         this.role = role;
@@ -113,5 +117,13 @@ public class Staff extends BaseModel {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

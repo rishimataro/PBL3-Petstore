@@ -113,50 +113,50 @@
 }
 
 /* DatePicker styles */
-.date-picker {
+.date_picker {
     -fx-background-color: white;
     -fx-border-color: #ddd;
     -fx-border-radius: 5px;
 }
 
-.date-picker .arrow-button {
+.date_picker .arrow-button {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
 
-.date-picker .arrow-button:hover {
+.date_picker .arrow-button:hover {
     -fx-background-color: #f0f0f0;
 }
 
-.date-picker .arrow-button .arrow {
+.date_picker .arrow-button .arrow {
     -fx-background-color: #017FCB;
 }
 
-.date-picker .text-field {
+.date_picker .text-field {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-text-fill: #6C6C6C;
 }
 
-.date-picker .cell {
+.date_picker .cell {
     -fx-background-color: white;
     -fx-text-fill: #333333;
 }
 
-.date-picker .cell:hover {
+.date_picker .cell:hover {
     -fx-background-color: #f0f0f0;
 }
 
-.date-picker .cell:focused {
+.date_picker .cell:focused {
     -fx-background-color: #e3f2fd;
 }
 
-.date-picker .selected {
+.date_picker .selected {
     -fx-background-color: #017FCB;
     -fx-text-fill: white;
 }
 
-.date-picker .selected:focused {
+.date_picker .selected:focused {
     -fx-background-color: #017FCB;
     -fx-text-fill: white;
 }

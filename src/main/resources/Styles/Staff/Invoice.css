@@ -101,48 +101,67 @@
 }
 
 .table-view {
-    -fx-background-color: #F9F9F9;
+    /*-fx-background-color: #F9F9F9;*/
     /*-fx-border-color: #FFB701;*/
     -fx-border-width: 1px;
     -fx-table-cell-border-color: transparent;
 }
 
-.table-view .column-header-background {
-    -fx-background-color: #FFB701;
-    -fx-border-color: #FFB701;
-}
-
-.table-view .column-header,
-.table-view .filler {
-    -fx-size: 17.5px;
-    -fx-border-width: 0 1px 0 0;
-    -fx-border-color: white;
-}
-
-.table-view .column-header .label {
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-font-size: 8px;
-    -fx-alignment: CENTER;
-}
-
-/* Dòng bình thường */
+/*.table-view .column-header-background {*/
+/*    -fx-background-color: #FFB701;*/
+/*    !*-fx-border-color: #FFB701;*!*/
+/*}*/
+/**/
 .table-row-cell {
-    -fx-background-color: #F9F9F9;
-    -fx-font-size: 13px;
-    -fx-border-color: transparent;
+    /*-fx-background-color: #f0f8ff;  !* màu nền mặc định *!*/
+    -fx-background-color: #f0f8ff;  /* màu nền mặc định */
+    -fx-text-fill: Red;
 }
 
-/* Hover */
+/* Khi được hover */
 .table-row-cell:hover {
-    -fx-background-color: #f0f0f0;
+    -fx-background-color: #d0e9ff;
 }
 
-/* Dòng được chọn */
+/* Khi được chọn */
 .table-row-cell:filled:selected {
-    -fx-background-color: #FFB701;
-    -fx-text-fill: white;
+    -fx-background-color: #a3c9f9;
+    -fx-text-fill: #292929;
 }
+/**/
+/*.table-view .column-header,*/
+/*.table-view .filler {*/
+/*    -fx-size: 17.5;*/
+/*    -fx-border-width: 0 1 0 0;*/
+/*    -fx-border-color: white;*/
+/*}*/
+
+/*.table-view .column-header .label {*/
+/*    -fx-text-fill: white !important;*/
+/*    -fx-font-weight: bold;*/
+/*    -fx-font-size: 14px;*/
+/*    -fx-alignment: CENTER;*/
+/*}*/
+
+/*!* Dòng bình thường *!*/
+/*.table-row-cell {*/
+/*    -fx-background-color: #F9F9F9 !important;*/
+/*    -fx-font-size: 13px;*/
+/*    !*-fx-border-color: transparent;*!*/
+/*    -text-fill: #FFFFFF;*/
+/*}*/
+
+/*!* Hover *!*/
+/*.table-row-cell:hover {*/
+/*    -fx-background-color: #f0f0f0 !important;*/
+/*    -text-fill: #FFFFFF;*/
+/*}*/
+
+/*!* Dòng được chọn *!*/
+/*.table-row-cell:filled:selected {*/
+/*    !*-fx-background-color: #FFB701 !important;*!*/
+/*    -fx-text-fill: white !important;*/
+/*}*/
 
 .button.crud_func{
     -fx-border-radius: 0;
@@ -176,4 +195,63 @@
 }
 .func_icon{
     -fx-fill: #FFFFFF;
+}
+._date_picker{
+
+}
+.date_picker > .text-field {
+    -fx-background-color: #FFFFFF;
+}
+
+.date_picker > .arrow-button {
+    -fx-background-color: #FFFFFF;
+    /*-fx-background-insets: 1, 1, 1, 1.6;*/
+    /*-fx-background-radius: 0 1 1 0, 0 1 1 0, 0 1 1 0, 0 1 1 0;*/
+}
+
+/*.date_picker-popup > .month-year-pane {*/
+/*    -fx-padding: 0.188883em 0.5em 0.666667em 0.5em; !* 0 0 0 0 *!*/
+/*    -fx-background-color:  gray;*/
+/*    !*-fx-background-insets: 0 0 0 0, 0 0 1 0;*!*/
+/*}*/
+
+/*.date_picker .text-field {*/
+/*    !*-fx-control-inner-background: white;*!*/
+/*}*/
+
+/*.date_picker .button {*/
+/*    !*-fx-background-color:  #252827;*!*/
+/*    -fx-border-color:transparent;*/
+/*    -fx-pref-height: 34px;*/
+/*    -fx-pref-width: 34px;*/
+/*}*/
+
+/*.date_picker-popup  {*/
+/*    -fx-border-color: gray;*/
+/*    -fx-background-color: gray;*/
+/*}*/
+
+/*.date_picker .cell {*/
+/*    -fx-background-color: gray;*/
+/*    -fx-pref-width:25px ;*/
+/*    -fx-pref-height:25px ;*/
+/*}*/
+.date_picker.yellow_border{
+
+    -fx-border-color: #FFB701;
+    -fx-border-radius: 3;
+}
+.date_picker.cyan_border{
+    -fx-border-color: #01C4DA;
+    -fx-border-radius: 3;
+}
+.date_picker.yellow_border .text-field{
+    -fx-control-inner-background: #FFB701;
+}
+
+.date_picker.cyan_border .text-field{
+    -fx-control-inner-background: #01C4DA;
+}
+.vbox-invoice-detail{
+    -fx-padding: 10 10 10 10;
 }

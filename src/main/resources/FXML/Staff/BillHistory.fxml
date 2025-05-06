@@ -5,11 +5,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollBar?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -51,9 +50,18 @@
                                     </AnchorPane>
                                  </children>
                               </StackPane>
-                              <DatePicker prefWidth="115.0" promptText="Ngày bắt đầu" />
-                              <DatePicker prefWidth="115.0" promptText="Ngày kết thúc" />
-                              <Button mnemonicParsing="false" text="Tìm kiếm">
+                              <CheckBox fx:id="allowDeletedInvoice" mnemonicParsing="false" text="Hoá đơn bị xoá" />
+                              <DatePicker fx:id="start_datepicker" prefWidth="115.0" promptText="Ngày bắt đầu">
+                                 <styleClass>
+                                    <String fx:value="date_picker" />
+                                    <String fx:value="yellow_border" />
+                                 </styleClass></DatePicker>
+                              <DatePicker fx:id="end_datepicker" prefWidth="115.0" promptText="Ngày kết thúc">
+                                 <styleClass>
+                                    <String fx:value="date_picker" />
+                                    <String fx:value="cyan_border" />
+                                 </styleClass></DatePicker>
+                              <Button id="search_btn" mnemonicParsing="false" onAction="#onSearchClicked" text="Tìm kiếm">
                                  <graphic>
                                     <FontAwesomeIconView glyphName="SEARCH" styleClass="func_icon" />
                                  </graphic>
@@ -69,11 +77,12 @@
                                   <children>
                                       <TableView fx:id="invoice_table" VBox.vgrow="ALWAYS">
                                           <columns>
-                                              <TableColumn fx:id="sttCol" styleClass="column-header-background" text="STT" />
-                                              <TableColumn fx:id="invoice_idCol" styleClass="column-header-background" text="Mã hóa đơn" />
-                                              <TableColumn fx:id="invoice_customerCol" styleClass="column-header-background" text="Khách hàng" />
-                                              <TableColumn fx:id="invoice_timeCol" styleClass="column-header-background" text="Thời gian" />
-                                              <TableColumn fx:id="invoice_totalBillCol" styleClass="column-header-background" text="Tổng hóa đơn" />
+                                              <TableColumn fx:id="sttCol" text="STT" />
+                                              <TableColumn fx:id="invoice_idCol" text="Mã hóa đơn" />
+                                              <TableColumn fx:id="invoice_customerCol" text="Khách hàng" />
+                                              <TableColumn fx:id="invoice_timeCol" text="Thời gian" />
+                                              <TableColumn fx:id="invoice_totalBillCol" text="Tổng hóa đơn" />
+                                              <TableColumn fx:id="invoice_statusCol" text="Hiệu lực" />
                                           </columns>
                                       </TableView>
                                   </children>
@@ -86,36 +95,17 @@
                           <children>
                               <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="144.0" styleClass="anchor-pane-invoice-id">
                                   <children>
-                                      <Label layoutX="33.0" layoutY="15.0" styleClass="invoice-id" text="[Mã hóa đơn]" textAlignment="CENTER" />
+                                      <Label fx:id="detailInvoiceID" layoutX="33.0" layoutY="15.0" styleClass="invoice-id" text="[Mã hóa đơn]" textAlignment="CENTER" />
                                   </children>
                               </AnchorPane>
-      
-                              <TabPane id="scroll_pane" prefWidth="410.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="135" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="52">
-                                  <tabs>
-                                      <Tab text="Đơn hàng 1">
-                                          <content>
-                                              <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox-order">
-                                                  <children>
-                                                      <ScrollBar orientation="VERTICAL" styleClass="scrollbar" />
-                                                  </children>
-                                              </HBox>
-                                          </content>
-                                      </Tab>
-                                      <Tab text="Đơn hàng 2">
-                                          <content>
-                                              <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox-order">
-                                                  <children>
-                                                      <ScrollBar orientation="VERTICAL" styleClass="scrollbar" />
-                                                  </children>
-                                              </HBox>
-                                          </content>
-                                      </Tab>
-                                  </tabs>
-                              </TabPane>
+                        <ScrollPane prefWidth="410" AnchorPane.bottomAnchor="135.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="52.0">
+                           <content>
+                              <VBox fx:id="productListVBox" spacing="10" styleClass="vbox-invoice-detail" />
+                           </content></ScrollPane>
       
                               <GridPane hgap="10.0" prefHeight="80.0" prefWidth="410.0" AnchorPane.bottomAnchor="57" AnchorPane.leftAnchor="8.0">
                                   <columnConstraints>
-                                      <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" prefWidth="108.0" />
+                                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="108.0" />
                                       <ColumnConstraints hgrow="SOMETIMES" prefWidth="162.0" />
                                       <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="140.0" />
                                   </columnConstraints>
@@ -130,7 +120,7 @@
                                     <Insets left="5.0" />
                                  </padding>
                                       </Label>
-                                      <Label styleClass="infomoney-label" text="Giảm giá" GridPane.rowIndex="1">
+                                      <Label styleClass="infomoney-label" text="Giảm giá:" GridPane.rowIndex="1">
                                           <padding>
                                     <Insets left="5.0" />
                                  </padding>
@@ -140,15 +130,16 @@
                                     <Insets left="5.0" />
                                  </padding>
                                       </Label>
-                                      <Label styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" />
-                                      <Label styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                      <Label styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                      <Label fx:id="detailInvoiceValue" styleClass="money-label" text="0" GridPane.columnIndex="2" />
+                                      <Label fx:id="DetailInvoiceDiscount" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                      <Label fx:id="detailInvoiceTotal" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <Label fx:id="discountCode" styleClass="infomoney-label" text="Không" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                   </children>
                               </GridPane>
                         <AnchorPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="15.0">
                            <children>
             
-                                    <Button layoutX="227.0" layoutY="21.5" mnemonicParsing="false" prefHeight="30.0" prefWidth="175.0" text="">
+                                    <Button layoutX="227.0" layoutY="21.5" mnemonicParsing="false" onAction="#DeleteInvoiceClicked" prefHeight="30.0" prefWidth="175.0" text="">
                                         <styleClass>
                                             <String fx:value="crud_func" />
                                             <String fx:value="delete-btn" />

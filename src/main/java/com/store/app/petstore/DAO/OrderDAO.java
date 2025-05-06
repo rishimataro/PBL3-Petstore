@@ -64,7 +64,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
             stmt.setInt(5, entity.getDiscountId());
             stmt.setBoolean(6, entity.isDeleted());
             stmt.setInt(7, entity.getOrderId());
-            
+
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -126,6 +126,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
         }
         return orders;
     }
+
     @Override
     public Order findById(Integer id) {
         Connection conn = null;

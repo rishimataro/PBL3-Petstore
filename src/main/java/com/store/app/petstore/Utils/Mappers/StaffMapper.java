@@ -13,10 +13,9 @@ public class StaffMapper {
         staff.setFullName(rs.getString("full_name"));
         staff.setPhone(rs.getString("phone"));
         staff.setEmail(rs.getString("email"));
+        staff.setAddress(rs.getString("address"));
         staff.setSalary(rs.getDouble("salary"));
-
         staff.setHireDate(rs.getTimestamp("hire_date").toLocalDateTime());
-
         staff.setRole(rs.getString("role"));
         staff.setActive(rs.getBoolean("isActive"));
         return staff;
