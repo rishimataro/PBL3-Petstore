@@ -14,7 +14,7 @@ public class PetStoreApplication extends Application {
     @Override
     public void start(Stage primaryStage) {
         DatabaseManager.connect();
-        ModelView.getInstance().getViewFactory().showWindow("payment");
+        ModelView.getInstance().getViewFactory().showWindow("login");
 
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/CustomerInfor.fxml"));
 //        Parent root;

@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
 
 <VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.PaymentController">
     <children>
@@ -142,6 +143,12 @@
                         </GridPane>
                     </children>
                 </AnchorPane>
+
+                <ScrollPane fx:id="orderDetailsScroll" fitToWidth="true" prefHeight="240.0" prefWidth="420.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
+                    <content>
+                        <VBox fx:id="orderDetailsBox" prefWidth="420.0" spacing="10.0" />
+                    </content>
+                </ScrollPane>
             </children>
         </AnchorPane>
     </children>

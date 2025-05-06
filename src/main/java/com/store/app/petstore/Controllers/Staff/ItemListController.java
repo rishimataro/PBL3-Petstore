@@ -59,7 +59,6 @@ public class ItemListController {
             tagGender.setText(pet.getSex());
         } else if (item instanceof Product product) {
             tagBreed.setText(product.getCategory());
-            tagGender.setText(product.getStock() + "");
         }
 
         try {

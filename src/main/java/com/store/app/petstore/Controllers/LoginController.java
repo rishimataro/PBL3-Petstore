@@ -24,6 +24,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginController implements Initializable {
 
@@ -135,7 +136,7 @@ public class LoginController implements Initializable {
             }
 
             // Kiểm tra mật khẩu
-            if (!user.getPassword().equals(password)) {
+            if(!BCrypt.checkpw(password, user.getPassword())) {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Mật khẩu không đúng");
                 return;
             }

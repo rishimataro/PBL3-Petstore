@@ -7,8 +7,11 @@ import com.store.app.petstore.Models.Entities.Item;
 import com.store.app.petstore.Models.Entities.Pet;
 import com.store.app.petstore.Models.Entities.Product;
 import com.store.app.petstore.Models.Entities.Discount;
+import com.store.app.petstore.Models.Entities.Order;
+import com.store.app.petstore.Models.Entities.OrderDetail;
 import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.Views.ViewFactory;
+import com.store.app.petstore.Sessions.SessionManager;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
@@ -28,12 +31,15 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class OrderController implements Initializable {
+    private SessionManager sessionManager = new SessionManager();
+    
     @FXML
     private ChoiceBox<String> categoryChoiceBox;
 
@@ -107,14 +113,21 @@ public class OrderController implements Initializable {
         calcAmount();
         setupClearSearchIcon();
         setupDiscountHandling();
-        
-        // Add search functionality with debounce
+        setupButtonActions();
+        loadOrderFromSession();
+
+        // Kiểm tra và xóa tab đã thanh toán
+        Tab tabToRemove = SessionManager.getTabToRemove();
+        if (tabToRemove != null) {
+            tabPane.getTabs().remove(tabToRemove);
+            SessionManager.setTabToRemove(null);
+        }
+
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() >= 2 || newValue.isEmpty()) {
                 searchDebouncer.playFromStart();
             }
         });
-        
         searchDebouncer.setOnFinished(event -> {
             handleSearch();
         });
@@ -122,7 +135,7 @@ public class OrderController implements Initializable {
 
     private void setupButtonActions() {
         confirmButton.setOnAction(event -> {
-            setupConfirm();
+            handleConfirmOrder();
         });
 
         createNewTabButton.setOnAction(event -> {
@@ -385,6 +398,23 @@ public class OrderController implements Initializable {
                             } catch (IOException ex) {
                                 System.err.println("Error adding pet back to display: " + ex.getMessage());
                             }
+                        } else if (item instanceof Product product) {
+                            // Add product back to display with updated stock
+                            try {
+                                AnchorPane itemPane = getOrCreateItemPane(product);
+                                itemPane.setOnMouseClicked(event -> {
+                                    if (event.getButton() == MouseButton.PRIMARY) {
+                                        try {
+                                            createOrderTab(product);
+                                        } catch (IOException ex) {
+                                            throw new RuntimeException(ex);
+                                        }
+                                    }
+                                });
+                                flowPane.getChildren().add(itemPane);
+                            } catch (IOException ex) {
+                                System.err.println("Error adding product back to display: " + ex.getMessage());
+                            }
                         }
                     }
                 });
@@ -402,6 +432,24 @@ public class OrderController implements Initializable {
             controller.setOnDeleteCallback(createDeleteCallback());
             controller.setData(item);
             controller.setOnQuantityChanged(() -> updateAmount(tabPane.getSelectionModel().getSelectedItem()));
+            controller.setOnStockChanged(() -> {
+                if (item instanceof Product product) {
+                    int quantity = controller.getQuantity();
+                    int remainingStock = product.getStock() - quantity;
+                    if (remainingStock <= 0) {
+                        // Remove item from display if out of stock
+                        flowPane.getChildren().removeIf(node -> {
+                            if (node instanceof AnchorPane itemPane) {
+                                Object controllerObj = itemPane.getProperties().get("controller");
+                                if (controllerObj instanceof ItemList2Controller itemController) {
+                                    return itemController.getItem().getId() == product.getId();
+                                }
+                            }
+                            return false;
+                        });
+                    }
+                }
+            });
             pane.setUserData(item.getId());
             pane.getProperties().put("controller", controller);
         }
@@ -657,5 +705,170 @@ public class OrderController implements Initializable {
         }
 
         voucherValueLabel.setText(ControllerUtils.formatCurrency(discountAmount));
+    }
+
+    @FXML
+    private void handleConfirmOrder() {
+        Tab currentTab = tabPane.getSelectionModel().getSelectedItem();
+        if (currentTab == null) {
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng chọn đơn hàng cần thanh toán!");
+            return;
+        }
+
+        // Lấy thông tin đơn hàng từ tab hiện tại
+        ScrollPane scrollPane = (ScrollPane) currentTab.getContent();
+        VBox tabContent = (VBox) scrollPane.getContent();
+        
+        // Tạo danh sách chi tiết đơn hàng
+        ArrayList<OrderDetail> orderDetails = new ArrayList<>();
+        Map<Integer, Product> products = new HashMap<>();
+        Map<Integer, Pet> pets = new HashMap<>();
+        double totalAmount = 0;
+
+        for (Node node : tabContent.getChildren()) {
+            if (node instanceof AnchorPane pane) {
+                Object controllerObj = pane.getProperties().get("controller");
+                if (controllerObj instanceof ItemList2Controller controller) {
+                    Item item = controller.getItem();
+                    int quantity = controller.getQuantity();
+                    
+                    if (quantity > 0) {
+                        OrderDetail detail = new OrderDetail();
+                        detail.setItemId(item.getId());
+                        detail.setQuantity(quantity);
+                        detail.setUnitPrice(item.getPrice());
+                        
+                        if (item instanceof Product product) {
+                            detail.setItemType("product");
+                            products.put(product.getProductId(), product);
+                        } else if (item instanceof Pet pet) {
+                            detail.setItemType("pet");
+                            pets.put(pet.getPetId(), pet);
+                        }
+                        
+                        orderDetails.add(detail);
+                        totalAmount += item.getPrice() * quantity;
+                    }
+                }
+            }
+        }
+
+        if (orderDetails.isEmpty()) {
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng chọn ít nhất một sản phẩm!");
+            return;
+        }
+
+        // Tạo đơn hàng mới
+        Order order = new Order();
+        order.setTotalPrice(totalAmount);
+        order.setOrderDate(LocalDateTime.now());
+        order.setStaffId(sessionManager.getCurrentStaff().getStaffId());
+
+        // Lấy thông tin giảm giá nếu có
+        final Discount discount;
+        String voucherCode = voucherTextField.getText().trim();
+        if (!voucherCode.isEmpty()) {
+            discount = DiscountDAO.getInstance().findByCode(voucherCode);
+        } else {
+            discount = null;
+        }
+
+        // Lưu dữ liệu vào SessionManager
+        SessionManager.setCurrentOrder(order);
+        SessionManager.setCurrentOrderDetails(orderDetails);
+        SessionManager.setCurrentOrderProducts(products);
+        SessionManager.setCurrentOrderPets(pets);
+        SessionManager.setCurrentDiscount(discount);
+        SessionManager.setCurrentTab(currentTab); // Lưu tab hiện tại
+
+        Stage currentStage = (Stage) root.getScene().getWindow();
+        ViewFactory.getInstance().switchContent("payment", currentStage);
+    }
+
+    private void loadOrderFromSession() {
+        Order order = SessionManager.getCurrentOrder();
+        ArrayList<OrderDetail> orderDetails = SessionManager.getCurrentOrderDetails();
+        Map<Integer, Product> products = SessionManager.getCurrentOrderProducts();
+        Map<Integer, Pet> pets = SessionManager.getCurrentOrderPets();
+        Discount discount = SessionManager.getCurrentDiscount();
+        Tab savedTab = SessionManager.getCurrentTab();
+        
+        if (order != null && orderDetails != null && products != null && pets != null) {
+            // Nếu có tab đã lưu, sử dụng tab đó
+            if (savedTab != null) {
+                tabPane.getSelectionModel().select(savedTab);
+                VBox tabContent = getCurrentTabContent();
+                if (tabContent != null) {
+                    tabContent.getChildren().clear();
+                    for (OrderDetail detail : orderDetails) {
+                        Item item = null;
+                        if ("product".equals(detail.getItemType())) {
+                            item = products.get(detail.getItemId());
+                        } else if ("pet".equals(detail.getItemType())) {
+                            item = pets.get(detail.getItemId());
+                        }
+                        if (item != null) {
+                            try {
+                                AnchorPane itemPane = createItemOrderPane(item);
+                                // Set lại số lượng
+                                Object controllerObj = itemPane.getProperties().get("controller");
+                                if (controllerObj instanceof ItemList2Controller controller) {
+                                    controller.AddItem(detail.getQuantity() - 1); // vì mặc định là 1
+                                }
+                                itemPane.setUserData(item.getId());
+                                tabContent.getChildren().add(itemPane);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Nếu không có tab đã lưu, tạo tab mới
+                tabPane.getTabs().clear();
+                handleCreateNewTab();
+                VBox tabContent = getCurrentTabContent();
+                if (tabContent != null) {
+                    for (OrderDetail detail : orderDetails) {
+                        Item item = null;
+                        if ("product".equals(detail.getItemType())) {
+                            item = products.get(detail.getItemId());
+                        } else if ("pet".equals(detail.getItemType())) {
+                            item = pets.get(detail.getItemId());
+                        }
+                        if (item != null) {
+                            try {
+                                AnchorPane itemPane = createItemOrderPane(item);
+                                // Set lại số lượng
+                                Object controllerObj = itemPane.getProperties().get("controller");
+                                if (controllerObj instanceof ItemList2Controller controller) {
+                                    controller.AddItem(detail.getQuantity() - 1); // vì mặc định là 1
+                                }
+                                itemPane.setUserData(item.getId());
+                                tabContent.getChildren().add(itemPane);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+            // Set lại voucher nếu có
+            if (discount != null) {
+                voucherTextField.setText(discount.getCode());
+                double totalAmount = order.getTotalPrice();
+                double discountAmount = 0;
+                if ("percent".equals(discount.getDiscountType())) {
+                    discountAmount = totalAmount * (discount.getValue() / 100.0);
+                    if (discount.getMaxDiscountValue() > 0) {
+                        discountAmount = Math.min(discountAmount, discount.getMaxDiscountValue());
+                    }
+                } else {
+                    discountAmount = discount.getValue();
+                }
+                voucherValueLabel.setText(ControllerUtils.formatCurrency(discountAmount));
+            }
+            updateAmount(tabPane.getSelectionModel().getSelectedItem());
+        }
     }
 }

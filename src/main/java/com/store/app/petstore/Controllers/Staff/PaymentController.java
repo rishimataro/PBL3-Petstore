@@ -1,27 +1,36 @@
 package com.store.app.petstore.Controllers.Staff;
 
 import com.store.app.petstore.Controllers.ControllerUtils;
-import com.store.app.petstore.DAO.CustomerDAO;
-import com.store.app.petstore.DAO.StaffDAO;
-import com.store.app.petstore.Models.Entities.Customer;
-import com.store.app.petstore.Models.Entities.Staff;
+import com.store.app.petstore.DAO.*;
+import com.store.app.petstore.Models.Entities.*;
 import com.store.app.petstore.Sessions.SessionManager;
 import com.store.app.petstore.Views.ViewFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.Node;
+import javafx.scene.control.Tab;
 
 import javax.swing.text.View;
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PaymentController implements Initializable {
     @FXML
@@ -96,22 +105,58 @@ public class PaymentController implements Initializable {
     @FXML
     private TextField voucherCodeField;
 
+    @FXML
+    private VBox orderDetailsBox;
+
     private CustomerDAO customerDAO = new CustomerDAO();
     private StaffDAO staffDAO = new StaffDAO();
+    private OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
+    private ProductDAO productDAO = new ProductDAO();
+    private PetDAO petDAO = new PetDAO();
 
-    private SessionManager sessionManager;
+    private SessionManager sessionManager = new SessionManager();
     private Customer customer;
     private Staff staff;
     private boolean isNewCustomer = true;
     private int currentCustomerId;
     private int currentStaffId;
 
+    private Order currentOrder;
+    private ArrayList<OrderDetail> orderDetails;
+    private Map<Integer, Product> productMap;
+    private Map<Integer, Pet> petMap;
+    private Discount currentDiscount;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setupPaymentInfo();
-        setupStaffInfo();
+        customerIdField.setDisable(true);
+        customerNameField.setDisable(true);
+        customerPhoneField.setDisable(true);
 
+        staffIdField.setDisable(true);
+        staffNameField.setDisable(true);
+        orderTimeField.setDisable(true);
+
+        voucherCodeField.setDisable(true);
+
+        setupStaffInfo();
         setupButtonActions();
+
+        searchCustomerField.setOnKeyPressed(event -> {
+            if (event.getCode().toString().equals("ENTER")) {
+                handleSearchCustomer();
+            }
+        });
+
+        // Lấy dữ liệu đơn hàng từ SessionManager nếu có
+        Order order = SessionManager.getCurrentOrder();
+        ArrayList<OrderDetail> orderDetails = SessionManager.getCurrentOrderDetails();
+        Map<Integer, Product> products = SessionManager.getCurrentOrderProducts();
+        Map<Integer, Pet> pets = SessionManager.getCurrentOrderPets();
+        Discount discount = SessionManager.getCurrentDiscount();
+        if (order != null && orderDetails != null && products != null && pets != null) {
+            setOrderData(order, orderDetails, products, pets, discount);
+        }
     }
 
     private void handleAddCustomer() {
@@ -126,6 +171,32 @@ public class PaymentController implements Initializable {
                     setupCustomerInfo();
                 }
             });
+        }
+    }
+
+    private void handleSearchCustomer() {
+        String searchText = searchCustomerField.getText().trim();
+        
+        if (searchText.isEmpty()) {
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng nhập thông tin tìm kiếm.");
+            return;
+        }
+
+        Customer foundCustomer = customerDAO.findByPhone(searchText);
+
+        if (foundCustomer != null) {
+            customer = foundCustomer;
+            setupCustomerInfo();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Cảnh báo");
+            alert.setHeaderText(null);
+            alert.setContentText("Không tìm thấy khách hàng nào với số điện thoại này. Bạn có muốn thêm khách hàng mới không?");
+            
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                handleAddCustomer();
+            }
         }
     }
 
@@ -152,7 +223,63 @@ public class PaymentController implements Initializable {
     }
 
     private void handleConfirmPayment() {
+        if (customer == null) {
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng chọn khách hàng trước khi thanh toán.");
+            return;
+        }
 
+        if (currentOrder == null) {
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Đơn hàng không hợp lệ.");
+            return;
+        }
+
+        if (currentOrder.getTotalPrice() <= 0) {
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Tổng tiền không hợp lệ.");
+            return;
+        }
+
+        if (ControllerUtils.showConfirmationAndWait("Xác nhận thanh toán", "Bạn có chắc chắn muốn thanh toán đơn hàng này không?")) {
+            currentOrder.setCustomerId(customer.getCustomerId());
+            if (currentDiscount != null) {
+                currentOrder.setDiscountId(currentDiscount.getDiscountId());
+            }
+            int orderId = OrderDAO.getInstance().insert(currentOrder);
+            if (orderId == 0) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu đơn hàng vào cơ sở dữ liệu.");
+                return;
+            }
+
+            for (OrderDetail detail : orderDetails) {
+                detail.setOrderId(orderId);
+                com.store.app.petstore.DAO.OrderDetailDAO.getInstance().insert(detail);
+
+                if ("pet".equals(detail.getItemType())) {
+                    Pet pet = petMap.get(detail.getItemId());
+                    if (pet != null) {
+                        pet.setIsSold(true);
+                        com.store.app.petstore.DAO.PetDAO.getInstance().update(pet);
+                    }
+                } else if ("product".equals(detail.getItemType())) {
+                    Product product = productMap.get(detail.getItemId());
+                    if (product != null) {
+                        product.setStock(product.getStock() - detail.getQuantity());
+                        com.store.app.petstore.DAO.ProductDAO.getInstance().update(product);
+                    }
+                }
+            }
+
+            ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Thanh toán thành công!");
+            
+            // Xóa tab đã thanh toán
+            Tab currentTab = SessionManager.getCurrentTab();
+            if (currentTab != null) {
+                // Lưu tab hiện tại để xóa sau khi quay lại màn hình order
+                SessionManager.setTabToRemove(currentTab);
+            }
+            
+            com.store.app.petstore.Sessions.SessionManager.clearCurrentOrder();
+            handleBack();
+        }
     }
 
     private void handleBack() {
@@ -160,56 +287,104 @@ public class PaymentController implements Initializable {
         ViewFactory.getInstance().switchContent("order", currentStage);
     }
 
-    private void handleSearchCustomer() {
-
-    }
-
     private void setupCustomerInfo() {
         if (customer != null) {
-            // Hiển thị thông tin khách hàng
             customerIdField.setText(String.valueOf(customer.getCustomerId()));
             customerNameField.setText(customer.getFullName());
             customerPhoneField.setText(customer.getPhone());
-            
-            // Hiển thị thông tin khác
-            customerInfoLabel.setText("Thông tin khách hàng");
-            otherInfoLabel.setText("Thông tin khác");
-            
-            // Enable các nút liên quan đến customer
+
             fixCustomerbtn.setDisable(false);
-            
-            // Hiển thị form thông tin khách hàng
+
             customerFormGrid.setVisible(true);
             customerInfoBox.setVisible(true);
         } else {
-            // Xóa thông tin khách hàng
             customerIdField.clear();
             customerNameField.clear();
             customerPhoneField.clear();
-            
-            // Ẩn thông tin khác
-            customerInfoLabel.setText("");
-            otherInfoLabel.setText("");
-            
-            // Disable các nút liên quan đến customer
+
             fixCustomerbtn.setDisable(true);
-            
-            // Ẩn form thông tin khách hàng
+
             customerFormGrid.setVisible(false);
             customerInfoBox.setVisible(false);
         }
     }
 
     private void setupStaffInfo() {
-
+        sessionManager.setCurrentStaff(staffDAO.findByUserId(SessionManager.getCurrentUser().getUserId()));
+        staff = sessionManager.getCurrentStaff();
+        if (staff != null) {
+            staffIdField.setText(String.valueOf(staff.getStaffId()));
+            staffNameField.setText(staff.getFullName());
+            orderTimeField.setText(ControllerUtils.getCurrentDateTime());
+        } else {
+            staffIdField.clear();
+            staffNameField.clear();
+            orderTimeField.clear();
+        }
     }
 
-    private void setupPaymentInfo() {
+    private Node createItemNode(OrderDetail detail, Map<Integer, Product> productMap, Map<Integer, Pet> petMap) {
+        try {
+            FXMLLoader loader;
+            Parent node;
 
+            switch (detail.getItemType()) {
+                case "product":
+                    loader = new FXMLLoader(getClass().getResource("/FXML/Staff/ProductItemDetail.fxml"));
+                    node = loader.load();
+                    ProductItemDetailController prodCtrl = loader.getController();
+                    prodCtrl.setData(productMap.get(detail.getItemId()), detail);
+                    return node;
+
+                case "pet":
+                    loader = new FXMLLoader(getClass().getResource("/FXML/Staff/PetItemDetail.fxml"));
+                    node = loader.load();
+                    PetItemDetailController petCtrl = loader.getController();
+                    petCtrl.setData(petMap.get(detail.getItemId()), detail);
+                    return node;
+
+                default:
+                    System.err.println("Unknown item type: " + detail.getItemType());
+                    return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void loadOrderDetails() {
+        if (currentOrder != null && orderDetails != null) {
+            orderDetailsBox.getChildren().clear();
+            for (OrderDetail detail : orderDetails) {
+                Node itemNode = createItemNode(detail, productMap, petMap);
+                if (itemNode != null) {
+                    orderDetailsBox.getChildren().add(itemNode);
+                }
+            }
+            double totalAmount = currentOrder.getTotalPrice();
+            double discountAmount = 0;
+            if (currentDiscount != null) {
+                voucherCodeField.setText(currentDiscount.getCode());
+                if (currentDiscount.getDiscountType().equals("percent")) {
+                    discountAmount = totalAmount * (currentDiscount.getValue() / 100.0);
+                    if (currentDiscount.getMaxDiscountValue() > 0) {
+                        discountAmount = Math.min(discountAmount, currentDiscount.getMaxDiscountValue());
+                    }
+                } else {
+                    discountAmount = currentDiscount.getValue();
+                }
+            }
+            totalAmountLabel.setText(String.format("%,.0f VNĐ", totalAmount));
+            discountAmountLabel.setText(String.format("%,.0f VNĐ", discountAmount));
+            finalAmountLabel.setText(String.format("%,.0f VNĐ", totalAmount - discountAmount));
+        }
     }
 
     private void handleClearSearch() {
-
+        searchCustomerField.clear();
+        customer = null;
+        setupCustomerInfo();
     }
 
     private void setupButtonActions() {
@@ -219,5 +394,15 @@ public class PaymentController implements Initializable {
         backbtn.setOnAction(event -> handleBack());
         searchIcon.setOnMouseClicked(event -> handleSearchCustomer());
         clearSearchIcon.setOnMouseClicked(event -> handleClearSearch());
+    }
+
+    public void setOrderData(Order order, ArrayList<OrderDetail> details, Map<Integer, Product> products, Map<Integer, Pet> pets, Discount discount) {
+        this.currentOrder = order;
+        this.orderDetails = details;
+        this.productMap = products;
+        this.petMap = pets;
+        this.currentDiscount = discount;
+
+        loadOrderDetails();
     }
 }

@@ -25,7 +25,11 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
             stmt.setInt(2, entity.getStaffId());
             stmt.setDouble(3, entity.getTotalPrice());
             stmt.setTimestamp(4, Timestamp.valueOf(entity.getOrderDate()));
-            stmt.setInt(5, entity.getDiscountId());
+            if (entity.getDiscountId() > 0) {
+                stmt.setInt(5, entity.getDiscountId());
+            } else {
+                stmt.setNull(5, java.sql.Types.INTEGER);
+            }
             stmt.setBoolean(6, entity.isDeleted());
             
             int affectedRows = stmt.executeUpdate();

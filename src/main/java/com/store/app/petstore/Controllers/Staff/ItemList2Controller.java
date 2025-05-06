@@ -27,6 +27,8 @@ public class ItemList2Controller {
     @FXML
     private Label total;
     @FXML
+    private Label stockLabel;
+    @FXML
     private FontAwesomeIconView trashIcon;
     @FXML
     private Label unitPrice;
@@ -34,6 +36,7 @@ public class ItemList2Controller {
     private FontAwesomeIconView upIcon;
     @FXML
     private Item item;
+    private int initialStock;
 
     @FXML
     private void initialize() {
@@ -48,6 +51,13 @@ public class ItemList2Controller {
         updateTotal();
         Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream(item.getImageUrl())));
         imgPet.setImage(img);
+        
+        if (item instanceof Product product) {
+            initialStock = product.getStock();
+            stockLabel.setText("Còn lại: " + (product.getStock() - 1));
+        } else {
+            stockLabel.setText("Còn lại: 1");
+        }
     }
 
     public Item getItem() {
@@ -71,6 +81,11 @@ public class ItemList2Controller {
     }
 
     private Runnable onQuantityChanged;
+    private Runnable onStockChanged;
+
+    public void setOnStockChanged(Runnable callback) {
+        this.onStockChanged = callback;
+    }
 
     public void setOnQuantityChanged(Runnable callback) {
         this.onQuantityChanged = callback;
@@ -108,9 +123,13 @@ public class ItemList2Controller {
     private void handleUpIcon() {
         int currentAmount = Integer.parseInt(quantity.getText());
         if (item instanceof Product product) {
-            if (currentAmount < product.getStock()) {
+            if (currentAmount < initialStock) {
                 quantity.setText(String.valueOf(currentAmount + 1));
                 updateTotal();
+                stockLabel.setText("Còn lại: " + (initialStock - (currentAmount + 1)));
+                if (onStockChanged != null) {
+                    onStockChanged.run();
+                }
             }
         } else {
             ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Không thể tăng số lượng thú cưng!");
@@ -120,7 +139,7 @@ public class ItemList2Controller {
     @FXML
     private void handleDownIcon() {
         if (item instanceof Product product) {
-            if (product.getStock() == 0) {
+            if (initialStock == 0) {
                 ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Sản phẩm đã hết hàng!");
                 return;
             }
@@ -128,10 +147,18 @@ public class ItemList2Controller {
             if (currentAmount > 1) {
                 quantity.setText(String.valueOf(currentAmount - 1));
                 updateTotal();
+                stockLabel.setText("Còn lại: " + (initialStock - (currentAmount - 1)));
+                if (onStockChanged != null) {
+                    onStockChanged.run();
+                }
             }
         }
         else {
             ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Không thể giảm số lượng thú cưng!");
         }
+    }
+
+    public int getQuantity() {
+        return Integer.parseInt(quantity.getText().isEmpty() ? "0" : quantity.getText());
     }
 }
