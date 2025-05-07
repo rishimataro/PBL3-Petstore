@@ -41,7 +41,7 @@
                                     <AnchorPane pickOnBounds="false" StackPane.alignment="CENTER">
                                        <children>
                                                 <FontAwesomeIconView glyphName="SEARCH" size="13" styleClass="icon" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="8.5" />
-                                                <FontAwesomeIconView glyphName="CLOSE" styleClass="icon" text="" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="8.5">
+                                                <FontAwesomeIconView fx:id="clear_invoice_search" glyphName="CLOSE" styleClass="icon" text="" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="8.5">
                                                     <cursor>
                                                         <Cursor fx:constant="HAND" />
                                                     </cursor>
@@ -95,7 +95,11 @@
                           <children>
                               <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="144.0" styleClass="anchor-pane-invoice-id">
                                   <children>
-                                      <Label fx:id="detailInvoiceID" layoutX="33.0" layoutY="15.0" styleClass="invoice-id" text="[Mã hóa đơn]" textAlignment="CENTER" />
+                              <HBox AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" alignment="CENTER"  layoutY="15.0">
+                                 <children>
+                                            <Label fx:id="detailInvoiceID" HBox.hgrow="ALWAYS" styleClass="invoice-id" text="[Mã hóa đơn]" textAlignment="CENTER" />
+                                 </children>
+                              </HBox>
                                   </children>
                               </AnchorPane>
                         <ScrollPane prefWidth="410" AnchorPane.bottomAnchor="135.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="52.0">

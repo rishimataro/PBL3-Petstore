@@ -16,7 +16,7 @@ module com.store.app.petstore {
     requires jbcrypt;
     requires io.github.cdimascio.dotenv.java;
     requires junit;
-    requires org.testng;
+    requires org.testng; // Ensure TestNG jar is added to the module path to resolve this
 
     opens com.store.app.petstore to javafx.fxml;
     exports com.store.app.test to junit;

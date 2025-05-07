@@ -1,5 +1,7 @@
-package com.store.app.petstore.Controllers.Staff;
+package com.store.app.petstore.Controllers.Admin;
 
+import com.store.app.petstore.Controllers.Staff.PetItemDetailController;
+import com.store.app.petstore.Controllers.Staff.ProductItemDetailController;
 import com.store.app.petstore.DAO.*;
 import com.store.app.petstore.Models.Entities.*;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -21,7 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class BillHistoryController {
+public class InvoiceManagementController {
     @FXML
     private TableView<Order> invoice_table;
     @FXML
@@ -39,6 +41,8 @@ public class BillHistoryController {
     @FXML
     private Button search_btn;
     @FXML
+    private TextField searchInvoice;
+    @FXML
     private DatePicker start_datepicker;
     @FXML
     private DatePicker end_datepicker;
@@ -48,7 +52,7 @@ public class BillHistoryController {
     private CheckBox allowDeletedInvoice;
     static private Map<Integer, Product> productMap;
     static private Map<Integer, Pet> petMap;
-    static private Map<Integer, Customer> customerMap;
+
     @FXML
     private Label detailInvoiceID;
     @FXML
@@ -58,9 +62,11 @@ public class BillHistoryController {
     @FXML
     private Label detailInvoiceTotal;
     @FXML
-    private FontAwesomeIconView clear_invoice_search;
+    private TextField totalRevenue;
+    private double totalRevenueValue;
+    private Map<Integer, Customer> customerMap;
     @FXML
-    private TextField searchInvoice;
+    private FontAwesomeIconView clear_invoice_search;
     @FXML
     public void initialize() {
         sttCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.1));
@@ -116,8 +122,6 @@ public class BillHistoryController {
             }
         });
 
-//        ObservableList<Order> orders = FXCollections.observableArrayList(OrderDAO.getInstance().findAll());
-//        invoice_table.setItems(orders);
         loadInvoicesWithFilter();
         //event
         invoice_table.setOnMouseClicked(event -> {
@@ -150,32 +154,32 @@ public class BillHistoryController {
             }
         });
         //
+
         productMap = ProductDAO.getInstance().findAll().stream()
-            .collect(Collectors.toMap(Product::getProductId, p -> p));
+                .collect(Collectors.toMap(Product::getProductId, p -> p));
         petMap = PetDAO.getInstance().findAll().stream()
-            .collect(Collectors.toMap(Pet::getPetId, p -> p));
+                .collect(Collectors.toMap(Pet::getPetId, p -> p));
     }
     @FXML
     private void onSearchClicked(){
         loadInvoicesWithFilter();
-
     }
 
-private void loadProductDetails(Order order) {
-    productListVBox.getChildren().clear();
-    List<OrderDetail> listOrderDetail = OrderDetailDAO.getInstance().findByOrderId(order.getOrderId());
+    private void loadProductDetails(Order order) {
+        productListVBox.getChildren().clear();
+        List<OrderDetail> listOrderDetail = OrderDetailDAO.getInstance().findByOrderId(order.getOrderId());
 
-    double discount = 0;
-    detailInvoiceID.setText(order.getOrderId() + "");
-    detailInvoiceValue.setText(order.getTotalPrice() + "");
-    detailInvoiceTotal.setText(order.getTotalPrice() - discount + "");
-    for (OrderDetail detail : listOrderDetail) {
-        Node itemNode = createItemNode(detail, productMap, petMap);
-        if (itemNode != null) {
-            productListVBox.getChildren().add(itemNode);
+        double discount = 0;
+        detailInvoiceID.setText(order.getOrderId() + "");
+        detailInvoiceValue.setText(order.getTotalPrice() + "");
+        detailInvoiceTotal.setText(order.getTotalPrice() - discount + "");
+        for (OrderDetail detail : listOrderDetail) {
+            Node itemNode = createItemNode(detail, productMap, petMap);
+            if (itemNode != null) {
+                productListVBox.getChildren().add(itemNode);
+            }
         }
     }
-}
 
     private Node createItemNode(OrderDetail detail, Map<Integer, Product> productMap, Map<Integer, Pet> petMap) {
         try {
@@ -241,8 +245,19 @@ private void loadProductDetails(Order order) {
                     return dateMatch && statusMatch && matchSearch;
                 })
                 .collect(Collectors.toList());
-
         invoice_table.setItems(FXCollections.observableArrayList(filtered));
+        calculateTotalRevenue(filtered);
+    }
+    private void calculateTotalRevenue(List<Order> filteredOrders) {
+        double total = 0;
+        for (Order order : filteredOrders) {
+            // Bỏ qua đơn bị huỷ nếu cần
+            if (!order.isDeleted()) {
+                total += order.getTotalPrice(); // hoặc order.getTotalPrice()
+            }
+        }
+
+        totalRevenue.setText(String.format("%, .0f VNĐ", total));
     }
     @FXML
     private void DeleteInvoiceClicked(){
@@ -265,9 +280,6 @@ private void loadProductDetails(Order order) {
             OrderDAO.getInstance().update(selectedOrder); // nhớ phải có hàm update
             loadInvoicesWithFilter(); // reload lại bảng dựa theo filter hiện tại
         }
-//        selectedOrder.setDeleted(true);  // hoặc status khác tuỳ hệ thống
-//        OrderDAO.getInstance().update(selectedOrder); // nhớ phải có hàm update
-//        loadInvoicesWithFilter(); // reload lại bảng dựa theo filter hiện tại
     }
     private void showAlert(String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
