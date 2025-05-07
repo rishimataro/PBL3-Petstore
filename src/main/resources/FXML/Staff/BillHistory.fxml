@@ -95,9 +95,9 @@
                           <children>
                               <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="144.0" styleClass="anchor-pane-invoice-id">
                                   <children>
-                              <HBox AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" alignment="CENTER"  layoutY="15.0">
+                              <HBox alignment="CENTER" layoutY="15.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
                                  <children>
-                                            <Label fx:id="detailInvoiceID" HBox.hgrow="ALWAYS" styleClass="invoice-id" text="[Mã hóa đơn]" textAlignment="CENTER" />
+                                            <Label fx:id="detailInvoiceID" styleClass="invoice-id" text="[Mã hóa đơn]" textAlignment="CENTER" />
                                  </children>
                               </HBox>
                                   </children>
@@ -135,9 +135,9 @@
                                  </padding>
                                       </Label>
                                       <Label fx:id="detailInvoiceValue" styleClass="money-label" text="0" GridPane.columnIndex="2" />
-                                      <Label fx:id="DetailInvoiceDiscount" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                      <Label fx:id="detailDiscountValue" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                       <Label fx:id="detailInvoiceTotal" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                              <Label fx:id="discountCode" styleClass="infomoney-label" text="Không" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="discountCode" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                   </children>
                               </GridPane>
                         <AnchorPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="15.0">

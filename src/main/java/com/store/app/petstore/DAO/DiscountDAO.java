@@ -115,6 +115,13 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
             rs = stmt.executeQuery();
             
             while (rs.next()) {
+                String discountType = rs.getString("discount_type");
+                // Chuyển đổi từ tiếng Việt sang tiếng Anh
+                if (discountType.equals("phần trăm")) {
+                    discountType = "percent";
+                } else if (discountType.equals("cố định")) {
+                    discountType = "fixed";
+                }
                 Discount discount = new Discount(
                     rs.getInt("discount_id"),
                     rs.getString("code"),
@@ -150,10 +157,18 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
             rs = stmt.executeQuery();
             
             if (rs.next()) {
+                String discountType = rs.getString("discount_type");
+                // Chuyển đổi từ tiếng Việt sang tiếng Anh
+                if (discountType.equals("phần trăm")) {
+                    discountType = "percent";
+                } else if (discountType.equals("cố định")) {
+                    discountType = "fixed";
+                }
                 Discount discount = new Discount();
                 discount.setDiscountId(rs.getInt("discount_id"));
                 discount.setCode(rs.getString("code"));
-                discount.setDiscountType(rs.getString("discount_type"));
+//                discount.setDiscountType(rs.getString("discount_type"));
+                discount.setDiscountType(discountType);
                 discount.setValue(rs.getDouble("value"));
                 discount.setStartDate(rs.getDate("start_date").toLocalDate());
                 discount.setEndDate(rs.getDate("end_date").toLocalDate());
@@ -183,6 +198,13 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
             rs = stmt.executeQuery();
             
             while (rs.next()) {
+                String discountType = rs.getString("discount_type");
+                // Chuyển đổi từ tiếng Việt sang tiếng Anh
+                if (discountType.equals("phần trăm")) {
+                    discountType = "percent";
+                } else if (discountType.equals("cố định")) {
+                    discountType = "fixed";
+                }
                 Discount discount = new Discount(
                     rs.getInt("discount_id"),
                     rs.getString("code"),

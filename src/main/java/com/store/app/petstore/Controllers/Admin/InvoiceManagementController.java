@@ -17,6 +17,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,9 @@ public class InvoiceManagementController {
     @FXML
     private TableColumn<Order, String> invoice_statusCol;
     @FXML
-    private Button search_btn;
+    private TextField discountCode;
+    @FXML
+    private Label detailDiscountValue;
     @FXML
     private TextField searchInvoice;
     @FXML
@@ -121,7 +124,10 @@ public class InvoiceManagementController {
                 setText((empty || item == null) ? null : item.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             }
         });
-
+        LocalDate today = LocalDate.now();
+        LocalDate thirtyDaysAgo = today.minusDays(30);
+        start_datepicker.setValue(thirtyDaysAgo);
+        end_datepicker.setValue(today);
         loadInvoicesWithFilter();
         //event
         invoice_table.setOnMouseClicked(event -> {
@@ -169,10 +175,9 @@ public class InvoiceManagementController {
         productListVBox.getChildren().clear();
         List<OrderDetail> listOrderDetail = OrderDetailDAO.getInstance().findByOrderId(order.getOrderId());
 
-        double discount = 0;
+        DiscountInfo(order);
         detailInvoiceID.setText(order.getOrderId() + "");
-        detailInvoiceValue.setText(order.getTotalPrice() + "");
-        detailInvoiceTotal.setText(order.getTotalPrice() - discount + "");
+        detailInvoiceValue.setText(String.format("%, .0f VNĐ", order.getTotalPrice()));
         for (OrderDetail detail : listOrderDetail) {
             Node itemNode = createItemNode(detail, productMap, petMap);
             if (itemNode != null) {
@@ -288,6 +293,37 @@ public class InvoiceManagementController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    private void DiscountInfo(Order order){
+        Discount dc = DiscountDAO.getInstance().findById(order.getDiscountId());
+        Double total_value = order.getTotalPrice();
+
+        Double max_discount_value = 0.0;
+        Double discount_value = 0.0;
+        Double discount_min_value = 0.0;
+        String discount_type = "";
+        String discount_code = "";
+        if(dc != null){
+            max_discount_value = dc.getMaxDiscountValue();
+            discount_value = dc.getValue();
+            discount_min_value = dc.getMinOrderValue();
+            discount_type = dc.getDiscountType();
+            discount_code = dc.getCode();
+        }
+
+        Double discount = 0.0;
+        if (discount_min_value > total_value) {
+            discount = 0.0;
+        }
+        else if(discount_type.equals("percent")){
+            discount = ((total_value * discount_value) / 100);
+            if (discount > max_discount_value) {
+                discount = max_discount_value;
+            }
+        }else if(discount_type.equals("fixed")){
+            discount = discount_value;
+        }
+        discountCode.setText(discount_code);
+        detailDiscountValue.setText(String.format("%, .0f VNĐ", discount_value));
+        detailInvoiceTotal.setText(String.format("%, .0f VNĐ", total_value - discount));
+    }
 }
-
-
