@@ -125,7 +125,7 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
                 Discount discount = new Discount(
                     rs.getInt("discount_id"),
                     rs.getString("code"),
-                    rs.getString("discount_type"),
+                    discountType,
                     rs.getDouble("value"),
                     rs.getDate("start_date").toLocalDate(),
                     rs.getDate("end_date").toLocalDate(),
@@ -208,7 +208,7 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
                 Discount discount = new Discount(
                     rs.getInt("discount_id"),
                     rs.getString("code"),
-                    rs.getString("discount_type"),
+                    discountType,
                     rs.getDouble("value"),
                     rs.getDate("start_date").toLocalDate(),
                     rs.getDate("end_date").toLocalDate(),
