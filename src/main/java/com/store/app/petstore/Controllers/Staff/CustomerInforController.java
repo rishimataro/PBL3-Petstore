@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
 
+// Staff
 public class CustomerInforController implements Initializable {
 
     @FXML

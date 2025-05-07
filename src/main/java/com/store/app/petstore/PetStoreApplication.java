@@ -13,21 +13,21 @@ import java.io.IOException;
 public class PetStoreApplication extends Application {
     @Override
     public void start(Stage primaryStage) {
-        DatabaseManager.connect();
-        ModelView.getInstance().getViewFactory().showWindow("login");
+//        DatabaseManager.connect();
+//        ModelView.getInstance().getViewFactory().showWindow("login");
 
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/CustomerInfor.fxml"));
-//        Parent root;
-//        try {
-//            root = loader.load();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return; // Exits the method if the FXML file cannot be loaded
-//        }
-//        primaryStage.setTitle("Hoá đơn");
-//        primaryStage.setScene(new Scene(root));
-//        primaryStage.setMaximized(true);
-//        primaryStage.show();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Admin/UserInfor.fxml"));
+        Parent root;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return; // Exits the method if the FXML file cannot be loaded
+        }
+        primaryStage.setTitle("Hoá đơn");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.setMaximized(true);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {

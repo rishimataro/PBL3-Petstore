@@ -32,10 +32,10 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Button mnemonicParsing="false" styleClass="btn-add1" text="Thêm" />
-                <Button mnemonicParsing="false" styleClass="btn-delete1" text="Xóa" GridPane.rowIndex="1" />
-                <Button mnemonicParsing="false" styleClass="btn-fix" text="Sửa" GridPane.columnIndex="1" />
-                <Button mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Button fx:id="btnAdd" mnemonicParsing="false" styleClass="btn-add1" text="Thêm" />
+                <Button fx:id="btnDelete" mnemonicParsing="false" styleClass="btn-delete1" text="Xóa" GridPane.rowIndex="1" />
+                <Button fx:id="btnFix" mnemonicParsing="false" styleClass="btn-fix" text="Sửa" GridPane.columnIndex="1" />
+                <Button fx:id="btnSave" mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             </children>
         </GridPane>
         <GridPane layoutX="238.0" layoutY="50.0" prefHeight="201.0" prefWidth="220.0">
@@ -56,11 +56,11 @@
                 <Label styleClass="lblInfor" text="Danh mục:" GridPane.rowIndex="2" />
                 <Label styleClass="lblInfor" text="Số lượng:" GridPane.rowIndex="3" />
                 <Label styleClass="lblInfor" text="Giá:" GridPane.rowIndex="4" />
-                <TextField editable="false" GridPane.columnIndex="1" />
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <TextField fx:id="txtProductId" editable="false" GridPane.columnIndex="1" />
+                <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="txtCategory" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="txtQuantity" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="txtPrice" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             </children>
         </GridPane>
         <VBox layoutX="238.0" layoutY="260.0" prefHeight="69.0" prefWidth="220.0">
@@ -69,10 +69,10 @@
                     <VBox.margin>
                         <Insets bottom="5.0" />
                     </VBox.margin></Label>
-                <TextArea prefHeight="200.0" prefWidth="200.0" />
+                <TextArea fx:id="txtDescription" prefHeight="200.0" prefWidth="200.0" />
             </children>
         </VBox>
-        <FontAwesomeIconView accessibleRole="BUTTON" fill="WHITE" glyphName="REFRESH" layoutX="200.0" layoutY="254.0" size="20">
+        <FontAwesomeIconView fx:id="btnRefresh" accessibleRole="BUTTON" fill="WHITE" glyphName="REFRESH" layoutX="200.0" layoutY="254.0" size="20">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>

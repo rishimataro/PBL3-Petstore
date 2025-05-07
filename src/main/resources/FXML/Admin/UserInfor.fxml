@@ -1,58 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="discountInforPopup" prefHeight="280.0" prefWidth="475.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.DiscountInforController">
+<AnchorPane fx:id="customerInforPopup" prefHeight="230.0" prefWidth="475.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.UserInforController">
    <children>
       <AnchorPane prefHeight="30.0" prefWidth="475.0" styleClass="nav-pane">
          <children>
             <Label layoutX="192.0" layoutY="7.0" styleClass="title" text="Thông tin chi tiết" />
          </children>
       </AnchorPane>
-      <VBox layoutY="30.0" prefHeight="250.0" prefWidth="475.0">
+      <VBox layoutY="30.0" prefHeight="200.0" prefWidth="475.0">
          <children>
-            <GridPane hgap="5.0" prefWidth="384.0" vgap="6.0">
+            <GridPane prefWidth="384.0" vgap="5.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.4000244140625" minWidth="10.0" prefWidth="103.20001068115235" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="356.3999710083008" minWidth="10.0" prefWidth="115.20001220703126" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="356.3999710083008" minWidth="10.0" prefWidth="78.39998779296874" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="356.3999710083008" minWidth="10.0" prefWidth="110.13331909179686" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.4000244140625" minWidth="10.0" prefWidth="146.800048828125" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="356.3999710083008" minWidth="10.0" prefWidth="329.199951171875" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label styleClass="lblInfor" text="Mã số:" />
-                  <Label styleClass="lblInfor" text="Code:" GridPane.rowIndex="1" />
-                  <Label styleClass="lblInfor" text="Ngày bắt đầu:" GridPane.rowIndex="2" />
-                  <TextField fx:id="txtDiscountId" editable="false" prefWidth="263.0" GridPane.columnIndex="1" GridPane.columnSpan="3" />
-                  <TextField fx:id="txtCode" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label styleClass="lblInfor" text="Ngày kết thúc:" GridPane.rowIndex="3" />
-                  <Label styleClass="lblInfor" text="Giá trị giảm: " GridPane.rowIndex="4" />
-                  <DatePicker fx:id="dpStartDate" prefHeight="26.0" prefWidth="309.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" />
-                  <DatePicker fx:id="dpEndDate" prefHeight="26.0" prefWidth="310.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3" />
-                  <Label styleClass="lblInfor" text="Loại:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <ChoiceBox fx:id="cbType" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <Label prefWidth="86.0" styleClass="lblInfor" text="Giá trị tối đa:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                  <TextField fx:id="txtDiscountValue" prefWidth="148.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <TextField fx:id="txtMaxValue" prefWidth="148.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <Label styleClass="lblInfor" text="Tên tài khoản:" GridPane.rowIndex="1" />
+                  <Label styleClass="lblInfor" text="Mật khẩu:" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtUserid" editable="false" promptText="Mã tài khoản" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtUsername" promptText="Tên tài khoản" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label styleClass="lblInfor" text="Vai trò:" GridPane.rowIndex="3" />
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <children>
+                        <ToggleButton fx:id="btnStaff" mnemonicParsing="false" styleClass="btn-dog" text="Nhân viên" />
+                        <ToggleButton fx:id="btnAdmin" mnemonicParsing="false" styleClass="btn-dog" text="Quản trị viên" />
+                     </children>
+                  </HBox>
+                  <PasswordField fx:id="txtPassword" promptText="Mật khẩu" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtPasswordVisible" managed="false" promptText="Mật khẩu" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <FontAwesomeIconView fx:id="iconHide" fill="#868686" glyphName="EYE" styleClass="icon" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
+                  </FontAwesomeIconView>
                </children>
                <VBox.margin>
-                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
+                  <Insets bottom="10.0" left="30.0" right="30.0" top="15.0" />
                </VBox.margin>
             </GridPane>
             <GridPane alignment="CENTER">

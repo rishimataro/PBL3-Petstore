@@ -85,6 +85,12 @@
     -fx-text-fill: white;
 }
 
+.btn-dog:focused, .btn-cat:focused{
+    -fx-background-color: #FFC534;
+    -fx-border-color: #FFC534;
+    -fx-text-fill: white;
+}
+
 .choice-box{
     -fx-background-radius: 5;
     -fx-border-radius: 3;
@@ -100,4 +106,8 @@
 
 .shape-img{
     -fx-stroke-width: 0;
+}
+
+.icon{
+    -fx-cursor: hand;
 }

@@ -6,15 +6,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
-import javafx.stage.Modality;
 
 public class ViewFactory {
     private static final String STAFF_FXML = "";
@@ -43,19 +39,6 @@ public class ViewFactory {
             instance = new ViewFactory();
         }
         return instance;
-    }
-
-    public AnchorPane getView(String viewName) {
-        if (!views.containsKey(viewName)) {
-            try {
-                String fxmlPath = getFxmlPath(viewName);
-                AnchorPane view = new FXMLLoader(getClass().getResource(fxmlPath)).load();
-                views.put(viewName, view);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return views.get(viewName);
     }
 
     public void showWindow(String fxmlName) {
@@ -103,57 +86,6 @@ public class ViewFactory {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-    }
-
-    public void closeWindow(String windowName) {
-        Stage stage = stages.get(windowName);
-        if (stage != null) {
-            stage.close();
-            stages.remove(windowName);
-        }
-    }
-
-    private String getFxmlPath(String viewName) {
-        switch (viewName.toLowerCase()) {
-            case "staff":
-                return STAFF_FXML;
-            case "login":
-                return LOGIN_FXML;
-            case "personalinfo":
-                return PERSONAL_INFOR_FXML;
-            case "order":
-                return ORDER_FXML;
-            case "forgotpassword":
-                return FORGOT_PASSWORD_FXML;
-            case "billhistory":
-                return BILL_HISTORY_FXML;
-            case "payment":
-                return PAYMENT_FXML;
-            // Add more cases as needed
-            default:
-                throw new IllegalArgumentException("Unknown view: " + viewName);
-        }
-    }
-
-    private String getWindowTitle(String windowName) {
-        switch (windowName.toLowerCase()) {
-            case "staff":
-                return "Staff Management";
-            case "login":
-                return "Login";
-            case "personalinfo":
-                return "Personal Information";
-            case "order":
-                return "Order Management";
-            case "forgotpassword":
-                return "Forgot Password";
-            case "billhistory":
-                return "Bill History";
-            case "payment":
-                return "Payment";
-            default:
-                return windowName;
-        }
     }
 
     public void clearCache() {

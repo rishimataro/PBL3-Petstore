@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane fx:id="petInforPopup" prefHeight="350.0" prefWidth="475.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.CustomerInforController">
+<AnchorPane fx:id="petInforPopup" prefHeight="350.0" prefWidth="475.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.PetInforController">
    <children>
       <AnchorPane prefHeight="30.0" prefWidth="475.0" styleClass="nav-pane">
          <children>
@@ -33,10 +33,10 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" styleClass="btn-add1" text="Thêm" />
-            <Button mnemonicParsing="false" styleClass="btn-delete1" text="Xóa" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" styleClass="btn-fix" text="Sửa" GridPane.columnIndex="1" />
-            <Button mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="btnAdd" mnemonicParsing="false" styleClass="btn-add1" text="Thêm" />
+            <Button fx:id="btnDelete" mnemonicParsing="false" styleClass="btn-delete1" text="Xóa" GridPane.rowIndex="1" />
+            <Button fx:id="btnFix" mnemonicParsing="false" styleClass="btn-fix" text="Sửa" GridPane.columnIndex="1" />
+            <Button fx:id="btnSave" mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <GridPane layoutX="238.0" layoutY="50.0" prefHeight="201.0" prefWidth="220.0">
@@ -59,15 +59,15 @@
             <Label styleClass="lblInfor" text="Giống:" GridPane.rowIndex="3" />
             <Label styleClass="lblInfor" text="Tuổi:" GridPane.rowIndex="4" />
             <Label styleClass="lblInfor" text="Giá:" GridPane.rowIndex="5" />
-            <TextField editable="false" GridPane.columnIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="txtPetId" editable="false" GridPane.columnIndex="1" />
+            <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="txtBreed" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="txtAge" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="txtPrice" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="3.0" styleClass="hbox-btn" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                <children>
-                  <Button maxHeight="27.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="75.0" styleClass="btn-dog" text="Chó" />
-                  <Button mnemonicParsing="false" prefWidth="75.0" styleClass="btn-cat" text="Mèo" />
+                  <Button fx:id="btnDog" maxHeight="27.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="75.0" styleClass="btn-dog" text="Chó" />
+                  <Button fx:id="btnCat" mnemonicParsing="false" prefWidth="75.0" styleClass="btn-cat" text="Mèo" />
                </children>
                <GridPane.margin>
                   <Insets />
@@ -84,10 +84,10 @@
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin></Label>
-            <TextArea prefHeight="200.0" prefWidth="200.0" />
+            <TextArea fx:id="txtDescription" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </VBox>
-      <FontAwesomeIconView accessibleRole="BUTTON" fill="WHITE" glyphName="REFRESH" layoutX="200.0" layoutY="254.0" size="20">
+      <FontAwesomeIconView fx:id="btnRefresh" accessibleRole="BUTTON" fill="WHITE" glyphName="REFRESH" layoutX="200.0" layoutY="254.0" size="20">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

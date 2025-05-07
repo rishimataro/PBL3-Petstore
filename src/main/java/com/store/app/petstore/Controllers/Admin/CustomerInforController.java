@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
 
+// Admin
 public class CustomerInforController implements Initializable {
 
     @FXML
@@ -79,16 +80,6 @@ public class CustomerInforController implements Initializable {
         }
     }
 
-    public void setCustomerData(Customer customer) {
-        if (customer != null) {
-            // Set các trường dữ liệu từ customer vào form
-            txtCustomerId.setText(String.valueOf(customer.getCustomerId()));
-            txtName.setText(customer.getFullName());
-            txtPhone.setText(customer.getPhone());
-            // Thêm các trường khác nếu cần
-        }
-    }
-
     private void clearFields() {
         txtCustomerId.clear();
         txtName.clear();
@@ -138,7 +129,7 @@ public class CustomerInforController implements Initializable {
     }
 
     @FXML
-    void handleSaveCustomer(ActionEvent event) {
+    void handleSaveCustomer() {
         String name = txtName.getText();
         String phone = txtPhone.getText();
 
@@ -197,55 +188,10 @@ public class CustomerInforController implements Initializable {
         btnSave.setDisable(false);
     }
 
-    private void handleSave() {
-        String name = txtName.getText();
-        String phone = txtPhone.getText();
-
-        if (name.isEmpty() || phone.isEmpty()) {
-            ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Vui lòng nhập đầy đủ thông tin!");
-            return;
-        }
-
-        Customer customer = new Customer();
-        customer.setFullName(name);
-        customer.setPhone(phone);
-
-        if (isNewCustomer) {
-            int result = customerDAO.insert(customer);
-            if (result > 0) {
-                idCustomerCurrent = result;
-                isNewCustomer = false;
-                ControllerUtils.showAlert(AlertType.INFORMATION, "Thành công", "Thêm khách hàng thành công!");
-
-                btnAdd.setDisable(false);
-                btnDelete.setDisable(false);
-                btnFix.setDisable(false);
-                btnSave.setDisable(true);
-                txtName.setDisable(true);
-                txtPhone.setDisable(true);
-            } else {
-                ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Không thể thêm khách hàng!");
-            }
-        } else {
-            customer.setCustomerId(idCustomerCurrent);
-            if (customerDAO.update(customer) > 0) {
-                ControllerUtils.showAlert(AlertType.INFORMATION, "Thành công", "Cập nhật khách hàng thành công!");
-                txtName.setDisable(true);
-                txtPhone.setDisable(true);
-                btnAdd.setDisable(false);
-                btnDelete.setDisable(false);
-                btnFix.setDisable(false);
-                btnSave.setDisable(true);
-            } else {
-                ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Không thể cập nhật khách hàng!");
-            }
-        }
-    }
-
     private void setupButtonActions() {
         btnAdd.setOnAction(event -> handleAdd());
         btnDelete.setOnAction(event -> handleDelete());
         btnFix.setOnAction(event -> handleFix());
-        btnSave.setOnAction(event -> handleSaveCustomer(null));
+        btnSave.setOnAction(event -> handleSaveCustomer());
     }
 }

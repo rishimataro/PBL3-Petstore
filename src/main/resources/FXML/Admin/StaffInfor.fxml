@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane fx:id="staffInforPopup" prefHeight="350.0" prefWidth="475.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.ProductInforController">
+<AnchorPane fx:id="staffInforPopup" prefHeight="350.0" prefWidth="475.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.StaffInforController">
     <children>
         <AnchorPane prefHeight="30.0" prefWidth="475.0" styleClass="nav-pane">
             <children>
@@ -30,10 +30,10 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Button mnemonicParsing="false" styleClass="btn-add1" text="Thêm" />
-                <Button mnemonicParsing="false" styleClass="btn-delete1" text="Xóa" GridPane.rowIndex="1" />
-                <Button mnemonicParsing="false" styleClass="btn-fix" text="Sửa" GridPane.columnIndex="1" />
-                <Button mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Button fx:id="btnAdd" mnemonicParsing="false" styleClass="btn-add1" text="Thêm" />
+                <Button fx:id="btnDelete" mnemonicParsing="false" styleClass="btn-delete1" text="Xóa" GridPane.rowIndex="1" />
+                <Button fx:id="btnFix" mnemonicParsing="false" styleClass="btn-fix" text="Sửa" GridPane.columnIndex="1" />
+                <Button fx:id="btnSave" mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             </children>
         </GridPane>
         <GridPane layoutX="234.0" layoutY="50.0" prefHeight="286.0" prefWidth="230.0">
@@ -56,18 +56,18 @@
                 <Label styleClass="lblInfor" text="SĐT:" GridPane.rowIndex="2" />
                 <Label styleClass="lblInfor" text="Email:" GridPane.rowIndex="3" />
                 <Label styleClass="lblInfor" text="Chức vụ:" GridPane.rowIndex="4" />
-                <TextField editable="false" GridPane.columnIndex="1" />
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="txtStaffId" editable="false" GridPane.columnIndex="1" />
+                <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="txtPhone" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label styleClass="lblInfor" text="Mức lương:" GridPane.rowIndex="5" />
             <Label styleClass="lblInfor" text="Tình trạng:" GridPane.rowIndex="6" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <ChoiceBox prefHeight="27.0" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ChoiceBox prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextField fx:id="txtSalary" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ChoiceBox fx:id="cbPosition" prefHeight="27.0" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ChoiceBox fx:id="cbStatus" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             </children>
         </GridPane>
-        <FontAwesomeIconView accessibleRole="BUTTON" fill="WHITE" glyphName="REFRESH" layoutX="200.0" layoutY="254.0" size="20">
+        <FontAwesomeIconView fx:id="btnRefresh" accessibleRole="BUTTON" fill="WHITE" glyphName="REFRESH" layoutX="200.0" layoutY="254.0" size="20">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>
