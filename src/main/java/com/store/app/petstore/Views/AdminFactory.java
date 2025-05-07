@@ -1,5 +1,6 @@
 package com.store.app.petstore.Views;
 
+import com.store.app.petstore.Controllers.Admin.Statistic.OverViewController;
 import com.store.app.petstore.Controllers.Staff.CustomerInforController;
 import com.store.app.petstore.Models.Entities.Customer;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +32,7 @@ public class AdminFactory {
     private final String STAFFINFOR_FXML = "/FXML/Admin/StaffInfor.fxml";
 
     private final String STATISTIC_BESTSELLER_FXML = "/FXML/Admin/Statistics/BestSeller.fxml";
-    private final String STATISTIC_OVERVIEW_FXML = "/FXML/Admin/Statistics/Overview.fxml";
+//    private final String STATISTIC_OVERVIEW_FXML = "/FXML/Admin/Statistics/Overview.fxml";
     private final String STATISTIC_REVENUE_FXML = "/FXML/Admin/Statistics/Revenue.fxml";
 
     private final Map<String, AnchorPane> views;
@@ -87,8 +88,8 @@ public class AdminFactory {
                     stage.setTitle("Best Seller Statistics");
                     break;
                 case "overview":
-                    root = loadFXML(STATISTIC_OVERVIEW_FXML);
-                    stage.setTitle("Overview Statistics");
+                    OverViewController overViewController = new OverViewController();
+                    overViewController.show(stage);
                     break;
                 case "revenue":
                     root = loadFXML(STATISTIC_REVENUE_FXML);
@@ -271,13 +272,14 @@ public class AdminFactory {
                     currentStage.setTitle("Best Seller Statistics");
                     break;
                 case "overview":
-                    root = loadFXML(STATISTIC_OVERVIEW_FXML);
-                    currentStage.setTitle("Overview Statistics");
+                    OverViewController overViewController = new OverViewController();
+                    overViewController.show(currentStage);
                     break;
                 case "revenue":
                     root = loadFXML(STATISTIC_REVENUE_FXML);
                     currentStage.setTitle("Revenue Statistics");
                     break;
+
                 default:
                     System.err.println("Unknown FXML file: " + fxmlName);
                     return;

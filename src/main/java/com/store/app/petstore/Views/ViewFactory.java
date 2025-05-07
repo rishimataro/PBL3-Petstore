@@ -1,5 +1,6 @@
 package com.store.app.petstore.Views;
 
+import com.store.app.petstore.Controllers.Admin.Statistic.OverViewController;
 import com.store.app.petstore.Controllers.Staff.CustomerInforController;
 import com.store.app.petstore.Models.Entities.Customer;
 import javafx.fxml.FXMLLoader;
@@ -74,6 +75,10 @@ public class ViewFactory {
                     root = loadFXML(PAYMENT_FXML);
                     stage.setTitle("Payment");
                     break;
+                case "overview":
+                    OverViewController overViewController = new OverViewController();
+                    overViewController.show(stage);
+                    return ;
                 default:
                     System.err.println("Unknown FXML file: " + fxmlName);
                     return;

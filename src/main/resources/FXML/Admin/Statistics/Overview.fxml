@@ -12,276 +12,173 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../../Styles/Statistics.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <AnchorPane prefHeight="40.0" prefWidth="990.0" styleClass="nav-bar">
-         <children>
-            <HBox layoutX="529.0" spacing="10.0">
-               <children>
-                  <Button mnemonicParsing="false" prefHeight="40.0">
-                     <styleClass>
-                        <String fx:value="nav-bar-btn" />
-                        <String fx:value="underline" />
-                     </styleClass>
-                     <graphic>
-                         <VBox alignment="CENTER" spacing="1.5">
-                             <Text styleClass="nav-bar-btn-text" text="Tổng quát" textAlignment="CENTER" />
-                             <Line endX="-14" endY="3.814697265625E-6" startX="-74.5621337890625" startY="3.814697265625E-6">
-                              <styleClass>
-                                 <String fx:value="btn-underline" />
-                                 <String fx:value="active" />
-                              </styleClass>
-                           </Line>
-                         </VBox>
-                     </graphic>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="40.0">
-                     <styleClass>
-                        <String fx:value="nav-bar-btn" />
-                        <String fx:value="underline" />
-                     </styleClass>
-                     <graphic>
-                        <VBox alignment="CENTER" spacing="1.5">
-                           <children>
-                              <Text styleClass="nav-bar-btn-text" text="Doanh thu" textAlignment="CENTER" />
-                              <Line endX="-14" endY="3.814697265625E-6" startX="-74.5621337890625" startY="3.814697265625E-6">
-                                 <styleClass>
-                                    <String fx:value="btn-underline" />
-                                    <String fx:value="inactive" />
-                                 </styleClass>
-                              </Line>
-                           </children>
-                        </VBox>
-                     </graphic>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="40.0">
-                     <styleClass>
-                        <String fx:value="nav-bar-btn" />
-                        <String fx:value="underline" />
-                     </styleClass>
-                     <graphic>
-                        <VBox alignment="CENTER" spacing="1.5">
-                           <children>
-                              <Text styleClass="nav-bar-btn-text" text="Bán chạy" textAlignment="CENTER" />
-                              <Line endX="-14" endY="3.814697265625E-6" startX="-74.5621337890625" startY="3.814697265625E-6">
-                                 <styleClass>
-                                    <String fx:value="btn-underline" />
-                                    <String fx:value="inactive" />
-                                 </styleClass>
-                              </Line>
-                           </children>
-                        </VBox>
-                     </graphic>
-                  </Button>
-               </children>
-            </HBox>
-         </children>
-      </AnchorPane>
-      <HBox layoutX="20.0" layoutY="60.0" prefHeight="110.0" prefWidth="950.0" styleClass="hbox-statistic">
-         <children>
-            <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
-               <children>
-                  <Pane prefHeight="35.0" prefWidth="35.0">
-                     <children>
-                        <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35" styleClass="item-tag-icon" />
-                     </children>
-                  </Pane>
-                  <VBox prefHeight="50.0" prefWidth="162.0">
-                     <children>
-                        <Label text="Tổng doanh thu trong ngày:">
-                           <styleClass>
-                              <String fx:value="item-tag-text" />
-                              <String fx:value="title" />
-                           </styleClass>
-                        </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label prefHeight="17.0" prefWidth="131.0" text="0.00">
-                                 <styleClass>
-                                    <String fx:value="item-tag-text" />
-                                    <String fx:value="number" />
-                                 </styleClass>
-                              </Label>
-                              <Label text="VND">
-                                 <styleClass>
-                                    <String fx:value="item-tag-text" />
-                                    <String fx:value="number" />
-                                 </styleClass>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label text="04/06/2025" textAlignment="RIGHT">
-                                 <styleClass>
-                                    <String fx:value="item-tag-text" />
-                                    <String fx:value="date" />
-                                 </styleClass></Label>
-                           </children>
-                        </VBox>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-            <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
-               <children>
-                  <Pane prefHeight="35.0" prefWidth="35.0">
-                     <children>
-                        <FontAwesomeIconView glyphName="PAW" layoutX="-4.0" layoutY="28.0" size="35" styleClass="item-tag-icon" />
-                     </children>
-                  </Pane>
-                  <VBox prefHeight="50.0" prefWidth="162.0">
-                     <children>
-                        <Label text="Tổng thú cưng đã bán trong ngày:">
-                           <styleClass>
-                              <String fx:value="item-tag-text" />
-                              <String fx:value="title" />
-                           </styleClass>
-                        </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label prefHeight="17.0" prefWidth="141.0" text="0">
-                                 <styleClass>
-                                    <String fx:value="item-tag-text" />
-                                    <String fx:value="number" />
-                                 </styleClass>
-                              </Label>
-                              <Label text="con">
-                                 <styleClass>
-                                    <String fx:value="item-tag-text" />
-                                    <String fx:value="number" />
-                                 </styleClass>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label text="04/06/2025" textAlignment="RIGHT">
-                                 <styleClass>
-                                    <String fx:value="item-tag-text" />
-                                    <String fx:value="date" />
-                                 </styleClass>
-                              </Label>
-                           </children>
-                        </VBox>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-            <HBox layoutX="260.0" layoutY="31.0" prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
-               <children>
-                  <Pane prefHeight="35.0" prefWidth="35.0">
-                     <children>
-                        <FontAwesomeIconView glyphName="ARCHIVE" layoutX="-4.0" layoutY="29.0" size="35" styleClass="item-tag-icon" />
-                     </children>
-                  </Pane>
-                  <VBox prefHeight="50.0" prefWidth="162.0">
-                     <children>
-                        <Label text="Tổng sản phẩm đã bán trong ngày:">
-                           <styleClass>
-                              <String fx:value="item-tag-text" />
-                              <String fx:value="title" />
-                           </styleClass>
-                        </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label prefHeight="17.0" prefWidth="141.0" text="0">
-                                 <styleClass>
-                                    <String fx:value="item-tag-text" />
-                                    <String fx:value="number" />
-                                 </styleClass>
-                              </Label>
-                              <Label prefHeight="17.0" prefWidth="89.0" text="sản phẩm">
-                                 <styleClass>
-                                    <String fx:value="item-tag-text" />
-                                    <String fx:value="number" />
-                                 </styleClass>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label text="04/06/2025" textAlignment="RIGHT">
-                                 <styleClass>
-                                    <String fx:value="item-tag-text" />
-                                    <String fx:value="date" />
-                                 </styleClass>
-                              </Label>
-                           </children>
-                        </VBox>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-            <HBox layoutX="489.0" layoutY="31.0" prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
-               <children>
-                  <Pane prefHeight="35.0" prefWidth="35.0">
-                     <children>
-                        <FontAwesomeIconView glyphName="CALCULATOR" layoutX="-4.0" layoutY="29.0" size="35" styleClass="item-tag-icon" />
-                     </children>
-                  </Pane>
-                  <VBox prefHeight="50.0" prefWidth="162.0">
-                     <children>
-                        <Label text="Tổng hóa đơn trong ngày:">
-                           <styleClass>
-                              <String fx:value="item-tag-text" />
-                              <String fx:value="title" />
-                           </styleClass>
-                        </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label prefHeight="17.0" prefWidth="121.0" text="0">
-                                 <styleClass>
-                                    <String fx:value="item-tag-text" />
-                                    <String fx:value="number" />
-                                 </styleClass>
-                              </Label>
-                              <Label prefHeight="17.0" prefWidth="53.0" text="hóa đơn">
-                                 <styleClass>
-                                    <String fx:value="item-tag-text" />
-                                    <String fx:value="number" />
-                                 </styleClass>
-                              </Label>
-                           </children>
-                        </HBox>
-                        <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label text="04/06/2025" textAlignment="RIGHT">
-                                 <styleClass>
-                                    <String fx:value="item-tag-text" />
-                                    <String fx:value="date" />
-                                 </styleClass>
-                              </Label>
-                           </children>
-                        </VBox>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-         </children>
-      </HBox>
-      <HBox layoutX="20.0" layoutY="180.0" prefHeight="240.0" prefWidth="950.0" spacing="10.0">
-         <children>
-            <VBox prefHeight="200.0" prefWidth="570.0" styleClass="main-statistic-tag">
-               <children>
-                  <Label styleClass="main-statistic-text" text="Biểu đồ thống kê tổng quát" />
-               </children>
+<AnchorPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="root"
+            stylesheets="@../../../Styles/Statistics.css" xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.store.app.petstore.Controllers.Admin.Statistic.OverViewController">
+    <HBox layoutX="20.0" layoutY="60.0" prefHeight="110.0" maxWidth="Infinity" styleClass="hbox-statistic">
+        <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
+            <Pane prefHeight="35.0" prefWidth="35.0">
+                <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
+                                     styleClass="item-tag-icon"/>
+            </Pane>
+            <VBox prefHeight="50.0" prefWidth="162.0">
+                <Label text="Tổng doanh thu trong ngày:">
+                    <styleClass>
+                        <String fx:value="item-tag-text"/>
+                        <String fx:value="title"/>
+                    </styleClass>
+                </Label>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <Label prefHeight="17.0" prefWidth="131.0" text="0.00">
+                        <styleClass>
+                            <String fx:value="item-tag-text"/>
+                            <String fx:value="number"/>
+                        </styleClass>
+                    </Label>
+                    <Label text="VND">
+                        <styleClass>
+                            <String fx:value="item-tag-text"/>
+                            <String fx:value="number"/>
+                        </styleClass>
+                    </Label>
+                </HBox>
+                <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
+                    <Label text="04/06/2025" textAlignment="RIGHT">
+                        <styleClass>
+                            <String fx:value="item-tag-text"/>
+                            <String fx:value="date"/>
+                        </styleClass>
+                    </Label>
+                </VBox>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="370.0" styleClass="main-statistic-tag">
-               <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Label prefHeight="21.0" prefWidth="270.0" styleClass="main-statistic-text" text="Tổng hóa đơn gần đây" />
-                        <ChoiceBox prefHeight="30.0" prefWidth="80.0">
-                           <styleClass>
-                              <String fx:value="choice-box-filter" />
-                              <String fx:value="yellow" />
-                           </styleClass></ChoiceBox>
-                     </children>
-                  </HBox>
-               </children>
+        </HBox>
+        <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
+            <Pane prefHeight="35.0" prefWidth="35.0">
+                <FontAwesomeIconView glyphName="PAW" layoutX="-4.0" layoutY="28.0" size="35"
+                                     styleClass="item-tag-icon"/>
+            </Pane>
+            <VBox prefHeight="50.0" prefWidth="162.0">
+                <Label text="Tổng thú cưng đã bán trong ngày:">
+                    <styleClass>
+                        <String fx:value="item-tag-text"/>
+                        <String fx:value="title"/>
+                    </styleClass>
+                </Label>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Label prefHeight="17.0" prefWidth="141.0" text="0">
+                            <styleClass>
+                                <String fx:value="item-tag-text"/>
+                                <String fx:value="number"/>
+                            </styleClass>
+                        </Label>
+                        <Label text="con">
+                            <styleClass>
+                                <String fx:value="item-tag-text"/>
+                                <String fx:value="number"/>
+                            </styleClass>
+                        </Label>
+                    </children>
+                </HBox>
+                <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
+                    <Label text="04/06/2025" textAlignment="RIGHT">
+                        <styleClass>
+                            <String fx:value="item-tag-text"/>
+                            <String fx:value="date"/>
+                        </styleClass>
+                    </Label>
+                </VBox>
             </VBox>
-         </children>
-      </HBox>
-   </children>
+        </HBox>
+        <HBox layoutX="260.0" layoutY="31.0" prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
+            <Pane prefHeight="35.0" prefWidth="35.0">
+                <FontAwesomeIconView glyphName="ARCHIVE" layoutX="-4.0" layoutY="29.0" size="35"
+                                     styleClass="item-tag-icon"/>
+            </Pane>
+            <VBox prefHeight="50.0" prefWidth="162.0">
+                <Label text="Tổng sản phẩm đã bán trong ngày:">
+                    <styleClass>
+                        <String fx:value="item-tag-text"/>
+                        <String fx:value="title"/>
+                    </styleClass>
+                </Label>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <Label prefHeight="17.0" prefWidth="141.0" text="0">
+                        <styleClass>
+                            <String fx:value="item-tag-text"/>
+                            <String fx:value="number"/>
+                        </styleClass>
+                    </Label>
+                    <Label prefHeight="17.0" prefWidth="89.0" text="sản phẩm">
+                        <styleClass>
+                            <String fx:value="item-tag-text"/>
+                            <String fx:value="number"/>
+                        </styleClass>
+                    </Label>
+                </HBox>
+                <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
+                    <Label text="04/06/2025" textAlignment="RIGHT">
+                        <styleClass>
+                            <String fx:value="item-tag-text"/>
+                            <String fx:value="date"/>
+                        </styleClass>
+                    </Label>
+                </VBox>
+            </VBox>
+        </HBox>
+        <HBox layoutX="489.0" layoutY="31.0" prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
+            <Pane prefHeight="35.0" prefWidth="35.0">
+                <FontAwesomeIconView glyphName="CALCULATOR" layoutX="-4.0" layoutY="29.0" size="35"
+                                     styleClass="item-tag-icon"/>
+            </Pane>
+            <VBox prefHeight="50.0" prefWidth="162.0">
+                <Label text="Tổng hóa đơn trong ngày:">
+                    <styleClass>
+                        <String fx:value="item-tag-text"/>
+                        <String fx:value="title"/>
+                    </styleClass>
+                </Label>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <Label prefHeight="17.0" prefWidth="121.0" text="0">
+                        <styleClass>
+                            <String fx:value="item-tag-text"/>
+                            <String fx:value="number"/>
+                        </styleClass>
+                    </Label>
+                    <Label prefHeight="17.0" prefWidth="53.0" text="hóa đơn">
+                        <styleClass>
+                            <String fx:value="item-tag-text"/>
+                            <String fx:value="number"/>
+                        </styleClass>
+                    </Label>
+                </HBox>
+                <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
+                    <Label text="04/06/2025" textAlignment="RIGHT">
+                        <styleClass>
+                            <String fx:value="item-tag-text"/>
+                            <String fx:value="date"/>
+                        </styleClass>
+                    </Label>
+                </VBox>
+            </VBox>
+        </HBox>
+    </HBox>
+    <HBox layoutX="20.0" layoutY="180.0" prefHeight="240.0" prefWidth="950.0" spacing="10.0">
+        <VBox prefHeight="200.0" prefWidth="570.0" styleClass="main-statistic-tag">
+            <Label styleClass="main-statistic-text" text="Biểu đồ thống kê tổng quát"/>
+        </VBox>
+        <VBox prefHeight="200.0" prefWidth="370.0" styleClass="main-statistic-tag">
+            <HBox prefHeight="100.0" prefWidth="200.0">
+                <Label prefHeight="21.0" prefWidth="270.0" styleClass="main-statistic-text"
+                       text="Tổng hóa đơn gần đây"/>
+                <ChoiceBox prefHeight="30.0" prefWidth="80.0">
+                    <styleClass>
+                        <String fx:value="choice-box-filter"/>
+                        <String fx:value="yellow"/>
+                    </styleClass>
+                </ChoiceBox>
+            </HBox>
+        </VBox>
+    </HBox>
 </AnchorPane>
