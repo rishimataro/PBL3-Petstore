@@ -1,40 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import java.lang.String?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="root"
-            stylesheets="@../../../Styles/Statistics.css" xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane fx:id="rootPane" styleClass="root" stylesheets="@../../../Styles/Statistics.css" 
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.store.app.petstore.Controllers.Admin.Statistic.OverViewController">
-    <HBox maxHeight="Infinity" maxWidth="Infinity" styleClass="hbox-statistic" spacing="20">
-        <HBox prefHeight="100.0" prefWidth="250.0" styleClass="statistic-item-tag revenue">
-            <Pane prefHeight="50.0" prefWidth="50.0">
-                <FontAwesomeIconView glyphName="DOLLAR" layoutX="8.0" layoutY="38.0" size="40"
-                                     styleClass="item-tag-icon"/>
-            </Pane>
-            <VBox prefHeight="100.0" prefWidth="180.0" spacing="5">
-                <Label text="TỔNG DOANH THU" styleClass="item-tag-title">
-                    <graphic>
-                        <Line endX="100" stroke="#01C4DA" strokeWidth="2"/>
-                    </graphic>
-                </Label>
-                <HBox alignment="CENTER_LEFT" spacing="5">
-                    <Label text="0.00" styleClass="item-tag-number"/>
-                    <Label text="VND" styleClass="item-tag-unit"/>
+    <VBox fx:id="mainContainer" AnchorPane.topAnchor="20" AnchorPane.rightAnchor="20" 
+          AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" spacing="20">
+        
+        <!-- Stats Cards Row -->
+        <HBox fx:id="statsRow" spacing="20" HBox.hgrow="ALWAYS">
+            <VBox fx:id="revenueCard" styleClass="stat-card" HBox.hgrow="ALWAYS" 
+                  minWidth="200" maxWidth="1.7976931348623157E308" spacing="10">
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <FontAwesomeIconView fx:id="revenueIcon" glyphName="DOLLAR" size="30"/>
+                    <VBox spacing="5">
+                        <Label fx:id="revenueTitle" text="TOTAL REVENUE" styleClass="card-title"/>
+                        <HBox alignment="BASELINE_CENTER" spacing="5">
+                            <Label fx:id="revenueValue" text="0.00" styleClass="card-value"/>
+                            <Label fx:id="revenueUnit" text="VND" styleClass="card-unit"/>
+                        </HBox>
+                    </VBox>
                 </HBox>
-                <Label text="Hôm nay, 04/06/2025" styleClass="item-tag-date"/>
+                <Label fx:id="revenueDate" text="Today, 04/06/2025" styleClass="card-date"/>
             </VBox>
-        </HBox>
         <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
             <Pane prefHeight="35.0" prefWidth="35.0">
                 <FontAwesomeIconView glyphName="PAW" layoutX="-4.0" layoutY="28.0" size="35"

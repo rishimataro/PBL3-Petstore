@@ -1,8 +1,44 @@
-*{
-    -fx-font-family: Inter;
+.root {
+    -fx-font-family: "Inter";
+    -fx-background-color: #F5F7FA;
+    -fx-padding: 0;
 }
-.root{
-    -fx-background-color: #FFFFFF;
+
+.main-container {
+    -fx-spacing: 20;
+    -fx-padding: 0;
+}
+
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-min-height: 120;
+    -fx-max-width: infinity;
+}
+
+.card-title {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+    -fx-font-weight: bold;
+}
+
+.card-value {
+    -fx-font-size: 24px;
+    -fx-text-fill: #111827;
+    -fx-font-weight: bold;
+}
+
+.card-unit {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6B7280;
+}
+
+.card-date {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9CA3AF;
+    -fx-padding: 5 0 0 0;
 }
 .nav-bar{
     -fx-background-color: #01C4DA;
