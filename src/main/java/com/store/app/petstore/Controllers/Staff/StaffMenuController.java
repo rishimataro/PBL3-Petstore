@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -100,7 +101,7 @@ public class StaffMenuController implements Initializable {
             Circle clip = new Circle(size / 2, size / 2, size / 2);
             imageView.setClip(clip);
 
-            javafx.scene.image.WritableImage clippedImage = imageView.snapshot(null, null);
+            WritableImage clippedImage = imageView.snapshot(null, null);
 
             userImage.setFill(new ImagePattern(clippedImage));
         } catch (Exception ex) {

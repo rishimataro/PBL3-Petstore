@@ -89,9 +89,7 @@ public class AdminMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        sessionManager = new SessionManager();
-        currentUser = sessionManager.getCurrentUser();
-
+        currentUser = SessionManager.getCurrentUser();
         setupUserName();
         setupUserImage();
         setMenu();
@@ -100,13 +98,20 @@ public class AdminMenuController implements Initializable {
     private void setupUserName() {
         if (currentUser != null) {
             usernameLabel.setText(currentUser.getUsername());
+            nameLabel.setText(currentUser.getUsername());
         } else {
+            usernameLabel.setText("Chưa đăng nhập");
             nameLabel.setText("Chưa cập nhật thông tin");
         }
     }
 
     private void setupUserImage() {
         try {
+            if (currentUser == null) {
+                userImage.setFill(javafx.scene.paint.Color.GRAY);
+                return;
+            }
+
             String userImagePath = currentUser.getImageUrl();
 
             String imageUrl = null;
@@ -145,48 +150,62 @@ public class AdminMenuController implements Initializable {
     }
 
     private void setMenu() {
-        Stage currentStage = (Stage) root.getScene().getWindow();
         //Dashboard
         menuHome.setOnAction(e -> {
-            AdminFactory.getInstance().switchContent("dashboard", currentStage);
+            Stage currentStage = (Stage) root.getScene().getWindow();
+           AdminFactory.getInstance().switchContent("dashboard", currentStage);
+        });
+
+        //Doanh thu
+        menuRevenue.setOnAction(e -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            AdminFactory.getInstance().switchContent("invoicemanagement", currentStage);
         });
 
         //Management
         menuItemAccounts.setOnAction(e -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("usermanagement", currentStage);
         });
         menuItemPets.setOnAction(e -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("petmanagement", currentStage);
         });
         menuItemProducts.setOnAction(e -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("productmanagement", currentStage);
         });
         menuItemDiscounts.setOnAction(e -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("discountmanagement", currentStage);
         });
         menuItemCustomers.setOnAction(e -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("customermanagement", currentStage);
         });
         menuItemStaff.setOnAction(e -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("staffmanagement", currentStage);
         });
 
         //Statistics
         menuItemOverview.setOnAction(e -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("overview", currentStage);
         });
 
+        menuItemBestSelling.setOnAction(e -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            AdminFactory.getInstance().switchContent("bestselling", currentStage);
+        });
+
         menuItemRevenue.setOnAction(e -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("revenue", currentStage);
         });
 
-        menuItemBestSelling.setOnAction(e -> {
-            AdminFactory.getInstance().switchContent("bestseller", currentStage);
-        });
-
-        menuLogout.setOnAction(e -> {
-            handleLogout(null);
-        });
+        //Logout
+        menuLogout.setOnAction(e -> handleLogout(null));
     }
 
     @FXML

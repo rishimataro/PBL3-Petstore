@@ -22,6 +22,7 @@ public class AdminFactory {
     private final String PETMANAGEMENT_FXML = "/FXML/Admin/PetManagement.fxml";
     private final String PRODUCTMANAGEMENT_FXML = "/FXML/Admin/ProductManagement.fxml";
     private final String STAFFMANAGEMENT_FXML = "/FXML/Admin/StaffManagement.fxml";
+    private final String INVOICEMANAGEMENT_FXML = "/FXML/Admin/InvoiceManagement.fxml";
 
     private final String USERTINFOR_FXML = "/FXML/Admin/UserInfor.fxml";
     private final String CUSTOMERINFOR_FXML = "/FXML/Admin/CustomerInfor.fxml";
@@ -81,6 +82,10 @@ public class AdminFactory {
                 case "staffmanagement":
                     root = loadFXML(STAFFMANAGEMENT_FXML);
                     stage.setTitle("Staff Management");
+                    break;
+                case "invoicemanagement":
+                    root = loadFXML(INVOICEMANAGEMENT_FXML);
+                    stage.setTitle("Invoice Management");
                     break;
                 case "bestseller":
                     root = loadFXML(STATISTIC_BESTSELLER_FXML);
@@ -277,6 +282,10 @@ public class AdminFactory {
                 case "revenue":
                     root = loadFXML(STATISTIC_REVENUE_FXML);
                     currentStage.setTitle("Revenue Statistics");
+                    break;
+                case "invoicemanagement":
+                    root = loadFXML(INVOICEMANAGEMENT_FXML);
+                    currentStage.setTitle("Invoice Management");
                     break;
                 default:
                     System.err.println("Unknown FXML file: " + fxmlName);

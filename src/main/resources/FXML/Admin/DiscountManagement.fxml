@@ -4,9 +4,6 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -14,41 +11,7 @@
 
 <AnchorPane prefHeight="442.0" prefWidth="990.0" stylesheets="@../../Styles/Admin/AdminCommon.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXML.Admin.DiscountManagement">
    <children>
-      <MenuBar prefHeight="40.0" prefWidth="990.0" styleClass="top-nav">
-        <menus>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Thú cưng">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Sản phẩm">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Khuyến mãi">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Khách hàng">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Action 1" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Nhân viên">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Action 1" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Tài khoản">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Action 1" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <AnchorPane layoutY="42.0" prefHeight="400.0" prefWidth="990.0" styleClass="search-section">
+      <AnchorPane layoutY="42.0" prefHeight="442.0" prefWidth="990.0" styleClass="search-section" AnchorPane.topAnchor="0.0">
          <children>
             <TextField layoutX="13.0" layoutY="15.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm khuyến mãi" styleClass="find-textfield" />
             <FontAwesomeIconView glyphName="SEARCH" layoutX="24.0" layoutY="34.0" size="13" styleClass="icon" />
@@ -57,7 +20,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </FontAwesomeIconView>
-            <TableView layoutX="13.0" layoutY="53.0" prefHeight="340.0" prefWidth="965.0">
+            <TableView layoutX="13.0" layoutY="53.0" prefHeight="380.0" prefWidth="965.0">
               <columns>
                 <TableColumn prefWidth="47.99997043609619" styleClass="stt-column" text="ID" />
                 <TableColumn prefWidth="265.6000175476074" text="Tên khuyến mãi" />

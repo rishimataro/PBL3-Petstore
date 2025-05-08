@@ -69,7 +69,7 @@
     -fx-font-weight: bold;
     -fx-border-color: #FFC534;
     -fx-border-radius: 3;
-    -fx-max-width: 95;
+    -fx-max-width: 100;
     -fx-max-height: 25;
     -fx-cursor: hand;
 }
@@ -111,3 +111,4 @@
 .icon{
     -fx-cursor: hand;
 }
+

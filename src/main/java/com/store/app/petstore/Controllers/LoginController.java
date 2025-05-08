@@ -5,6 +5,7 @@ import com.store.app.petstore.DAO.StaffDAO;
 import com.store.app.petstore.Models.Entities.User;
 import com.store.app.petstore.Models.Entities.Staff;
 import com.store.app.petstore.Sessions.SessionManager;
+import com.store.app.petstore.Views.AdminFactory;
 import com.store.app.petstore.Views.ViewFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -147,10 +148,9 @@ public class LoginController implements Initializable {
 
             if(user.getRole().equals(User.ROLE_ADMIN)) {
                 idAdminCurrent = user.getUserId();
-                ViewFactory.getInstance().switchContent("admin", currentStage);
+                AdminFactory.getInstance().switchContent("invoicemanagement", currentStage);
             } else if(user.getRole().equals(User.ROLE_USER)) {
                 idStaffCurrent = user.getUserId();
-                // Lấy thông tin Staff và lưu vào session
                 Staff staff = staffDAO.findByUserId(user.getUserId());
                 if (staff != null) {
                     sessionManager.setCurrentStaff(staff);
