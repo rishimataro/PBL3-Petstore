@@ -16,41 +16,23 @@
             stylesheets="@../../../Styles/Statistics.css" xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.store.app.petstore.Controllers.Admin.Statistic.OverViewController">
-    <HBox maxHeight="Infinity" maxWidth="Infinity" styleClass="hbox-statistic">
-        <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
-            <Pane prefHeight="35.0" prefWidth="35.0">
-                <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
+    <HBox maxHeight="Infinity" maxWidth="Infinity" styleClass="hbox-statistic" spacing="20">
+        <HBox prefHeight="100.0" prefWidth="250.0" styleClass="statistic-item-tag revenue">
+            <Pane prefHeight="50.0" prefWidth="50.0">
+                <FontAwesomeIconView glyphName="DOLLAR" layoutX="8.0" layoutY="38.0" size="40"
                                      styleClass="item-tag-icon"/>
             </Pane>
-            <VBox prefHeight="50.0" prefWidth="162.0">
-                <Label text="Tổng doanh thu trong ngày:">
-                    <styleClass>
-                        <String fx:value="item-tag-text"/>
-                        <String fx:value="title"/>
-                    </styleClass>
+            <VBox prefHeight="100.0" prefWidth="180.0" spacing="5">
+                <Label text="TỔNG DOANH THU" styleClass="item-tag-title">
+                    <graphic>
+                        <Line endX="100" stroke="#01C4DA" strokeWidth="2"/>
+                    </graphic>
                 </Label>
-                <HBox prefHeight="100.0" prefWidth="200.0">
-                    <Label prefHeight="17.0" prefWidth="131.0" text="0.00">
-                        <styleClass>
-                            <String fx:value="item-tag-text"/>
-                            <String fx:value="number"/>
-                        </styleClass>
-                    </Label>
-                    <Label text="VND">
-                        <styleClass>
-                            <String fx:value="item-tag-text"/>
-                            <String fx:value="number"/>
-                        </styleClass>
-                    </Label>
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="0.00" styleClass="item-tag-number"/>
+                    <Label text="VND" styleClass="item-tag-unit"/>
                 </HBox>
-                <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
-                    <Label text="04/06/2025" textAlignment="RIGHT">
-                        <styleClass>
-                            <String fx:value="item-tag-text"/>
-                            <String fx:value="date"/>
-                        </styleClass>
-                    </Label>
-                </VBox>
+                <Label text="Hôm nay, 04/06/2025" styleClass="item-tag-date"/>
             </VBox>
         </HBox>
         <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
