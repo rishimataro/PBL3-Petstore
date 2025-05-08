@@ -16,7 +16,7 @@
             stylesheets="@../../../Styles/Statistics.css" xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.store.app.petstore.Controllers.Admin.Statistic.OverViewController">
-    <HBox layoutX="20.0" layoutY="60.0" prefHeight="110.0" maxWidth="Infinity" styleClass="hbox-statistic">
+    <HBox maxHeight="Infinity" maxWidth="Infinity" styleClass="hbox-statistic">
         <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
             <Pane prefHeight="35.0" prefWidth="35.0">
                 <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
