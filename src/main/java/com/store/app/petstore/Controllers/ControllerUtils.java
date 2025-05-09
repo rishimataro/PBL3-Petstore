@@ -15,7 +15,7 @@ public class ControllerUtils {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
-        
+
         // Lấy window hiện tại
         Window window = alert.getDialogPane().getScene().getWindow();
         if (window instanceof Stage) {
@@ -27,7 +27,7 @@ public class ControllerUtils {
             // Đặt style cho stage
             stage.initStyle(StageStyle.DECORATED);
         }
-        
+
         alert.showAndWait();
     }
 
@@ -44,7 +44,7 @@ public class ControllerUtils {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
-        
+
         // Lấy window hiện tại
         Window window = alert.getDialogPane().getScene().getWindow();
         if (window instanceof Stage) {
@@ -56,7 +56,7 @@ public class ControllerUtils {
             // Đặt style cho stage
             stage.initStyle(StageStyle.DECORATED);
         }
-        
+
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == ButtonType.OK;
     }
@@ -65,5 +65,47 @@ public class ControllerUtils {
         java.util.Date date = new java.util.Date();
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(date);
+    }
+
+    public static void showErrorAndWait(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+
+        // Get the current window
+        Window window = alert.getDialogPane().getScene().getWindow();
+        if (window instanceof Stage) {
+            Stage stage = (Stage) window;
+            // Ensure the alert is always on top
+            stage.setAlwaysOnTop(true);
+            // Set modality to block interaction with other windows
+            stage.initModality(Modality.APPLICATION_MODAL);
+            // Set style for the stage
+            stage.initStyle(StageStyle.DECORATED);
+        }
+
+        alert.showAndWait();
+    }
+
+    public static void showInformationAndWait(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+
+        // Get the current window
+        Window window = alert.getDialogPane().getScene().getWindow();
+        if (window instanceof Stage) {
+            Stage stage = (Stage) window;
+            // Ensure the alert is always on top
+            stage.setAlwaysOnTop(true);
+            // Set modality to block interaction with other windows
+            stage.initModality(Modality.APPLICATION_MODAL);
+            // Set style for the stage
+            stage.initStyle(StageStyle.DECORATED);
+        }
+
+        alert.showAndWait();
     }
 }

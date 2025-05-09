@@ -23,6 +23,8 @@ public class AdminFactory {
     private final String PRODUCTMANAGEMENT_FXML = "/FXML/Admin/ProductManagement.fxml";
     private final String STAFFMANAGEMENT_FXML = "/FXML/Admin/StaffManagement.fxml";
     private final String INVOICEMANAGEMENT_FXML = "/FXML/Admin/InvoiceManagement.fxml";
+    private final String INVENTORY_FXML = "/FXML/Admin/Inventory.fxml";
+    private final String CUSTOMERREPORT_FXML = "/FXML/Admin/CustomerReport.fxml";
 
     private final String USERTINFOR_FXML = "/FXML/Admin/UserInfor.fxml";
     private final String CUSTOMERINFOR_FXML = "/FXML/Admin/CustomerInfor.fxml";
@@ -57,47 +59,55 @@ public class AdminFactory {
             switch (fxmlName.toLowerCase()) {
                 case "dashboard":
                     root = loadFXML(DASHBOARD_FXML);
-                    stage.setTitle("Admin Dashboard");
+                    stage.setTitle("Bảng điều khiển Admin");
                     break;
                 case "usermanagement":
                     root = loadFXML(USERMANAGEMENT_FXML);
-                    stage.setTitle("Account Management");
+                    stage.setTitle("Quản lý tài khoản");
                     break;
                 case "customermanagement":
                     root = loadFXML(CUSTOMERMANAGEMENT_FXML);
-                    stage.setTitle("Customer Management");
+                    stage.setTitle("Quản lý khách hàng");
                     break;
                 case "discountmanagement":
                     root = loadFXML(DISCOUNTMANAGEMENT_FXML);
-                    stage.setTitle("Discount Management");
+                    stage.setTitle("Quản lý khuyến mãi");
                     break;
                 case "petmanagement":
                     root = loadFXML(PETMANAGEMENT_FXML);
-                    stage.setTitle("Pet Management");
+                    stage.setTitle("Quản lý thú cưng");
                     break;
                 case "productmanagement":
                     root = loadFXML(PRODUCTMANAGEMENT_FXML);
-                    stage.setTitle("Product Management");
+                    stage.setTitle("Quản lý sản phẩm");
                     break;
                 case "staffmanagement":
                     root = loadFXML(STAFFMANAGEMENT_FXML);
-                    stage.setTitle("Staff Management");
+                    stage.setTitle("Quản lý nhân viên");
                     break;
                 case "invoicemanagement":
                     root = loadFXML(INVOICEMANAGEMENT_FXML);
-                    stage.setTitle("Invoice Management");
+                    stage.setTitle("Quản lý hóa đơn");
                     break;
-                case "bestseller":
+                case "bestselling":
                     root = loadFXML(STATISTIC_BESTSELLER_FXML);
-                    stage.setTitle("Best Seller Statistics");
+                    stage.setTitle("Thống kê bán chạy");
                     break;
                 case "overview":
                     root = loadFXML(STATISTIC_OVERVIEW_FXML);
-                    stage.setTitle("Overview Statistics");
+                    stage.setTitle("Thống kê tổng quan");
                     break;
                 case "revenue":
                     root = loadFXML(STATISTIC_REVENUE_FXML);
-                    stage.setTitle("Revenue Statistics");
+                    stage.setTitle("Thống kê doanh thu");
+                    break;
+                case "inventory":
+                    root = loadFXML(INVENTORY_FXML);
+                    stage.setTitle("Báo cáo tồn kho");
+                    break;
+                case "customerreport":
+                    root = loadFXML(CUSTOMERREPORT_FXML);
+                    stage.setTitle("Báo cáo khách hàng");
                     break;
                 default:
                     System.err.println("Unknown FXML file: " + fxmlName);
@@ -245,47 +255,55 @@ public class AdminFactory {
             switch (fxmlName.toLowerCase()) {
                 case "dashboard":
                     root = loadFXML(DASHBOARD_FXML);
-                    currentStage.setTitle("Admin Dashboard");
+                    currentStage.setTitle("Bảng điều khiển Admin");
                     break;
                 case "usermanagement":
                     root = loadFXML(USERMANAGEMENT_FXML);
-                    currentStage.setTitle("Account Management");
+                    currentStage.setTitle("Quản lý tài khoản");
                     break;
                 case "customermanagement":
                     root = loadFXML(CUSTOMERMANAGEMENT_FXML);
-                    currentStage.setTitle("Customer Management");
+                    currentStage.setTitle("Quản lý khách hàng");
                     break;
                 case "discountmanagement":
                     root = loadFXML(DISCOUNTMANAGEMENT_FXML);
-                    currentStage.setTitle("Discount Management");
+                    currentStage.setTitle("Quản lý khuyến mãi");
                     break;
                 case "petmanagement":
                     root = loadFXML(PETMANAGEMENT_FXML);
-                    currentStage.setTitle("Pet Management");
+                    currentStage.setTitle("Quản lý thú cưng");
                     break;
                 case "productmanagement":
                     root = loadFXML(PRODUCTMANAGEMENT_FXML);
-                    currentStage.setTitle("Product Management");
+                    currentStage.setTitle("Quản lý sản phẩm");
                     break;
                 case "staffmanagement":
                     root = loadFXML(STAFFMANAGEMENT_FXML);
-                    currentStage.setTitle("Staff Management");
+                    currentStage.setTitle("Quản lý nhân viên");
                     break;
-                case "bestseller":
+                case "bestselling":
                     root = loadFXML(STATISTIC_BESTSELLER_FXML);
-                    currentStage.setTitle("Best Seller Statistics");
+                    currentStage.setTitle("Thống kê bán chạy");
                     break;
                 case "overview":
                     root = loadFXML(STATISTIC_OVERVIEW_FXML);
-                    currentStage.setTitle("Overview Statistics");
+                    currentStage.setTitle("Thống kê tổng quan");
                     break;
                 case "revenue":
                     root = loadFXML(STATISTIC_REVENUE_FXML);
-                    currentStage.setTitle("Revenue Statistics");
+                    currentStage.setTitle("Thống kê doanh thu");
                     break;
                 case "invoicemanagement":
                     root = loadFXML(INVOICEMANAGEMENT_FXML);
-                    currentStage.setTitle("Invoice Management");
+                    currentStage.setTitle("Quản lý hóa đơn");
+                    break;
+                case "inventory":
+                    root = loadFXML(INVENTORY_FXML);
+                    currentStage.setTitle("Báo cáo tồn kho");
+                    break;
+                case "customerreport":
+                    root = loadFXML(CUSTOMERREPORT_FXML);
+                    currentStage.setTitle("Báo cáo khách hàng");
                     break;
                 default:
                     System.err.println("Unknown FXML file: " + fxmlName);

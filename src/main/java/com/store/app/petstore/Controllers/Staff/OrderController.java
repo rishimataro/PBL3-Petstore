@@ -38,7 +38,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class OrderController implements Initializable {
-    private SessionManager sessionManager = new SessionManager();
+    private final SessionManager sessionManager = new SessionManager();
     
     @FXML
     private ChoiceBox<String> categoryChoiceBox;
@@ -87,13 +87,13 @@ public class OrderController implements Initializable {
 
     @FXML
     private AnchorPane orderContentPane;
-    private VBox orderVBox = new VBox(10);
+    private final VBox orderVBox = new VBox(10);
 
     @FXML
     private ScrollPane orderScrollPane;
 
     private final FlowPane flowPane = new FlowPane();
-    private Map<Item, AnchorPane> itemPaneCache = new HashMap<>();
+    private final Map<Item, AnchorPane> itemPaneCache = new HashMap<>();
     private int currentColumnCount = 0;
     private final List<Item> itemList = new ArrayList<>();
     private final PauseTransition resizeDebouncer = new PauseTransition(Duration.millis(300));
@@ -109,7 +109,7 @@ public class OrderController implements Initializable {
         setupGridLayout();
         configureScrollPane();
         loadItemsByCategory("Thú cưng");
-        setupGridColumnBinding();
+//        setupGridColumnBinding();
         setupClearSearchIcon();
         setupDiscountHandling();
         setupButtonActions();
@@ -119,7 +119,7 @@ public class OrderController implements Initializable {
         orderScrollPane.setContent(orderVBox);
         loadOrderFromSession();
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() >= 2 || newValue.isEmpty()) {
+            if (newValue.length() != 1) {
                 searchDebouncer.playFromStart();
             }
         });
@@ -208,6 +208,7 @@ public class OrderController implements Initializable {
     }
 
     private void loadItemsByCategory(String category) {
+
         Task<List<?>> task = new Task<>() {
             @Override
             protected List<?> call() {
@@ -240,19 +241,8 @@ public class OrderController implements Initializable {
         thread.start();
     }
 
-    private void setupGridColumnBinding() {
-        resizeDebouncer.setOnFinished(e -> {
-            int newColumnCount = calculateOptimalColumnCount(root.getWidth());
-            updateGridColumns(newColumnCount);
-        });
-        root.widthProperty().addListener((obs, oldVal, newVal) -> resizeDebouncer.playFromStart());
-    }
 
-    private int calculateOptimalColumnCount(double windowWidth) {
-        double availableWidth = windowWidth - 600;
-        int columnCount = (int) Math.floor(availableWidth / 110);
-        return Math.max(4, Math.min(9, columnCount));
-    }
+
 
     private void updateGridColumns(int newColumnCount) {
         if (newColumnCount == currentColumnCount) return;
@@ -372,7 +362,7 @@ public class OrderController implements Initializable {
             controller.setParentPane(pane);
             controller.setOnDeleteCallback(createDeleteCallback());
             controller.setData(item);
-            controller.setOnQuantityChanged(() -> updateAmount());
+            controller.setOnQuantityChanged(this::updateAmount);
             controller.setOnStockChanged(() -> {
                 if (item instanceof Product product) {
                     int quantity = controller.getQuantity();
@@ -399,7 +389,6 @@ public class OrderController implements Initializable {
 
     private void addItemToOrder(Item item) throws IOException {
         if (item == null) return;
-        // Check if item already exists in orderVBox
         for (Node node : orderVBox.getChildren()) {
             if (node instanceof AnchorPane pane) {
                 Object controllerObj = pane.getProperties().get("controller");

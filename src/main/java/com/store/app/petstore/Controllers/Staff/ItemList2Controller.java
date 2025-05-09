@@ -1,6 +1,7 @@
 package com.store.app.petstore.Controllers.Staff;
 
 import com.store.app.petstore.Models.Entities.Item;
+import com.store.app.petstore.Models.Entities.Pet;
 import com.store.app.petstore.Models.Entities.Product;
 import com.store.app.petstore.Controllers.ControllerUtils;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -75,6 +76,13 @@ public class ItemList2Controller {
         if (newAmount < 0) {
             newAmount = 0;
         }
+
+        if(this.item instanceof Pet pet) {
+            if (newAmount > 1) {
+                newAmount = 1;
+            }
+        }
+
 
         quantity.setText(String.valueOf(newAmount));
         updateTotal();

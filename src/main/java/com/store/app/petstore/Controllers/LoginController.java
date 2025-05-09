@@ -148,7 +148,7 @@ public class LoginController implements Initializable {
 
             if(user.getRole().equals(User.ROLE_ADMIN)) {
                 idAdminCurrent = user.getUserId();
-                AdminFactory.getInstance().switchContent("invoicemanagement", currentStage);
+                AdminFactory.getInstance().switchContent("dashboard", currentStage);
             } else if(user.getRole().equals(User.ROLE_USER)) {
                 idStaffCurrent = user.getUserId();
                 Staff staff = staffDAO.findByUserId(user.getUserId());

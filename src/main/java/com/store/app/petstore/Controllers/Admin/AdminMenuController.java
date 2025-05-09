@@ -84,8 +84,9 @@ public class AdminMenuController implements Initializable {
     @FXML
     private Label usernameLabel;
 
-    private SessionManager sessionManager;
     private User currentUser;
+
+//    private SessionManager sessionManager;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -150,19 +151,20 @@ public class AdminMenuController implements Initializable {
     }
 
     private void setMenu() {
-        //Dashboard
-        menuHome.setOnAction(e -> {
+        MenuItem dashboardMenuItem = new MenuItem("Trang chủ");
+        dashboardMenuItem.setOnAction(e -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-           AdminFactory.getInstance().switchContent("dashboard", currentStage);
+            AdminFactory.getInstance().switchContent("dashboard", currentStage);
         });
+        menuHome.getItems().add(dashboardMenuItem);
 
-        //Doanh thu
-        menuRevenue.setOnAction(e -> {
+        MenuItem revenueMenuItem = new MenuItem("Doanh thu");
+        revenueMenuItem.setOnAction(e -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("invoicemanagement", currentStage);
         });
+        menuRevenue.getItems().add(revenueMenuItem);
 
-        //Management
         menuItemAccounts.setOnAction(e -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("usermanagement", currentStage);
@@ -188,7 +190,6 @@ public class AdminMenuController implements Initializable {
             AdminFactory.getInstance().switchContent("staffmanagement", currentStage);
         });
 
-        //Statistics
         menuItemOverview.setOnAction(e -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("overview", currentStage);
@@ -204,15 +205,16 @@ public class AdminMenuController implements Initializable {
             AdminFactory.getInstance().switchContent("revenue", currentStage);
         });
 
-        //Logout
-        menuLogout.setOnAction(e -> handleLogout(null));
+        MenuItem logoutMenuItem = new MenuItem("Đăng xuất");
+        logoutMenuItem.setOnAction(e -> handleLogout(null));
+        menuLogout.getItems().add(logoutMenuItem);
     }
 
     @FXML
     void handleLogout(ActionEvent event) {
         Stage currentStage = (Stage) root.getScene().getWindow();
         if (ControllerUtils.showConfirmationAndWait("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
-            sessionManager.clear();
+            SessionManager.clear();
             ViewFactory.getInstance().switchContent("login", currentStage);
         } else {
             ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đăng xuất không thành công");
