@@ -11,14 +11,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
-<AnchorPane styleClass="root" 
-            stylesheets="@../../../Styles/Statistics.css"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1">
-    <VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"
-          spacing="10" fillWidth="true">
+<AnchorPane styleClass="root" stylesheets="@../../../Styles/Statistics.css" 
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox spacing="10" fillWidth="true" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" 
+          AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
-        <HBox styleClass="hbox-statistic" spacing="10" minHeight="110" HBox.hgrow="ALWAYS">
+        <HBox styleClass="hbox-statistic" spacing="10" minHeight="110" HBox.hgrow="ALWAYS" fillHeight="true">
+>>>>>>> REPRACTICE
+```
+
+src/main/resources/FXML/Admin/statistic/Revenue.fxml
+```xml
+<<<<<<< SEARCH
+            <HBox styleClass="statistic-item-tag" HBox.hgrow="ALWAYS" minWidth="200">
             <HBox styleClass="statistic-item-tag" HBox.hgrow="ALWAYS" minWidth="200">
                 <Pane prefHeight="35.0" prefWidth="35.0">
                     <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
