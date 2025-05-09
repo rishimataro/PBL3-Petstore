@@ -11,20 +11,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
-<AnchorPane styleClass="root" stylesheets="@../../../Styles/Statistics.css" 
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-    <VBox spacing="10" fillWidth="true" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" 
-          AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+<AnchorPane styleClass="root"
+            stylesheets="@../../../Styles/Statistics.css"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"
+          spacing="10" fillWidth="true">
 
-        <HBox styleClass="hbox-statistic" spacing="10" minHeight="110" HBox.hgrow="ALWAYS" fillHeight="true">
->>>>>>> REPRACTICE
-```
-
-src/main/resources/FXML/Admin/statistic/Revenue.fxml
-```xml
-<<<<<<< SEARCH
-            <HBox styleClass="statistic-item-tag" HBox.hgrow="ALWAYS" minWidth="200">
-            <HBox styleClass="statistic-item-tag" HBox.hgrow="ALWAYS" minWidth="200">
+        <HBox styleClass="hbox-statistic" spacing="10" minHeight="110" HBox.hgrow="ALWAYS">
+            <HBox styleClass="statistic-item-tag" HBox.hgrow="ALWAYS" >
                 <Pane prefHeight="35.0" prefWidth="35.0">
                     <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
                                          styleClass="item-tag-icon"/>
@@ -60,7 +55,7 @@ src/main/resources/FXML/Admin/statistic/Revenue.fxml
                     </VBox>
                 </VBox>
             </HBox>
-            <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
+            <HBox  styleClass="statistic-item-tag" HBox.hgrow="ALWAYS">
                 <Pane prefHeight="35.0" prefWidth="35.0">
                     <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
                                          styleClass="item-tag-icon"/>
@@ -96,7 +91,7 @@ src/main/resources/FXML/Admin/statistic/Revenue.fxml
                     </VBox>
                 </VBox>
             </HBox>
-            <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
+            <HBox HBox.hgrow="ALWAYS" styleClass="statistic-item-tag">
                 <Pane prefHeight="35.0" prefWidth="35.0">
                     <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
                                          styleClass="item-tag-icon"/>
@@ -124,7 +119,7 @@ src/main/resources/FXML/Admin/statistic/Revenue.fxml
                     </HBox>
                 </VBox>
             </HBox>
-            <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
+            <HBox HBox.hgrow="ALWAYS" styleClass="statistic-item-tag">
                 <Pane prefHeight="35.0" prefWidth="35.0">
                     <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
                                          styleClass="item-tag-icon"/>
