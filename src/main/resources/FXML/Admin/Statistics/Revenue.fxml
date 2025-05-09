@@ -17,8 +17,8 @@
             xmlns:fx="http://javafx.com/fxml/1">
     <VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
-        <HBox styleClass="hbox-statistic" spacing="10" maxHeight="110" minHeight="110">
-            <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
+        <HBox styleClass="hbox-statistic" spacing="10" minHeight="110" HBox.hgrow="ALWAYS">
+            <HBox styleClass="statistic-item-tag" HBox.hgrow="ALWAYS" minWidth="200">
                 <Pane prefHeight="35.0" prefWidth="35.0">
                     <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
                                          styleClass="item-tag-icon"/>
@@ -149,8 +149,8 @@
             </HBox>
         </HBox>
 
-        <HBox spacing="10" VBox.vgrow="ALWAYS">
-            <VBox prefHeight="200.0" prefWidth="570.0" styleClass="main-statistic-tag">
+        <HBox spacing="10" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+            <VBox styleClass="main-statistic-tag" HBox.hgrow="ALWAYS" minWidth="300">
                 <HBox spacing="10.0">
                     <Label prefHeight="29.0" prefWidth="310.0" styleClass="main-statistic-text"
                            text="Biểu đồ thống kê doanh thu"/>
@@ -168,7 +168,7 @@
                     </ChoiceBox>
                 </HBox>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="370.0" styleClass="main-statistic-tag">
+            <VBox styleClass="main-statistic-tag" HBox.hgrow="ALWAYS" minWidth="300">
                 <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                     <Label prefHeight="29.0" prefWidth="204.0" styleClass="main-statistic-text"
                            text="Doanh thu theo nhân viên"/>
