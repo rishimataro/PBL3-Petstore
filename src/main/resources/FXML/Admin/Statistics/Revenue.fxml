@@ -15,7 +15,8 @@
             stylesheets="@../../../Styles/Statistics.css"
             xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1">
-    <VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+    <VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"
+          spacing="10" fillWidth="true">
 
         <HBox styleClass="hbox-statistic" spacing="10" minHeight="110" HBox.hgrow="ALWAYS">
             <HBox styleClass="statistic-item-tag" HBox.hgrow="ALWAYS" minWidth="200">
