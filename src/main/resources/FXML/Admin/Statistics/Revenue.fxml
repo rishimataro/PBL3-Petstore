@@ -18,8 +18,8 @@
     <VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"
           spacing="10" fillWidth="true">
 
-        <HBox styleClass="hbox-statistic" spacing="10" minHeight="110" HBox.hgrow="ALWAYS">
-            <HBox styleClass="statistic-item-tag" HBox.hgrow="ALWAYS" >
+        <HBox styleClass="statistics-container" spacing="20" minHeight="120" HBox.hgrow="ALWAYS">
+            <HBox styleClass="statistic-card" HBox.hgrow="ALWAYS" spacing="15">
                 <Pane prefHeight="35.0" prefWidth="35.0">
                     <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
                                          styleClass="item-tag-icon"/>
