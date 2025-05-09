@@ -12,181 +12,86 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            styleClass="root"
-            stylesheets="@../../../Styles/Statistics.css"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1">
-    <VBox>
-
-        <HBox prefHeight="110.0" prefWidth="950.0" styleClass="hbox-statistic">
-            <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
-                <Pane prefHeight="35.0" prefWidth="35.0">
-                    <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
-                                         styleClass="item-tag-icon"/>
+<AnchorPane styleClass="root" stylesheets="@../../../Styles/Statistics.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox spacing="15">
+        <HBox styleClass="hbox-statistic" spacing="15">
+            <HBox styleClass="statistic-item-tag" spacing="10">
+                <Pane prefWidth="35" prefHeight="35">
+                    <FontAwesomeIconView glyphName="DOLLAR" size="35" styleClass="item-tag-icon"/>
                 </Pane>
-                <VBox prefHeight="50.0" prefWidth="162.0">
-                    <Label text="Tổng doanh thu:">
-                        <styleClass>
-                            <String fx:value="item-tag-text"/>
-                            <String fx:value="title"/>
-                        </styleClass>
-                    </Label>
-                    <HBox prefHeight="100.0" prefWidth="200.0">
-                        <Label prefHeight="17.0" prefWidth="131.0" text="0.00">
-                            <styleClass>
-                                <String fx:value="item-tag-text"/>
-                                <String fx:value="number"/>
-                            </styleClass>
-                        </Label>
-                        <Label text="VND">
-                            <styleClass>
-                                <String fx:value="item-tag-text"/>
-                                <String fx:value="number"/>
-                            </styleClass>
-                        </Label>
+                <VBox spacing="5">
+                    <Label text="Tổng doanh thu:" styleClass="item-tag-title"/>
+                    <HBox>
+                        <Label text="0.00" styleClass="item-tag-number"/>
+                        <Label text="VND" styleClass="item-tag-unit"/>
                     </HBox>
-                    <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
-                        <Label text="04/06/2025" textAlignment="RIGHT">
-                            <styleClass>
-                                <String fx:value="item-tag-text"/>
-                                <String fx:value="date"/>
-                            </styleClass>
-                        </Label>
+                    <VBox alignment="CENTER_RIGHT">
+                        <Label text="04/06/2025" styleClass="item-tag-date"/>
                     </VBox>
                 </VBox>
             </HBox>
-            <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
-                <Pane prefHeight="35.0" prefWidth="35.0">
-                    <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
-                                         styleClass="item-tag-icon"/>
+            <HBox styleClass="statistic-item-tag" spacing="10">
+                <Pane prefWidth="35" prefHeight="35">
+                    <FontAwesomeIconView glyphName="DOLLAR" size="35" styleClass="item-tag-icon"/>
                 </Pane>
-                <VBox prefHeight="50.0" prefWidth="162.0">
-                    <Label text="Tổng doanh thu tháng này:">
-                        <styleClass>
-                            <String fx:value="item-tag-text"/>
-                            <String fx:value="title"/>
-                        </styleClass>
-                    </Label>
-                    <HBox prefHeight="100.0" prefWidth="200.0">
-                        <Label prefHeight="17.0" prefWidth="141.0" text="0">
-                            <styleClass>
-                                <String fx:value="item-tag-text"/>
-                                <String fx:value="number"/>
-                            </styleClass>
-                        </Label>
-                        <Label prefHeight="17.0" prefWidth="33.0" text="VND">
-                            <styleClass>
-                                <String fx:value="item-tag-text"/>
-                                <String fx:value="number"/>
-                            </styleClass>
-                        </Label>
+                <VBox spacing="5">
+                    <Label text="Tổng doanh thu tháng này:" styleClass="item-tag-title"/>
+                    <HBox>
+                        <Label text="0" styleClass="item-tag-number"/>
+                        <Label text="VND" styleClass="item-tag-unit"/>
                     </HBox>
-                    <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
-                        <Label text="04/06/2025" textAlignment="RIGHT">
-                            <styleClass>
-                                <String fx:value="item-tag-text"/>
-                                <String fx:value="date"/>
-                            </styleClass>
-                        </Label>
+                    <VBox alignment="CENTER_RIGHT">
+                        <Label text="04/06/2025" styleClass="item-tag-date"/>
                     </VBox>
                 </VBox>
             </HBox>
-            <HBox  prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
-                <Pane prefHeight="35.0" prefWidth="35.0">
-                    <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
-                                         styleClass="item-tag-icon"/>
+            <HBox styleClass="statistic-item-tag" spacing="10">
+                <Pane prefWidth="35" prefHeight="35">
+                    <FontAwesomeIconView glyphName="DOLLAR" size="35" styleClass="item-tag-icon"/>
                 </Pane>
-                <VBox prefHeight="50.0" prefWidth="162.0">
-                    <Label text="Tổng doanh thu tháng trước:">
-                        <styleClass>
-                            <String fx:value="item-tag-text"/>
-                            <String fx:value="title"/>
-                        </styleClass>
-                    </Label>
-                    <HBox prefHeight="100.0" prefWidth="200.0">
-                        <Label prefHeight="17.0" prefWidth="141.0" text="0">
-                            <styleClass>
-                                <String fx:value="item-tag-text"/>
-                                <String fx:value="number"/>
-                            </styleClass>
-                        </Label>
-                        <Label prefHeight="17.0" prefWidth="33.0" text="VND">
-                            <styleClass>
-                                <String fx:value="item-tag-text"/>
-                                <String fx:value="number"/>
-                            </styleClass>
-                        </Label>
+                <VBox spacing="5">
+                    <Label text="Tổng doanh thu tháng trước:" styleClass="item-tag-title"/>
+                    <HBox>
+                        <Label text="0" styleClass="item-tag-number"/>
+                        <Label text="VND" styleClass="item-tag-unit"/>
                     </HBox>
                 </VBox>
             </HBox>
-            <HBox  prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
-                <Pane prefHeight="35.0" prefWidth="35.0">
-                    <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
-                                         styleClass="item-tag-icon"/>
+            <HBox styleClass="statistic-item-tag" spacing="10">
+                <Pane prefWidth="35" prefHeight="35">
+                    <FontAwesomeIconView glyphName="DOLLAR" size="35" styleClass="item-tag-icon"/>
                 </Pane>
-                <VBox prefHeight="50.0" prefWidth="162.0">
-                    <Label text="Tỉ lệ doanh thu:">
-                        <styleClass>
-                            <String fx:value="item-tag-text"/>
-                            <String fx:value="title"/>
-                        </styleClass>
-                    </Label>
-                    <HBox prefHeight="100.0" prefWidth="200.0">
-                        <Label prefHeight="17.0" prefWidth="149.0" text="0">
-                            <styleClass>
-                                <String fx:value="item-tag-text"/>
-                                <String fx:value="number"/>
-                            </styleClass>
-                        </Label>
-                        <Label prefHeight="17.0" prefWidth="12.0" text="\%">
-                            <styleClass>
-                                <String fx:value="item-tag-text"/>
-                                <String fx:value="number"/>
-                            </styleClass>
-                        </Label>
+                <VBox spacing="5">
+                    <Label text="Tỉ lệ doanh thu:" styleClass="item-tag-title"/>
+                    <HBox>
+                        <Label text="0" styleClass="item-tag-number"/>
+                        <Label text="%" styleClass="item-tag-unit"/>
                     </HBox>
-                    <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0"/>
+                    <VBox alignment="CENTER_RIGHT"/>
                 </VBox>
             </HBox>
         </HBox>
 
-        <HBox  prefHeight="240.0" prefWidth="950.0" spacing="10.0">
-            <VBox prefHeight="200.0" prefWidth="570.0" styleClass="main-statistic-tag">
-                <HBox spacing="10.0">
-                    <Label prefHeight="29.0" prefWidth="310.0" styleClass="main-statistic-text"
-                           text="Biểu đồ thống kê doanh thu"/>
-                    <ChoiceBox prefHeight="30.0" prefWidth="110.0">
-                        <styleClass>
-                            <String fx:value="choice-box-filter"/>
-                            <String fx:value="yellow"/>
-                        </styleClass>
-                    </ChoiceBox>
-                    <ChoiceBox prefHeight="30.0" prefWidth="110.0">
-                        <styleClass>
-                            <String fx:value="choice-box-filter"/>
-                            <String fx:value="yellow"/>
-                        </styleClass>
-                    </ChoiceBox>
+        <HBox spacing="10">
+            <VBox styleClass="main-statistic-tag" spacing="10">
+                <HBox spacing="10">
+                    <Label styleClass="main-statistic-text" text="Biểu đồ thống kê doanh thu"/>
+                    <ChoiceBox styleClass="choice-box-filter yellow" prefWidth="110"/>
+                    <ChoiceBox styleClass="choice-box-filter yellow" prefWidth="110"/>
                 </HBox>
+                <Pane styleClass="chart-container">
+                    <!-- Chart placeholder -->
+                </Pane>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="370.0" styleClass="main-statistic-tag">
-                <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                    <Label prefHeight="29.0" prefWidth="204.0" styleClass="main-statistic-text"
-                           text="Doanh thu theo nhân viên"/>
-                    <ChoiceBox prefHeight="30.0" prefWidth="70.0">
-                        <styleClass>
-                            <String fx:value="choice-box-filter"/>
-                            <String fx:value="cyan"/>
-                        </styleClass>
-                    </ChoiceBox>
-                    <ChoiceBox prefHeight="30.0" prefWidth="80.0">
-                        <styleClass>
-                            <String fx:value="choice-box-filter"/>
-                            <String fx:value="yellow"/>
-                        </styleClass>
-                    </ChoiceBox>
+            <VBox styleClass="main-statistic-tag" spacing="10">
+                <HBox spacing="10">
+                    <Label styleClass="main-statistic-text" text="Doanh thu theo nhân viên"/>
+                    <ChoiceBox styleClass="choice-box-filter cyan" prefWidth="70"/>
+                    <ChoiceBox styleClass="choice-box-filter yellow" prefWidth="80"/>
                 </HBox>
+                <Pane styleClass="chart-container">
+                    <!-- Chart placeholder -->
+                </Pane>
             </VBox>
         </HBox>
     </VBox>

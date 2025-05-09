@@ -47,7 +47,7 @@ public class BestSellerController {
     }
 
     public AnchorPane createStatistic() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Admin/Statistic/BestSeller.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Admin/Statistics/BestSeller.fxml"));
         return loader.load();
     }
 
