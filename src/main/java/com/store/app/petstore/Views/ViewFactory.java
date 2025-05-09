@@ -88,6 +88,8 @@ public class ViewFactory {
                     return;
                 case "revenue":
                     RevenueController revenueController = new RevenueController();
+                    revenueController.show(stage);
+                    return;
                 default:
                     System.err.println("Unknown FXML file: " + fxmlName);
                     return;
