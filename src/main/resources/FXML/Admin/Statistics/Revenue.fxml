@@ -11,14 +11,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            styleClass="root"
+<AnchorPane styleClass="root" 
             stylesheets="@../../../Styles/Statistics.css"
             xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1">
-    <VBox>
+    <VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
 
-        <HBox prefHeight="110.0" prefWidth="950.0" styleClass="hbox-statistic">
+        <HBox styleClass="hbox-statistic" spacing="10" maxHeight="110" minHeight="110">
             <HBox prefHeight="70.0" prefWidth="219.0" styleClass="statistic-item-tag">
                 <Pane prefHeight="35.0" prefWidth="35.0">
                     <FontAwesomeIconView glyphName="DOLLAR" layoutX="4.0" layoutY="28.0" size="35"
@@ -150,7 +149,7 @@
             </HBox>
         </HBox>
 
-        <HBox prefHeight="240.0" prefWidth="950.0" spacing="10.0">
+        <HBox spacing="10" VBox.vgrow="ALWAYS">
             <VBox prefHeight="200.0" prefWidth="570.0" styleClass="main-statistic-tag">
                 <HBox spacing="10.0">
                     <Label prefHeight="29.0" prefWidth="310.0" styleClass="main-statistic-text"
