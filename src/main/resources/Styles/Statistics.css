@@ -1,44 +1,8 @@
-.root {
-    -fx-font-family: "Inter";
-    -fx-background-color: #F5F7FA;
-    -fx-padding: 0;
+*{
+    -fx-font-family: Inter;
 }
-
-.main-container {
-    -fx-spacing: 20;
-    -fx-padding: 0;
-}
-
-.stat-card {
-    -fx-background-color: white;
-    -fx-background-radius: 8;
-    -fx-padding: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
-    -fx-min-height: 120;
-    -fx-max-width: infinity;
-}
-
-.card-title {
-    -fx-font-size: 12px;
-    -fx-text-fill: #6B7280;
-    -fx-font-weight: bold;
-}
-
-.card-value {
-    -fx-font-size: 24px;
-    -fx-text-fill: #111827;
-    -fx-font-weight: bold;
-}
-
-.card-unit {
-    -fx-font-size: 14px;
-    -fx-text-fill: #6B7280;
-}
-
-.card-date {
-    -fx-font-size: 11px;
-    -fx-text-fill: #9CA3AF;
-    -fx-padding: 5 0 0 0;
+.root{
+    -fx-background-color: #FFFFFF;
 }
 .nav-bar{
     -fx-background-color: #01C4DA;
@@ -142,10 +106,78 @@
     -fx-text-fill: rgba(8, 1, 149, 1);
  }
 
-.view-button{
-    -fx-background-color: rgba(1, 196, 218, 1);
-    -fx-font-weight: 700;
-    -fx-text-fill: #FFFFFF;
-    -fx-cursor: hand;
+/* TableView styling */
 
+* {
+    -fx-primary-color: #007acc;
+    -fx-secondary-color: #4B6EAF;
+    -fx-accent-color: #B6FF00;
+    -fx-grey-color: #b9b9b9;
+    -fx-light-grey-color: #d1d1d1;
+    -fx-lightest-grey-color: #F9F9FB;
+
+    -fx-focus-color: -fx-secondary-color;
+}
+
+.table-button {
+    -fx-background-color: -fx-primary-color;
+    -fx-cursor: hand;
+}
+.table-button:hover{
+    -fx-background-color: transparent;
+}
+.table-view {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent; /* OR  -fx-background-insets: 0.0; */
+}
+.table-view .column-header-background,
+.table-view .column-header-background .filler,
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+.table-view .column-header {
+    -fx-background-color: -fx-light-grey-color;
+    -fx-border-color: -fx-grey-color;
+}
+.table-view .column-header .label{
+    -fx-font-weight: bold;
+    -fx-alignment: center-left;
+}
+.table-view .column-header-background,
+.table-view .column-header-background .filler,
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+.table-view .column-header {
+    -fx-background-color: -fx-light-grey-color;
+    -fx-border-color: -fx-grey-color;
+}
+.table-view .column-header .label{
+    -fx-font-weight: bold;
+    -fx-alignment: center-left;
+}
+.button:hover {
+    -fx-background-color: #45a049;
+}
+
+/* ProgressBar styling */
+.progress-bar {
+    -fx-accent: #4CAF50;
+    -fx-pref-height: 20px;
+    -fx-background-color: #e0e0e0;
+}
+
+/* BarChart styling */
+.bar-chart {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-title-text-fill: #333333;
+}
+
+.bar-chart .chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.bar-chart .axis {
+    -fx-stroke: #dddddd;
 }

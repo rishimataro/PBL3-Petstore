@@ -1,5 +1,6 @@
 package com.store.app.petstore.Views;
 
+import com.store.app.petstore.Controllers.Admin.Statistic.BestSellerController;
 import com.store.app.petstore.Controllers.Admin.Statistic.OverViewController;
 import com.store.app.petstore.Controllers.Staff.CustomerInforController;
 import com.store.app.petstore.Models.Entities.Customer;
@@ -9,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
@@ -78,7 +80,11 @@ public class ViewFactory {
                 case "overview":
                     OverViewController overViewController = new OverViewController();
                     overViewController.show(stage);
-                    return ;
+                    return;
+                case "bestseller":
+                    BestSellerController bestSellerController = new BestSellerController();
+                    bestSellerController.show(stage);
+                    return;
                 default:
                     System.err.println("Unknown FXML file: " + fxmlName);
                     return;
@@ -158,7 +164,7 @@ public class ViewFactory {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
-            
+
             // Get the controller and set the data
             Object controller = loader.getController();
             if (controller != null) {
