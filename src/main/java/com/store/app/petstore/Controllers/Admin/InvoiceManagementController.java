@@ -1,5 +1,6 @@
 package com.store.app.petstore.Controllers.Admin;
 
+import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.Controllers.Staff.PetItemDetailController;
 import com.store.app.petstore.Controllers.Staff.ProductItemDetailController;
 import com.store.app.petstore.DAO.*;
@@ -21,10 +22,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InvoiceManagementController {
+
     @FXML
     private TableView<Order> invoice_table;
     @FXML
@@ -53,6 +56,7 @@ public class InvoiceManagementController {
     private VBox productListVBox;
     @FXML
     private CheckBox allowDeletedInvoice;
+
     static private Map<Integer, Product> productMap;
     static private Map<Integer, Pet> petMap;
 
@@ -66,10 +70,13 @@ public class InvoiceManagementController {
     private Label detailInvoiceTotal;
     @FXML
     private TextField totalRevenue;
+
     private double totalRevenueValue;
     private Map<Integer, Customer> customerMap;
+
     @FXML
     private FontAwesomeIconView clear_invoice_search;
+
     @FXML
     public void initialize() {
         sttCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.1));
@@ -116,7 +123,7 @@ public class InvoiceManagementController {
                 }
             }
         });
-        // Định dạng ngày giờ hiển thị
+
         invoice_timeCol.setCellFactory(column -> new TableCell<Order, LocalDateTime>() {
             @Override
             protected void updateItem(LocalDateTime item, boolean empty) {
@@ -129,7 +136,7 @@ public class InvoiceManagementController {
         start_datepicker.setValue(thirtyDaysAgo);
         end_datepicker.setValue(today);
         loadInvoicesWithFilter();
-        //event
+
         invoice_table.setOnMouseClicked(event -> {
             if(event.getClickCount() == 1) {
                 Order order = invoice_table.getSelectionModel().getSelectedItem();
@@ -143,7 +150,7 @@ public class InvoiceManagementController {
         });
         searchInvoice.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                loadInvoicesWithFilter(); // Thực hiện tìm kiếm khi nhấn Enter
+                loadInvoicesWithFilter();
             }
         });
         clear_invoice_search.setOnMouseClicked(event -> {
@@ -161,11 +168,12 @@ public class InvoiceManagementController {
         });
         //
 
-        productMap = ProductDAO.getInstance().findAll().stream()
+        productMap = ProductDAO.findAll().stream()
                 .collect(Collectors.toMap(Product::getProductId, p -> p));
-        petMap = PetDAO.getInstance().findAll().stream()
+        petMap = Objects.requireNonNull(PetDAO.findAll()).stream()
                 .collect(Collectors.toMap(Pet::getPetId, p -> p));
     }
+
     @FXML
     private void onSearchClicked(){
         loadInvoicesWithFilter();
@@ -215,21 +223,22 @@ public class InvoiceManagementController {
             return null;
         }
     }
+
     private void loadInvoicesWithFilter() {
         LocalDateTime startDateTime = (start_datepicker.getValue() != null) ? start_datepicker.getValue().atStartOfDay() : null;
         LocalDateTime endDateTime = (end_datepicker.getValue() != null) ? end_datepicker.getValue().atTime(23, 59, 59) : null;
         boolean allowDeleted = allowDeletedInvoice.isSelected();
-        customerMap = CustomerDAO.getInstance().findAll()
+        customerMap = Objects.requireNonNull(CustomerDAO.findAll())
                 .stream()
                 .collect(Collectors.toMap(Customer::getCustomerId, customer -> customer));
+
         String keyword = searchInvoice.getText().toLowerCase().trim();
-        List<Order> filtered = OrderDAO.getInstance()
+        List<Order> filtered = OrderDAO
                 .findAll()
                 .stream()
                 .filter(order -> {
                     LocalDateTime orderDate = order.getOrderDate();
 
-                    // 1. Lọc theo ngày
                     boolean dateMatch = true;
                     if (orderDate != null) {
                         if (startDateTime != null) {
@@ -240,10 +249,8 @@ public class InvoiceManagementController {
                         }
                     }
 
-                    // 2. Lọc theo trạng thái (nếu không cho phép hiện bản ghi bị xóa)
                     boolean statusMatch = allowDeleted || !order.isDeleted();
 
-                    // Lọc theo tìm kiếm tên người dùng hoặc ID
                     boolean matchSearch = keyword.isEmpty()
                             || Integer.toString(order.getOrderId()).contains(keyword)
                             || customerMap.get(order.getCustomerId()).getFullName().toLowerCase().contains(keyword);
@@ -256,9 +263,8 @@ public class InvoiceManagementController {
     private void calculateTotalRevenue(List<Order> filteredOrders) {
         double total = 0;
         for (Order order : filteredOrders) {
-            // Bỏ qua đơn bị huỷ nếu cần
             if (!order.isDeleted()) {
-                total += order.getTotalPrice(); // hoặc order.getTotalPrice()
+                total += order.getTotalPrice();
             }
         }
 
@@ -269,37 +275,25 @@ public class InvoiceManagementController {
         Order selectedOrder = invoice_table.getSelectionModel().getSelectedItem();
 
         if (selectedOrder == null) {
-            showAlert("Vui lòng chọn hóa đơn để huỷ!", Alert.AlertType.WARNING);
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng chọn hóa đơn để huỷ!");
             return;
         }
 
-        // Xác nhận huỷ
-        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmAlert.setTitle("Xác nhận huỷ hoá đơn");
-        confirmAlert.setHeaderText(null);
-        confirmAlert.setContentText("Bạn có chắc chắn muốn huỷ hoá đơn này?");
-
-        Optional<ButtonType> result = confirmAlert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            selectedOrder.setDeleted(true);  // hoặc status khác tuỳ hệ thống
-            OrderDAO.getInstance().update(selectedOrder); // nhớ phải có hàm update
-            loadInvoicesWithFilter(); // reload lại bảng dựa theo filter hiện tại
+        if(ControllerUtils.showConfirmationAndWait("Xác nhận huỷ hoá đơn", "Bạn có chắc chắn muốn huỷ hoá đơn này không?")){
+            selectedOrder.setDeleted(true);
+            OrderDAO.update(selectedOrder);
+            loadInvoicesWithFilter();
         }
-    }
-    private void showAlert(String message, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle("Thông báo");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-    private void DiscountInfo(Order order){
-        Discount dc = DiscountDAO.getInstance().findById(order.getDiscountId());
-        Double total_value = order.getTotalPrice();
 
-        Double max_discount_value = 0.0;
-        Double discount_value = 0.0;
-        Double discount_min_value = 0.0;
+    }
+
+    private void DiscountInfo(Order order){
+        Discount dc = DiscountDAO.findById(order.getDiscountId());
+        double total_value = order.getTotalPrice();
+
+        double max_discount_value = 0.0;
+        double discount_value = 0.0;
+        double discount_min_value = 0.0;
         String discount_type = "";
         String discount_code = "";
         if(dc != null){
@@ -310,7 +304,7 @@ public class InvoiceManagementController {
             discount_code = dc.getCode();
         }
 
-        Double discount = 0.0;
+        double discount = 0.0;
         if (discount_min_value > total_value) {
             discount = 0.0;
         }

@@ -16,15 +16,10 @@ public class ControllerUtils {
         alert.setHeaderText(null);
         alert.setContentText(content);
 
-        // Lấy window hiện tại
         Window window = alert.getDialogPane().getScene().getWindow();
-        if (window instanceof Stage) {
-            Stage stage = (Stage) window;
-            // Đảm bảo alert luôn hiển thị trên cùng
+        if (window instanceof Stage stage) {
             stage.setAlwaysOnTop(true);
-            // Đặt modality để chặn tương tác với các window khác
             stage.initModality(Modality.APPLICATION_MODAL);
-            // Đặt style cho stage
             stage.initStyle(StageStyle.DECORATED);
         }
 
@@ -45,15 +40,10 @@ public class ControllerUtils {
         alert.setHeaderText(null);
         alert.setContentText(content);
 
-        // Lấy window hiện tại
         Window window = alert.getDialogPane().getScene().getWindow();
-        if (window instanceof Stage) {
-            Stage stage = (Stage) window;
-            // Đảm bảo alert luôn hiển thị trên cùng
+        if (window instanceof Stage stage) {
             stage.setAlwaysOnTop(true);
-            // Đặt modality để chặn tương tác với các window khác
             stage.initModality(Modality.APPLICATION_MODAL);
-            // Đặt style cho stage
             stage.initStyle(StageStyle.DECORATED);
         }
 
@@ -67,42 +57,16 @@ public class ControllerUtils {
         return sdf.format(date);
     }
 
-    public static void showErrorAndWait(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-
-        // Get the current window
-        Window window = alert.getDialogPane().getScene().getWindow();
-        if (window instanceof Stage) {
-            Stage stage = (Stage) window;
-            // Ensure the alert is always on top
-            stage.setAlwaysOnTop(true);
-            // Set modality to block interaction with other windows
-            stage.initModality(Modality.APPLICATION_MODAL);
-            // Set style for the stage
-            stage.initStyle(StageStyle.DECORATED);
-        }
-
-        alert.showAndWait();
-    }
-
     public static void showInformationAndWait(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
 
-        // Get the current window
         Window window = alert.getDialogPane().getScene().getWindow();
-        if (window instanceof Stage) {
-            Stage stage = (Stage) window;
-            // Ensure the alert is always on top
+        if (window instanceof Stage stage) {
             stage.setAlwaysOnTop(true);
-            // Set modality to block interaction with other windows
             stage.initModality(Modality.APPLICATION_MODAL);
-            // Set style for the stage
             stage.initStyle(StageStyle.DECORATED);
         }
 

@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class UserInforController implements Initializable {
@@ -44,10 +45,6 @@ public class UserInforController implements Initializable {
     @FXML
     private AnchorPane customerInforPopup;
 
-    // No longer needed as we have btnRestore
-    // @FXML
-    // private Button resetActiveButton;
-
     @FXML
     private FontAwesomeIconView closeIcon;
 
@@ -67,7 +64,6 @@ public class UserInforController implements Initializable {
     private TextField txtPasswordVisible;
 
     private int idUserCurrent;
-    private UserDAO userDAO = new UserDAO();
     private boolean isNewUser = true;
     private boolean isPasswordVisible = false;
 
@@ -190,14 +186,14 @@ public class UserInforController implements Initializable {
     private void handleLock() {
         if (idUserCurrent > 0) {
             if (ControllerUtils.showConfirmationAndWait("Xác nhận khóa tài khoản", "Bạn có chắc chắn muốn khóa người dùng này?")) {
-                User user = userDAO.findById(idUserCurrent);
+                User user = UserDAO.findById(idUserCurrent);
                 if (user == null) {
                     ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không tìm thấy người dùng!");
                     return;
                 }
 
                 user.setActive(false);
-                int result = userDAO.update(user);
+                int result = UserDAO.update(user);
 
                 if (result > 0) {
                     ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thành công", "Khóa người dùng thành công!");
@@ -214,14 +210,14 @@ public class UserInforController implements Initializable {
     private void handleRestore() {
         if (idUserCurrent > 0) {
             if (ControllerUtils.showConfirmationAndWait("Xác nhận khôi phục tài khoản", "Bạn có chắc chắn muốn khôi phục người dùng này?")) {
-                User user = userDAO.findById(idUserCurrent);
+                User user = UserDAO.findById(idUserCurrent);
                 if (user == null) {
                     ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không tìm thấy người dùng!");
                     return;
                 }
 
                 user.setActive(true);
-                int result = userDAO.update(user);
+                int result = UserDAO.update(user);
 
                 if (result > 0) {
                     ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thành công", "Khôi phục người dùng thành công!");
@@ -284,15 +280,15 @@ public class UserInforController implements Initializable {
 
             int result;
             if (isNewUser) {
-                if (userDAO.checkDuplicate(user.getUsername().trim(), -1)) {
+                if (UserDAO.checkDuplicate(user.getUsername().trim(), -1)) {
                     ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Tên người dùng đã tồn tại!");
                     return;
                 }
-                result = userDAO.insert(user);
+                result = UserDAO.insert(user);
                 // After inserting a new user, get the generated ID
-                idUserCurrent = userDAO.findByUsername(user.getUsername()).getUserId();
+                idUserCurrent = UserDAO.findByUsername(user.getUsername()).getUserId();
             } else {
-                User oldUser = userDAO.findById(idUserCurrent);
+                User oldUser = UserDAO.findById(idUserCurrent);
                 if (oldUser == null) {
                     ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không tìm thấy người dùng!");
                     return;
@@ -301,21 +297,21 @@ public class UserInforController implements Initializable {
                 String newUsername = user.getUsername().trim().toLowerCase();
 
                 if (!oldUsername.equals(newUsername)) {
-                    if (userDAO.checkDuplicate(user.getUsername().trim(), idUserCurrent)) {
+                    if (UserDAO.checkDuplicate(user.getUsername().trim(), idUserCurrent)) {
                         ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Tên người dùng đã tồn tại!");
                         return;
                     }
                 }
-                result = userDAO.update(user);
+                result = UserDAO.update(user);
             }
 
             if (result > 0) {
                 ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thành công", "Lưu thông tin người dùng thành công!");
                 disableEditing();
                 btnFix.setDisable(false);
-                User updatedUser = userDAO.findById(idUserCurrent);
-                btnLock.setDisable(updatedUser.isActive() == false);
-                btnRestore.setDisable(updatedUser.isActive() == true);
+                User updatedUser = UserDAO.findById(idUserCurrent);
+                btnLock.setDisable(!Objects.requireNonNull(updatedUser).isActive());
+                btnRestore.setDisable(updatedUser.isActive());
                 btnAdd.setDisable(false);
                 btnSave.setDisable(true);
                 isNewUser = false;
@@ -383,9 +379,6 @@ public class UserInforController implements Initializable {
         return true;
     }
 
-    /**
-     * Closes the current window
-     */
     private void closeWindow() {
         Stage stage = (Stage) customerInforPopup.getScene().getWindow();
         if (stage != null) {
@@ -394,8 +387,8 @@ public class UserInforController implements Initializable {
     }
 
     private int getNextUserId() {
-        ArrayList<User> users = userDAO.findAll();
-        if (users == null || users.isEmpty()) {
+        ArrayList<User> users = UserDAO.findAll();
+        if (users.isEmpty()) {
             return 1;
         }
         return users.stream()

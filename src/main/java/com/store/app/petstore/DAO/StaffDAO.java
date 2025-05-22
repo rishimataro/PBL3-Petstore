@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class StaffDAO implements BaseDAO<Staff, Integer> {
+public class StaffDAO {
     private static StaffDAO instance;
 
     public static StaffDAO getInstance() {
@@ -19,19 +19,18 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
         return instance;
     }
 
-    @Override
-    public Staff findById(Integer id) {
+    public static Staff findById(Integer id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "SELECT * FROM Staffs WHERE staff_id = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 return StaffMapper.fromResutlSet(rs);
             }
@@ -43,18 +42,18 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
         return null;
     }
 
-    public Staff findByUserId(Integer userId) {
+    public static Staff findByUserId(Integer userId) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "SELECT * FROM Staffs WHERE user_id = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, userId);
             rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 return StaffMapper.fromResutlSet(rs);
             }
@@ -66,19 +65,18 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
         return null;
     }
 
-    @Override
-    public ArrayList<Staff> findByCondition(String condition) {
+    public static ArrayList<Staff> findByCondition(String condition) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ArrayList<Staff> staffs = new ArrayList<>();
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "SELECT * FROM Staffs WHERE " + condition;
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
-            
+
             while (rs.next()) {
                 staffs.add(StaffMapper.fromResutlSet(rs));
             }
@@ -90,16 +88,15 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
         return staffs;
     }
 
-    @Override
-    public int insert(Staff entity) {
+    public static int insert(Staff entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "INSERT INTO Staffs (user_id, full_name, phone, email, address, salary, hire_date, role, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql);
-            
+
             stmt.setInt(1, entity.getUserId());
             stmt.setString(2, entity.getFullName());
             stmt.setString(3, entity.getPhone());
@@ -109,7 +106,7 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
             stmt.setTimestamp(7, java.sql.Timestamp.valueOf(entity.getHireDate()));
             stmt.setString(8, entity.getRole());
             stmt.setBoolean(9, entity.isActive());
-            
+
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,16 +116,15 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
         }
     }
 
-    @Override
-    public int update(Staff entity) {
+    public static int update(Staff entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "UPDATE Staffs SET full_name = ?, phone = ?, email = ?, address = ?, salary = ?, hire_date = ?, role = ?, isActive = ? WHERE staff_id = ?";
             stmt = conn.prepareStatement(sql);
-            
+
             stmt.setString(1, entity.getFullName());
             stmt.setString(2, entity.getPhone());
             stmt.setString(3, entity.getEmail());
@@ -138,7 +134,7 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
             stmt.setString(7, entity.getRole());
             stmt.setBoolean(8, entity.isActive());
             stmt.setInt(9, entity.getStaffId());
-            
+
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -148,17 +144,16 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
         }
     }
 
-    @Override
-    public int delete(Staff entity) {
+    public static int delete(Staff entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "DELETE FROM Staffs WHERE staff_id = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, entity.getStaffId());
-            
+
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -168,19 +163,18 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
         }
     }
 
-    @Override
-    public ArrayList<Staff> findAll() {
+    public static ArrayList<Staff> findAll() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ArrayList<Staff> staffs = new ArrayList<>();
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "SELECT * FROM Staffs";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
-            
+
             while (rs.next()) {
                 Staff staff = new Staff();
                 staff.setStaffId(rs.getInt("staff_id"));
@@ -202,32 +196,32 @@ public class StaffDAO implements BaseDAO<Staff, Integer> {
         return staffs;
     }
 
-    public ArrayList<Staff> findActiveStaff() {
+    public static ArrayList<Staff> findActiveStaff() {
         return findByCondition("isActive = 1");
     }
 
-    public ArrayList<Staff> findInactiveStaff() {
+    public static ArrayList<Staff> findInactiveStaff() {
         return findByCondition("isActive = 0");
     }
 
     // tim kiem thao ten, email, sdt --> search
-    public ArrayList<Staff> searchStaff(String keyword) {
+    public static ArrayList<Staff> searchStaff(String keyword) {
         String searchPattern = "'%" + keyword + "%'";
         return findByCondition("full_name LIKE " + searchPattern + " OR email LIKE " + searchPattern + " OR phone LIKE " + searchPattern);
     }
 
     // so luong nhan vien
-    public int getStaffCount() {
+    public static int getStaffCount() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "SELECT COUNT(*) as count FROM Staffs";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 return rs.getInt("count");
             }

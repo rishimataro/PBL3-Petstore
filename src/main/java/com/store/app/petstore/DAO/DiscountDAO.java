@@ -7,13 +7,12 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class DiscountDAO implements BaseDAO<Discount, Integer> {
+public class DiscountDAO {
     public static DiscountDAO getInstance() { 
         return new DiscountDAO(); 
     }
 
-    @Override
-    public int insert(Discount entity) {
+    public static int insert(Discount entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -52,8 +51,7 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
         }
     }
 
-    @Override
-    public int update(Discount entity) {
+    public static int update(Discount entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         
@@ -80,8 +78,7 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
         }
     }
 
-    @Override
-    public int delete(Discount entity) {
+    public static int delete(Discount entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         
@@ -101,8 +98,7 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
         }
     }
 
-    @Override
-    public ArrayList<Discount> findAll() {
+    public static ArrayList<Discount> findAll() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -143,8 +139,7 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
         }
     }
 
-    @Override
-    public Discount findById(Integer id) {
+    public static Discount findById(Integer id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -184,8 +179,7 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
         return null;
     }
 
-    @Override
-    public ArrayList<Discount> findByCondition(String condition) {
+    public static ArrayList<Discount> findByCondition(String condition) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -226,7 +220,7 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
         }
     }
 
-    public Discount findByCode(String code) {
+    public static Discount findByCode(String code) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -240,7 +234,6 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
             
             if (rs.next()) {
                 String discountType = rs.getString("discount_type");
-                // Chuyển đổi từ tiếng Việt sang tiếng Anh
                 if (discountType.equals("phần trăm")) {
                     discountType = "percent";
                 } else if (discountType.equals("cố định")) {
@@ -267,11 +260,11 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
         }
     }
 
-    public ArrayList<Discount> findActiveDiscounts() {
+    public static ArrayList<Discount> findActiveDiscounts() {
         return findByCondition("CURRENT_DATE BETWEEN start_date AND end_date");
     }
 
-    public boolean isValidDiscount(Discount discount) {
+    public static boolean isValidDiscount(Discount discount) {
         if (discount == null) return false;
         
         LocalDate today = LocalDate.now();
@@ -279,7 +272,7 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
                !today.isAfter(discount.getEndDate());
     }
 
-    public String validateDiscount(Discount discount, double orderTotal) {
+    public static String validateDiscount(Discount discount, double orderTotal) {
         if (discount == null) {
             return "Mã giảm giá không tồn tại!";
         }
@@ -301,6 +294,6 @@ public class DiscountDAO implements BaseDAO<Discount, Integer> {
                 ControllerUtils.formatCurrency(discount.getMinOrderValue()));
         }
 
-        return null; // null means valid
+        return null;
     }
 }

@@ -4,13 +4,12 @@ import com.store.app.petstore.Models.Entities.Customer;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class CustomerDAO implements BaseDAO<Customer, Integer> {
+public class CustomerDAO {
     public static CustomerDAO getInstance() { 
         return new CustomerDAO(); 
     }
 
-    @Override
-    public int insert(Customer entity) {
+    public static int insert(Customer entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -44,8 +43,7 @@ public class CustomerDAO implements BaseDAO<Customer, Integer> {
         }
     }
 
-    @Override
-    public int update(Customer entity) {
+    public static int update(Customer entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         
@@ -67,8 +65,7 @@ public class CustomerDAO implements BaseDAO<Customer, Integer> {
         }
     }
 
-    @Override
-    public int delete(Customer entity) {
+    public static int delete(Customer entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         
@@ -88,8 +85,7 @@ public class CustomerDAO implements BaseDAO<Customer, Integer> {
         }
     }
 
-    @Override
-    public ArrayList<Customer> findAll() {
+    public static ArrayList<Customer> findAll() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -118,8 +114,7 @@ public class CustomerDAO implements BaseDAO<Customer, Integer> {
         }
     }
 
-    @Override
-    public Customer findById(Integer id) {
+    public static Customer findById(Integer id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -146,8 +141,7 @@ public class CustomerDAO implements BaseDAO<Customer, Integer> {
         return null;
     }
 
-    @Override
-    public ArrayList<Customer> findByCondition(String condition) {
+    public static ArrayList<Customer> findByCondition(String condition) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -176,16 +170,16 @@ public class CustomerDAO implements BaseDAO<Customer, Integer> {
         }
     }
 
-    public Customer findByPhone(String phone) {
+    public static Customer findByPhone(String phone) {
         ArrayList<Customer> customers = findByCondition("phone = '" + phone + "'");
         return customers != null && !customers.isEmpty() ? customers.get(0) : null;
     }
 
-    public ArrayList<Customer> findByName(String name) {
+    public static ArrayList<Customer> findByName(String name) {
         return findByCondition("full_name LIKE '%" + name + "%'");
     }
 
-    public int getCustomerCount() {
+    public static int getCustomerCount() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -208,7 +202,7 @@ public class CustomerDAO implements BaseDAO<Customer, Integer> {
         }
     }
 
-    public Customer findLatest() {
+    public static Customer findLatest() {
         String sql = "SELECT * FROM CUSTOMER ORDER BY CUSTOMER_ID DESC FETCH FIRST 1 ROW ONLY";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);

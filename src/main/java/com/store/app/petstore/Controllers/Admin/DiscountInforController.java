@@ -54,7 +54,6 @@ public class DiscountInforController implements Initializable {
     private TextField txtMaxValue;
 
     private int idDiscountCurrent;
-    private DiscountDAO discountDAO = new DiscountDAO();
     private boolean isNewDiscount = true;
 
     @Override

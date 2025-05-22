@@ -53,8 +53,8 @@ public class StaffMenuController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         sessionManager = new SessionManager();
-        currentUser = sessionManager.getCurrentUser();
-        currentStaff = sessionManager.getCurrentStaff();
+        currentUser = SessionManager.getCurrentUser();
+        currentStaff = SessionManager.getCurrentStaff();
         setupUserImage();
         setMenu();
         setupUserName();
@@ -191,7 +191,7 @@ public class StaffMenuController implements Initializable {
     void handleLogout(ActionEvent event) {
         Stage currentStage = (Stage) root.getScene().getWindow();
         if (ControllerUtils.showConfirmationAndWait("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
-            sessionManager.clear();
+            SessionManager.clear();
             ViewFactory.getInstance().switchContent("login", currentStage);
         } else {
             ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đăng xuất không thành công");

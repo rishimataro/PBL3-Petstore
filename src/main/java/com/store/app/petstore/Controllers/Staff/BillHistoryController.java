@@ -1,16 +1,17 @@
 package com.store.app.petstore.Controllers.Staff;
 
+import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.*;
 import com.store.app.petstore.Models.Entities.*;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.collections.FXCollections;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
@@ -19,10 +20,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BillHistoryController {
+    static private Map<Integer, Product> productMap;
+    static private Map<Integer, Pet> petMap;
+    static private Map<Integer, Customer> customerMap;
+    
     @FXML
     private TableView<Order> invoice_table;
     @FXML
@@ -47,9 +51,6 @@ public class BillHistoryController {
     private VBox productListVBox;
     @FXML
     private CheckBox allowDeletedInvoice;
-    static private Map<Integer, Product> productMap;
-    static private Map<Integer, Pet> petMap;
-    static private Map<Integer, Customer> customerMap;
     @FXML
     private Label detailInvoiceID;
     @FXML
@@ -62,6 +63,7 @@ public class BillHistoryController {
     private FontAwesomeIconView clear_invoice_search;
     @FXML
     private TextField searchInvoice;
+
     @FXML
     public void initialize() {
         sttCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.1));
@@ -86,7 +88,7 @@ public class BillHistoryController {
                 if (empty || getTableRow() == null || getTableRow().getItem() == null) {
                     setText(null);
                 } else {
-                    Order order = (Order) getTableRow().getItem();
+                    Order order = getTableRow().getItem();
                     Customer customer = customerMap.get(order.getCustomerId());
                     setText(customer != null ? customer.getFullName() : "(Không tìm thấy)");
                 }
@@ -95,20 +97,19 @@ public class BillHistoryController {
 
         invoice_timeCol.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
         invoice_totalBillCol.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
-        invoice_statusCol.setCellFactory(column -> new TableCell<Order, String>(){
+        invoice_statusCol.setCellFactory(column -> new TableCell<Order, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || getTableRow() == null || getTableRow().getItem() == null) {
                     setText(null);
                 } else {
-                    Order order = (Order) getTableRow().getItem();
+                    Order order = getTableRow().getItem();
                     boolean isDeleted = order.isDeleted();
                     setText(isDeleted ? "Đã huỷ" : "Hiệu lực");
                 }
             }
         });
-        // Định dạng ngày giờ hiển thị
         invoice_timeCol.setCellFactory(column -> new TableCell<Order, LocalDateTime>() {
             @Override
             protected void updateItem(LocalDateTime item, boolean empty) {
@@ -124,9 +125,9 @@ public class BillHistoryController {
         start_datepicker.setValue(thirtyDaysAgo);
         end_datepicker.setValue(today);
         loadInvoicesWithFilter();
-        //event
+
         invoice_table.setOnMouseClicked(event -> {
-            if(event.getClickCount() == 1) {
+            if (event.getClickCount() == 1) {
                 Order order = invoice_table.getSelectionModel().getSelectedItem();
                 if (order != null) {
                     loadProductDetails(order);
@@ -138,7 +139,7 @@ public class BillHistoryController {
         });
         searchInvoice.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                loadInvoicesWithFilter(); // Thực hiện tìm kiếm khi nhấn Enter
+                loadInvoicesWithFilter();
             }
         });
         clear_invoice_search.setOnMouseClicked(event -> {
@@ -154,34 +155,34 @@ public class BillHistoryController {
                 case DELETE, BACK_SPACE -> end_datepicker.setValue(null);
             }
         });
-        //
 
-        productMap = ProductDAO.getInstance().findAll().stream()
-            .collect(Collectors.toMap(Product::getProductId, p -> p));
-        petMap = PetDAO.getInstance().findAll().stream()
-            .collect(Collectors.toMap(Pet::getPetId, p -> p));
+        productMap = ProductDAO.findAll().stream()
+                .collect(Collectors.toMap(Product::getProductId, p -> p));
+        petMap = PetDAO.findAll().stream()
+                .collect(Collectors.toMap(Pet::getPetId, p -> p));
     }
+
     @FXML
-    private void onSearchClicked(){
+    private void onSearchClicked() {
         loadInvoicesWithFilter();
 
     }
 
-private void loadProductDetails(Order order) {
-    productListVBox.getChildren().clear();
-    List<OrderDetail> listOrderDetail = OrderDetailDAO.getInstance().findByOrderId(order.getOrderId());
+    private void loadProductDetails(Order order) {
+        productListVBox.getChildren().clear();
+        List<OrderDetail> listOrderDetail = OrderDetailDAO.findByOrderId(order.getOrderId());
 
-    DiscountInfo(order);
-    detailInvoiceID.setText(order.getOrderId() + "");
-    detailInvoiceValue.setText(String.format("%, .0f VNĐ", order.getTotalPrice()));
+        DiscountInfo(order);
+        detailInvoiceID.setText(order.getOrderId() + "");
+        detailInvoiceValue.setText(String.format("%, .0f VNĐ", order.getTotalPrice()));
 //    detailInvoiceTotal.setText("0 VNĐ");
-    for (OrderDetail detail : listOrderDetail) {
-        Node itemNode = createItemNode(detail, productMap, petMap);
-        if (itemNode != null) {
-            productListVBox.getChildren().add(itemNode);
+        for (OrderDetail detail : listOrderDetail) {
+            Node itemNode = createItemNode(detail, productMap, petMap);
+            if (itemNode != null) {
+                productListVBox.getChildren().add(itemNode);
+            }
         }
     }
-}
 
     private Node createItemNode(OrderDetail detail, Map<Integer, Product> productMap, Map<Integer, Pet> petMap) {
         try {
@@ -212,21 +213,22 @@ private void loadProductDetails(Order order) {
             return null;
         }
     }
+
     private void loadInvoicesWithFilter() {
         LocalDateTime startDateTime = (start_datepicker.getValue() != null) ? start_datepicker.getValue().atStartOfDay() : null;
         LocalDateTime endDateTime = (end_datepicker.getValue() != null) ? end_datepicker.getValue().atTime(23, 59, 59) : null;
         boolean allowDeleted = allowDeletedInvoice.isSelected();
-        customerMap = CustomerDAO.getInstance().findAll()
+
+        customerMap = CustomerDAO.findAll()
                 .stream()
                 .collect(Collectors.toMap(Customer::getCustomerId, customer -> customer));
         String keyword = searchInvoice.getText().toLowerCase().trim();
-        List<Order> filtered = OrderDAO.getInstance()
+        List<Order> filtered = OrderDAO
                 .findAll()
                 .stream()
                 .filter(order -> {
                     LocalDateTime orderDate = order.getOrderDate();
 
-                    // 1. Lọc theo ngày
                     boolean dateMatch = true;
                     if (orderDate != null) {
                         if (startDateTime != null) {
@@ -237,7 +239,7 @@ private void loadProductDetails(Order order) {
                         }
                     }
 
-                    // 2. Lọc theo trạng thái (nếu không cho phép hiện bản ghi bị xóa)
+                    // Lọc theo trạng thái
                     boolean statusMatch = allowDeleted || !order.isDeleted();
 
                     // Lọc theo tìm kiếm tên người dùng hoặc ID
@@ -250,48 +252,33 @@ private void loadProductDetails(Order order) {
 
         invoice_table.setItems(FXCollections.observableArrayList(filtered));
     }
+
     @FXML
-    private void DeleteInvoiceClicked(){
+    private void DeleteInvoiceClicked() {
         Order selectedOrder = invoice_table.getSelectionModel().getSelectedItem();
 
         if (selectedOrder == null) {
-            showAlert("Vui lòng chọn hóa đơn để huỷ!", Alert.AlertType.WARNING);
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng chọn hóa đơn để huỷ!");
             return;
         }
 
-        // Xác nhận huỷ
-        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmAlert.setTitle("Xác nhận huỷ hoá đơn");
-        confirmAlert.setHeaderText(null);
-        confirmAlert.setContentText("Bạn có chắc chắn muốn huỷ hoá đơn này?");
-
-        Optional<ButtonType> result = confirmAlert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        if (ControllerUtils.showConfirmationAndWait("Xác nhận huỷ hoá đơn", "Bạn có chắc chắn muốn huỷ hoá đơn này?")) {
             selectedOrder.setDeleted(true);  // hoặc status khác tuỳ hệ thống
-            OrderDAO.getInstance().update(selectedOrder); // nhớ phải có hàm update
+            OrderDAO.update(selectedOrder); // nhớ phải có hàm update
             loadInvoicesWithFilter(); // reload lại bảng dựa theo filter hiện tại
         }
-//        selectedOrder.setDeleted(true);  // hoặc status khác tuỳ hệ thống
-//        OrderDAO.getInstance().update(selectedOrder); // nhớ phải có hàm update
-//        loadInvoicesWithFilter(); // reload lại bảng dựa theo filter hiện tại
     }
-    private void showAlert(String message, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle("Thông báo");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-    private void DiscountInfo(Order order){
-        Discount dc = DiscountDAO.getInstance().findById(order.getDiscountId());
-        Double total_value = order.getTotalPrice();
 
-        Double max_discount_value = 0.0;
-        Double discount_value = 0.0;
-        Double discount_min_value = 0.0;
+    private void DiscountInfo(Order order) {
+        Discount dc = DiscountDAO.findById(order.getDiscountId());
+        double total_value = order.getTotalPrice();
+
+        double max_discount_value = 0.0;
+        double discount_value = 0.0;
+        double discount_min_value = 0.0;
         String discount_type = "";
         String discount_code = "";
-        if(dc != null){
+        if (dc != null) {
             max_discount_value = dc.getMaxDiscountValue();
             discount_value = dc.getValue();
             discount_min_value = dc.getMinOrderValue();
@@ -299,16 +286,15 @@ private void loadProductDetails(Order order) {
             discount_code = dc.getCode();
         }
 
-        Double discount = 0.0;
+        double discount = 0.0;
         if (discount_min_value > total_value) {
             discount = 0.0;
-        }
-        else if(discount_type.equals("percent")){
+        } else if (discount_type.equals("percent")) {
             discount = ((total_value * discount_value) / 100);
             if (discount > max_discount_value) {
                 discount = max_discount_value;
             }
-        }else if(discount_type.equals("fixed")){
+        } else if (discount_type.equals("fixed")) {
             discount = discount_value;
         }
         discountCode.setText(discount_code);

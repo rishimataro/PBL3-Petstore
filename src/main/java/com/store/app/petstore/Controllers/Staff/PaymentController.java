@@ -22,15 +22,12 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 
-import javax.swing.text.View;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PaymentController implements Initializable {
     @FXML
@@ -108,12 +105,6 @@ public class PaymentController implements Initializable {
     @FXML
     private VBox orderDetailsBox;
 
-    private CustomerDAO customerDAO = new CustomerDAO();
-    private StaffDAO staffDAO = new StaffDAO();
-    private OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
-    private ProductDAO productDAO = new ProductDAO();
-    private PetDAO petDAO = new PetDAO();
-
     private SessionManager sessionManager = new SessionManager();
     private Customer customer;
     private Staff staff;
@@ -148,7 +139,6 @@ public class PaymentController implements Initializable {
             }
         });
 
-        // Lấy dữ liệu đơn hàng từ SessionManager nếu có
         Order order = SessionManager.getCurrentOrder();
         ArrayList<OrderDetail> orderDetails = SessionManager.getCurrentOrderDetails();
         Map<Integer, Product> products = SessionManager.getCurrentOrderProducts();
@@ -182,7 +172,7 @@ public class PaymentController implements Initializable {
             return;
         }
 
-        Customer foundCustomer = customerDAO.findByPhone(searchText);
+        Customer foundCustomer = CustomerDAO.findByPhone(searchText);
 
         if (foundCustomer != null) {
             customer = foundCustomer;
@@ -212,7 +202,7 @@ public class PaymentController implements Initializable {
         if (popupStage != null) {
             popupStage.setOnHiding(event -> {
                 if (customer != null) {
-                    Customer updatedCustomer = customerDAO.findById(customer.getCustomerId());
+                    Customer updatedCustomer = CustomerDAO.findById(customer.getCustomerId());
                     if (updatedCustomer != null) {
                         customer = updatedCustomer;
                         setupCustomerInfo();
@@ -243,7 +233,7 @@ public class PaymentController implements Initializable {
             if (currentDiscount != null) {
                 currentOrder.setDiscountId(currentDiscount.getDiscountId());
             }
-            int orderId = OrderDAO.getInstance().insert(currentOrder);
+            int orderId = OrderDAO.insert(currentOrder);
             if (orderId == 0) {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu đơn hàng vào cơ sở dữ liệu.");
                 return;
@@ -251,33 +241,31 @@ public class PaymentController implements Initializable {
 
             for (OrderDetail detail : orderDetails) {
                 detail.setOrderId(orderId);
-                com.store.app.petstore.DAO.OrderDetailDAO.getInstance().insert(detail);
+                OrderDetailDAO.insert(detail);
 
                 if ("pet".equals(detail.getItemType())) {
                     Pet pet = petMap.get(detail.getItemId());
                     if (pet != null) {
                         pet.setIsSold(true);
-                        com.store.app.petstore.DAO.PetDAO.getInstance().update(pet);
+                        PetDAO.update(pet);
                     }
                 } else if ("product".equals(detail.getItemType())) {
                     Product product = productMap.get(detail.getItemId());
                     if (product != null) {
                         product.setStock(product.getStock() - detail.getQuantity());
-                        com.store.app.petstore.DAO.ProductDAO.getInstance().update(product);
+                        ProductDAO.update(product);
                     }
                 }
             }
 
             ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Thanh toán thành công!");
-            
-            // Xóa tab đã thanh toán
+
             Tab currentTab = SessionManager.getCurrentTab();
             if (currentTab != null) {
-                // Lưu tab hiện tại để xóa sau khi quay lại màn hình order
                 SessionManager.setTabToRemove(currentTab);
             }
             
-            com.store.app.petstore.Sessions.SessionManager.clearCurrentOrder();
+            SessionManager.clearCurrentOrder();
             handleBack();
         }
     }
@@ -310,8 +298,8 @@ public class PaymentController implements Initializable {
     }
 
     private void setupStaffInfo() {
-        sessionManager.setCurrentStaff(staffDAO.findByUserId(SessionManager.getCurrentUser().getUserId()));
-        staff = sessionManager.getCurrentStaff();
+        SessionManager.setCurrentStaff(StaffDAO.findByUserId(SessionManager.getCurrentUser().getUserId()));
+        staff = SessionManager.getCurrentStaff();
         if (staff != null) {
             staffIdField.setText(String.valueOf(staff.getStaffId()));
             staffNameField.setText(staff.getFullName());

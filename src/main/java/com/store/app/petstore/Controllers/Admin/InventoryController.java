@@ -20,7 +20,6 @@ import java.util.*;
 
 public class InventoryController implements Initializable {
 
-    // Filter Controls
     @FXML
     private ComboBox<String> categoryComboBox;
 
@@ -33,7 +32,6 @@ public class InventoryController implements Initializable {
     @FXML
     private Button resetButton;
 
-    // Summary Labels
     @FXML
     private Label totalProductsLabel;
 
@@ -46,7 +44,6 @@ public class InventoryController implements Initializable {
     @FXML
     private Label outOfStockLabel;
 
-    // Table
     @FXML
     private TableView<Product> inventoryTable;
 
@@ -74,7 +71,6 @@ public class InventoryController implements Initializable {
     @FXML
     private TableColumn<Product, Void> actionsColumn;
 
-    // Buttons
     @FXML
     private Button exportButton;
 
@@ -84,21 +80,13 @@ public class InventoryController implements Initializable {
     @FXML
     private Button backButton;
 
-    // Data access object
     private final ProductDAO productDAO = ProductDAO.getInstance();
-
-    // Formatter for currency
     private final NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-
-    // Product list
     private ObservableList<Product> productList;
-
-    // Constants
     private static final int LOW_STOCK_THRESHOLD = 10;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialize components
         setupTable();
         setupFilters();
         setupButtons();
@@ -106,26 +94,22 @@ public class InventoryController implements Initializable {
     }
 
     private void setupTable() {
-        // Set up table columns
         idColumn.setCellValueFactory(new PropertyValueFactory<>("productId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        
-        // Format price column
+
         priceColumn.setCellValueFactory(cellData -> {
             int price = cellData.getValue().getPrice();
             return new SimpleStringProperty(currencyFormatter.format(price));
         });
-        
-        // Calculate value column
+
         valueColumn.setCellValueFactory(cellData -> {
             Product product = cellData.getValue();
             int value = product.getPrice() * product.getStock();
             return new SimpleStringProperty(currencyFormatter.format(value));
         });
-        
-        // Set status column
+
         statusColumn.setCellValueFactory(cellData -> {
             int stock = cellData.getValue().getStock();
             String status;
@@ -138,8 +122,7 @@ public class InventoryController implements Initializable {
             }
             return new SimpleStringProperty(status);
         });
-        
-        // Style status column based on stock level
+
         statusColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -163,8 +146,7 @@ public class InventoryController implements Initializable {
                 }
             }
         });
-        
-        // Set up actions column
+
         setupActionsColumn();
     }
 
@@ -200,48 +182,38 @@ public class InventoryController implements Initializable {
     }
 
     private void setupFilters() {
-        // Get all unique categories
         Set<String> categories = new HashSet<>();
         for (Product product : productDAO.findAll()) {
             if (product.getCategory() != null && !product.getCategory().isEmpty()) {
                 categories.add(product.getCategory());
             }
         }
-        
-        // Add "All" option
+
         List<String> categoryList = new ArrayList<>(categories);
         Collections.sort(categoryList);
         categoryList.add(0, "Tất cả");
-        
-        // Set up category combo box
+
         categoryComboBox.setItems(FXCollections.observableArrayList(categoryList));
         categoryComboBox.getSelectionModel().selectFirst();
-        
-        // Set up search button
+
         searchButton.setOnAction(e -> applyFilters());
-        
-        // Set up reset button
+
         resetButton.setOnAction(e -> resetFilters());
     }
 
     private void setupButtons() {
-        // Export button
         exportButton.setOnAction(e -> exportInventory());
-        
-        // Print button
+
         printButton.setOnAction(e -> printInventory());
-        
-        // Back button
+
         backButton.setOnAction(e -> navigateToDashboard());
     }
 
     private void loadData() {
-        // Load all products
         ArrayList<Product> products = productDAO.findAll();
         productList = FXCollections.observableArrayList(products);
         inventoryTable.setItems(productList);
-        
-        // Update summary labels
+
         updateSummary(products);
     }
 
@@ -281,8 +253,7 @@ public class InventoryController implements Initializable {
         } else {
             filteredProducts = productDAO.findByCategory(category);
         }
-        
-        // Apply search filter if search text is not empty
+
         if (!searchText.isEmpty()) {
             filteredProducts.removeIf(product -> 
                 !product.getName().toLowerCase().contains(searchText));
@@ -290,8 +261,7 @@ public class InventoryController implements Initializable {
         
         productList = FXCollections.observableArrayList(filteredProducts);
         inventoryTable.setItems(productList);
-        
-        // Update summary labels
+
         updateSummary(filteredProducts);
     }
 
@@ -302,22 +272,16 @@ public class InventoryController implements Initializable {
     }
 
     private void handleEditProduct(Product product) {
-        // In a real implementation, this would open a dialog to edit the product
-        // For now, we'll just show a message
         ControllerUtils.showInformationAndWait("Chỉnh sửa sản phẩm", 
                 "Đang chỉnh sửa sản phẩm: " + product.getName());
     }
 
     private void exportInventory() {
-        // In a real implementation, this would export the inventory to a file
-        // For now, we'll just show a message
         ControllerUtils.showInformationAndWait("Xuất báo cáo", 
                 "Đang xuất báo cáo tồn kho...");
     }
 
     private void printInventory() {
-        // In a real implementation, this would print the inventory
-        // For now, we'll just show a message
         ControllerUtils.showInformationAndWait("In báo cáo", 
                 "Đang in báo cáo tồn kho...");
     }

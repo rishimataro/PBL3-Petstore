@@ -5,9 +5,8 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Base64;
 
-public class UserDAO implements BaseDAO<User, Integer> {
+public class UserDAO {
     public static final int isDuplicate = -1;
 
     public static UserDAO getInstance() {
@@ -15,20 +14,14 @@ public class UserDAO implements BaseDAO<User, Integer> {
     }
 
     public static String encode(String password) {
-//        return Base64.getEncoder().encodeToString(password.getBytes());
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
-
-//    public static String decode(String password) {
-//        return new String(Base64.getDecoder().decode(password));
-//    }
 
     public static boolean verify(String password, String hashed) {
         return BCrypt.checkpw(password, hashed);
     }
 
-    @Override
-    public int insert(User entity) {
+    public static int insert(User entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -63,8 +56,7 @@ public class UserDAO implements BaseDAO<User, Integer> {
         }
     }
 
-    @Override
-    public int update(User entity) {
+    public static int update(User entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -89,7 +81,7 @@ public class UserDAO implements BaseDAO<User, Integer> {
         }
     }
 
-    public int update(User entity, boolean isUsernameChanged) {
+    public static int update(User entity, boolean isUsernameChanged) {
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -114,8 +106,7 @@ public class UserDAO implements BaseDAO<User, Integer> {
         }
     }
 
-    @Override
-    public int delete(User entity) {
+    public static int delete(User entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -135,8 +126,7 @@ public class UserDAO implements BaseDAO<User, Integer> {
         }
     }
 
-    @Override
-    public ArrayList<User> findAll() {
+    public static ArrayList<User> findAll() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -166,8 +156,7 @@ public class UserDAO implements BaseDAO<User, Integer> {
         return users;
     }
 
-    @Override
-    public User findById(Integer id) {
+    public static User findById(Integer id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -197,8 +186,7 @@ public class UserDAO implements BaseDAO<User, Integer> {
         return null;
     }
 
-    @Override
-    public ArrayList<User> findByCondition(String condition) {
+    public static ArrayList<User> findByCondition(String condition) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -228,7 +216,7 @@ public class UserDAO implements BaseDAO<User, Integer> {
         return users;
     }
 
-    public User findByUsername(String username) {
+    public static User findByUsername(String username) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -258,7 +246,7 @@ public class UserDAO implements BaseDAO<User, Integer> {
         return null;
     }
 
-    public User findByEmail(String email) {
+    public static User findByEmail(String email) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -273,8 +261,8 @@ public class UserDAO implements BaseDAO<User, Integer> {
 
             // Nếu email tồn tại, lấy thông tin user
             String sql = "SELECT u.* FROM Users u " +
-                        "JOIN Staffs s ON u.user_id = s.user_id " +
-                        "WHERE s.email = ?";
+                    "JOIN Staffs s ON u.user_id = s.user_id " +
+                    "WHERE s.email = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
 
@@ -299,7 +287,7 @@ public class UserDAO implements BaseDAO<User, Integer> {
         return null;
     }
 
-    public boolean checkDuplicate(String username, int excludeUserId) {
+    public static boolean checkDuplicate(String username, int excludeUserId) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -326,7 +314,7 @@ public class UserDAO implements BaseDAO<User, Integer> {
         return false;
     }
 
-    public boolean checkUserID(User entity) {
+    public static boolean checkUserID(User entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;

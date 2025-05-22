@@ -1,21 +1,17 @@
 package com.store.app.petstore.Controllers.Staff;
 
+import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.CustomerDAO;
 import com.store.app.petstore.Models.Entities.Customer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.event.ActionEvent;
-import com.store.app.petstore.Controllers.ControllerUtils;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 // Staff
 public class CustomerInforController implements Initializable {
@@ -39,7 +35,6 @@ public class CustomerInforController implements Initializable {
     private TextField txtPhone;
 
     private int idCustomerCurrent;
-    private CustomerDAO customerDAO = new CustomerDAO();
     private boolean isNewCustomer = true;
 
     @Override
@@ -65,7 +60,7 @@ public class CustomerInforController implements Initializable {
             txtCustomerId.setText(String.valueOf(customer.getCustomerId()));
             txtName.setText(customer.getFullName());
             txtPhone.setText(customer.getPhone());
-            
+
             btnAdd.setDisable(true);
             btnFix.setDisable(false);
             btnSave.setDisable(true);
@@ -83,7 +78,7 @@ public class CustomerInforController implements Initializable {
     }
 
     private int getNextCustomerId() {
-        ArrayList<Customer> customers = customerDAO.findAll();
+        ArrayList<Customer> customers = CustomerDAO.findAll();
         if (customers == null || customers.isEmpty()) {
             return 1;
         }
@@ -120,12 +115,12 @@ public class CustomerInforController implements Initializable {
             customer.setPhone(phone);
 
             if (isNewCustomer) {
-                int result = customerDAO.insert(customer);
+                int result = CustomerDAO.insert(customer);
                 if (result > 0) {
                     idCustomerCurrent = result;
                     isNewCustomer = false;
                     ControllerUtils.showAlert(AlertType.INFORMATION, "Thành công", "Thêm khách hàng thành công!");
-                    
+
                     btnAdd.setDisable(false);
                     btnFix.setDisable(false);
                     btnSave.setDisable(true);
@@ -136,7 +131,7 @@ public class CustomerInforController implements Initializable {
                 }
             } else {
                 customer.setCustomerId(idCustomerCurrent);
-                if (customerDAO.update(customer) > 0) {
+                if (CustomerDAO.update(customer) > 0) {
                     ControllerUtils.showAlert(AlertType.INFORMATION, "Thành công", "Cập nhật khách hàng thành công!");
                     txtName.setDisable(true);
                     txtPhone.setDisable(true);
