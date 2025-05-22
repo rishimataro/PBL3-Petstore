@@ -93,7 +93,11 @@ public class AdminMenuController implements Initializable {
         currentUser = SessionManager.getCurrentUser();
         setupUserName();
         setupUserImage();
-        setMenu();
+        root.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                setMenu();
+            }
+        });
     }
 
     private void setupUserName() {
