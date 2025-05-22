@@ -13,7 +13,7 @@ import java.io.IOException;
 public class PetStoreApplication extends Application {
     @Override
     public void start(Stage primaryStage) {
-        DatabaseManager.connect();
+//        DatabaseManager.connect();
 //        ModelView.getInstance().getViewFactory().showWindow("login");
 
 //        ModelView.getInstance().getAdminFactory().showWindow("dashboard");
@@ -21,7 +21,7 @@ public class PetStoreApplication extends Application {
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/BillHistory.fxml"));
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Admin/InvoiceManagement.fxml"));
         Parent root;
-        try {
+        try{
             root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();

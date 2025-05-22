@@ -29,7 +29,7 @@
                         <StackPane HBox.hgrow="ALWAYS">
                            <children>
                                     <TextField fx:id="searchTextField" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm sản phẩm" styleClass="find-textfield" />
-                              <AnchorPane>
+                              <AnchorPane mouseTransparent="true">
                                  <children>
 
                                           <FontAwesomeIconView fx:id="searchIcon" glyphName="SEARCH" size="13" styleClass="icon" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="8.5" />
@@ -61,7 +61,7 @@
 <!--                              </AnchorPane>-->
 <!--                             <AnchorPane fx:id="orderContentPane"  AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">-->
 
-                                     <ScrollPane VBox.vgrow="ALWAYS" fx:id="orderScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="280.0" prefWidth="420.0" vbarPolicy="NEVER" />
+                         <ScrollPane fx:id="orderScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="280.0" prefWidth="420.0" vbarPolicy="NEVER" VBox.vgrow="ALWAYS" />
 
 <!--                             </AnchorPane>-->
                                        <GridPane hgap="10.0" prefHeight="80.0" prefWidth="410.0">
@@ -79,9 +79,9 @@
                                       <Label fx:id="totalMoneyLabel" styleClass="infomoney-label" text="Tổng tiền:" />
                                       <Label fx:id="voucherLabel" styleClass="infomoney-label" text="Voucher:" GridPane.rowIndex="1" />
                                       <Label fx:id="finalMoneyLabel" styleClass="infomoney-label" text="Khách cần trả:" GridPane.rowIndex="2" />
-      
+
                                                <TextField fx:id="voucherTextField" promptText="Nhập code (nếu có)" styleClass="code-textfield" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      
+
                                                <Label fx:id="totalMoneyValueLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" />
                                       <Label fx:id="voucherValueLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                       <Label fx:id="finalMoneyValueLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
