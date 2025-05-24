@@ -1,73 +1,81 @@
-*{
+* {
     -main-background-color: #FFFFFF;
 }
-.root{
+
+.root {
     -fx-background-color: -main-background-color;
 }
+
 .circle-mask {
     -fx-pref-width: 195;
     -fx-pref-height: 195;
     -fx-background-color: -main-background-color; /* màu che phủ */
-    -fx-shape: "M0,0 H195 V195 H0 Z
-    M97.5,97.5
-    m-92.5,0
-    a92.5,92.5 0 1,0 185,0
-    a92.5,92.5 0 1,0 -185,0";
+    -fx-shape: "M0,0 H195 V195 H0 Z M97 .5, 97.5 m-92 .5, 0 a92 .5, 92.5 0 1, 0 185, 0 a92 .5, 92.5 0 1, 0 -185, 0 ";
 }
-.fullName-label{
+
+.fullName-label {
     -fx-text-fill: #017FCB;
     -fx-font-size: 24;
     -fx-font-weight: 700;
 }
-.role-label{
+
+.role-label {
     -fx-text-fill: #01C4DA;
     -fx-font-size: 15;
     -fx-font-weight: 700;
 }
-.staffID-label{
+
+.staffID-label {
     -fx-text-fill: #01C4DA;
     -fx-font-size: 15;
     -fx-font-weight: 400;
 }
-.main-label{
+
+.main-label {
     -fx-text-fill: #017FCB;
     -fx-font-size: 16;
     -fx-font-weight: 700;
 }
-.secondary-label{
+
+.secondary-label {
     -fx-text-fill: #017FCB;
     -fx-font-size: 13;
     -fx-font-weight: bold;
     -fx-padding: 0 0 0 10;
 }
-.gridForm{
+
+.gridForm {
     -fx-background-color: #FFFFFF;
     -fx-padding: 5 10 15 10;
     -fx-background-radius: 15;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.1, 0, 0.7);
 }
-.textField_cst_form{
+
+.textField_cst_form {
     -fx-padding: 0 0 0 10;
     /*-fx-pref-height: 20;*/
     -fx-max-width: Infinity;
     -fx-max-height: Infinity;
     -fx-background-color: transparent;
 }
-.button.crud_func{
+
+.button.crud_func {
     -fx-border-radius: 0;
     -fx-text-fill: #FFFFFF;
     -fx-background-radius: 0;
     -fx-cursor: hand;
     -fx-font-weight: bold;
 }
-.save-btn{
+
+.save-btn {
     -fx-background-color: #FFC534;
 }
-.icon{
+
+.icon {
     -fx-fill: #FFFFFF;
 }
 
-.change-btn{
+.change-btn {
     -fx-background-color: #01C4DA;
 }
 

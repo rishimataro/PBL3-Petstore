@@ -42,7 +42,6 @@
                <children>
                   <Label fx:id="itemPrice" prefHeight="15.0" prefWidth="75.0" styleClass="price-box" text="\$10 000 000" />
                   <FontAwesomeIconView fx:id="addIcon" accessibleRole="BUTTON" glyphName="PLUS_CIRCLE" styleClass="icon-button" />
-                  <FontAwesomeIconView fx:id="closeIcon" accessibleRole="BUTTON" glyphName="WINDOW_CLOSE" styleClass="icon-button" />
                </children>
             </HBox>
          </children>
