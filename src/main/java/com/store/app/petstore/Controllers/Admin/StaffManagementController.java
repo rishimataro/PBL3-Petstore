@@ -5,6 +5,7 @@ import com.store.app.petstore.DAO.StaffDAO;
 import com.store.app.petstore.DAO.UserDAO;
 import com.store.app.petstore.Models.Entities.Staff;
 import com.store.app.petstore.Models.Entities.User;
+import com.store.app.petstore.Views.AdminFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -197,27 +198,14 @@ public class StaffManagementController implements Initializable {
     }
 
     private void openStaffInfoPopup(Staff staff) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Admin/StaffInfor.fxml"));
-            Parent root = loader.load();
+        Stage currentStage = (Stage) root.getScene().getWindow();
+        Stage popupStage = AdminFactory.getInstance().showPopup("staff", currentStage, true, staff);
 
-            StaffInforController controller = loader.getController();
-            if (staff != null) {
-                controller.setStaff(staff);
-            }
-
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-            loadStaffs();
-            applyFilters();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể mở cửa sổ thông tin nhân viên!");
+        if (popupStage != null) {
+            popupStage.setOnHiding(event -> {
+                loadStaffs();
+                applyFilters();
+            });
         }
     }
 

@@ -228,24 +228,18 @@ public class PetInforController implements Initializable {
                     pet.setPrice(Integer.parseInt(txtPrice.getText()));
                     pet.setDescription(txtDescription.getText());
 
-                    // Set type based on radio button selection
                     if (rbtnDog.isSelected()) {
-                        pet.setType("Chó");
+                        pet.setType("chó");
                     } else if (rbtnCat.isSelected()) {
-                        pet.setType("Mèo");
+                        pet.setType("mèo");
                     }
 
-                    // Set sex from choice box
                     pet.setSex(cmbSex.getValue());
-
-                    // Set default isSold status
                     pet.setIsSold(false);
 
-                    // If we have a temporary image URL from the change image function, use it
                     if(tempImageUrl != null && !tempImageUrl.isEmpty()) {
                         pet.setImageUrl(tempImageUrl);
                     }
-                    // Otherwise, use the standard pet image path format
                     else {
                         pet.setImageUrl("/Images/Pet/pet" + pet.getPetId() + ".jpg");
                     }
@@ -273,14 +267,12 @@ public class PetInforController implements Initializable {
                         pet.setPrice(Integer.parseInt(txtPrice.getText()));
                         pet.setDescription(txtDescription.getText());
 
-                        // Set type based on radio button selection
                         if (rbtnDog.isSelected()) {
-                            pet.setType("Chó");
+                            pet.setType("chó");
                         } else if (rbtnCat.isSelected()) {
-                            pet.setType("Mèo");
+                            pet.setType("mèo");
                         }
 
-                        // Set sex from choice box
                         pet.setSex(cmbSex.getValue());
 
                         int result = PetDAO.update(pet);
@@ -316,9 +308,9 @@ public class PetInforController implements Initializable {
             pet.setPetId(idPetCurrent);
             pet.setName(txtName.getText());
             if (rbtnDog.isSelected()) {
-                pet.setType("Chó");
+                pet.setType("chó");
             } else if (rbtnCat.isSelected()) {
-                pet.setType("Mèo");
+                pet.setType("mèo");
             }
             pet.setBreed(txtBreed.getText());
             if(!txtAge.getText().isEmpty()) {
@@ -329,7 +321,6 @@ public class PetInforController implements Initializable {
             }
             pet.setDescription(txtDescription.getText());
 
-            // Show warning that the pet hasn't been saved yet
             ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo",
                 "Thú cưng chưa được lưu vào cơ sở dữ liệu. Hình ảnh sẽ được cập nhật khi bạn lưu thú cưng.");
         } else {
@@ -419,27 +410,10 @@ public class PetInforController implements Initializable {
 
     private void loadDefaultImage() {
         try {
-            // Try to load a default pet image using the standard format
-            // If idPetCurrent is set, use that ID, otherwise use a generic pet image
-            String imagePath = "/Images/Pet/pet";
-            if (idPetCurrent > 0) {
-                imagePath += idPetCurrent;
-            } else {
-                imagePath += "1"; // Use pet1.jpg as a fallback
-            }
-            imagePath += ".jpg";
-
-            Image defaultImage = new Image(getClass().getResourceAsStream(imagePath));
-            setRectangleImage(defaultImage);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            // Fallback to noImage.png if the pet image is not found
-            try {
-                Image fallbackImage = new Image(getClass().getResourceAsStream("/Images/noImage.png"));
-                setRectangleImage(fallbackImage);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Image fallbackImage = new Image(getClass().getResourceAsStream("/Images/noImage.png"));
+            setRectangleImage(fallbackImage);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -502,9 +476,9 @@ public class PetInforController implements Initializable {
         txtDescription.clear();
         rbtnDog.setSelected(false);
         rbtnCat.setSelected(false);
-        cmbSex.setValue("Đực"); // Reset to default value
-        tempImageUrl = null; // Reset temporary image URL
-        loadDefaultImage(); // Reset the image to default
+        cmbSex.setValue("Đực");
+        tempImageUrl = null;
+        loadDefaultImage();
     }
 
     private boolean validateInput() {

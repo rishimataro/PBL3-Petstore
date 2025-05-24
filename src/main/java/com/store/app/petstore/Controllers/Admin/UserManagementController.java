@@ -3,6 +3,7 @@ package com.store.app.petstore.Controllers.Admin;
 import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.UserDAO;
 import com.store.app.petstore.Models.Entities.User;
+import com.store.app.petstore.Views.AdminFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -207,27 +208,14 @@ public class UserManagementController implements Initializable {
     }
 
     private void openUserInfoPopup(User user) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Admin/UserInfor.fxml"));
-            Parent root = loader.load();
+        Stage currentStage = (Stage) root.getScene().getWindow();
+        Stage popupStage = AdminFactory.getInstance().showPopup("account", currentStage, true, user);
 
-            UserInforController controller = loader.getController();
-            if (user != null) {
-                controller.setUser(user);
-            }
-
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-            loadUsers();
-            applyFilters();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể mở cửa sổ thông tin người dùng!");
+        if (popupStage != null) {
+            popupStage.setOnHiding(event -> {
+                loadUsers();
+                applyFilters();
+            });
         }
     }
 

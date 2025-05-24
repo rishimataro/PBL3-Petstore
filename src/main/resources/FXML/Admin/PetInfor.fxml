@@ -17,19 +17,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane fx:id="petInforPopup" prefHeight="365.0" prefWidth="500.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.PetInforController">
+<AnchorPane fx:id="petInforPopup" prefHeight="475.0" prefWidth="600.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.PetInforController">
    <children>
-      <AnchorPane prefHeight="30.0" prefWidth="500.0" styleClass="nav-pane">
+      <AnchorPane prefHeight="40.0" prefWidth="600.0" styleClass="nav-pane">
          <children>
-            <Label layoutX="192.0" layoutY="7.0" styleClass="title" text="Thông tin chi tiết" />
-            <FontAwesomeIconView fx:id="closeIcon" fill="WHITE" glyphName="CLOSE" layoutX="476.0" layoutY="21.0" size="16">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></FontAwesomeIconView>
+            <Label layoutX="239.0" layoutY="9.0" styleClass="title" text="Thông tin chi tiết" />
          </children>
       </AnchorPane>
-      <Rectangle fx:id="imgPet" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="210.0" layoutX="24.0" layoutY="38.0" stroke="BLACK" strokeType="INSIDE" styleClass="shape-img" width="200.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0" />
-      <GridPane layoutX="25.0" layoutY="268.0" styleClass="grid-btn" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="270.0">
+      <Rectangle fx:id="imgPet" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="250.0" layoutX="24.0" layoutY="38.0" stroke="BLACK" strokeType="INSIDE" styleClass="shape-img" width="200.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0" />
+      <GridPane layoutX="22.0" layoutY="314.0" styleClass="grid-btn" AnchorPane.leftAnchor="22.0" AnchorPane.topAnchor="318.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -45,10 +41,10 @@
             <Button fx:id="btnSave" mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <GridPane layoutX="238.0" layoutY="50.0" prefHeight="202.0" prefWidth="245.0">
+      <GridPane hgap="5.0" layoutX="245.0" layoutY="57.0" prefHeight="264.0" prefWidth="326.0" vgap="10.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="103.5999755859375" minWidth="10.0" prefWidth="66.79998779296875" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="153.20001220703125" minWidth="10.0" prefWidth="153.20001220703125" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="217.5999755859375" minWidth="10.0" prefWidth="84.00001220703125" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="255.39997558593748" minWidth="10.0" prefWidth="248.79998779296875" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -66,11 +62,11 @@
             <Label styleClass="lblInfor" text="Giống:" GridPane.rowIndex="4" />
             <Label styleClass="lblInfor" text="Tuổi:" GridPane.rowIndex="5" />
             <Label styleClass="lblInfor" text="Giá:" GridPane.rowIndex="6" />
-            <TextField fx:id="txtPetId" editable="false" GridPane.columnIndex="1" />
-            <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="txtBreed" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField fx:id="txtAge" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField fx:id="txtPrice" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextField fx:id="txtPetId" editable="false" promptText="Mã thú cưng" GridPane.columnIndex="1" />
+            <TextField fx:id="txtName" promptText="Tên thú cưng" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="txtBreed" promptText="Giống loài" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="txtAge" promptText="Số tuổi" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="txtPrice" promptText="Giá bán" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="30.0" styleClass="hbox-btn" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets top="5.0" />
@@ -79,24 +75,30 @@
                   <Insets top="4.0" />
                </padding>
                <children>
-                  <RadioButton fx:id="rbtnDog" mnemonicParsing="false" text="Chó" />
-                  <RadioButton fx:id="rbtnCat" mnemonicParsing="false" text="Mèo" />
+                  <RadioButton fx:id="rbtnDog" mnemonicParsing="false" text="Chó">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></RadioButton>
+                  <RadioButton fx:id="rbtnCat" mnemonicParsing="false" text="Mèo">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></RadioButton>
                </children>
             </HBox>
             <Label styleClass="lblInfor" text="Giới tính:" GridPane.rowIndex="3" />
-            <ChoiceBox fx:id="cmbSex" prefHeight="27.0" prefWidth="158.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <ChoiceBox fx:id="cmbSex" prefHeight="37.0" prefWidth="243.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
-      <VBox layoutX="238.0" layoutY="260.0" prefHeight="70.0" prefWidth="246.0">
+      <VBox layoutX="244.0" layoutY="334.0" prefHeight="116.0" prefWidth="326.0">
          <children>
             <Label styleClass="lblInfor" text="Mô tả:">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin></Label>
-            <TextArea fx:id="txtDescription" prefHeight="200.0" prefWidth="200.0" />
+            <TextArea fx:id="txtDescription" prefHeight="200.0" prefWidth="200.0" promptText="Mô tả về thú cưng" />
          </children>
       </VBox>
-      <FontAwesomeIconView fx:id="btnChange" accessibleRole="BUTTON" fill="WHITE" glyphName="REFRESH" layoutX="200.0" layoutY="254.0" size="20">
+      <FontAwesomeIconView fx:id="btnChange" accessibleRole="BUTTON" fill="WHITE" glyphName="REFRESH" layoutX="200.0" layoutY="292.0" size="20" stroke="BLACK">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

@@ -3,6 +3,7 @@ package com.store.app.petstore.Controllers.Admin;
 import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.CustomerDAO;
 import com.store.app.petstore.Models.Entities.Customer;
+import com.store.app.petstore.Views.AdminFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -199,27 +200,14 @@ public class CustomerManagementController implements Initializable {
     }
 
     private void openCustomerInfoPopup(Customer customer) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Admin/CustomerInfor.fxml"));
-            Parent root = loader.load();
+        Stage currentStage = (Stage) root.getScene().getWindow();
+        Stage popupStage = AdminFactory.getInstance().showPopup("customer", currentStage, true, customer);
 
-            CustomerInforController controller = loader.getController();
-            if (customer != null) {
-                controller.setCustomer(customer);
-            }
-
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-            loadCustomers();
-            applyFilters();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể mở cửa sổ thông tin khách hàng!");
+        if (popupStage != null) {
+            popupStage.setOnHiding(event -> {
+                loadCustomers();
+                applyFilters();
+            });
         }
     }
 

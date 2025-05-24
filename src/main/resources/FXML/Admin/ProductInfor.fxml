@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -14,21 +15,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<?import javafx.scene.control.ChoiceBox?>
-<AnchorPane fx:id="productInforPopup" prefHeight="365.0" prefWidth="500.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.ProductInforController">
+<AnchorPane fx:id="productInforPopup" prefHeight="465.0" prefWidth="600.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.ProductInforController">
     <children>
-        <AnchorPane prefHeight="30.0" prefWidth="500.0" styleClass="nav-pane">
+        <AnchorPane prefHeight="40.0" prefWidth="600.0" styleClass="nav-pane">
             <children>
-                <Label layoutX="192.0" layoutY="7.0" styleClass="title" text="Thông tin chi tiết" />
-            <FontAwesomeIconView fx:id="closeIcon" fill="WHITE" glyphName="CLOSE" layoutX="476.0" layoutY="21.0" size="16">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </FontAwesomeIconView>
+                <Label layoutX="239.0" layoutY="9.0" styleClass="title" text="Thông tin chi tiết" />
             </children>
         </AnchorPane>
-        <Rectangle fx:id="imgProduct" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="210.0" layoutX="24.0" layoutY="38.0" stroke="BLACK" strokeType="INSIDE" styleClass="shape-img" width="200.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0" />
-        <GridPane layoutX="25.0" layoutY="268.0" styleClass="grid-btn" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="270.0">
+        <Rectangle fx:id="imgProduct" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="250.0" layoutX="24.0" layoutY="38.0" stroke="BLACK" strokeType="INSIDE" styleClass="shape-img" width="200.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0" />
+        <GridPane layoutX="22.0" layoutY="314.0" styleClass="grid-btn" AnchorPane.leftAnchor="22.0" AnchorPane.topAnchor="318.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -44,10 +39,10 @@
                 <Button fx:id="btnSave" mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             </children>
         </GridPane>
-        <GridPane layoutX="238.0" layoutY="50.0" prefHeight="202.0" prefWidth="242.0">
+        <GridPane hgap="5.0" layoutX="244.0" layoutY="51.0" prefHeight="231.0" prefWidth="332.0" vgap="10.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="103.5999755859375" minWidth="10.0" prefWidth="72.99998779296875" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="168.80001220703127" minWidth="10.0" prefWidth="168.80001220703127" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="189.59998779296876" minWidth="10.0" prefWidth="82.39996337890625" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.99996337890624" minWidth="10.0" prefWidth="220.00003662109373" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -66,19 +61,19 @@
                 <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <TextField fx:id="txtQuantity" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                 <TextField fx:id="txtPrice" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ChoiceBox fx:id="cmbCatelogy" prefHeight="26.0" prefWidth="167.0" GridPane.columnIndex="1" GridPane.rowIndex="2"></ChoiceBox>
+            <ChoiceBox fx:id="cmbCatelogy" prefHeight="37.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </children>
         </GridPane>
-        <VBox layoutX="238.0" layoutY="260.0" prefHeight="70.0" prefWidth="242.0">
+        <VBox layoutX="244.0" layoutY="298.0" prefHeight="142.0" prefWidth="332.0" spacing="10.0">
             <children>
                 <Label styleClass="lblInfor" text="Mô tả:">
                     <VBox.margin>
                         <Insets bottom="5.0" />
                     </VBox.margin></Label>
-                <TextArea fx:id="txtDescription" prefHeight="200.0" prefWidth="239.0" />
+                <TextArea fx:id="txtDescription" prefHeight="200.0" prefWidth="242.0" />
             </children>
         </VBox>
-        <FontAwesomeIconView fx:id="btnChange" accessibleRole="BUTTON" fill="WHITE" glyphName="REFRESH" layoutX="200.0" layoutY="254.0" size="20" stroke="BLACK">
+        <FontAwesomeIconView fx:id="btnChange" accessibleRole="BUTTON" fill="WHITE" glyphName="REFRESH" layoutX="200.0" layoutY="292.0" size="20" stroke="BLACK">
             <cursor>
                 <Cursor fx:constant="HAND" />
             </cursor>

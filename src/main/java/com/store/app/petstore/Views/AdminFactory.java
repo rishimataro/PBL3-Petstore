@@ -1,8 +1,8 @@
 package com.store.app.petstore.Views;
 
+import com.store.app.petstore.Controllers.Admin.*;
 import com.store.app.petstore.Controllers.Admin.Statistic.OverViewController;
-import com.store.app.petstore.Controllers.Staff.CustomerInforController;
-import com.store.app.petstore.Models.Entities.Customer;
+import com.store.app.petstore.Models.Entities.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -208,8 +208,21 @@ public class AdminFactory {
                 if (data instanceof Customer && controller instanceof CustomerInforController) {
                     ((CustomerInforController) controller).setCustomer((Customer) data);
                 }
-
-                // Thêm các trường hợp khác ở đây
+                else if (data instanceof Staff && controller instanceof StaffInforController) {
+                    ((StaffInforController) controller).setStaff((Staff) data);
+                }
+                else if (data instanceof Discount && controller instanceof DiscountInforController) {
+                    ((DiscountInforController) controller).setDiscount((Discount) data);
+                }
+                else if (data instanceof Pet && controller instanceof PetInforController) {
+                    ((PetInforController) controller).setPet((Pet) data);
+                }
+                else if (data instanceof Product && controller instanceof ProductInforController) {
+                    ((ProductInforController) controller).setProduct((Product) data);
+                }
+                else if (data instanceof User && controller instanceof UserInforController) {
+                    ((UserInforController) controller).setUser((User) data);
+                }
             }
 
             Stage popupStage = new Stage();
