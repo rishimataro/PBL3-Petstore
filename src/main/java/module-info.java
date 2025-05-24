@@ -34,5 +34,6 @@ module com.store.app.petstore {
     opens com.store.app.petstore.Controllers.Staff to javafx.fxml;
     exports com.store.app.petstore.Models.Seeder;
     opens com.store.app.petstore.Models.Seeder to javafx.fxml;
-    opens com.store.app.test to org.testng; // Added to allow TestNG access
+    opens com.store.app.test to org.testng;
+    exports com.store.app.petstore.Controllers.Admin; // Added to allow TestNG access
 }

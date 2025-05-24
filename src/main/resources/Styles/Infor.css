@@ -21,6 +21,7 @@
     -fx-background-radius: 0;
     -fx-max-width: 95;
     -fx-max-height: 25;
+    -fx-font-weight: bold;
 }
 
 .btn-add, .btn-delete {

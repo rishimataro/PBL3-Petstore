@@ -28,17 +28,17 @@
 
                 <TableView fx:id="accountTableView" layoutX="13.0" layoutY="53.0" prefHeight="380.0" prefWidth="965.0">
                     <columns>
-                        <TableColumn fx:id="colID" prefWidth="47.2" styleClass="stt-column" text="ID" />
-                        <TableColumn fx:id="colUsername" prefWidth="343.9999694824219" text="Tên đăng nhập" />
-                        <TableColumn fx:id="colPassword" prefWidth="274.4000244140625" text="Mật khẩu" />
-                        <TableColumn fx:id="colRole" prefWidth="172.0" text="Vai trò" />
-                        <TableColumn fx:id="colStatus" minWidth="0.0" prefWidth="125.5999755859375" text="Tình trạng" />
+                        <TableColumn fx:id="colID" styleClass="stt-column" text="ID" />
+                        <TableColumn fx:id="colUsername" text="Tên đăng nhập" />
+                        <TableColumn fx:id="colPassword" text="Mật khẩu" />
+                        <TableColumn fx:id="colRole" text="Vai trò" />
+                        <TableColumn fx:id="colDateCreate" text="Ngày tạo" />
+                        <TableColumn fx:id="colStatus" text="Tình trạng" />
                     </columns>
                 </TableView>
 
                 <Button fx:id="addAccountButton" layoutX="543.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Thêm tài khoản" />
                 <Button fx:id="viewDetailsButton" layoutX="649.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Xem chi tiết" />
-            <Button fx:id="resetActiveButton" layoutX="735.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Khôi phục tài khoản" />
             </children>
         </AnchorPane>
     </children>

@@ -14,7 +14,7 @@ public class PetStoreApplication extends Application {
     @Override
     public void start(Stage primaryStage) {
 //        DatabaseManager.connect();
-        ModelView.getInstance().getViewFactory().showWindow("revenue");
+        ModelView.getInstance().getAdminFactory().showWindow("customermanagement");
 
     }
 

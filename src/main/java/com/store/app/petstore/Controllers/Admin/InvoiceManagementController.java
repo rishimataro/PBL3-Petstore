@@ -93,7 +93,6 @@ public class InvoiceManagementController {
 
         invoice_idCol.setCellValueFactory(new PropertyValueFactory<>("orderId"));
 
-
         invoice_customerCol.setCellFactory(column -> new TableCell<Order, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {

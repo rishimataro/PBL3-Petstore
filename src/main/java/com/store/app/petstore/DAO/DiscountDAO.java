@@ -8,33 +8,35 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class DiscountDAO {
-    public static DiscountDAO getInstance() { 
-        return new DiscountDAO(); 
+    public static DiscountDAO getInstance() {
+        return new DiscountDAO();
     }
 
     public static int insert(Discount entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "INSERT INTO Discounts (code, discount_type, value, start_date, end_date, min_order_value, max_discount_value) VALUES (?, ?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            
+
             stmt.setString(1, entity.getCode());
-            stmt.setString(2, entity.getDiscountType());
+            // Convert discount type from English to Vietnamese
+            String discountType = entity.getDiscountType().equals("percent") ? "phần trăm" : "cố định";
+            stmt.setString(2, discountType);
             stmt.setDouble(3, entity.getValue());
             stmt.setDate(4, Date.valueOf(entity.getStartDate()));
             stmt.setDate(5, Date.valueOf(entity.getEndDate()));
             stmt.setDouble(6, entity.getMinOrderValue());
             stmt.setDouble(7, entity.getMaxDiscountValue());
-            
+
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
                 return 0;
             }
-            
+
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     int discountId = generatedKeys.getInt(1);
@@ -54,21 +56,23 @@ public class DiscountDAO {
     public static int update(Discount entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "UPDATE Discounts SET code = ?, discount_type = ?, value = ?, start_date = ?, end_date = ?, min_order_value = ?, max_discount_value = ? WHERE discount_id = ?";
             stmt = conn.prepareStatement(sql);
-            
+
             stmt.setString(1, entity.getCode());
-            stmt.setString(2, entity.getDiscountType());
+            // Convert discount type from English to Vietnamese
+            String discountType = entity.getDiscountType().equals("percent") ? "phần trăm" : "cố định";
+            stmt.setString(2, discountType);
             stmt.setDouble(3, entity.getValue());
             stmt.setDate(4, Date.valueOf(entity.getStartDate()));
             stmt.setDate(5, Date.valueOf(entity.getEndDate()));
             stmt.setDouble(6, entity.getMinOrderValue());
             stmt.setDouble(7, entity.getMaxDiscountValue());
             stmt.setInt(8, entity.getDiscountId());
-            
+
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,16 +83,20 @@ public class DiscountDAO {
     }
 
     public static int delete(Discount entity) {
+        return delete(entity.getDiscountId());
+    }
+
+    public static int delete(int discountId) {
         Connection conn = null;
         PreparedStatement stmt = null;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "DELETE FROM Discounts WHERE discount_id = ?";
             stmt = conn.prepareStatement(sql);
-            
-            stmt.setInt(1, entity.getDiscountId());
-            
+
+            stmt.setInt(1, discountId);
+
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,13 +111,13 @@ public class DiscountDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ArrayList<Discount> discountList = new ArrayList<>();
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "SELECT * FROM Discounts";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
-            
+
             while (rs.next()) {
                 String discountType = rs.getString("discount_type");
                 // Chuyển đổi từ tiếng Việt sang tiếng Anh
@@ -143,14 +151,14 @@ public class DiscountDAO {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "SELECT * FROM Discounts WHERE discount_id = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 String discountType = rs.getString("discount_type");
                 // Chuyển đổi từ tiếng Việt sang tiếng Anh
@@ -184,13 +192,13 @@ public class DiscountDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         ArrayList<Discount> discountList = new ArrayList<>();
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "SELECT * FROM Discounts WHERE " + condition;
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
-            
+
             while (rs.next()) {
                 String discountType = rs.getString("discount_type");
                 // Chuyển đổi từ tiếng Việt sang tiếng Anh
@@ -224,14 +232,14 @@ public class DiscountDAO {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "SELECT * FROM Discounts WHERE code = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, code);
             rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 String discountType = rs.getString("discount_type");
                 if (discountType.equals("phần trăm")) {
@@ -239,7 +247,7 @@ public class DiscountDAO {
                 } else if (discountType.equals("cố định")) {
                     discountType = "fixed";
                 }
-                
+
                 return new Discount(
                     rs.getInt("discount_id"),
                     rs.getString("code"),
@@ -266,9 +274,9 @@ public class DiscountDAO {
 
     public static boolean isValidDiscount(Discount discount) {
         if (discount == null) return false;
-        
+
         LocalDate today = LocalDate.now();
-        return !today.isBefore(discount.getStartDate()) && 
+        return !today.isBefore(discount.getStartDate()) &&
                !today.isAfter(discount.getEndDate());
     }
 
@@ -278,19 +286,19 @@ public class DiscountDAO {
         }
 
         LocalDate today = LocalDate.now();
-        
+
         if (today.isBefore(discount.getStartDate())) {
-            return String.format("Mã giảm giá này sẽ có hiệu lực từ ngày %s", 
+            return String.format("Mã giảm giá này sẽ có hiệu lực từ ngày %s",
                 discount.getStartDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         }
-        
+
         if (today.isAfter(discount.getEndDate())) {
-            return String.format("Mã giảm giá này đã hết hạn từ ngày %s", 
+            return String.format("Mã giảm giá này đã hết hạn từ ngày %s",
                 discount.getEndDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         }
 
         if (orderTotal < discount.getMinOrderValue()) {
-            return String.format("Đơn hàng phải có giá trị tối thiểu %s để áp dụng mã giảm giá!", 
+            return String.format("Đơn hàng phải có giá trị tối thiểu %s để áp dụng mã giảm giá!",
                 ControllerUtils.formatCurrency(discount.getMinOrderValue()));
         }
 

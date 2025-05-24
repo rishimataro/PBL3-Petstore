@@ -22,6 +22,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -42,6 +43,9 @@ public class UserManagementController implements Initializable {
 
     @FXML
     private TableColumn<User, String> colStatus;
+
+    @FXML
+    private TableColumn<User, String> colDateCreate;
 
     @FXML
     private TableColumn<User, String> colUsername;
@@ -71,14 +75,12 @@ public class UserManagementController implements Initializable {
     private Button viewDetailsButton;
 
     private static Map<Integer, User> userMap;
-    private UserDAO userDAO;
-    private ObservableList<User> userList;
     private FilteredList<User> filteredUserList;
     private User selectedUser;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userDAO = new UserDAO();
+        setupTableSize();
         setupTableView();
         loadUsers();
         setupChoiceBoxes();
@@ -86,11 +88,19 @@ public class UserManagementController implements Initializable {
         setupSearch();
     }
 
+    private void setupTableSize() {
+        colID.prefWidthProperty().bind(accountTableView.widthProperty().multiply(0.05));
+        colUsername.prefWidthProperty().bind(accountTableView.widthProperty().multiply(0.25));
+        colPassword.prefWidthProperty().bind(accountTableView.widthProperty().multiply(0.15));
+        colRole.prefWidthProperty().bind(accountTableView.widthProperty().multiply(0.15));
+        colStatus.prefWidthProperty().bind(accountTableView.widthProperty().multiply(0.15));
+        colDateCreate.prefWidthProperty().bind(accountTableView.widthProperty().multiply(0.25));
+    }
+
     private void setupTableView() {
         colID.setCellValueFactory(new PropertyValueFactory<>("userId"));
         colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
 
-        // Hide actual password and show asterisks
         colPassword.setCellValueFactory(cellData -> {
             return new SimpleStringProperty("********");
         });
@@ -107,7 +117,11 @@ public class UserManagementController implements Initializable {
             return new SimpleStringProperty(status);
         });
 
-        // Add row click listener
+        colDateCreate.setCellValueFactory(cellData -> {
+            LocalDateTime createdAt = cellData.getValue().getCreatedAt();
+            return new SimpleStringProperty(createdAt.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        });
+
         accountTableView.setRowFactory(tv -> {
             TableRow<User> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -121,8 +135,8 @@ public class UserManagementController implements Initializable {
     }
 
     private void loadUsers() {
-        ArrayList<User> users = userDAO.findAll();
-        userList = FXCollections.observableArrayList(users);
+        ArrayList<User> users = UserDAO.findAll();
+        ObservableList<User> userList = FXCollections.observableArrayList(users);
         filteredUserList = new FilteredList<>(userList, p -> true);
         accountTableView.setItems(filteredUserList);
     }
@@ -134,7 +148,6 @@ public class UserManagementController implements Initializable {
         statusChoiceBox.getItems().addAll("Tất cả", "Hiệu lực", "Đã khóa");
         statusChoiceBox.setValue("Tất cả");
 
-        // Add listeners for filtering
         roleChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             applyFilters();
         });
@@ -145,37 +158,30 @@ public class UserManagementController implements Initializable {
     }
 
     private void setupEventHandlers() {
-        // Add account button
         addAccountButton.setOnAction(event -> {
             openUserInfoPopup(null);
         });
 
-        // View details button
         viewDetailsButton.setOnAction(event -> {
             if (selectedUser != null) {
                 openUserInfoPopup(selectedUser);
             }
         });
 
-        // Close button
         closeIcon.setOnMouseClicked(event -> {
-            Stage stage = (Stage) root.getScene().getWindow();
-            stage.close();
+            searchTextField.setText("");
         });
 
-        // Search icon
         searchIcon.setOnMouseClicked(event -> {
             applyFilters();
         });
 
-        // Search text field enter key
         searchTextField.setOnAction(event -> {
             applyFilters();
         });
     }
 
     private void setupSearch() {
-        // Initialize with disabled view details button
         viewDetailsButton.setDisable(true);
     }
 
@@ -185,16 +191,13 @@ public class UserManagementController implements Initializable {
         String statusFilter = statusChoiceBox.getValue();
 
         filteredUserList.setPredicate(user -> {
-            // Filter by search text (username)
             boolean matchesSearch = searchText.isEmpty() ||
                     user.getUsername().toLowerCase().contains(searchText);
 
-            // Filter by role
             boolean matchesRole = roleFilter.equals("Tất cả") ||
                     (roleFilter.equals("Quản trị viên") && User.ROLE_ADMIN.equals(user.getRole())) ||
                     (roleFilter.equals("Nhân viên") && User.ROLE_USER.equals(user.getRole()));
 
-            // Filter by status
             boolean matchesStatus = statusFilter.equals("Tất cả") ||
                     (statusFilter.equals("Hiệu lực") && user.isActive()) ||
                     (statusFilter.equals("Đã khóa") && !user.isActive());
@@ -219,7 +222,6 @@ public class UserManagementController implements Initializable {
             stage.setScene(new Scene(root));
             stage.showAndWait();
 
-            // Refresh the table after the popup is closed
             loadUsers();
             applyFilters();
 
@@ -229,7 +231,6 @@ public class UserManagementController implements Initializable {
         }
     }
 
-    // Method to refresh the table from outside
     public void refreshTable() {
         loadUsers();
         applyFilters();

@@ -49,9 +49,6 @@ public class UserInforController implements Initializable {
     private FontAwesomeIconView closeIcon;
 
     @FXML
-    private FontAwesomeIconView iconHide;
-
-    @FXML
     private PasswordField txtPassword;
 
     @FXML
@@ -60,20 +57,14 @@ public class UserInforController implements Initializable {
     @FXML
     private TextField txtUsername;
 
-    @FXML
-    private TextField txtPasswordVisible;
-
     private int idUserCurrent;
     private boolean isNewUser = true;
-    private boolean isPasswordVisible = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         txtUserid.setDisable(true);
         txtUsername.setDisable(true);
         txtPassword.setDisable(true);
-        txtPasswordVisible.setDisable(true);
-        txtPasswordVisible.setVisible(false);
 
         rbtnAdmin.setDisable(true);
         rbtnStaff.setDisable(true);
@@ -103,7 +94,6 @@ public class UserInforController implements Initializable {
         btnFix.setOnAction(event -> handleFix());
         btnSave.setOnAction(event -> handleSave());
 
-        // Add close icon action
         if (closeIcon != null) {
             closeIcon.setOnMouseClicked(event -> closeWindow());
         }
@@ -111,7 +101,6 @@ public class UserInforController implements Initializable {
         rbtnAdmin.setOnAction(event -> handleRoleSelection(true));
         rbtnStaff.setOnAction(event -> handleRoleSelection(false));
 
-        iconHide.setOnMouseClicked(event -> setupPasswordVisibility());
     }
 
     private void handleRoleSelection(boolean isAdmin) {
@@ -147,7 +136,7 @@ public class UserInforController implements Initializable {
         if (user != null) {
             txtUserid.setText(String.valueOf(user.getUserId()));
             txtUsername.setText(user.getUsername());
-            txtPassword.setText(user.getPassword());
+            txtPassword.setText("********");
 
             if (User.ROLE_ADMIN.equals(user.getRole())) {
                 rbtnAdmin.setSelected(true);
@@ -199,7 +188,6 @@ public class UserInforController implements Initializable {
                     ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thành công", "Khóa người dùng thành công!");
                     clearFields();
                     setupInitialState();
-                    closeWindow();
                 } else {
                     ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể khóa người dùng!");
                 }
@@ -223,7 +211,6 @@ public class UserInforController implements Initializable {
                     ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thành công", "Khôi phục người dùng thành công!");
                     clearFields();
                     setupInitialState();
-                    closeWindow();
                 } else {
                     ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể khôi phục người dùng!");
                 }
@@ -285,8 +272,7 @@ public class UserInforController implements Initializable {
                     return;
                 }
                 result = UserDAO.insert(user);
-                // After inserting a new user, get the generated ID
-                idUserCurrent = UserDAO.findByUsername(user.getUsername()).getUserId();
+                idUserCurrent = Objects.requireNonNull(UserDAO.findByUsername(user.getUsername())).getUserId();
             } else {
                 User oldUser = UserDAO.findById(idUserCurrent);
                 if (oldUser == null) {
@@ -315,32 +301,10 @@ public class UserInforController implements Initializable {
                 btnAdd.setDisable(false);
                 btnSave.setDisable(true);
                 isNewUser = false;
-                closeWindow();
             } else {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu thông tin người dùng!");
             }
         }
-    }
-
-    private void setupPasswordVisibility() {
-        txtPasswordVisible.textProperty().bindBidirectional(txtPassword.textProperty());
-
-        iconHide.setOnMouseClicked(event -> {
-            isPasswordVisible = !isPasswordVisible;
-            if (isPasswordVisible) {
-                txtPasswordVisible.setVisible(true);
-                txtPasswordVisible.setManaged(true);
-                txtPassword.setVisible(false);
-                txtPassword.setManaged(false);
-                iconHide.setGlyphName("EYE");
-            } else {
-                txtPasswordVisible.setVisible(false);
-                txtPasswordVisible.setManaged(false);
-                txtPassword.setVisible(true);
-                txtPassword.setManaged(true);
-                iconHide.setGlyphName("EYE_SLASH");
-            }
-        });
     }
 
     private void clearFields() {
@@ -352,9 +316,9 @@ public class UserInforController implements Initializable {
 
     private void enableEditing() {
         txtUsername.setDisable(false);
-        txtPassword.setDisable(false);
-        txtPasswordVisible.setDisable(false);
-        iconHide.setDisable(false);
+
+        rbtnAdmin.setDisable(false);
+        rbtnStaff.setDisable(false);
     }
 
     private void disableEditing() {
@@ -362,9 +326,6 @@ public class UserInforController implements Initializable {
         rbtnStaff.setDisable(true);
 
         txtUsername.setDisable(true);
-        txtPassword.setDisable(true);
-        txtPasswordVisible.setDisable(true);
-        iconHide.setDisable(true);
     }
 
     private boolean validateInput() {

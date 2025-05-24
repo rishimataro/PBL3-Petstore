@@ -144,6 +144,7 @@ public class UserDAO {
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
+                user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                 user.setImageUrl(rs.getString("image_url"));
                 user.setActive(rs.getBoolean("isActive"));
                 users.add(user);
@@ -216,6 +217,37 @@ public class UserDAO {
         return users;
     }
 
+    public static User findById(int userId) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DatabaseUtil.getConnection();
+            String sql = "SELECT * FROM Users WHERE user_id = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                user.setImageUrl(rs.getString("image_url"));
+                user.setActive(rs.getBoolean("isActive"));
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DatabaseUtil.closeResources(rs, stmt, conn);
+        }
+        return null;
+    }
+
     public static User findByUsername(String username) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -234,6 +266,7 @@ public class UserDAO {
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
+                user.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                 user.setImageUrl(rs.getString("image_url"));
                 user.setActive(rs.getBoolean("isActive"));
                 return user;

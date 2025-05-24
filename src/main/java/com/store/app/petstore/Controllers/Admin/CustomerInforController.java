@@ -2,6 +2,7 @@ package com.store.app.petstore.Controllers.Admin;
 
 import com.store.app.petstore.DAO.CustomerDAO;
 import com.store.app.petstore.Models.Entities.Customer;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -11,6 +12,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.event.ActionEvent;
 import com.store.app.petstore.Controllers.ControllerUtils;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.Optional;
@@ -40,6 +43,12 @@ public class CustomerInforController implements Initializable {
 
     @FXML
     private TextField txtPhone;
+
+    @FXML
+    private FontAwesomeIconView closeIcon;
+
+    @FXML
+    private AnchorPane customerInforPopup;
 
     private int idCustomerCurrent;
     private CustomerDAO customerDAO = new CustomerDAO();
@@ -193,5 +202,15 @@ public class CustomerInforController implements Initializable {
         btnDelete.setOnAction(event -> handleDelete());
         btnFix.setOnAction(event -> handleFix());
         btnSave.setOnAction(event -> handleSaveCustomer());
+        if(closeIcon != null) {
+            closeIcon.setOnMouseClicked(event -> closeWindow());
+        }
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) customerInforPopup.getScene().getWindow();
+        if (stage != null) {
+            stage.close();
+        }
     }
 }
