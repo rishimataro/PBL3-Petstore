@@ -2,64 +2,82 @@ package com.store.app.petstore.Models.Entities;
 
 import com.store.app.petstore.Models.BaseModel;
 
-public class Pet extends BaseModel {
+public class Pet extends BaseModel implements Item {
     private int petId;
     private String name;
     private String type;
     private String breed;
-    private int age;
-    private String description;
-    private String imageUrl;
     private String sex;
-    private long price;
+    private int age;
+    private int price;
+    private String imageUrl;
+    private String description;
+    private boolean isSold;
 
-    public Pet() {
-        this.petId = 0;
-        this.name = "";
-        this.type = "";
-        this.breed = "";
-        this.age = 0;
-        this.description = "";
-        this.imageUrl = "";
-        this.sex = "";
-        this.price = 0;
-    }
+    public Pet() {}
 
-    public Pet( String name, String type, String breed, int age,  String description, String imageUrl, long price, String sex) {
+    public Pet(String name, String type, String breed, String sex, int age, int price, String imageUrl, String description, boolean isSold) {
         this.name = name;
         this.type = type;
         this.breed = breed;
-        setAge(age); // Đảm bảo age >= 0
-        this.description = description;
-        this.imageUrl = imageUrl;
+        this.sex = sex;
+        this.age = age;
         this.price = price;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.isSold = isSold;
     }
-    public Pet(int petId, String name, String type, String breed, int age,  String description, String imageUrl, long price, String sex) {
+
+    public Pet(int petId, String name, String type, String breed, String sex, int age, int price, String imageUrl, String description, boolean isSold) {
         this.petId = petId;
         this.name = name;
         this.type = type;
         this.breed = breed;
-        setAge(age); // Đảm bảo age >= 0
-        this.description = description;
-        this.imageUrl = imageUrl;
+        this.sex = sex;
+        this.age = age;
         this.price = price;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.isSold = isSold;
     }
 
-    // Getters
+    @Override
+    public int getId() {
+        return petId;
+    }
+
     public int getPetId() {
         return petId;
     }
 
+    public void setPetId(int petId) {
+        this.petId = petId;
+    }
+
+    @Override
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public String getType() {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getBreed() {
         return breed;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
     }
 
     public String getSex() {
@@ -74,54 +92,47 @@ public class Pet extends BaseModel {
         return age;
     }
 
-
-    public String getDescription() {
-        return description;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public long getPrice() {
+    @Override
+    public int getPrice() {
         return price;
     }
 
-    // Setters
-    public void setPetId(int petId) {
-        this.petId = petId;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setBreed(String breed) {
-        this.breed = breed;
-    }
-
-    public void setAge(int age) {
-        if (age >= 0) {
-            this.age = age;
-        } else {
-            throw new IllegalArgumentException("Age must be greater than or equal to 0");
-        }
-    }
-
-
-    public void setDescription(String description) {
-        this.description = description;
+    @Override
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return petId + name + type + breed + age;
+    }
+
+    @Override
+    public boolean getIsSold() {
+        return isSold;
+    }
+
+    public void setIsSold(boolean isSold) {
+        this.isSold = isSold;
     }
 }

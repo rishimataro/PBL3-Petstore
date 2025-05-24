@@ -1,0 +1,176 @@
+/* Inventory Container */
+.inventory-container {
+    -fx-background-color: #f5f5f5;
+}
+
+.inventory-container .viewport {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Header Section */
+.header-section {
+    -fx-padding: 10px 0;
+}
+
+.header-text {
+    -fx-text-fill: #333333;
+}
+
+/* Filter Section */
+.filter-section {
+    -fx-padding: 10px;
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+/* Summary Section */
+.summary-section {
+    -fx-padding: 10px 0;
+}
+
+.summary-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+    -fx-min-width: 200px;
+}
+
+.summary-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: #555555;
+}
+
+.summary-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* Card Colors */
+.total-products-card {
+    -fx-background-color: linear-gradient(to right, #017FCB, #01C4DA);
+}
+
+.total-products-card .summary-title, .total-products-card .summary-value {
+    -fx-text-fill: white;
+}
+
+.total-value-card {
+    -fx-background-color: linear-gradient(to right, #43A047, #8BC34A);
+}
+
+.total-value-card .summary-title, .total-value-card .summary-value {
+    -fx-text-fill: white;
+}
+
+.low-stock-card {
+    -fx-background-color: linear-gradient(to right, #FF8F00, #FFCA28);
+}
+
+.low-stock-card .summary-title, .low-stock-card .summary-value {
+    -fx-text-fill: white;
+}
+
+.out-of-stock-card {
+    -fx-background-color: linear-gradient(to right, #E53935, #FF5252);
+}
+
+.out-of-stock-card .summary-title, .out-of-stock-card .summary-value {
+    -fx-text-fill: white;
+}
+
+/* Table Container */
+.table-container {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.table-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Table Styling */
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: #017FCB;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #e3f2fd;
+    -fx-text-fill: #333333;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #e3f2fd;
+}
+
+/* Status Colors */
+.status-normal {
+    -fx-text-fill: #43A047;
+}
+
+.status-low {
+    -fx-text-fill: #FF8F00;
+}
+
+.status-out {
+    -fx-text-fill: #E53935;
+}
+
+/* Buttons */
+.search-button, .export-button, .print-button {
+    -fx-background-color: #017FCB;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 15px;
+}
+
+.search-button:hover, .export-button:hover, .print-button:hover {
+    -fx-background-color: derive(#017FCB, 10%);
+}
+
+.reset-button {
+    -fx-background-color: #757575;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 15px;
+}
+
+.reset-button:hover {
+    -fx-background-color: derive(#757575, 10%);
+}
+
+.back-button {
+    -fx-background-color: #757575;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 15px;
+}
+
+.back-button:hover {
+    -fx-background-color: derive(#757575, 10%);
+}

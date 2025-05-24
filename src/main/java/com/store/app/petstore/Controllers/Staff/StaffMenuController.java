@@ -1,22 +1,31 @@
 package com.store.app.petstore.Controllers.Staff;
 
+import com.store.app.petstore.Models.Entities.User;
+import com.store.app.petstore.Models.Entities.Staff;
+import com.store.app.petstore.Sessions.SessionManager;
+import com.store.app.petstore.Views.ViewFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.image.ImageView;
+import com.store.app.petstore.Controllers.ControllerUtils;
+import javafx.event.ActionEvent;
 
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class StaffMenuController implements Initializable {
@@ -30,41 +39,81 @@ public class StaffMenuController implements Initializable {
     @FXML
     private Circle userImage;
 
+    @FXML
+    private Label usernameLabel;
+
+    @FXML
+    private Label nameLabel;
+
     private ContextMenu contextMenu;
+    private SessionManager sessionManager;
+    private User currentUser;
+    private Staff currentStaff;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setUserImage("src/main/resources/Images/dog.png");
+        sessionManager = new SessionManager();
+        currentUser = SessionManager.getCurrentUser();
+        currentStaff = SessionManager.getCurrentStaff();
+        setupUserImage();
         setMenu();
+        setupUserName();
     }
 
-    public void setUserImage(String imagePath) {
-        try {
-            Image image;
-            if (imagePath != null && !imagePath.isEmpty()) {
-                if (imagePath.startsWith("http") || imagePath.startsWith("file:")) {
-                    image = new Image(imagePath);
-                } else {
-                    image = new Image("file:" + imagePath);
-                }
+    private void setupUserName() {
+        if (currentUser != null) {
+            usernameLabel.setText(currentUser.getUsername());
+            if (currentStaff != null) {
+                nameLabel.setText(currentStaff.getFullName());
             } else {
-                image = new Image(Objects.requireNonNull(getClass().getResource("/Images/user.jpg")).toExternalForm());
-            }
-            userImage.setFill(new ImagePattern(image));
-        } catch (Exception e) {
-            System.out.println("Không thể tải ảnh. Đang dùng ảnh mặc định.");
-            try {
-                Image fallback = new Image(Objects.requireNonNull(getClass().getResource("/Images/user.jpg")).toExternalForm());
-                userImage.setFill(new ImagePattern(fallback));
-            } catch (Exception ex) {
-                System.out.println("Không tìm thấy ảnh mặc định.");
-                ex.printStackTrace();
+                nameLabel.setText("Chưa cập nhật thông tin");
             }
         }
     }
 
+    private void setupUserImage() {
+        try {
+            String userImagePath = currentUser.getImageUrl();
+
+            String imageUrl = null;
+            if (userImagePath != null && !userImagePath.isEmpty()) {
+                imageUrl = Objects.requireNonNull(getClass().getResource(userImagePath)).toExternalForm();
+            } else {
+                imageUrl = Objects.requireNonNull(getClass().getResource("/Images/User/default.jpg")).toExternalForm();
+            }
+
+            Image image = new Image(imageUrl, false);
+            double size = userImage.getRadius() * 2;
+
+            double imgWidth = image.getWidth();
+            double imgHeight = image.getHeight();
+            double side = Math.min(imgWidth, imgHeight);
+            double x = (imgWidth - side) / 2;
+            double y = (imgHeight - side) / 2;
+
+            ImageView imageView = new ImageView(image);
+            imageView.setViewport(new javafx.geometry.Rectangle2D(x, y, side, side));
+            imageView.setFitWidth(size);
+            imageView.setFitHeight(size);
+            imageView.setPreserveRatio(true);
+            imageView.setSmooth(true);
+
+            Circle clip = new Circle(size / 2, size / 2, size / 2);
+            imageView.setClip(clip);
+
+            WritableImage clippedImage = imageView.snapshot(null, null);
+
+            userImage.setFill(new ImagePattern(clippedImage));
+        } catch (Exception ex) {
+            System.err.println("Error loading user image: " + ex.getMessage());
+            userImage.setFill(javafx.scene.paint.Color.GRAY);
+        }
+    }
+
+
     private ContextMenu contextMenuItem() {
         ContextMenu contextMenu = new ContextMenu();
+        MenuItem dashboardItem = new MenuItem("Trang chủ");
         MenuItem orderItem = new MenuItem("Đặt hàng");
         MenuItem billItem = new MenuItem("Lịch sử hóa đơn");
         MenuItem infoItem = new MenuItem("Thông tin tài khoản");
@@ -75,15 +124,35 @@ public class StaffMenuController implements Initializable {
                 "-fx-font-size: 14px;" +
                 "-fx-background-color: white;" +
                 "-fx-border-radius: 10;" +
-                "-fx-background-radius: 6;"
+                "-fx-background-radius: 6;" +
+                        "-fx-cursor: hand;"
         );
 
-        orderItem.setOnAction(event -> System.out.println("Đặt hàng"));
-        billItem.setOnAction(event -> System.out.println("Lịch sử hóa đơn"));
-        infoItem.setOnAction(e -> System.out.println("Xem thông tin tài khoản"));
-        logoutItem.setOnAction(e -> System.out.println("Đăng xuất"));
+        dashboardItem.setOnAction(event -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            ViewFactory.getInstance().switchContent("dashboard", currentStage);
+        });
 
-        contextMenu.getItems().addAll(orderItem, billItem, infoItem, logoutItem);
+        orderItem.setOnAction(event -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            ViewFactory.getInstance().switchContent("order", currentStage);
+        });
+
+        billItem.setOnAction(event -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            ViewFactory.getInstance().switchContent("billhistory", currentStage);
+        });
+
+        infoItem.setOnAction(event -> {
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            ViewFactory.getInstance().switchContent("profile", currentStage);
+        });
+
+        logoutItem.setOnAction(event -> {
+            handleLogout(null);
+        });
+
+        contextMenu.getItems().addAll(dashboardItem, orderItem, billItem, infoItem, logoutItem);
         contextMenu.setAutoHide(true);
         return contextMenu;
     }
@@ -117,4 +186,19 @@ public class StaffMenuController implements Initializable {
             contextMenu.show(menuIcon, event.getScreenX(), event.getScreenY());
         }
     }
+
+    @FXML
+    void handleLogout(ActionEvent event) {
+        Stage currentStage = (Stage) root.getScene().getWindow();
+        if (ControllerUtils.showConfirmationAndWait("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
+            SessionManager.clear();
+            ViewFactory.getInstance().switchContent("login", currentStage);
+        } else {
+            ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đăng xuất không thành công");
+        }
+    }
+
 }
+
+
+

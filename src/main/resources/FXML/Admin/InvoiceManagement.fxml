@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.InvoiceManagementController">
+    <children>
+        <fx:include source="AdminMenu.fxml" />
+
+        <AnchorPane id="main_anchor" styleClass="root" stylesheets="@../../Styles/Staff/Invoice.css" VBox.vgrow="ALWAYS">
+            <children>
+                <HBox spacing="20" styleClass="main-HBox" AnchorPane.bottomAnchor="22" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="2">
+                    <children>
+
+                        <!-- Bảng hóa đơn bên trái -->
+                        <AnchorPane id="left_pane" HBox.hgrow="ALWAYS">
+                            <children>
+                                <HBox alignment="CENTER" spacing="10" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="15.0">
+                                    <children>
+                                        <StackPane HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <TextField id="search_invoice" fx:id="searchInvoice" minWidth="270.0" prefHeight="30.0" promptText="Tìm kiếm hóa đơn" styleClass="find-textfield" />
+                                                <AnchorPane pickOnBounds="false" StackPane.alignment="CENTER">
+                                                    <children>
+                                                        <FontAwesomeIconView glyphName="SEARCH" size="13" styleClass="icon" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="8.5" />
+                                                        <FontAwesomeIconView fx:id="clear_invoice_search" glyphName="CLOSE" styleClass="icon" text="" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="8.5">
+                                                            <cursor>
+                                                                <Cursor fx:constant="HAND" />
+                                                            </cursor>
+                                                        </FontAwesomeIconView>
+                                                    </children>
+                                                </AnchorPane>
+                                            </children>
+                                        </StackPane>
+                                        <CheckBox fx:id="allowDeletedInvoice" mnemonicParsing="false" text="Hoá đơn bị xoá" />
+                                        <DatePicker fx:id="start_datepicker" prefWidth="115.0" promptText="Ngày bắt đầu">
+                                            <styleClass>
+                                                <String fx:value="date_picker" />
+                                                <String fx:value="yellow_border" />
+                                            </styleClass></DatePicker>
+                                        <DatePicker fx:id="end_datepicker" prefWidth="115.0" promptText="Ngày kết thúc">
+                                            <styleClass>
+                                                <String fx:value="date_picker" />
+                                                <String fx:value="cyan_border" />
+                                            </styleClass></DatePicker>
+                                        <Button id="search_btn" mnemonicParsing="false" onAction="#onSearchClicked" text="Tìm kiếm">
+                                            <graphic>
+                                                <FontAwesomeIconView glyphName="SEARCH" styleClass="func_icon" />
+                                            </graphic>
+                                            <styleClass>
+                                                <String fx:value="edit-btn" />
+                                                <String fx:value="crud_func" />
+                                            </styleClass>
+                                        </Button>
+                                    </children>
+                                </HBox>
+
+                                <VBox styleClass="bg1" AnchorPane.bottomAnchor="60" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="50">
+                                    <children>
+                                        <TableView fx:id="invoice_table" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="sttCol" text="STT" />
+                                                <TableColumn fx:id="invoice_idCol" text="Mã hóa đơn" />
+                                                <TableColumn fx:id="invoice_customerCol" text="Khách hàng" />
+                                                <TableColumn fx:id="invoice_timeCol" text="Thời gian" />
+                                                <TableColumn fx:id="invoice_totalBillCol" text="Tổng hóa đơn" />
+                                                <TableColumn fx:id="invoice_statusCol" text="Hiệu lực" />
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </VBox>
+                        <HBox alignment="CENTER" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="20" spacing="5.0">
+                           <children>
+                              <Label styleClass="total-lbl" text="Tổng doanh thu:" />
+                              <TextField HBox.hgrow="ALWAYS" fx:id="totalRevenue" disable="true" prefWidth="111.0" />
+                           </children>
+                        </HBox>
+                            </children>
+                        </AnchorPane>
+
+                        <!-- Chi tiết hóa đơn bên phải -->
+                        <AnchorPane id="right_pane">
+                            <children>
+                                <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="144.0" styleClass="anchor-pane-invoice-id">
+                                    <children>
+                                        <HBox AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" alignment="CENTER"  layoutY="15.0">
+                                            <children>
+                                                <Label fx:id="detailInvoiceID" HBox.hgrow="ALWAYS" styleClass="invoice-id" text="[Mã hóa đơn]" textAlignment="CENTER" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </AnchorPane>
+                                <ScrollPane prefWidth="410" AnchorPane.bottomAnchor="135.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="52.0">
+                                    <content>
+                                        <VBox fx:id="productListVBox" spacing="10" styleClass="vbox-invoice-detail" />
+                                    </content></ScrollPane>
+
+                                <GridPane hgap="10.0" prefHeight="80.0" prefWidth="410.0" AnchorPane.bottomAnchor="57" AnchorPane.leftAnchor="8.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="108.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" prefWidth="162.0" />
+                                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="140.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints prefHeight="30.0" />
+                                        <RowConstraints prefHeight="30.0" />
+                                        <RowConstraints prefHeight="30.0" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Label styleClass="infomoney-label" text="Tổng tiền hàng:">
+                                            <padding>
+                                                <Insets left="5.0" />
+                                            </padding>
+                                        </Label>
+                                        <Label styleClass="infomoney-label" text="Giảm giá:" GridPane.rowIndex="1">
+                                            <padding>
+                                                <Insets left="5.0" />
+                                            </padding>
+                                        </Label>
+                                        <Label styleClass="infomoney-label" text="Khách cần trả:" GridPane.rowIndex="2">
+                                            <padding>
+                                                <Insets left="5.0" />
+                                            </padding>
+                                        </Label>
+                                        <Label fx:id="detailInvoiceValue" styleClass="money-label" text="0" GridPane.columnIndex="2" />
+                                        <Label fx:id="detailDiscountValue" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <Label fx:id="detailInvoiceTotal" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                        <TextField fx:id="discountCode" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    </children>
+                                </GridPane>
+                                <AnchorPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="15.0">
+                                    <children>
+
+                                        <Button layoutX="227.0" layoutY="21.5" mnemonicParsing="false" onAction="#DeleteInvoiceClicked" prefHeight="30.0" prefWidth="175.0" text="">
+                                            <styleClass>
+                                                <String fx:value="crud_func" />
+                                                <String fx:value="delete-btn" />
+                                            </styleClass>
+                                            <graphic>
+                                                <HBox alignment="CENTER" spacing="5.0">
+                                                    <children>
+                                                        <Text styleClass="func_icon" text="Huỷ hoá đơn" />
+                                                        <FontAwesomeIconView glyphName="TRASH" styleClass="func_icon" />
+                                                    </children>
+                                                </HBox>
+                                            </graphic>
+                                        </Button>
+                                    </children>
+                                </AnchorPane>
+                            </children>
+                        </AnchorPane>
+                    </children>
+                </HBox>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

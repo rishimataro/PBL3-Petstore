@@ -1,82 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../Styles/Order.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.OrderController">
-   <children>
-      <AnchorPane layoutX="550.0" layoutY="70.0" prefHeight="442.0" prefWidth="440.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <TabPane layoutX="10.0" layoutY="14.0" prefHeight="280.0" prefWidth="410.0" styleClass="tab-container" tabClosingPolicy="UNAVAILABLE" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="15.0">
-              <tabs>
-                <Tab text="Đơn hàng 1">
-                     <content>
-                        <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox-order">
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.OrderController">
+    <children>
+        <fx:include source="StaffMenu.fxml" />
+
+        <AnchorPane fx:id="root" styleClass="root" stylesheets="@../../Styles/Staff/Order.css" VBox.vgrow="ALWAYS">
+            <children>
+
+                      <!-- Left pane - Sản phẩm -->
+                <AnchorPane id="left_panel" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="470" AnchorPane.topAnchor="0.0">
+                    <children>
+                  <HBox alignment="CENTER" fillHeight="false" spacing="10" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="10">
+                     <children>
+                        <StackPane HBox.hgrow="ALWAYS">
                            <children>
-                              <ScrollBar orientation="VERTICAL" styleClass="scrollbar" />
+                                    <TextField fx:id="searchTextField" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm sản phẩm" styleClass="find-textfield" />
+                              <AnchorPane mouseTransparent="true">
+                                 <children>
+
+                                          <FontAwesomeIconView fx:id="searchIcon" glyphName="SEARCH" size="13" styleClass="icon" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="8.5" />
+                                    <FontAwesomeIconView fx:id="clearSearchIcon" glyphName="CLOSE" size="15" styleClass="icon" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="7.5" />
+                                 </children>
+                              </AnchorPane>
                            </children>
-                        </HBox>
-                     </content>
-                </Tab>
-                <Tab text="Đơn hàng 2">
-                     <content>
-                        <HBox prefHeight="100.0" prefWidth="200.0" styleClass="hbox-order">
-                           <children>
-                              <ScrollBar orientation="VERTICAL" styleClass="scrollbar" />
-                           </children>
-                        </HBox>
-                     </content>
-                </Tab>
-              </tabs>
-            </TabPane>
-            <GridPane hgap="10.0" layoutX="10.0" layoutY="295.0" prefHeight="80.0" prefWidth="410.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="300.0">
-              <columnConstraints>
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="143.0" minWidth="10.0" prefWidth="108.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="205.0" minWidth="10.0" prefWidth="162.0" />
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="220.0" minWidth="10.0" prefWidth="140.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label styleClass="infomoney-label" text="Tổng tiền:" />
-                  <Label styleClass="infomoney-label" text="Voucher:" GridPane.rowIndex="1" />
-                  <Label styleClass="infomoney-label" text="Khách cần trả:" GridPane.rowIndex="2" />
-                  <TextField promptText="Nhập code (nếu có)" styleClass="code-textfield" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" />
-                  <Label styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Label styleClass="money-label" text="30 000 000" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-               </children>
-            </GridPane>
-            <Button layoutX="368.0" layoutY="386.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="Xác nhận" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-         </children></AnchorPane>
-      <AnchorPane layoutY="70.0" prefHeight="442.0" prefWidth="550.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <TextField layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm sản phẩm" styleClass="find-textfield" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="15.0" />
-            <FontAwesomeIconView glyphName="SEARCH" layoutX="32.0" layoutY="35.0" size="13" styleClass="icon" />
-            <FontAwesomeIconView glyphName="CLOSE" layoutX="268.0" layoutY="35.0" styleClass="icon" text="">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></FontAwesomeIconView>
-            <ChoiceBox layoutX="306.0" layoutY="14.0" prefWidth="110.0" style="-fx-border-color: #FFB500;" AnchorPane.leftAnchor="305.0" AnchorPane.topAnchor="15.0" />
-            <ChoiceBox layoutX="425.0" layoutY="16.0" prefWidth="110.0" style="-fx-border-color: #017FCB;" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
-            <ScrollPane fx:id="scrollPane" layoutX="32.8" layoutY="70.4" prefHeight="370.0" prefWidth="515.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
-         </children>
-      </AnchorPane>
-   </children>
-</AnchorPane>
+                        </StackPane>
+
+                                    <ChoiceBox fx:id="categoryChoiceBox" prefWidth="110.0" style="-fx-border-color: #FFB500;" />
+
+                                    <ChoiceBox fx:id="sortChoiceBox" prefWidth="110.0" style="-fx-border-color: #017FCB;" />
+                     </children>
+                  </HBox>
+
+                              <ScrollPane fx:id="scrollPane" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0" />
+                    </children>
+                </AnchorPane>
+
+                      <!-- Right pane - Đơn hàng -->
+                <AnchorPane id="right_panel" prefWidth="440.0" AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="0.0">
+                    <children>
+                  <VBox AnchorPane.bottomAnchor="50" AnchorPane.topAnchor="60">
+                     <children>
+<!--                              <AnchorPane fx:id="orderContentPane" layoutX="10.0" layoutY="14.0" prefHeight="280.0" prefWidth="420.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">-->
+<!--                           <children>-->
+<!--                                     <ScrollPane fx:id="orderScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="280.0" prefWidth="420.0" vbarPolicy="NEVER" />-->
+<!--                           </children>-->
+<!--                              </AnchorPane>-->
+<!--                             <AnchorPane fx:id="orderContentPane"  AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">-->
+
+                         <ScrollPane fx:id="orderScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="280.0" prefWidth="420.0" vbarPolicy="NEVER" VBox.vgrow="ALWAYS" />
+
+<!--                             </AnchorPane>-->
+                                       <GridPane hgap="10.0" prefHeight="80.0" prefWidth="410.0">
+                                  <columnConstraints>
+                                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="108.0" />
+                                      <ColumnConstraints hgrow="SOMETIMES" prefWidth="162.0" />
+                                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="140.0" />
+                                  </columnConstraints>
+                                  <rowConstraints>
+                                      <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                      <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                      <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                  </rowConstraints>
+                                  <children>
+                                      <Label fx:id="totalMoneyLabel" styleClass="infomoney-label" text="Tổng tiền:" />
+                                      <Label fx:id="voucherLabel" styleClass="infomoney-label" text="Voucher:" GridPane.rowIndex="1" />
+                                      <Label fx:id="finalMoneyLabel" styleClass="infomoney-label" text="Khách cần trả:" GridPane.rowIndex="2" />
+
+                                               <TextField fx:id="voucherTextField" promptText="Nhập code (nếu có)" styleClass="code-textfield" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                               <Label fx:id="totalMoneyValueLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" />
+                                      <Label fx:id="voucherValueLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                      <Label fx:id="finalMoneyValueLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                  </children>
+                              </GridPane>
+                     </children>
+                  </VBox>
+
+                              <Button fx:id="confirmButton" layoutX="368.0" layoutY="386.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="Xác nhận" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+                    </children>
+                </AnchorPane>
+
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

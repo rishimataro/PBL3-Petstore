@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="442.0" prefWidth="990.0" styleClass="root" stylesheets="@../../../Styles/Statistics.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.Statistic.BestSellerController">
+    <children>
+        <AnchorPane prefHeight="40.0" prefWidth="990.0" styleClass="nav-bar">
+            <children>
+                <HBox layoutX="529.0" spacing="10.0">
+                    <children>
+                        <Button fx:id="btnOverview" mnemonicParsing="false" prefHeight="40.0">
+                            <styleClass>
+                                <String fx:value="nav-bar-btn" />
+                                <String fx:value="underline" />
+                            </styleClass>
+                            <graphic>
+                                <VBox alignment="CENTER" spacing="1.5">
+                                    <Text styleClass="nav-bar-btn-text" text="Tổng quát" textAlignment="CENTER" />
+                                    <Line endX="-14" endY="3.814697265625E-6" startX="-74.5621337890625" startY="3.814697265625E-6">
+                                        <styleClass>
+                                            <String fx:value="btn-underline" />
+                                            <String fx:value="inactive" />
+                                        </styleClass>
+                                    </Line>
+                                </VBox>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="btnRevenue" mnemonicParsing="false" prefHeight="40.0">
+                            <styleClass>
+                                <String fx:value="nav-bar-btn" />
+                                <String fx:value="underline" />
+                            </styleClass>
+                            <graphic>
+                                <VBox alignment="CENTER" spacing="1.5">
+                                    <children>
+                                        <Text styleClass="nav-bar-btn-text" text="Doanh thu" textAlignment="CENTER" />
+                                        <Line endX="-14" endY="3.814697265625E-6" startX="-74.5621337890625" startY="3.814697265625E-6">
+                                            <styleClass>
+                                                <String fx:value="btn-underline" />
+                                                <String fx:value="inactive" />
+                                            </styleClass>
+                                        </Line>
+                                    </children>
+                                </VBox>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="btnBestSeller" mnemonicParsing="false" prefHeight="40.0">
+                            <styleClass>
+                                <String fx:value="nav-bar-btn" />
+                                <String fx:value="underline" />
+                            </styleClass>
+                            <graphic>
+                                <VBox alignment="CENTER" spacing="1.5">
+                                    <children>
+                                        <Text styleClass="nav-bar-btn-text" text="Bán chạy" textAlignment="CENTER" />
+                                        <Line endX="-14" endY="3.814697265625E-6" startX="-74.5621337890625" startY="3.814697265625E-6">
+                                            <styleClass>
+                                                <String fx:value="btn-underline" />
+                                                <String fx:value="active" />
+                                            </styleClass>
+                                        </Line>
+                                    </children>
+                                </VBox>
+                            </graphic>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </AnchorPane>
+        <HBox layoutX="20.0" layoutY="69.5" prefHeight="350.5" prefWidth="950.0" spacing="10.0">
+            <children>
+                <VBox prefHeight="350.5" prefWidth="470.0" styleClass="main-statistic-tag">
+                    <children>
+                  <VBox spacing="6.5">
+                     <children>
+                              <Label fx:id="lblPetStats" prefHeight="29.0" prefWidth="310.0" styleClass="main-statistic-text" text="Thống kê thú cưng" />
+                        <HBox spacing="10.0">
+                           <children>
+                                      <ChoiceBox fx:id="petFilter1" prefHeight="30.0" prefWidth="110.0">
+                                 <styleClass>
+                                    <String fx:value="choice-box-filter" />
+                                    <String fx:value="yellow" />
+                                 </styleClass></ChoiceBox>
+                              <ChoiceBox fx:id="petFilter2" prefHeight="30.0" prefWidth="110.0">
+                                 <styleClass>
+                                    <String fx:value="choice-box-filter" />
+                                    <String fx:value="blue" />
+                                 </styleClass>
+                              </ChoiceBox>
+                              <ChoiceBox fx:id="petFilter3" prefHeight="30.0" prefWidth="70.0">
+                                 <styleClass>
+                                    <String fx:value="choice-box-filter" />
+                                    <String fx:value="cyan" />
+                                 </styleClass>
+                              </ChoiceBox>
+                              <Button fx:id="btnViewPets" mnemonicParsing="false" prefHeight="30.0" prefWidth="50.0" styleClass="view-button" text="Xem" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                  </VBox>
+                    </children>
+                </VBox>
+                <VBox prefHeight="200.0" prefWidth="470.0" styleClass="main-statistic-tag">
+                    <children>
+                        <VBox prefHeight="100.0" prefWidth="200.0" spacing="6.5">
+                            <children>
+                                <Label fx:id="lblStaffStats" prefHeight="29.0" prefWidth="204.0" styleClass="main-statistic-text" text="Doanh thu theo nhân viên" />
+                        <HBox spacing="10.0">
+                           <children>
+                              <ChoiceBox fx:id="staffFilter1" prefHeight="30.0" prefWidth="110.0">
+                                 <styleClass>
+                                    <String fx:value="choice-box-filter" />
+                                    <String fx:value="yellow" />
+                                 </styleClass>
+                              </ChoiceBox>
+                              <ChoiceBox fx:id="staffFilter2" prefHeight="30.0" prefWidth="110.0">
+                                 <styleClass>
+                                    <String fx:value="choice-box-filter" />
+                                    <String fx:value="blue" />
+                                 </styleClass>
+                              </ChoiceBox>
+                              <ChoiceBox fx:id="staffFilter3" prefHeight="30.0" prefWidth="70.0">
+                                 <styleClass>
+                                    <String fx:value="choice-box-filter" />
+                                    <String fx:value="cyan" />
+                                 </styleClass>
+                              </ChoiceBox>
+                              <Button fx:id="btnViewStaff" mnemonicParsing="false" prefHeight="30.0" prefWidth="50.0" styleClass="view-button" text="Xem" />
+                           </children>
+                        </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>
