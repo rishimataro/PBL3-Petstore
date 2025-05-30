@@ -15,6 +15,7 @@ import com.store.app.petstore.Sessions.SessionManager;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,12 +23,12 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -38,105 +39,133 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class OrderController implements Initializable {
-    private SessionManager sessionManager = new SessionManager();
-    
-    @FXML
-    private ChoiceBox<String> categoryChoiceBox;
-
-    @FXML
-    private ChoiceBox<String> sortChoiceBox;
-
-    @FXML
-    private FontAwesomeIconView clearSearchIcon;
-
-    @FXML
-    private Button confirmButton;
-
-    @FXML
-    private Label finalMoneyLabel;
-
-    @FXML
-    private Label finalMoneyValueLabel;
-
-    @FXML
-    private AnchorPane root;
-
-    @FXML
-    private ScrollPane scrollPane;
-
-    @FXML
-    private FontAwesomeIconView searchIcon;
-
-    @FXML
-    private TextField searchTextField;
-
-    @FXML
-    private Label totalMoneyLabel;
-
-    @FXML
-    private Label totalMoneyValueLabel;
-
-    @FXML
-    private Label voucherLabel;
-
-    @FXML
-    private TextField voucherTextField;
-
-    @FXML
-    private Label voucherValueLabel;
-
-    @FXML
-    private AnchorPane orderContentPane;
-    private VBox orderVBox = new VBox(10);
-
-    @FXML
-    private ScrollPane orderScrollPane;
-
-    private final FlowPane flowPane = new FlowPane();
-    private Map<Item, AnchorPane> itemPaneCache = new HashMap<>();
-    private int currentColumnCount = 0;
-    private final List<Item> itemList = new ArrayList<>();
-    private final PauseTransition resizeDebouncer = new PauseTransition(Duration.millis(300));
-    private final PauseTransition searchDebouncer = new PauseTransition(Duration.millis(300));
-    private Task<List<?>> currentSearchTask = null;
-    private final Map<String, List<?>> searchCache = new HashMap<>();
     private static final int SEARCH_LIMIT = 50;
     private static final int CACHE_SIZE = 100;
+    private static final int DEBOUNCE_DELAY_MS = 100; // Further reduced for more responsive search
+    private static final int INCREMENTAL_SEARCH_BATCH_SIZE = 10; // Number of items to show in incremental search
+    private static final String DEFAULT_CATEGORY = "Thú cưng";
+    private static final double SPACING = 10.0;
+
+    private final SessionManager sessionManager = new SessionManager();
+
+    @FXML private AnchorPane root;
+
+    @FXML private ScrollPane scrollPane;
+    private final FlowPane flowPane = new FlowPane();
+    private int currentColumnCount = 0;
+    private final List<Item> itemList = new ArrayList<>();
+    private final Map<Item, AnchorPane> itemPaneCache = new HashMap<>();
+    private final Set<Integer> temporarilyRemovedPetIds = new HashSet<>();
+
+    @FXML private ChoiceBox<String> categoryChoiceBox;
+    @FXML private ChoiceBox<String> sortChoiceBox;
+    @FXML private TextField searchTextField;
+    @FXML private FontAwesomeIconView searchIcon;
+    @FXML private FontAwesomeIconView clearSearchIcon;
+    private final PauseTransition searchDebouncer = new PauseTransition(Duration.millis(DEBOUNCE_DELAY_MS));
+    private Task<List<?>> currentSearchTask = null;
+    private final Map<String, List<?>> searchCache = new HashMap<>();
+    private final PauseTransition resizeDebouncer = new PauseTransition(Duration.millis(DEBOUNCE_DELAY_MS));
+    private final List<Item> incrementalSearchResults = new ArrayList<>();
+
+    @FXML private AnchorPane orderContentPane;
+    @FXML private ScrollPane orderScrollPane;
+    private final VBox orderVBox = new VBox(SPACING);
+
+    @FXML private Label totalMoneyLabel;
+    @FXML private Label totalMoneyValueLabel;
+    @FXML private Label voucherLabel;
+    @FXML private TextField voucherTextField;
+    @FXML private Label voucherValueLabel;
+    @FXML private Label finalMoneyLabel;
+    @FXML private Label finalMoneyValueLabel;
+
+    @FXML private Button confirmButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setupChoiceBox();
-        setupGridLayout();
-        configureScrollPane();
-        loadItemsByCategory("Thú cưng");
-        setupGridColumnBinding();
-        setupClearSearchIcon();
+        setupItemDisplayArea();
+        setupOrderDisplayArea();
+        setupFilterComponents();
+        setupSearchComponents();
         setupDiscountHandling();
         setupButtonActions();
-        orderVBox.setAlignment(Pos.TOP_CENTER);
-        orderVBox.getStyleClass().add("tab-content");
-        orderVBox.setPadding(new Insets(10,3,10,20));
-        orderScrollPane.setContent(orderVBox);
-        loadOrderFromSession();
-        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() >= 2 || newValue.isEmpty()) {
-                searchDebouncer.playFromStart();
+
+        Platform.runLater(() -> {
+            searchTextField.setEditable(true);
+            searchTextField.setFocusTraversable(true);
+            searchTextField.setMouseTransparent(false);
+
+            Parent parent = searchTextField.getParent();
+            while (parent != null) {
+                parent.setPickOnBounds(true);
+                parent.setMouseTransparent(false);
+                parent = parent.getParent();
             }
         });
-        searchDebouncer.setOnFinished(event -> {
-            handleSearch();
+
+        loadItemsByCategory(DEFAULT_CATEGORY);
+        loadOrderFromSession();
+    }
+
+    private void setupItemDisplayArea() {
+        setupGridLayout();
+        configureScrollPane();
+    }
+
+    private void setupOrderDisplayArea() {
+        orderVBox.setAlignment(Pos.TOP_CENTER);
+        orderVBox.getStyleClass().add("tab-content");
+        orderVBox.setPadding(new Insets(10, 3, 10, 20));
+        orderScrollPane.setContent(orderVBox);
+    }
+
+    private void setupFilterComponents() {
+        setupChoiceBox();
+    }
+
+    private void setupSearchComponents() {
+        setupClearSearchIcon();
+
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            clearSearchIcon.setVisible(!newValue.isEmpty());
+
+            if (newValue.length() <= 2) {
+                searchDebouncer.setDuration(Duration.millis(50));
+            } else if (newValue.length() <= 4) {
+                searchDebouncer.setDuration(Duration.millis(100));
+            } else {
+                searchDebouncer.setDuration(Duration.millis(150));
+            }
+
+            if (currentSearchTask != null && currentSearchTask.isRunning()) {
+                currentSearchTask.cancel();
+            }
+
+            searchDebouncer.playFromStart();
+
+            if (newValue.length() <= 2 && !newValue.isEmpty()) {
+                handleSearch();
+            }
         });
+
+        searchDebouncer.setOnFinished(event -> handleSearch());
     }
 
     private void setupButtonActions() {
-        confirmButton.setOnAction(event -> {
-            handleConfirmOrder();
+        confirmButton.setOnAction(event -> handleConfirmOrder());
+
+        root.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (oldScene != null && newScene == null) {
+                temporarilyRemovedPetIds.clear();
+            }
         });
     }
 
     private void setupConfirm() {
         if (orderVBox.getChildren().isEmpty()) {
-            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", "Vui lòng tạo đơn hàng trước khi xác nhận!");
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo",
+                "Vui lòng tạo đơn hàng trước khi xác nhận!");
             return;
         }
         Stage currentStage = (Stage) root.getScene().getWindow();
@@ -145,35 +174,54 @@ public class OrderController implements Initializable {
 
     private void setupClearSearchIcon() {
         clearSearchIcon.setVisible(false);
+        searchTextField.setPickOnBounds(true);
+
+        searchTextField.setOnMouseClicked(event -> {
+            double textFieldWidth = searchTextField.getWidth();
+            if (event.getX() > textFieldWidth - 30 && !searchTextField.getText().isEmpty()) {
+                searchTextField.clear();
+                searchTextField.requestFocus();
+                clearSearchIcon.setVisible(false);
+
+                loadItemsByCategory(categoryChoiceBox.getValue());
+                event.consume();
+            } else {
+                searchTextField.requestFocus();
+            }
+        });
+
         clearSearchIcon.setOnMouseClicked(event -> {
             searchTextField.clear();
             searchTextField.requestFocus();
             clearSearchIcon.setVisible(false);
+            loadItemsByCategory(categoryChoiceBox.getValue());
+            event.consume();
         });
+
+        clearSearchIcon.toFront();
+        clearSearchIcon.setMouseTransparent(false);
     }
 
     private void setupChoiceBox() {
         categoryChoiceBox.getItems().addAll("Thú cưng", "Phụ kiện", "Đồ chơi", "Thức ăn");
-        categoryChoiceBox.setValue("Thú cưng");
+        categoryChoiceBox.setValue(DEFAULT_CATEGORY);
         categoryChoiceBox.setOnAction(event -> {
-            String selectedCategory = categoryChoiceBox.getValue();
-            loadItemsByCategory(selectedCategory);
+            searchCache.clear();
+            searchTextField.clear();
+            loadItemsByCategory(categoryChoiceBox.getValue());
         });
 
         sortChoiceBox.getItems().addAll("Mới nhất", "Giá thấp đến cao", "Giá cao đến thấp");
         sortChoiceBox.setValue("Mới nhất");
-        sortChoiceBox.setOnAction(event -> {
-            String selectedSort = sortChoiceBox.getValue();
-            sortItems(selectedSort);
-        });
+        sortChoiceBox.setOnAction(event -> sortItems(sortChoiceBox.getValue()));
     }
 
     private void sortItems(String sortOption) {
         if (itemList.isEmpty()) return;
 
         Comparator<Item> priceComparator = (item1, item2) -> {
-            double price1 = item1 instanceof Pet ? ((Pet) item1).getPrice() : ((Product) item1).getPrice();
-            double price2 = item2 instanceof Pet ? ((Pet) item2).getPrice() : ((Product) item2).getPrice();
+            double price1 = item1.getPrice();
+            double price2 = item2.getPrice();
             return Double.compare(price1, price2);
         };
 
@@ -187,6 +235,7 @@ public class OrderController implements Initializable {
             case "Mới nhất":
                 break;
         }
+
         rearrangeGridItems();
     }
 
@@ -202,25 +251,30 @@ public class OrderController implements Initializable {
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         scrollPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setPannable(true);
     }
 
     private void loadItemsByCategory(String category) {
+        itemPaneCache.clear();
+
         Task<List<?>> task = new Task<>() {
             @Override
             protected List<?> call() {
                 if (category.equals("Thú cưng")) {
-                    return PetDAO.getInstance().findAll().stream()
+                    return Objects.requireNonNull(PetDAO.findAll()).stream()
                             .filter(pet -> !pet.getIsSold())
+                            .filter(pet -> !temporarilyRemovedPetIds.contains(pet.getPetId()))
                             .collect(Collectors.toList());
                 } else {
-                    return ProductDAO.getInstance().findByCategory(category).stream()
+                    return ProductDAO.findByCategory(category).stream()
                             .filter(product -> !product.getIsSold())
                             .collect(Collectors.toList());
                 }
             }
+
             @Override
             protected void succeeded() {
                 List<?> items = getValue();
@@ -230,64 +284,74 @@ public class OrderController implements Initializable {
                     rearrangeGridItems();
                 }
             }
+
             @Override
             protected void failed() {
                 getException().printStackTrace();
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
+                    "Không thể tải danh sách sản phẩm. Vui lòng thử lại sau.");
             }
         };
+
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
     }
 
-    private void setupGridColumnBinding() {
-        resizeDebouncer.setOnFinished(e -> {
-            int newColumnCount = calculateOptimalColumnCount(root.getWidth());
-            updateGridColumns(newColumnCount);
-        });
-        root.widthProperty().addListener((obs, oldVal, newVal) -> resizeDebouncer.playFromStart());
-    }
-
-    private int calculateOptimalColumnCount(double windowWidth) {
-        double availableWidth = windowWidth - 600;
-        int columnCount = (int) Math.floor(availableWidth / 110);
-        return Math.max(4, Math.min(9, columnCount));
-    }
-
     private void updateGridColumns(int newColumnCount) {
         if (newColumnCount == currentColumnCount) return;
+
         currentColumnCount = newColumnCount;
         rearrangeGridItems();
     }
 
     private void rearrangeGridItems() {
         flowPane.getChildren().clear();
+        itemPaneCache.clear();
+
         for (Item item : itemList) {
             try {
                 if (item instanceof Product product && product.getStock() <= 0) {
                     continue;
                 }
-                
+
+                if (item instanceof Pet pet && temporarilyRemovedPetIds.contains(pet.getPetId())) {
+                    continue;
+                }
+
                 AnchorPane itemPane = getOrCreateItemPane(item);
+
                 itemPane.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY) {
                         try {
-                            addItemToOrder(item);
-                            // If it's a pet, remove it from display immediately
-                            if (item instanceof Pet) {
-                                flowPane.getChildren().remove(itemPane);
+                            boolean itemExists = isItemInOrder(item);
+
+                            if (!itemExists) {
+                                AnchorPane newItemPane = createItemOrderPane(item);
+                                newItemPane.setUserData(item.getId());
+                                orderVBox.getChildren().add(newItemPane);
+                                updateAmount();
+
+                                if (item instanceof Pet) {
+                                    flowPane.getChildren().remove(itemPane);
+                                    itemPaneCache.remove(item);
+                                }
                             }
                         } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
+                                "Không thể thêm sản phẩm vào đơn hàng.");
+                            e.printStackTrace();
                         }
                     }
                 });
-                // Only add if not already present
+
                 if (!flowPane.getChildren().contains(itemPane)) {
                     flowPane.getChildren().add(itemPane);
                 }
             } catch (IOException e) {
-                System.err.println("Error loading item: " + e.getMessage());
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
+                    "Không thể tải sản phẩm: " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -296,6 +360,7 @@ public class OrderController implements Initializable {
         if (itemPaneCache.containsKey(item)) {
             return itemPaneCache.get(item);
         }
+
         AnchorPane pane = createItemPane(item);
         itemPaneCache.put(item, pane);
         return pane;
@@ -304,63 +369,94 @@ public class OrderController implements Initializable {
     private AnchorPane createItemPane(Item item) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList.fxml"));
         AnchorPane pane = loader.load();
+
         ItemListController controller = loader.getController();
         controller.setData(item);
+
         return pane;
     }
 
     private Consumer<AnchorPane> createDeleteCallback() {
         return paneToRemove -> {
             VBox tabContent = orderVBox;
-            if (tabContent != null) {
-                FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), paneToRemove);
-                fadeTransition.setFromValue(1.0);
-                fadeTransition.setToValue(0.0);
-                fadeTransition.setOnFinished(e -> {
-                    tabContent.getChildren().remove(paneToRemove);
-                    updateAmount();
-                    // If it was a pet, add it back to the display
-                    Object controllerObj = paneToRemove.getProperties().get("controller");
-                    if (controllerObj instanceof ItemList2Controller controller) {
-                        Item item = controller.getItem();
-                        if (item instanceof Pet) {
+            FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), paneToRemove);
+            fadeTransition.setFromValue(1.0);
+            fadeTransition.setToValue(0.0);
+
+            fadeTransition.setOnFinished(e -> {
+                tabContent.getChildren().remove(paneToRemove);
+                updateAmount();
+
+                Object controllerObj = paneToRemove.getProperties().get("controller");
+                if (controllerObj instanceof ItemList2Controller controller) {
+                    Item item = controller.getItem();
+                    String currentCategory = categoryChoiceBox.getValue();
+
+                    if (item instanceof Pet pet) {
+                        temporarilyRemovedPetIds.remove(pet.getPetId());
+
+                        if (currentCategory.equals("Thú cưng")) {
                             try {
                                 AnchorPane itemPane = getOrCreateItemPane(item);
                                 itemPane.setOnMouseClicked(event -> {
                                     if (event.getButton() == MouseButton.PRIMARY) {
                                         try {
-                                            addItemToOrder(item);
-                                            flowPane.getChildren().remove(itemPane);
+                                            boolean itemExists = isItemInOrder(item);
+
+                                            if (!itemExists) {
+                                                AnchorPane newItemPane = createItemOrderPane(item);
+                                                newItemPane.setUserData(item.getId());
+                                                orderVBox.getChildren().add(newItemPane);
+                                                updateAmount();
+
+                                                temporarilyRemovedPetIds.add(pet.getPetId());
+
+                                                flowPane.getChildren().remove(itemPane);
+                                            }
                                         } catch (IOException ex) {
                                             throw new RuntimeException(ex);
                                         }
                                     }
                                 });
-                                flowPane.getChildren().add(itemPane);
+
+                                if (!flowPane.getChildren().contains(itemPane)) {
+                                    flowPane.getChildren().add(itemPane);
+                                }
                             } catch (IOException ex) {
                                 System.err.println("Error adding pet back to display: " + ex.getMessage());
                             }
-                        } else if (item instanceof Product product) {
+                        }
+                    } else if (item instanceof Product product) {
+                        if (product.getCategory().equals(currentCategory)) {
                             try {
                                 AnchorPane itemPane = getOrCreateItemPane(product);
                                 itemPane.setOnMouseClicked(event -> {
                                     if (event.getButton() == MouseButton.PRIMARY) {
                                         try {
-                                            addItemToOrder(product);
+                                            boolean itemExists = isItemInOrder(product);
+
+                                            if (!itemExists) {
+                                                AnchorPane newItemPane = createItemOrderPane(product);
+                                                newItemPane.setUserData(product.getId());
+                                                orderVBox.getChildren().add(newItemPane);
+                                                updateAmount();
+                                            }
                                         } catch (IOException ex) {
                                             throw new RuntimeException(ex);
                                         }
                                     }
                                 });
-                                flowPane.getChildren().add(itemPane);
+                                if (!flowPane.getChildren().contains(itemPane)) {
+                                    flowPane.getChildren().add(itemPane);
+                                }
                             } catch (IOException ex) {
                                 System.err.println("Error adding product back to display: " + ex.getMessage());
                             }
                         }
                     }
-                });
-                fadeTransition.play();
-            }
+                }
+            });
+            fadeTransition.play();
         };
     }
 
@@ -368,17 +464,23 @@ public class OrderController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/ItemList2.fxml"));
         AnchorPane pane = loader.load();
         ItemList2Controller controller = loader.getController();
+
         if (controller != null) {
             controller.setParentPane(pane);
             controller.setOnDeleteCallback(createDeleteCallback());
             controller.setData(item);
-            controller.setOnQuantityChanged(() -> updateAmount());
+            controller.setOnQuantityChanged(this::updateAmount);
+
+            if (item instanceof Pet pet) {
+                temporarilyRemovedPetIds.add(pet.getPetId());
+            }
+
             controller.setOnStockChanged(() -> {
                 if (item instanceof Product product) {
                     int quantity = controller.getQuantity();
                     int remainingStock = product.getStock() - quantity;
+
                     if (remainingStock <= 0) {
-                        // Remove item from display if out of stock
                         flowPane.getChildren().removeIf(node -> {
                             if (node instanceof AnchorPane itemPane) {
                                 Object controllerObj = itemPane.getProperties().get("controller");
@@ -391,31 +493,29 @@ public class OrderController implements Initializable {
                     }
                 }
             });
+
             pane.setUserData(item.getId());
             pane.getProperties().put("controller", controller);
         }
+
         return pane;
     }
 
-    private void addItemToOrder(Item item) throws IOException {
-        if (item == null) return;
-        // Check if item already exists in orderVBox
+    private boolean isItemInOrder(Item item) {
+        if (item == null) return false;
+
         for (Node node : orderVBox.getChildren()) {
             if (node instanceof AnchorPane pane) {
                 Object controllerObj = pane.getProperties().get("controller");
                 if (controllerObj instanceof ItemList2Controller controller) {
                     if (controller.getItem().getId() == item.getId()) {
-                        controller.AddItem(1);
-                        updateAmount();
-                        return;
+                        return true;
                     }
                 }
             }
         }
-        AnchorPane itemPane = createItemOrderPane(item);
-        itemPane.setUserData(item.getId());
-        orderVBox.getChildren().add(itemPane);
-        updateAmount();
+
+        return false;
     }
 
     private void updateAmount() {
@@ -432,24 +532,38 @@ public class OrderController implements Initializable {
 
         totalMoneyValueLabel.setText(ControllerUtils.formatCurrency(total));
 
-        double finalAmountNumber = ControllerUtils.parseCurrency(totalMoneyValueLabel.getText()) - 
-                                 ControllerUtils.parseCurrency(voucherValueLabel.getText());
+        double discountAmount = ControllerUtils.parseCurrency(voucherValueLabel.getText());
+        double finalAmount = total - discountAmount;
 
-        finalMoneyValueLabel.setText(ControllerUtils.formatCurrency(finalAmountNumber));
+        finalAmount = Math.max(0, finalAmount);
+
+        finalMoneyValueLabel.setText(ControllerUtils.formatCurrency(finalAmount));
     }
 
-    private void calcAmount() {
-        // This method is no longer used
+    private void updateIncrementalSearchResults() {
+        if (incrementalSearchResults.isEmpty()) {
+            return;
+        }
+
+        itemList.clear();
+        itemList.addAll(incrementalSearchResults);
+
+        rearrangeGridItems();
     }
 
     private void handleSearch() {
         String searchText = searchTextField.getText().trim();
+
         if (searchText.isEmpty()) {
             loadItemsByCategory(categoryChoiceBox.getValue());
             return;
         }
 
-        String cacheKey = categoryChoiceBox.getValue() + "_" + searchText;
+        itemPaneCache.clear();
+
+        String currentCategory = categoryChoiceBox.getValue();
+        String cacheKey = currentCategory + "_" + searchText;
+
         if (searchCache.containsKey(cacheKey)) {
             itemList.clear();
             itemList.addAll((List<Item>) searchCache.get(cacheKey));
@@ -457,24 +571,175 @@ public class OrderController implements Initializable {
             return;
         }
 
+        if (searchText.length() >= 3) {
+            for (int prefixLength = searchText.length() - 1; prefixLength >= 2; prefixLength--) {
+                String prefix = searchText.substring(0, prefixLength);
+                String prefixCacheKey = currentCategory + "_" + prefix;
+
+                if (searchCache.containsKey(prefixCacheKey)) {
+                    List<Item> prefixResults = (List<Item>) searchCache.get(prefixCacheKey);
+
+                    String searchTextLower = searchText.toLowerCase();
+                    List<Item> filteredResults = prefixResults.stream()
+                            .filter(item -> {
+                                if (item instanceof Pet pet) {
+                                    if (searchTextLower.length() <= 2) {
+                                        if (pet.getName().toLowerCase().startsWith(searchTextLower)) {
+                                            return true;
+                                        }
+                                        return pet.getType().toLowerCase().startsWith(searchTextLower) ||
+                                               pet.getBreed().toLowerCase().startsWith(searchTextLower);
+                                    } else {
+                                        return pet.getName().toLowerCase().contains(searchTextLower) ||
+                                               pet.getType().toLowerCase().contains(searchTextLower) ||
+                                               pet.getBreed().toLowerCase().contains(searchTextLower) ||
+                                               pet.getSex().toLowerCase().contains(searchTextLower) ||
+                                               pet.getDescription().toLowerCase().contains(searchTextLower) ||
+                                               String.valueOf(pet.getPrice()).contains(searchTextLower) ||
+                                               String.valueOf(pet.getAge()).contains(searchTextLower);
+                                    }
+                                } else if (item instanceof Product product) {
+                                    if (searchTextLower.length() <= 2) {
+                                        if (product.getName().toLowerCase().startsWith(searchTextLower)) {
+                                            return true;
+                                        }
+                                        return product.getCategory().toLowerCase().startsWith(searchTextLower);
+                                    } else {
+                                        return product.getName().toLowerCase().contains(searchTextLower) ||
+                                               product.getCategory().toLowerCase().contains(searchTextLower) ||
+                                               product.getDescription().toLowerCase().contains(searchTextLower) ||
+                                               String.valueOf(product.getPrice()).contains(searchTextLower) ||
+                                               String.valueOf(product.getStock()).contains(searchTextLower);
+                                    }
+                                }
+                                return false;
+                            })
+                            .collect(Collectors.toList());
+
+                    searchCache.put(cacheKey, filteredResults);
+
+                    itemList.clear();
+                    itemList.addAll(filteredResults);
+                    rearrangeGridItems();
+                    return;
+                }
+            }
+        }
+
         if (currentSearchTask != null && currentSearchTask.isRunning()) {
             currentSearchTask.cancel();
         }
 
+        incrementalSearchResults.clear();
+
         currentSearchTask = new Task<>() {
             @Override
-            protected List<?> call() {
-                if (categoryChoiceBox.getValue().equals("Thú cưng")) {
-                    return PetDAO.getInstance().findAll().stream()
+            protected List<?> call() throws Exception {
+                String currentCategory = categoryChoiceBox.getValue();
+                String searchTextLower = searchText.toLowerCase();
+
+                if (currentCategory.equals("Thú cưng")) {
+                    List<Pet> availablePets = Objects.requireNonNull(PetDAO.findAll()).stream()
                             .filter(pet -> !pet.getIsSold())
-                            .filter(pet -> pet.getName().toLowerCase().contains(searchText.toLowerCase()))
+                            .filter(pet -> !temporarilyRemovedPetIds.contains(pet.getPetId()))
+                            .collect(Collectors.toList());
+
+                    List<Pet> results = new ArrayList<>();
+
+                    List<Pet> matchingPets = availablePets.parallelStream()
+                            .filter(pet -> {
+                                if (searchTextLower.length() <= 2) {
+                                    if (pet.getName().toLowerCase().startsWith(searchTextLower)) {
+                                        return true;
+                                    }
+                                    return pet.getType().toLowerCase().startsWith(searchTextLower) ||
+                                           pet.getBreed().toLowerCase().startsWith(searchTextLower);
+                                } else {
+                                    if (pet.getName().toLowerCase().contains(searchTextLower)) {
+                                        return true;
+                                    }
+
+                                    return pet.getType().toLowerCase().contains(searchTextLower) ||
+                                           pet.getBreed().toLowerCase().contains(searchTextLower) ||
+                                           pet.getSex().toLowerCase().contains(searchTextLower) ||
+                                           pet.getDescription().toLowerCase().contains(searchTextLower) ||
+                                           String.valueOf(pet.getPrice()).contains(searchTextLower) ||
+                                           String.valueOf(pet.getAge()).contains(searchTextLower);
+                                }
+                            })
                             .limit(SEARCH_LIMIT)
                             .collect(Collectors.toList());
+
+                    for (int i = 0; i < matchingPets.size(); i++) {
+                        Pet pet = matchingPets.get(i);
+                        results.add(pet);
+
+                        if (i % INCREMENTAL_SEARCH_BATCH_SIZE == 0 || i == matchingPets.size() - 1) {
+                            List<Pet> incrementalBatch = new ArrayList<>(results);
+
+                            Platform.runLater(() -> {
+                                if (!isCancelled()) {
+                                    incrementalSearchResults.clear();
+                                    incrementalSearchResults.addAll(incrementalBatch);
+
+                                    updateIncrementalSearchResults();
+                                }
+                            });
+
+                            Thread.sleep(10);
+                        }
+                    }
+
+                    return results;
                 } else {
-                    return ProductDAO.getInstance().searchProducts(searchText).stream()
+                    List<Product> availableProducts = ProductDAO.findByCategory(currentCategory).stream()
                             .filter(product -> !product.getIsSold())
+                            .collect(Collectors.toList());
+
+                    List<Product> results = new ArrayList<>();
+
+                    List<Product> matchingProducts = availableProducts.parallelStream()
+                            .filter(product -> {
+                                if (searchTextLower.length() <= 2) {
+                                    if (product.getName().toLowerCase().startsWith(searchTextLower)) {
+                                        return true;
+                                    }
+                                    return product.getCategory().toLowerCase().startsWith(searchTextLower);
+                                } else {
+                                    if (product.getName().toLowerCase().contains(searchTextLower)) {
+                                        return true;
+                                    }
+
+                                    return product.getCategory().toLowerCase().contains(searchTextLower) ||
+                                           product.getDescription().toLowerCase().contains(searchTextLower) ||
+                                           String.valueOf(product.getPrice()).contains(searchTextLower) ||
+                                           String.valueOf(product.getStock()).contains(searchTextLower);
+                                }
+                            })
                             .limit(SEARCH_LIMIT)
                             .collect(Collectors.toList());
+
+                    for (int i = 0; i < matchingProducts.size(); i++) {
+                        Product product = matchingProducts.get(i);
+                        results.add(product);
+
+                        if (i % INCREMENTAL_SEARCH_BATCH_SIZE == 0 || i == matchingProducts.size() - 1) {
+                            List<Product> incrementalBatch = new ArrayList<>(results);
+
+                            Platform.runLater(() -> {
+                                if (!isCancelled()) {
+                                    incrementalSearchResults.clear();
+                                    incrementalSearchResults.addAll(incrementalBatch);
+
+                                    updateIncrementalSearchResults();
+                                }
+                            });
+
+                            Thread.sleep(10);
+                        }
+                    }
+
+                    return results;
                 }
             }
         };
@@ -482,11 +747,26 @@ public class OrderController implements Initializable {
         currentSearchTask.setOnSucceeded(event -> {
             List<?> results = currentSearchTask.getValue();
             if (results != null) {
-                // Update cache
                 if (searchCache.size() >= CACHE_SIZE) {
-                    searchCache.clear();
+                    int toRemove = CACHE_SIZE / 4;
+                    List<String> keys = new ArrayList<>(searchCache.keySet());
+                    for (int i = 0; i < Math.min(toRemove, keys.size()); i++) {
+                        searchCache.remove(keys.get(i));
+                    }
                 }
+
                 searchCache.put(cacheKey, results);
+
+                if (searchText.length() <= 5) {
+                    for (int prefixLength = 2; prefixLength < searchText.length(); prefixLength++) {
+                        String prefix = searchText.substring(0, prefixLength);
+                        String prefixCacheKey = currentCategory + "_" + prefix;
+
+                        if (!searchCache.containsKey(prefixCacheKey)) {
+                            searchCache.put(prefixCacheKey, results);
+                        }
+                    }
+                }
 
                 itemList.clear();
                 itemList.addAll((List<Item>) results);
@@ -496,6 +776,8 @@ public class OrderController implements Initializable {
 
         currentSearchTask.setOnFailed(event -> {
             currentSearchTask.getException().printStackTrace();
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
+                "Không thể tìm kiếm sản phẩm. Vui lòng thử lại sau.");
         });
 
         Thread searchThread = new Thread(currentSearchTask);
@@ -515,22 +797,27 @@ public class OrderController implements Initializable {
     }
 
     private boolean isValidDiscount(Discount discount) {
+        if (discount == null) {
+            return false;
+        }
+
         LocalDate today = LocalDate.now();
-        
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
         if (today.isBefore(discount.getStartDate())) {
-            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", 
-                String.format("Mã giảm giá này sẽ có hiệu lực từ ngày %s", 
-                discount.getStartDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo",
+                String.format("Mã giảm giá này sẽ có hiệu lực từ ngày %s",
+                discount.getStartDate().format(dateFormatter)));
             return false;
         }
-        
+
         if (today.isAfter(discount.getEndDate())) {
-            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", 
-                String.format("Mã giảm giá này đã hết hạn từ ngày %s", 
-                discount.getEndDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo",
+                String.format("Mã giảm giá này đã hết hạn từ ngày %s",
+                discount.getEndDate().format(dateFormatter)));
             return false;
         }
-        
+
         return true;
     }
 
@@ -539,7 +826,7 @@ public class OrderController implements Initializable {
             @Override
             protected Discount call() {
                 try {
-                    return DiscountDAO.getInstance().findByCode(code);
+                    return DiscountDAO.findByCode(code);
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw e;
@@ -550,9 +837,18 @@ public class OrderController implements Initializable {
         task.setOnSucceeded(event -> {
             try {
                 Discount discount = task.getValue();
+
+                if (discount == null) {
+                    voucherValueLabel.setText("0");
+                    ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo",
+                        "Mã giảm giá không tồn tại!");
+                    updateAmount();
+                    return;
+                }
+
                 double totalAmount = ControllerUtils.parseCurrency(totalMoneyValueLabel.getText());
-                String validationMessage = DiscountDAO.getInstance().validateDiscount(discount, totalAmount);
-                
+                String validationMessage = DiscountDAO.validateDiscount(discount, totalAmount);
+
                 if (validationMessage == null) {
                     applyDiscount(discount);
                 } else {
@@ -563,7 +859,8 @@ public class OrderController implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
                 voucherValueLabel.setText("0");
-                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Có lỗi xảy ra khi xử lý mã giảm giá!");
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
+                    "Có lỗi xảy ra khi xử lý mã giảm giá!");
                 updateAmount();
             }
         });
@@ -574,7 +871,8 @@ public class OrderController implements Initializable {
                 exception.printStackTrace();
             }
             voucherValueLabel.setText("0");
-            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể kiểm tra mã giảm giá! Vui lòng thử lại sau.");
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
+                "Không thể kiểm tra mã giảm giá! Vui lòng thử lại sau.");
             updateAmount();
         });
 
@@ -586,15 +884,18 @@ public class OrderController implements Initializable {
     private void applyDiscount(Discount discount) {
         double totalAmount = ControllerUtils.parseCurrency(totalMoneyValueLabel.getText());
         double discountAmount;
-        
+
         if (discount.getDiscountType().equals("percent")) {
             discountAmount = totalAmount * (discount.getValue() / 100);
+
             if (discount.getMaxDiscountValue() > 0) {
                 discountAmount = Math.min(discountAmount, discount.getMaxDiscountValue());
             }
         } else {
             discountAmount = discount.getValue();
         }
+
+        discountAmount = Math.min(discountAmount, totalAmount);
 
         voucherValueLabel.setText(ControllerUtils.formatCurrency(discountAmount));
     }
@@ -606,7 +907,6 @@ public class OrderController implements Initializable {
             return;
         }
 
-        // Lấy thông tin đơn hàng từ orderVBox
         ArrayList<OrderDetail> orderDetails = new ArrayList<>();
         Map<Integer, Product> products = new HashMap<>();
         Map<Integer, Pet> pets = new HashMap<>();
@@ -642,27 +942,26 @@ public class OrderController implements Initializable {
             return;
         }
 
-        // Tạo đơn hàng mới
         Order order = new Order();
         order.setTotalPrice(totalAmount);
         order.setOrderDate(LocalDateTime.now());
-        order.setStaffId(sessionManager.getCurrentStaff().getStaffId());
+        order.setStaffId(SessionManager.getCurrentStaff().getStaffId());
 
-        // Lấy thông tin giảm giá nếu có
         final Discount discount;
         String voucherCode = voucherTextField.getText().trim();
         if (!voucherCode.isEmpty()) {
-            discount = DiscountDAO.getInstance().findByCode(voucherCode);
+            discount = DiscountDAO.findByCode(voucherCode);
         } else {
             discount = null;
         }
 
-        // Lưu dữ liệu vào SessionManager
         SessionManager.setCurrentOrder(order);
         SessionManager.setCurrentOrderDetails(orderDetails);
         SessionManager.setCurrentOrderProducts(products);
         SessionManager.setCurrentOrderPets(pets);
         SessionManager.setCurrentDiscount(discount);
+
+        temporarilyRemovedPetIds.clear();
 
         Stage currentStage = (Stage) root.getScene().getWindow();
         ViewFactory.getInstance().switchContent("payment", currentStage);
@@ -674,7 +973,7 @@ public class OrderController implements Initializable {
         Map<Integer, Product> products = SessionManager.getCurrentOrderProducts();
         Map<Integer, Pet> pets = SessionManager.getCurrentOrderPets();
         Discount discount = SessionManager.getCurrentDiscount();
-        
+
         if (order != null && orderDetails != null && products != null && pets != null) {
             VBox tabContent = orderVBox;
             if (tabContent != null) {
@@ -689,10 +988,10 @@ public class OrderController implements Initializable {
                     if (item != null) {
                         try {
                             AnchorPane itemPane = createItemOrderPane(item);
-                            // Set lại số lượng
                             Object controllerObj = itemPane.getProperties().get("controller");
                             if (controllerObj instanceof ItemList2Controller controller) {
-                                controller.AddItem(detail.getQuantity() - 1); // vì mặc định là 1
+                                controller.addItem(-1);
+                                controller.addItem(detail.getQuantity());
                             }
                             itemPane.setUserData(item.getId());
                             tabContent.getChildren().add(itemPane);
@@ -702,7 +1001,6 @@ public class OrderController implements Initializable {
                     }
                 }
             }
-            // Set lại voucher nếu có
             if (discount != null) {
                 voucherTextField.setText(discount.getCode());
                 double totalAmount = order.getTotalPrice();

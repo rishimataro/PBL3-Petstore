@@ -14,14 +14,14 @@
 
 <AnchorPane accessibleRole="BUTTON" prefHeight="170.0" prefWidth="110.0" styleClass="card" stylesheets="@../../Styles/Staff/ItemList.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.ItemListController">
    <children>
-      <ImageView fx:id="imgPet" fitHeight="90.0" fitWidth="90.0" layoutX="10.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <ImageView fx:id="itemImage" fitHeight="90.0" fitWidth="90.0" layoutX="10.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
          <image>
             <Image url="@../../Images/Pet/pet1.jpg" />
          </image>
       </ImageView>
       <VBox layoutX="10.0" layoutY="100.0" prefHeight="70.0" prefWidth="90.0" styleClass="infor-container" AnchorPane.topAnchor="100.0">
          <children>
-            <Label fx:id="namePet" styleClass="pet-name" text="LUCKY" />
+            <Label fx:id="itemName" styleClass="pet-name" text="LUCKY" />
             <Separator fx:id="sep" prefWidth="200.0" />
             <GridPane fx:id="tagPane" prefHeight="15.0" prefWidth="90.0" styleClass="category-label">
               <columnConstraints>
@@ -33,16 +33,15 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label fx:id="tagType" styleClass="label-type" text="Chó" />
-                  <Label fx:id="tagBreed" styleClass="label-breed" text="Shiba" GridPane.columnIndex="1" />
-                  <Label fx:id="tagGender" styleClass="label-sex" text="Đực" GridPane.columnIndex="2" />
+                  <Label fx:id="itemType" styleClass="label-type" text="Chó" />
+                  <Label fx:id="itemBreed" styleClass="label-breed" text="Shiba" GridPane.columnIndex="1" />
+                  <Label fx:id="itemGender" styleClass="label-sex" text="Đực" GridPane.columnIndex="2" />
                </children>
             </GridPane>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="pricePet" prefHeight="15.0" prefWidth="75.0" styleClass="price-box" text="\$10 000 000" />
+                  <Label fx:id="itemPrice" prefHeight="15.0" prefWidth="75.0" styleClass="price-box" text="\$10 000 000" />
                   <FontAwesomeIconView fx:id="addIcon" accessibleRole="BUTTON" glyphName="PLUS_CIRCLE" styleClass="icon-button" />
-                  <FontAwesomeIconView fx:id="closeIcon" accessibleRole="BUTTON" glyphName="WINDOW_CLOSE" styleClass="icon-button" />
                </children>
             </HBox>
          </children>

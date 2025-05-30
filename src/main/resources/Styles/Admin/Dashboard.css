@@ -1,0 +1,308 @@
+/* Dashboard Container */
+.dashboard-container {
+    -fx-background-color: #f5f5f5;
+}
+
+.dashboard-container .viewport {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Welcome Section */
+.welcome-section {
+    -fx-padding: 10px 0;
+    -fx-alignment: center;
+}
+
+.welcome-text {
+    -fx-text-fill: #333333;
+}
+
+/* Date Filter Controls */
+.date-filter-container {
+    -fx-padding: 5px;
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 5px;
+    -fx-border-color: #dddddd;
+    -fx-border-radius: 5px;
+}
+
+.filter-button {
+    -fx-background-color: #017FCB;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 5px 10px;
+}
+
+.filter-button:hover {
+    -fx-background-color: derive(#017FCB, 10%);
+}
+
+.date-picker {
+    -fx-background-color: white;
+    -fx-border-color: #dddddd;
+    -fx-border-radius: 3px;
+}
+
+/* Update Label */
+.update-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666666;
+    -fx-font-style: italic;
+}
+
+/* Section Titles */
+.section-title {
+    -fx-text-fill: #333333;
+    -fx-padding: 5px 0;
+}
+
+/* Statistics Cards */
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.stat-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: #555555;
+}
+
+.stat-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.stat-change {
+    -fx-font-size: 12px;
+}
+
+.stat-icon {
+    -fx-fill: white;
+    -fx-opacity: 0.8;
+}
+
+/* Card Colors */
+.revenue-card {
+    -fx-background-color: linear-gradient(to right, #017FCB, #01C4DA);
+}
+
+.revenue-card .stat-title, .revenue-card .stat-value, .revenue-card .stat-change {
+    -fx-text-fill: white;
+}
+
+.customer-card {
+    -fx-background-color: linear-gradient(to right, #FF8F00, #FFCA28);
+}
+
+.customer-card .stat-title, .customer-card .stat-value, .customer-card .stat-change {
+    -fx-text-fill: white;
+}
+
+.product-card {
+    -fx-background-color: linear-gradient(to right, #43A047, #8BC34A);
+}
+
+.product-card .stat-title, .product-card .stat-value, .product-card .stat-change {
+    -fx-text-fill: white;
+}
+
+.pet-card {
+    -fx-background-color: linear-gradient(to right, #E53935, #FF5252);
+}
+
+.pet-card .stat-title, .pet-card .stat-value, .pet-card .stat-change {
+    -fx-text-fill: white;
+}
+
+/* Chart Containers */
+.chart-container {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Table Containers */
+.table-container {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.table-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Management Buttons */
+.management-button {
+    -fx-background-radius: 8px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 15px;
+    -fx-alignment: center-left;
+    -fx-content-display: left;
+    -fx-graphic-text-gap: 15;
+    -fx-min-width: 200px;
+    -fx-max-width: 450px;
+}
+
+.accounts-button {
+    -fx-background-color: #017FCB;
+}
+
+.accounts-button:hover {
+    -fx-background-color: derive(#017FCB, 10%);
+}
+
+.employees-button {
+    -fx-background-color: #FF8F00;
+}
+
+.employees-button:hover {
+    -fx-background-color: derive(#FF8F00, 10%);
+}
+
+.customers-button {
+    -fx-background-color: #43A047;
+}
+
+.customers-button:hover {
+    -fx-background-color: derive(#43A047, 10%);
+}
+
+.pets-button {
+    -fx-background-color: #E53935;
+}
+
+.pets-button:hover {
+    -fx-background-color: derive(#E53935, 10%);
+}
+
+.products-button {
+    -fx-background-color: #5E35B1;
+}
+
+.products-button:hover {
+    -fx-background-color: derive(#5E35B1, 10%);
+}
+
+.promotions-button {
+    -fx-background-color: #00897B;
+}
+
+.promotions-button:hover {
+    -fx-background-color: derive(#00897B, 10%);
+}
+
+/* Report Buttons */
+.report-button {
+    -fx-background-color: #017FCB;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 15px;
+}
+
+.report-button:hover {
+    -fx-background-color: derive(#017FCB, 10%);
+}
+
+/* Logout Button */
+.logout-button {
+    -fx-background-color: #E53935;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 15px;
+}
+
+.logout-button:hover {
+    -fx-background-color: derive(#E53935, 10%);
+}
+
+/* Chart Styling */
+.chart {
+    -fx-padding: 10px;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #dddddd;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #dddddd;
+}
+
+.axis {
+    -fx-tick-label-fill: #666666;
+}
+
+.axis-label {
+    -fx-text-fill: #666666;
+}
+
+/* Bar Chart Specific */
+.chart-bar {
+    -fx-bar-fill: #017FCB;
+}
+
+/* Pie Chart Specific */
+.chart-pie {
+    -fx-border-color: derive(-fx-pie-color, -10%);
+    -fx-border-width: 1px;
+}
+
+.chart-pie-label {
+    -fx-fill: #666666;
+}
+
+.chart-pie-label-line {
+    -fx-stroke: #bbbbbb;
+}
+
+/* Table Styling */
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: #017FCB;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #e3f2fd;
+    -fx-text-fill: #333333;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #e3f2fd;
+}

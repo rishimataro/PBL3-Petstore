@@ -40,8 +40,7 @@ public class PetItemDetailController {
         if (imageStream != null) {
             img = new Image(imageStream);
         } else {
-            // ảnh mặc định nếu ảnh bị null hoặc không tồn tại
-            img = new Image(getClass().getResourceAsStream("/Images/noImage.png"));
+            img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/noImage.png")));
         }
         petImg.setImage(img);
     }

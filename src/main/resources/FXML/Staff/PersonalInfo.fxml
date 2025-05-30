@@ -20,7 +20,7 @@
 <VBox minWidth="992" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.PersonalInforController">
     <children>
         <fx:include source="StaffMenu.fxml" />
-      <HBox VBox.vgrow="ALWAYS" alignment="CENTER" styleClass="root" stylesheets="@../../Styles/Staff/PersonalInfo.css">
+      <HBox alignment="CENTER" styleClass="root" stylesheets="@../../Styles/Staff/PersonalInfo.css" VBox.vgrow="ALWAYS">
          <children>
               <AnchorPane maxWidth="1000">
                   <children>
@@ -34,10 +34,17 @@
                                               <Image url="@../../Images/Staff/staff_125_1746243419945.jpg" />
                                           </image>
                                       </ImageView>
-                                      <Pane fx:id="profileMask" styleClass="circle-mask" />
+                                      <Pane fx:id="profileMask" prefWidth="116.0" styleClass="circle-mask" />
                                   </children>
                               </StackPane>
-                              <Button fx:id="changeImageBtn" layoutX="161.0" layoutY="268.0" mnemonicParsing="false" onAction="#handleChangeImage" text="Đổi ảnh" />
+                              <Button fx:id="changeImageBtn" layoutX="143.0" layoutY="271.0" mnemonicParsing="false" onAction="#handleChangeImage" prefHeight="26.0" prefWidth="90.0" text="Đổi ảnh">
+                           <styleClass>
+                              <String fx:value="crud_func" />
+                              <String fx:value="change-btn" />
+                           </styleClass>
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" />
+                           </graphic></Button>
                               <Label fx:id="fullNameLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="310.0" prefWidth="350.0" styleClass="fullName-label" />
                               <Label fx:id="roleLabel" layoutX="90.0" layoutY="350.0" styleClass="role-label" />
                               <Label fx:id="staffIDLabel" layoutX="250.0" layoutY="350.0" styleClass="staffID-label" />
@@ -48,8 +55,8 @@
                       <AnchorPane layoutX="400.0" prefHeight="442.0" prefWidth="592.0">
                           <children>
                               <!-- Personal Information Section -->
-                              <Label layoutY="28.0" styleClass="main-label" text="THÔNG TIN CÁ NHÂN" />
-                              <GridPane   AnchorPane.topAnchor="53.5" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="40" styleClass="gridForm">
+                              <Label layoutX="8.0" layoutY="9.0" styleClass="main-label" text="THÔNG TIN CÁ NHÂN" />
+                              <GridPane hgap="5.0" layoutX="10.4" layoutY="38.2" styleClass="gridForm" vgap="5.0" AnchorPane.leftAnchor="10.4" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="38.2">
                                   <columnConstraints>
                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="311.0" />
                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="254.85711669921875" minWidth="10.0" prefWidth="208.1428571428571" />
@@ -103,7 +110,7 @@
                                       </VBox>
                                       <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="6">
                                           <children>
-                                              <Button fx:id="info_save_btn" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="5" mnemonicParsing="false" onAction="#handleUpdateInfo" prefHeight="22.0" prefWidth="89.0" text="Lưu">
+                                              <Button fx:id="info_save_btn" mnemonicParsing="false" onAction="#handleUpdateInfo" prefHeight="22.0" prefWidth="89.0" text="Lưu" AnchorPane.rightAnchor="5" AnchorPane.topAnchor="10">
                                                   <styleClass>
                                                       <String fx:value="crud_func" />
                                                       <String fx:value="save-btn" />
@@ -118,8 +125,8 @@
                               </GridPane>
       
                               <!-- Password Change Section -->
-                              <Label layoutY="278.0" styleClass="main-label" text="ĐỔI MẬT KHẨU" />
-                              <GridPane AnchorPane.topAnchor="303.5" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="40" styleClass="gridForm">
+                              <Label layoutX="13.0" layoutY="283.0" styleClass="main-label" text="ĐỔI MẬT KHẨU" />
+                              <GridPane hgap="5.0" layoutX="15.2" layoutY="310.2" styleClass="gridForm" vgap="5.0" AnchorPane.leftAnchor="15.2" AnchorPane.rightAnchor="35.200000000000045" AnchorPane.topAnchor="310.2">
                                   <columnConstraints>
                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="311.0" minWidth="10.0" prefWidth="250.0" />
                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="254.85711669921875" minWidth="10.0" prefWidth="208.1428571428571" />
@@ -131,7 +138,7 @@
                                   </rowConstraints>
                                   <children>
                                       <Label styleClass="secondary-label" text="Mật khẩu cũ:" />
-                                      <Label styleClass="secondary-label" text="Mật khẩu mới" GridPane.columnIndex="1" />
+                                      <Label styleClass="secondary-label" text="Mật khẩu mới:" GridPane.columnIndex="1" />
                                       <VBox styleClass="textField_cst_form" GridPane.rowIndex="1">
                                           <children>
                                               <PasswordField fx:id="old_pwd" prefHeight="20.0" prefWidth="250.0" promptText="Mật khẩu cũ" styleClass="txtField" />
@@ -144,7 +151,7 @@
                                       </VBox>
                                       <AnchorPane id="change_pw_pane" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                           <children>
-                                              <Button fx:id="pwd_save_btn" AnchorPane.topAnchor="15" AnchorPane.rightAnchor="5" mnemonicParsing="false" onAction="#handleChangePassword" prefHeight="22.0" prefWidth="89.0" text="Lưu">
+                                              <Button fx:id="pwd_save_btn" mnemonicParsing="false" onAction="#handleChangePassword" prefHeight="22.0" prefWidth="89.0" text="Lưu" AnchorPane.rightAnchor="5" AnchorPane.topAnchor="15">
                                                   <styleClass>
                                                       <String fx:value="crud_func" />
                                                       <String fx:value="save-btn" />

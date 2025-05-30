@@ -6,13 +6,12 @@ import com.store.app.petstore.Utils.Mappers.PetMapper;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class PetDAO implements BaseDAO<Pet, Integer> {
+public class PetDAO {
     public static PetDAO getInstance() {
         return new PetDAO();
     }
 
-    @Override
-    public int insert(Pet entity) {
+    public static int insert(Pet entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -53,8 +52,7 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
         }
     }
 
-    @Override
-    public int update(Pet entity) {
+    public static int update(Pet entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -83,8 +81,7 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
         }
     }
 
-    @Override
-    public int delete(Pet entity) {
+    public static int delete(Pet entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -104,8 +101,7 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
         }
     }
 
-    @Override
-    public ArrayList<Pet> findAll() {
+    public static ArrayList<Pet> findAll() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -141,8 +137,7 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
         }
     }
 
-    @Override
-    public Pet findById(Integer id) {
+    public static Pet findById(Integer id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -176,8 +171,7 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
         return null;
     }
 
-    @Override
-    public ArrayList<Pet> findByCondition(String condition) {
+    public static ArrayList<Pet> findByCondition(String condition) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -201,24 +195,24 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
         }
     }
 
-    public ArrayList<Pet> findByType(String type) {
+    public static ArrayList<Pet> findByType(String type) {
         return findByCondition("type = '" + type + "'");
     }
 
-    public ArrayList<Pet> findByBreed(String breed) {
+    public static ArrayList<Pet> findByBreed(String breed) {
         return findByCondition("breed = '" + breed + "'");
     }
 
-    public ArrayList<Pet> findByPriceRange(long minPrice, long maxPrice) {
+    public static ArrayList<Pet> findByPriceRange(long minPrice, long maxPrice) {
         return findByCondition("price BETWEEN " + minPrice + " AND " + maxPrice);
     }
 
-    public ArrayList<Pet> findBySex(String sex) {
+    public static ArrayList<Pet> findBySex(String sex) {
         return findByCondition("sex = '" + sex + "'");
     }
 
     // tim kiem theo ten, loai, giong
-    public ArrayList<Pet> searchPets(String searchText, int limit) {
+    public static ArrayList<Pet> searchPets(String searchText, int limit) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -227,12 +221,12 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
         try {
             conn = DatabaseUtil.getConnection();
             String sql = "SELECT * FROM Pets WHERE LOWER(name) LIKE ? LIMIT ?";
-            
+
             stmt = conn.prepareStatement(sql);
             String searchPattern = "%" + searchText.toLowerCase() + "%";
             stmt.setString(1, searchPattern);
             stmt.setInt(2, limit);
-            
+
             rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -248,7 +242,7 @@ public class PetDAO implements BaseDAO<Pet, Integer> {
     }
 
     // so luong thu cung
-    public int getPetCount() {
+    public static int getPetCount() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;

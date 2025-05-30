@@ -15,19 +15,14 @@ public class ControllerUtils {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
-        
-        // Lấy window hiện tại
+
         Window window = alert.getDialogPane().getScene().getWindow();
-        if (window instanceof Stage) {
-            Stage stage = (Stage) window;
-            // Đảm bảo alert luôn hiển thị trên cùng
+        if (window instanceof Stage stage) {
             stage.setAlwaysOnTop(true);
-            // Đặt modality để chặn tương tác với các window khác
             stage.initModality(Modality.APPLICATION_MODAL);
-            // Đặt style cho stage
             stage.initStyle(StageStyle.DECORATED);
         }
-        
+
         alert.showAndWait();
     }
 
@@ -44,19 +39,14 @@ public class ControllerUtils {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
-        
-        // Lấy window hiện tại
+
         Window window = alert.getDialogPane().getScene().getWindow();
-        if (window instanceof Stage) {
-            Stage stage = (Stage) window;
-            // Đảm bảo alert luôn hiển thị trên cùng
+        if (window instanceof Stage stage) {
             stage.setAlwaysOnTop(true);
-            // Đặt modality để chặn tương tác với các window khác
             stage.initModality(Modality.APPLICATION_MODAL);
-            // Đặt style cho stage
             stage.initStyle(StageStyle.DECORATED);
         }
-        
+
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == ButtonType.OK;
     }
@@ -65,5 +55,21 @@ public class ControllerUtils {
         java.util.Date date = new java.util.Date();
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(date);
+    }
+
+    public static void showInformationAndWait(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+
+        Window window = alert.getDialogPane().getScene().getWindow();
+        if (window instanceof Stage stage) {
+            stage.setAlwaysOnTop(true);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.DECORATED);
+        }
+
+        alert.showAndWait();
     }
 }

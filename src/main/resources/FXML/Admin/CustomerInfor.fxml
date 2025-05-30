@@ -10,16 +10,16 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="230.0" prefWidth="475.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.CustomerInforController">
+<AnchorPane fx:id="customerInforPopup" prefHeight="230.0" prefWidth="500.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.CustomerInforController">
    <children>
-      <AnchorPane prefHeight="30.0" prefWidth="475.0" styleClass="nav-pane">
+      <AnchorPane prefHeight="40.0" prefWidth="500.0" styleClass="nav-pane">
          <children>
-            <Label layoutX="192.0" layoutY="7.0" styleClass="title" text="Thông tin chi tiết" />
+            <Label layoutX="189.0" layoutY="9.0" styleClass="title" text="Thông tin chi tiết" />
          </children>
       </AnchorPane>
-      <VBox layoutY="30.0" prefHeight="200.0" prefWidth="475.0">
+      <VBox layoutY="40.0" prefHeight="216.0" prefWidth="500.0">
          <children>
-            <GridPane prefWidth="384.0" vgap="10.0">
+            <GridPane prefHeight="131.0" prefWidth="439.0" vgap="10.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.4000244140625" minWidth="10.0" prefWidth="146.800048828125" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="356.3999710083008" minWidth="10.0" prefWidth="329.199951171875" />
@@ -33,9 +33,9 @@
                   <Label styleClass="lblInfor" text="Mã số:" />
                   <Label styleClass="lblInfor" text="Họ tên:" GridPane.rowIndex="1" />
                   <Label styleClass="lblInfor" text="Số điện thoại:" GridPane.rowIndex="2" />
-                  <TextField editable="false" GridPane.columnIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtCustomerId" editable="false" promptText="Mã khách hàng" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtName" promptText="Họ tên khách hàng" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtPhone" promptText="Số điện thoại khách hàng" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
                <VBox.margin>
                   <Insets bottom="25.0" left="30.0" right="30.0" top="15.0" />
@@ -52,10 +52,10 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" styleClass="btn-add1" text="Thêm" />
-                  <Button mnemonicParsing="false" styleClass="btn-fix" text="Sửa" GridPane.columnIndex="1" />
-                  <Button mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="2" />
-                  <Button mnemonicParsing="false" styleClass="btn-delete1" text="Xóa" GridPane.columnIndex="3" />
+                  <Button fx:id="btnAdd" mnemonicParsing="false" styleClass="btn-add1" text="Thêm" />
+                  <Button fx:id="btnFix" mnemonicParsing="false" styleClass="btn-fix" text="Sửa" GridPane.columnIndex="1" />
+                  <Button fx:id="btnSave" mnemonicParsing="false" styleClass="btn-save" text="Lưu" GridPane.columnIndex="2" />
+                  <Button fx:id="btnDelete" mnemonicParsing="false" styleClass="btn-delete1" text="Xóa" GridPane.columnIndex="3" />
                </children>
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />

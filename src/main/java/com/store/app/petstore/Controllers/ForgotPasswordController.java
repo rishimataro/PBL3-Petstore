@@ -5,11 +5,7 @@ import com.store.app.petstore.Models.Entities.User;
 import com.store.app.petstore.Views.ViewFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -20,29 +16,20 @@ public class ForgotPasswordController implements Initializable {
 
     @FXML
     private TextField emailField;
-
     @FXML
     private PasswordField newPasswordField;
-
     @FXML
     private PasswordField confirmPasswordField;
-
     @FXML
     private Button resetButton;
-
     @FXML
     private Button backButton;
-
     @FXML
     private Label messageLabel;
-
     @FXML
     private VBox passwordFields;
-
     @FXML
     private VBox confirmPasswordFields;
-
-    private UserDAO userDAO = new UserDAO();
     private boolean isEmailVerified = false;
 
     @Override
@@ -57,34 +44,29 @@ public class ForgotPasswordController implements Initializable {
     }
 
     private boolean checkFormEmail(String email) {
-        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"))
-            return false;
-
-        return true;
+        return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     }
 
     private void handleResetPassword() {
         String email = emailField.getText().trim();
-        
+
         if (email.isEmpty()) {
             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập email của bạn");
             return;
         }
 
-        if(!checkFormEmail(email)) {
+        if (!checkFormEmail(email)) {
             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Email không hợp lệ");
             return;
         }
 
         if (!isEmailVerified) {
-            // Kiểm tra email có tồn tại trong hệ thống không
-            User user = userDAO.findByEmail(email);
+            User user = UserDAO.findByEmail(email);
             if (user == null) {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Email không tồn tại trong hệ thống");
                 return;
             }
-            
-            // Hiển thị các trường nhập mật khẩu mới
+
             showPasswordFields();
             isEmailVerified = true;
             resetButton.setText("Đặt lại mật khẩu");
@@ -110,10 +92,10 @@ public class ForgotPasswordController implements Initializable {
         }
 
         try {
-            // Cập nhật mật khẩu mới
-            User user = userDAO.findByEmail(email);
+            User user = UserDAO.findByEmail(email);
+            assert user != null;
             user.setPassword(newPassword);
-            userDAO.update(user);
+            UserDAO.update(user);
 
             ControllerUtils.showAlert(Alert.AlertType.CONFIRMATION, "Thành công", "Mật khẩu đã được đặt lại thành công");
             handleBackToLogin();

@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -52,8 +53,8 @@ public class StaffMenuController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         sessionManager = new SessionManager();
-        currentUser = sessionManager.getCurrentUser();
-        currentStaff = sessionManager.getCurrentStaff();
+        currentUser = SessionManager.getCurrentUser();
+        currentStaff = SessionManager.getCurrentStaff();
         setupUserImage();
         setMenu();
         setupUserName();
@@ -100,7 +101,7 @@ public class StaffMenuController implements Initializable {
             Circle clip = new Circle(size / 2, size / 2, size / 2);
             imageView.setClip(clip);
 
-            javafx.scene.image.WritableImage clippedImage = imageView.snapshot(null, null);
+            WritableImage clippedImage = imageView.snapshot(null, null);
 
             userImage.setFill(new ImagePattern(clippedImage));
         } catch (Exception ex) {
@@ -190,7 +191,7 @@ public class StaffMenuController implements Initializable {
     void handleLogout(ActionEvent event) {
         Stage currentStage = (Stage) root.getScene().getWindow();
         if (ControllerUtils.showConfirmationAndWait("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
-            sessionManager.clear();
+            SessionManager.clear();
             ViewFactory.getInstance().switchContent("login", currentStage);
         } else {
             ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đăng xuất không thành công");

@@ -45,8 +45,8 @@ public class StaffDashboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         sessionManager = new SessionManager();
-        currentUser = sessionManager.getCurrentUser();
-        currentStaff = sessionManager.getCurrentStaff();
+        currentUser = SessionManager.getCurrentUser();
+        currentStaff = SessionManager.getCurrentStaff();
         setupStaffname();
         setMenuCard();
     }

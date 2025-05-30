@@ -6,13 +6,15 @@
     -fx-background-radius: 5;
     -fx-background-color: #F3F3F3;
     -fx-border-radius: 5;
-    -fx-padding: 0 0 0 30;
+    -fx-padding: 0 30 0 30; /* Add padding on both sides for icons */
     -fx-text-fill: #6C6C6C;
+    -fx-cursor: text; /* Ensure text cursor is shown */
 }
 
 .icon{
-    -fx-fill: #AAAAAA;
+    -fx-fill: #888888;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 1, 1, 0, 0);
 }
 
 .choice-box {

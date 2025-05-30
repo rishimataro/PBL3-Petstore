@@ -5,13 +5,12 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class OrderDAO implements BaseDAO<Order, Integer> {
+public class OrderDAO {
     public static OrderDAO getInstance() { 
         return new OrderDAO(); 
     }
 
-    @Override
-    public int insert(Order entity) {
+    public static int insert(Order entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -51,8 +50,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
         }
     }
 
-    @Override
-    public int update(Order entity) {
+    public static int update(Order entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         
@@ -82,8 +80,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
         }
     }
 
-    @Override
-    public int delete(Order entity) {
+    public static int delete(Order entity) {
         Connection conn = null;
         PreparedStatement stmt = null;
         
@@ -103,8 +100,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
         }
     }
 
-    @Override
-    public ArrayList<Order> findAll() {
+    public static ArrayList<Order> findAll() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -135,8 +131,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
         return orders;
     }
 
-    @Override
-    public Order findById(Integer id) {
+    public static Order findById(Integer id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -167,8 +162,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
         return null;
     }
 
-    @Override
-    public ArrayList<Order> findByCondition(String condition) {
+    public static ArrayList<Order> findByCondition(String condition) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -199,19 +193,19 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
         return orders;
     }
 
-    public ArrayList<Order> findByCustomerId(int customerId) {
+    public static ArrayList<Order> findByCustomerId(int customerId) {
         return findByCondition("customer_id = " + customerId);
     }
 
-    public ArrayList<Order> findByStaffId(int staffId) {
+    public static ArrayList<Order> findByStaffId(int staffId) {
         return findByCondition("staff_id = " + staffId);
     }
 
-    public ArrayList<Order> findByDateRange(Timestamp startDate, Timestamp endDate) {
+    public static ArrayList<Order> findByDateRange(Timestamp startDate, Timestamp endDate) {
         return findByCondition("order_date BETWEEN '" + startDate + "' AND '" + endDate + "'");
     }
 
-    public int getOrderCount() {
+    public static int getOrderCount() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -234,7 +228,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
         }
     }
 
-    public double getTotalRevenue() {
+    public static double getTotalRevenue() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -257,7 +251,7 @@ public class OrderDAO implements BaseDAO<Order, Integer> {
         }
     }
 
-    public double getAverageOrderValue() {
+    public static double getAverageOrderValue() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;

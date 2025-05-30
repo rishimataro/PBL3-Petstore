@@ -94,7 +94,7 @@
 }
 
 .table-view .table-row-cell:selected {
-    -fx-background-color: #e3f2fd;
+    -fx-background-color: #017FCB;
 }
 
 /* Price filter dropdown */
