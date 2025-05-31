@@ -1,7 +1,6 @@
 package com.store.app.petstore.Controllers.Staff;
 
 import com.store.app.petstore.Models.Entities.Staff;
-import com.store.app.petstore.Models.Entities.User;
 import com.store.app.petstore.Sessions.SessionManager;
 import com.store.app.petstore.Views.ViewFactory;
 import javafx.fxml.FXML;
@@ -11,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.Modality;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,58 +36,48 @@ public class StaffDashboardController implements Initializable {
     @FXML
     private Label staffNameLabel;
 
-    private SessionManager sessionManager;
-    private User currentUser;
     private Staff currentStaff;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        sessionManager = new SessionManager();
-        currentUser = sessionManager.getCurrentUser();
-        currentStaff = sessionManager.getCurrentStaff();
+        currentStaff = SessionManager.getCurrentStaff();
         setupStaffname();
         setMenuCard();
     }
 
     private void setupStaffname() {
-        if(currentStaff != null) {
+        if (currentStaff != null) {
             staffNameLabel.setText(currentStaff.getFullName());
         } else {
             staffNameLabel.setText("Chưa cập nhật thông tin");
         }
     }
 
-    private void setMenuCard(){
+    private void setMenuCard() {
         AccountCard.setOnMouseClicked(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("profile");
+            ViewFactory.getInstance().switchContent("profile", currentStage);
         });
 
         AddCustomerCard.setOnMouseClicked(event -> {
-            Stage popupStage = new Stage();
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.initOwner(root.getScene().getWindow());
-            ViewFactory.getInstance().showPopup("addcustomer", popupStage);
+            Stage currentStage = (Stage) root.getScene().getWindow();
+            ViewFactory.getInstance().showPopup("customer", currentStage, true);
         });
 
         BillHistoryCard.setOnMouseClicked(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("billhistory");
+            ViewFactory.getInstance().switchContent("billhistory", currentStage);
         });
 
         OrderCard.setOnMouseClicked(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("order");
+            ViewFactory.getInstance().switchContent("order", currentStage);
         });
 
         btnLogout.setOnMouseClicked(event -> {
-            sessionManager.clear();
+            SessionManager.clear();
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("login");
+            ViewFactory.getInstance().switchContent("login", currentStage);
         });
     }
 }

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.geometry.Insets?>
+<VBox spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+      AnchorPane.topAnchor="0.0" alignment="CENTER" styleClass="root" stylesheets="@../../../Styles/Statistics.css"
+      xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.store.app.petstore.Controllers.Admin.Statistic.BestSellerController">
+    <fx:include source="../AdminMenu.fxml"/>
+    <Label text="Thống kê bán chạy" styleClass="page-title" alignment="center"/>
+    <HBox spacing="20.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" style="-fx-padding: 20px">
+        <VBox styleClass="main-statistic-tag" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" maxWidth="Infinity"
+              maxHeight="Infinity" style="-fx-padding: 15;">
+            <VBox spacing="10.0">
+                <Label fx:id="lblPetStats" prefHeight="29.0" prefWidth="310.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS"
+                       styleClass="main-statistic-text" text="Thống kê thú cưng"/>
+                <HBox spacing="15.0" AnchorPane.bottomAnchor="30.0">
+                    <DatePicker fx:id="petFilter1" prefHeight="30.0" prefWidth="150.0">
+                        <styleClass>
+                            <String fx:value="choice-box-filter"/>
+                            <String fx:value="yellow"/>
+                        </styleClass>
+                    </DatePicker>
+                    <DatePicker fx:id="petFilter2" prefHeight="30.0" prefWidth="150.0">
+                        <styleClass>
+                            <String fx:value="choice-box-filter"/>
+                            <String fx:value="blue"/>
+                        </styleClass>
+                    </DatePicker>
+                    <ChoiceBox fx:id="petFilter3" prefHeight="30.0" prefWidth="100.0">
+                        <styleClass>
+                            <String fx:value="choice-box-filter"/>
+                            <String fx:value="cyan"/>
+                        </styleClass>
+                    </ChoiceBox>
+                    <Button fx:id="btnViewPets" mnemonicParsing="false" onAction="#onBtnViewPetsClick" prefHeight="30.0"
+                            prefWidth="80" styleClass="view-button" text="Xem"/>
+                </HBox>
+                <ProgressBar prefWidth="200" progress="-1" visible="false"/>
+            </VBox>
+            <StackPane VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                <TableView fx:id="petTableView" styleClass="styled-table" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                    <placeholder>
+                        <Label text="Không có dữ liệu để hiển thị"/>
+                    </placeholder>
+                    <columns>
+                        <TableColumn fx:id="petNameCol" prefWidth="150.0" text="Tên thú cưng"/>
+                        <TableColumn fx:id="petSoldCol" prefWidth="150.0" text="Số lượng bán"/>
+                    </columns>
+                </TableView>
+                <ProgressBar fx:id="petProgressBar" prefWidth="200" progress="-1" visible="false"/>
+            </StackPane>
+        </VBox>
+        <VBox styleClass="main-statistic-tag" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" style="-fx-padding: 15;">
+            <VBox spacing="10.0">
+                <Label fx:id="lblProductStats" prefHeight="29.0" prefWidth="204.0"
+                       styleClass="main-statistic-text" text="Thống kê sản phẩm"/>
+                <HBox spacing="15.0">
+                    <DatePicker fx:id="productFilter1" prefHeight="30.0" prefWidth="150.0">
+                        <styleClass>
+                            <String fx:value="choice-box-filter"/>
+                            <String fx:value="yellow"/>
+                        </styleClass>
+                    </DatePicker>
+                    <DatePicker fx:id="productFilter2" prefHeight="30.0" prefWidth="150.0">
+                        <styleClass>
+                            <String fx:value="choice-box-filter"/>
+                            <String fx:value="blue"/>
+                        </styleClass>
+                    </DatePicker>
+                    <ChoiceBox fx:id="productFilter3" prefHeight="30.0" prefWidth="100.0">
+                        <styleClass>
+                            <String fx:value="choice-box-filter"/>
+                            <String fx:value="cyan"/>
+                        </styleClass>
+                    </ChoiceBox>
+                    <Button fx:id="btnViewProduct" mnemonicParsing="false" onAction="#onBtnViewProductClick"
+                            prefHeight="30.0"
+                            prefWidth="80.0" styleClass="view-button" text="Xem"/>
+                </HBox>
+
+                <ProgressBar prefWidth="200" progress="-1" visible="false"/>
+            </VBox>
+            <StackPane VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                <TableView fx:id="productTableView" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" styleClass="styled-table"
+                           AnchorPane.topAnchor="30.0">
+                    <placeholder>
+                        <Label text="Không có dữ liệu để hiển thị"/>
+                    </placeholder>
+                    <columns>
+                        <TableColumn prefWidth="150.0" text="Tên sản phẩm"/>
+                        <TableColumn prefWidth="150.0" text="Số lượng bán"/>
+                    </columns>
+                </TableView>
+                <ProgressBar fx:id="productProgressBar" prefWidth="200" progress="-1" visible="false"/>
+            </StackPane>
+        </VBox>
+    </HBox>
+</VBox>

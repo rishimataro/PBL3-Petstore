@@ -2,7 +2,7 @@ package com.store.app.petstore.Models.Entities;
 
 import com.store.app.petstore.Models.BaseModel;
 
-public class Product extends BaseModel {
+public class Product extends BaseModel implements Item {
     private int productId;
     private String name;
     private String category;
@@ -10,16 +10,21 @@ public class Product extends BaseModel {
     private int price;
     private String description;
     private String imageUrl;
+    private boolean isSold;
 
-    public Product( String name, String category, int stock, int price, String description, String imageUrl) {
+    public Product() {}
+
+    public Product(String name, String category, int stock, int price, String description, String imageUrl, boolean isSold) {
         this.name = name;
         this.category = category;
         this.stock = stock;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
+        this.isSold = isSold;
     }
-    public Product(int productId, String name, String category, int stock, int price, String description, String imageUrl) {
+
+    public Product(int productId, String name, String category, int stock, int price, String description, String imageUrl, boolean isSold) {
         this.productId = productId;
         this.name = name;
         this.category = category;
@@ -27,23 +32,12 @@ public class Product extends BaseModel {
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
-    }
-    public Product() {}
-
-    public String getCategory() {
-        return category;
+        this.isSold = isSold;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
+    @Override
+    public int getId() {
+        return productId;
     }
 
     public int getProductId() {
@@ -54,12 +48,26 @@ public class Product extends BaseModel {
         this.productId = productId;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getType() {
+        return category;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public int getStock() {
@@ -70,6 +78,15 @@ public class Product extends BaseModel {
         this.stock = stock;
     }
 
+    @Override
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -78,11 +95,21 @@ public class Product extends BaseModel {
         this.description = description;
     }
 
+    @Override
     public String getImageUrl() {
         return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    @Override
+    public boolean getIsSold() {
+        return isSold;
+    }
+
+    public void setIsSold(boolean isSold) {
+        this.isSold = isSold;
     }
 }

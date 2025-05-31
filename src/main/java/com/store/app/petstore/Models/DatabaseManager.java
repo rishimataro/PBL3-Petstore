@@ -8,7 +8,6 @@ public class DatabaseManager {
     private static Connection connection = null;
 
     public static Connection connect() {
-        System.out.println("Connecting to database...");
         try {
             if (connection == null || connection.isClosed()) {
                 Dotenv dotenv = Dotenv.load();
@@ -16,10 +15,10 @@ public class DatabaseManager {
                 final String dbName = dotenv.get("DB_NAME");
                 final String username = dotenv.get("DB_USER");
                 final String password = dotenv.get("DB_PASSWORD");
-                final String connectionURL = "jdbc:mysql://" + hostName + "/" + dbName + "?useSSL=false&allowPublicKeyRetrieval=true";
+                final String connectionURL = "jdbc:mysql://" + hostName + "/" + dbName
+                        + "?useSSL=false&allowPublicKeyRetrieval=true";
 
                 connection = DriverManager.getConnection(connectionURL, username, password);
-                System.out.println("Connected to database");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -68,4 +67,3 @@ public class DatabaseManager {
         }
     }
 }
-

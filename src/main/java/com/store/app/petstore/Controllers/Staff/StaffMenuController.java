@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -19,10 +20,11 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.image.ImageView;
+import com.store.app.petstore.Controllers.ControllerUtils;
+import javafx.event.ActionEvent;
 
 import java.net.URL;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class StaffMenuController implements Initializable {
@@ -43,15 +45,13 @@ public class StaffMenuController implements Initializable {
     private Label nameLabel;
 
     private ContextMenu contextMenu;
-    private SessionManager sessionManager;
     private User currentUser;
     private Staff currentStaff;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        sessionManager = new SessionManager();
-        currentUser = sessionManager.getCurrentUser();
-        currentStaff = sessionManager.getCurrentStaff();
+        currentUser = SessionManager.getCurrentUser();
+        currentStaff = SessionManager.getCurrentStaff();
         setupUserImage();
         setMenu();
         setupUserName();
@@ -71,7 +71,6 @@ public class StaffMenuController implements Initializable {
     private void setupUserImage() {
         try {
             String userImagePath = currentUser.getImageUrl();
-            System.out.println("User image path: " + userImagePath);
 
             String imageUrl = null;
             if (userImagePath != null && !userImagePath.isEmpty()) {
@@ -99,7 +98,7 @@ public class StaffMenuController implements Initializable {
             Circle clip = new Circle(size / 2, size / 2, size / 2);
             imageView.setClip(clip);
 
-            javafx.scene.image.WritableImage clippedImage = imageView.snapshot(null, null);
+            WritableImage clippedImage = imageView.snapshot(null, null);
 
             userImage.setFill(new ImagePattern(clippedImage));
         } catch (Exception ex) {
@@ -107,7 +106,6 @@ public class StaffMenuController implements Initializable {
             userImage.setFill(javafx.scene.paint.Color.GRAY);
         }
     }
-
 
     private ContextMenu contextMenuItem() {
         ContextMenu contextMenu = new ContextMenu();
@@ -119,39 +117,34 @@ public class StaffMenuController implements Initializable {
 
         contextMenu.setStyle(
                 "-fx-font-family: 'Arial';" +
-                "-fx-font-size: 14px;" +
-                "-fx-background-color: white;" +
-                "-fx-border-radius: 10;" +
-                "-fx-background-radius: 6;" +
-                        "-fx-cursor: hand;"
-        );
+                        "-fx-font-size: 14px;" +
+                        "-fx-background-color: white;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 6;" +
+                        "-fx-cursor: hand;");
 
         dashboardItem.setOnAction(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("dashboard");
+            ViewFactory.getInstance().switchContent("dashboard", currentStage);
         });
 
         orderItem.setOnAction(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("order");
+            ViewFactory.getInstance().switchContent("order", currentStage);
         });
 
         billItem.setOnAction(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("billhistory");
+            ViewFactory.getInstance().switchContent("billhistory", currentStage);
         });
 
         infoItem.setOnAction(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("profile");
+            ViewFactory.getInstance().switchContent("profile", currentStage);
         });
 
         logoutItem.setOnAction(event -> {
-            confirmLogout();
+            handleLogout(null);
         });
 
         contextMenu.getItems().addAll(dashboardItem, orderItem, billItem, infoItem, logoutItem);
@@ -189,33 +182,16 @@ public class StaffMenuController implements Initializable {
         }
     }
 
-    private void confirmLogout() {
-        if (showConfirmationAndWait("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
-            sessionManager.clear();
-            Stage currentStage = (Stage) root.getScene().getWindow();
-            currentStage.close();
-            ViewFactory.getInstance().showWindow("login");
-        }
-        else {
-            showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đăng xuất không thành công");
+    @FXML
+    void handleLogout(ActionEvent event) {
+        Stage currentStage = (Stage) root.getScene().getWindow();
+        if (ControllerUtils.showConfirmationAndWait("Đăng xuất",
+                "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
+            SessionManager.clear();
+            ViewFactory.getInstance().switchContent("login", currentStage);
+        } else {
+            ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đăng xuất không thành công");
         }
     }
 
-    private boolean showConfirmationAndWait(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        Optional<ButtonType> result = alert.showAndWait();
-        return result.isPresent() && result.get() == ButtonType.OK;
-    }
-
-    // show popup error
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 }

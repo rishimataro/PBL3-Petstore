@@ -11,10 +11,10 @@ import java.util.Random;
 
 public class ProductTableSeeder {
     public ProductTableSeeder() {
-        Faker faker = new Faker(new Locale("vi"));
+        Faker faker = new Faker(Locale.forLanguageTag("vi"));
         Random random = new Random();
 
-        String[] categories = {"phụ kiện", "thức ăn", "đồ chơi"};
+        String[] categories = { "phụ kiện", "thức ăn", "đồ chơi" };
 
         try (Connection conn = DatabaseManager.connect()) {
             String sql = "INSERT INTO Products (name, category, stock, price, description, image_url) VALUES (?, ?, ?, ?, ?, ?)";
@@ -24,7 +24,7 @@ public class ProductTableSeeder {
                 String name = "Sản phẩm cho " + faker.animal().name();
                 String category = categories[random.nextInt(categories.length)];
                 int stock = random.nextInt(50);
-                int price = random.nextInt(50000,200000);
+                int price = random.nextInt(50000, 200000);
                 String description = "Miêu tả sản phẩm " + i;
                 String imageUrl = "https://example.com/images/product-" + i + ".jpg";
 

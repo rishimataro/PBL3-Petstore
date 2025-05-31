@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="@127.0.0.1" uuid="4f12cb7d-e4e5-4e09-a187-e9eab89505f3">
+    <data-source source="LOCAL" name="MariaDB" uuid="4f12cb7d-e4e5-4e09-a187-e9eab89505f3">
       <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
@@ -13,7 +13,7 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="PetStoreDB@125.212.231.184" uuid="3b08851c-f3b2-4ccf-ad2c-6d9c85ad8d86">
+    <data-source source="LOCAL" name="PetStoreDB@vpnphake.ddns.net" uuid="3b08851c-f3b2-4ccf-ad2c-6d9c85ad8d86">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>

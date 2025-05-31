@@ -4,75 +4,41 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="442.0" prefWidth="990.0" stylesheets="@../../Styles/Admin/AdminCommon.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXML.Admin.ProductManagement">
+<VBox prefHeight="442.0" prefWidth="990.0" stylesheets="@../../Styles/Admin/AdminCommon.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.ProductManagementController">
    <children>
-      <MenuBar prefHeight="40.0" prefWidth="990.0" styleClass="top-nav">
-        <menus>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Thú cưng">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Sản phẩm">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Khuyến mãi">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Khách hàng">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Action 1" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Nhân viên">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Action 1" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" styleClass="nav-button" text="Tài khoản">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Action 1" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <AnchorPane layoutY="42.0" prefHeight="400.0" prefWidth="990.0" styleClass="search-section">
+       <fx:include source="AdminMenu.fxml" />
+      <AnchorPane fx:id="root" layoutY="42.0" prefHeight="442.0" prefWidth="990.0" styleClass="search-section" AnchorPane.topAnchor="0.0">
          <children>
-            <TextField layoutX="13.0" layoutY="15.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm sản phẩm" styleClass="find-textfield" />
-            <FontAwesomeIconView glyphName="SEARCH" layoutX="24.0" layoutY="34.0" size="13" styleClass="icon" />
-            <FontAwesomeIconView glyphName="CLOSE" layoutX="262.0" layoutY="35.0" styleClass="icon" text="">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </FontAwesomeIconView>
-            <ChoiceBox layoutX="305.0" layoutY="15.0" prefWidth="110.0" styleClass="filter-combo-box" />
-            <ChoiceBox layoutX="424.0" layoutY="14.0" prefWidth="110.0" styleClass="filter-combo-box" />
-            <TableView layoutX="13.0" layoutY="53.0" prefHeight="340.0" prefWidth="965.0">
+            <TextField fx:id="searchTextField" layoutX="13.0" layoutY="15.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm sản phẩm" styleClass="find-textfield" />
+            <FontAwesomeIconView fx:id="searchIcon" glyphName="SEARCH" layoutX="24.0" layoutY="34.0" size="13" styleClass="icon" />
+            <ChoiceBox fx:id="catelogyChoiceBox" layoutX="305.0" layoutY="15.0" prefWidth="110.0" styleClass="filter-combo-box" />
+            <ChoiceBox fx:id="cmbSort" layoutX="424.0" layoutY="14.0" prefWidth="110.0" styleClass="filter-combo-box" />
+            <TableView fx:id="productTableView" layoutX="13.0" layoutY="53.0" prefHeight="380.0" prefWidth="965.0">
               <columns>
-                <TableColumn prefWidth="37.599976539611816" styleClass="stt-column" text="ID" />
-                <TableColumn prefWidth="275.2000427246094" text="Tên sản phẩm" />
-                <TableColumn prefWidth="156.80001831054688" text="Loại" />
-                <TableColumn prefWidth="187.2000732421875" text="Giá tiền" />
-                <TableColumn prefWidth="103.20001220703125" text="Số lượng" />
-                <TableColumn prefWidth="108.79998779296875" text="Tình trạng" />
+                <TableColumn fx:id="colID" styleClass="stt-column" text="ID" />
+                <TableColumn fx:id="colName" text="Tên sản phẩm" />
+                <TableColumn fx:id="colCatelogy" text="Loại" />
+                <TableColumn fx:id="colPrice" text="Giá tiền" />
+                <TableColumn fx:id="colStock" text="Lượng tồn kho" />
+                <TableColumn fx:id="colStatus" text="Tình trạng" />
               </columns>
             </TableView>
-            <Button layoutX="665.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Thêm sản phẩm" />
-            <Button layoutX="771.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Xem chi tiết" />
-            <ChoiceBox layoutX="542.0" layoutY="14.0" prefWidth="110.0" styleClass="price-filter" />
+            <Button fx:id="addProductNutton" layoutX="544.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Thêm sản phẩm">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button fx:id="viewDetailsButton" layoutX="650.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Xem chi tiết">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <FontAwesomeIconView fx:id="closeIcon" glyphName="CLOSE" layoutX="262.0" layoutY="35.0" size="13" styleClass="icon" />
          </children>
       </AnchorPane>
    </children>
-</AnchorPane> 
+</VBox>

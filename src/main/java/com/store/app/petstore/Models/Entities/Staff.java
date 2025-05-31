@@ -1,43 +1,45 @@
 package com.store.app.petstore.Models.Entities;
 
-import com.store.app.petstore.Models.BaseModel;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Staff extends BaseModel {
+public class Staff extends User {
     private int staffId;
-    private int userId;
     private String fullName;
     private String phone;
     private String email;
+    private String address;
     private double salary;
     private LocalDateTime hireDate;
     private String role;
     private boolean isActive;
 
-    public Staff( int userId, String fullName, String phone, String email, double salary,
-                 LocalDateTime hireDate, String role, boolean isActive) {
-        this.userId = userId;
+    public Staff(int userId, String username, String password, String userRole, boolean userIsActive,
+            String fullName, String phone, String email, String address, double salary,
+            LocalDateTime hireDate, String staffRole, boolean staffIsActive) {
+        super(userId, username, password, userRole, LocalDateTime.now(), userIsActive);
         this.fullName = fullName;
         this.phone = phone;
         this.email = email;
+        this.address = address;
         this.salary = salary;
         this.hireDate = hireDate;
-        this.role = role;
-        this.isActive = isActive;
+        this.role = staffRole;
+        this.isActive = staffIsActive;
     }
-    public Staff(int staffId, int userId, String fullName, String phone, String email, double salary,
-                 LocalDateTime hireDate, String role, boolean isActive) {
+
+    public Staff(int staffId, int userId, String username, String password, String userRole, boolean userIsActive,
+            String fullName, String phone, String email, String address, double salary,
+            LocalDateTime hireDate, String staffRole, boolean staffIsActive) {
+        super(userId, username, password, userRole, LocalDateTime.now(), userIsActive);
         this.staffId = staffId;
-        this.userId = userId;
         this.fullName = fullName;
         this.phone = phone;
         this.email = email;
+        this.address = address;
         this.salary = salary;
         this.hireDate = hireDate;
-        this.role = role;
-        this.isActive = isActive;
+        this.role = staffRole;
+        this.isActive = staffIsActive;
     }
 
     public Staff() {
@@ -52,11 +54,11 @@ public class Staff extends BaseModel {
     }
 
     public int getUserId() {
-        return userId;
+        return super.getUserId();
     }
 
     public void setUserId(int userId) {
-        this.userId = userId;
+        super.setUserId(userId);
     }
 
     public String getFullName() {
@@ -113,5 +115,13 @@ public class Staff extends BaseModel {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

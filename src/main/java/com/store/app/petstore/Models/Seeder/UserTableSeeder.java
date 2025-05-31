@@ -1,6 +1,5 @@
 package com.store.app.petstore.Models.Seeder;
 
-import com.github.javafaker.Faker;
 import com.store.app.petstore.Models.DatabaseManager;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -8,7 +7,6 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.Locale;
 
 public class UserTableSeeder {
     public UserTableSeeder() {
@@ -16,11 +14,9 @@ public class UserTableSeeder {
         String insertSql = "INSERT INTO Users (user_id, username, password, role, created_at, isActive, image_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
         int userId = 1;
         try (Connection conn = DatabaseManager.connect();
-             Statement deleteStmt = conn.createStatement();
-             PreparedStatement insertStmt = conn.prepareStatement(insertSql)
-        ) {
+                Statement deleteStmt = conn.createStatement();
+                PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
             deleteStmt.executeUpdate(deleteSql);
-            Faker faker = new Faker(new Locale("vi"));
             {
                 String username = "admin";
                 String password = BCrypt.hashpw("o3Trjrndn8Fqb", BCrypt.gensalt());

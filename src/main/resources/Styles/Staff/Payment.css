@@ -28,7 +28,7 @@
     -fx-pref-height: 37px;
     -fx-font-size: 12px;
     -fx-text-fill: #017FCB;
-    -fx-font-weight: nomal;
+    -fx-font-weight: normal;
     -fx-border-radius: 5px;
 }
 
@@ -168,4 +168,30 @@
     -fx-font-weight: bold;
     -fx-font-size: 15;
     -fx-text-fill: #017FCB;
+}
+
+.header-box {
+    -fx-background-color: transparent;
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+}
+
+.lblCustomerInfo {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #017FCB;
+    -fx-background-color: transparent;
+}
+
+.btn-fix {
+    -fx-background-color: #017FCB;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.btn-fix:hover {
+    -fx-background-color: #005cb2;
 }
