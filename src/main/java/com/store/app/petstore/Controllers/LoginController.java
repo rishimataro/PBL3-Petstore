@@ -14,17 +14,20 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable {
+public class LoginController implements Initializable  {
 
     public static int idStaffCurrent;
     public static int idAdminCurrent;
-    StaffDAO staffDAO = StaffDAO.getInstance();
+    public ImageView sidebarImage;
+    public AnchorPane mainPanel;
 
     @FXML
     private FontAwesomeIconView eyeIcon;
@@ -51,6 +54,8 @@ public class LoginController implements Initializable {
         setupPasswordVisibility();
         setupLoginButton();
         setupForgotPasswordLink();
+        sidebarImage.fitWidthProperty().bind(mainPanel.widthProperty());
+        sidebarImage.fitHeightProperty().bind(mainPanel.heightProperty());
     }
 
     private void setupPasswordVisibility() {

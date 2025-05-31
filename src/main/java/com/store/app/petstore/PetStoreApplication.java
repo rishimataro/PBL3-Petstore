@@ -7,10 +7,7 @@ import javafx.stage.Stage;
 public class PetStoreApplication extends Application {
     @Override
     public void start(Stage primaryStage) {
-        ModelView.getInstance().getViewFactory().showWindow("revenue");
-//        ModelView.getInstance().getViewFactory().showWindow("overview");
-//        ModelView.getInstance().getViewFactory().showWindow("overview");
-
+        ModelView.getInstance().getViewFactory().showWindow("login");
     }
 
     public static void main(String[] args) {
