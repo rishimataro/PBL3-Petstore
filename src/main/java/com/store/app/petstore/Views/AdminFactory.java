@@ -32,7 +32,6 @@ public class AdminFactory {
     private final String STAFFINFOR_FXML = "/FXML/Admin/StaffInfor.fxml";
 
     private final String OVERVIEW_FXML = "/FXML/Admin/Statistics/Overview.fxml";
-    private final String BESTSELLER_FXML = "/FXML/Admin/Statistics/BestSeller.fxml";
     private final String REVENUE_FXML = "/FXML/Admin/Statistics/Revenue.fxml";
 
     private final Map<String, AnchorPane> views;
@@ -82,10 +81,6 @@ public class AdminFactory {
                 case "staffmanagement":
                     root = loadFXML(STAFFMANAGEMENT_FXML);
                     stage.setTitle("Staff Management");
-                    break;
-                case "bestseller":
-                    root = loadFXML(BESTSELLER_FXML);
-                    stage.setTitle("Best Seller Statistics");
                     break;
                 case "overview":
                     root = loadFXML(OVERVIEW_FXML);
@@ -273,10 +268,6 @@ public class AdminFactory {
                     break;
                 case "staffmanagement":
                     root = loadFXML(STAFFMANAGEMENT_FXML);
-                    currentStage.setTitle("Staff Management");
-                    break;
-                case "bestseller":
-                    root = loadFXML(BESTSELLER_FXML);
                     currentStage.setTitle("Staff Management");
                     break;
                 case "overview":

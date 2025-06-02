@@ -26,8 +26,11 @@ public class LoginController implements Initializable  {
 
     public static int idStaffCurrent;
     public static int idAdminCurrent;
-    public ImageView sidebarImage;
-    public AnchorPane mainPanel;
+
+    @FXML
+    private ImageView sidebarImage;
+    @FXML
+    private AnchorPane mainPanel;
 
     @FXML
     private FontAwesomeIconView eyeIcon;

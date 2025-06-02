@@ -1,14 +1,18 @@
 *{
     -fx-font-family: Inter;
 }
+
 .root{
     -fx-background-color: #FFFFFF;
 }
+
 .nav-bar{
     -fx-background-color: #01C4DA;
 }
+
 .nav-bar-btn{
     -fx-background-color: transparent;
+
 }.nav-bar-btn-text{
      /*-fx-text-fill: #FFFFFF;*/
      -fx-fill: #FFFFFF;

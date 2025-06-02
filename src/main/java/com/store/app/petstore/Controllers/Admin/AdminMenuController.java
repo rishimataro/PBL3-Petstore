@@ -196,11 +196,6 @@ public class AdminMenuController implements Initializable {
             AdminFactory.getInstance().switchContent("overview", currentStage);
         });
 
-        menuItemBestSelling.setOnAction(e -> {
-            Stage currentStage = (Stage) root.getScene().getWindow();
-            AdminFactory.getInstance().switchContent("bestseller", currentStage);
-        });
-
         menuItemRevenue.setOnAction(e -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("revenue", currentStage);
