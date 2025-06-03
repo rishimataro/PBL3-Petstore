@@ -109,7 +109,6 @@ public class StaffMenuController implements Initializable {
 
     private ContextMenu contextMenuItem() {
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem dashboardItem = new MenuItem("Trang chủ");
         MenuItem orderItem = new MenuItem("Đặt hàng");
         MenuItem billItem = new MenuItem("Lịch sử hóa đơn");
         MenuItem infoItem = new MenuItem("Thông tin tài khoản");
@@ -122,11 +121,6 @@ public class StaffMenuController implements Initializable {
                         "-fx-border-radius: 10;" +
                         "-fx-background-radius: 6;" +
                         "-fx-cursor: hand;");
-
-        dashboardItem.setOnAction(event -> {
-            Stage currentStage = (Stage) root.getScene().getWindow();
-            ViewFactory.getInstance().switchContent("dashboard", currentStage);
-        });
 
         orderItem.setOnAction(event -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
@@ -147,7 +141,7 @@ public class StaffMenuController implements Initializable {
             handleLogout(null);
         });
 
-        contextMenu.getItems().addAll(dashboardItem, orderItem, billItem, infoItem, logoutItem);
+        contextMenu.getItems().addAll(orderItem, billItem, infoItem, logoutItem);
         contextMenu.setAutoHide(true);
         return contextMenu;
     }

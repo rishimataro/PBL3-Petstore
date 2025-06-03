@@ -14,9 +14,7 @@ import java.util.Map;
 import java.io.IOException;
 
 public class AdminFactory {
-    // private static final String ADMIN_FXML = "";
     private static AdminFactory instance;
-    private final String DASHBOARD_FXML = "/FXML/Admin/Dashboard.fxml";
     private final String USERMANAGEMENT_FXML = "/FXML/Admin/UserManagement.fxml";
     private final String CUSTOMERMANAGEMENT_FXML = "/FXML/Admin/CustomerManagement.fxml";
     private final String DISCOUNTMANAGEMENT_FXML = "/FXML/Admin/DiscountManagement.fxml";
@@ -54,10 +52,6 @@ public class AdminFactory {
         Parent root = null;
         try {
             switch (fxmlName.toLowerCase()) {
-                case "dashboard":
-                    root = loadFXML(DASHBOARD_FXML);
-                    stage.setTitle("Admin Dashboard");
-                    break;
                 case "usermanagement":
                     root = loadFXML(USERMANAGEMENT_FXML);
                     stage.setTitle("Account Management");
@@ -242,10 +236,6 @@ public class AdminFactory {
         Parent root = null;
         try {
             switch (fxmlName.toLowerCase()) {
-                case "dashboard":
-                    root = loadFXML(DASHBOARD_FXML);
-                    currentStage.setTitle("Admin Dashboard");
-                    break;
                 case "usermanagement":
                     root = loadFXML(USERMANAGEMENT_FXML);
                     currentStage.setTitle("Account Management");

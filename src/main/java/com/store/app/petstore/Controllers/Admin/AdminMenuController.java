@@ -152,13 +152,6 @@ public class AdminMenuController implements Initializable {
     }
 
     private void setMenu() {
-        MenuItem dashboardMenuItem = new MenuItem("Trang chủ");
-        dashboardMenuItem.setOnAction(e -> {
-            Stage currentStage = (Stage) root.getScene().getWindow();
-            AdminFactory.getInstance().switchContent("dashboard", currentStage);
-        });
-        menuHome.getItems().add(dashboardMenuItem);
-
         MenuItem revenueMenuItem = new MenuItem("Doanh thu");
         revenueMenuItem.setOnAction(e -> {
             Stage currentStage = (Stage) root.getScene().getWindow();

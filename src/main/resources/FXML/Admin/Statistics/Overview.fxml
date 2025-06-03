@@ -2,7 +2,6 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
@@ -30,7 +29,7 @@
                 <FontAwesomeIconView glyphName="DOLLAR" layoutX="8.0" layoutY="38.0" size="40" styleClass="item-tag-icon" />
             </Pane>
             <VBox maxWidth="400" prefHeight="62.0" prefWidth="191.0" spacing="5">
-                <Label styleClass="item-tag-title" text="TỔNG DOANH THU" />
+                <Label styleClass="item-tag-title" text="Tổng doanh thu trong ngày:" />
                 <HBox alignment="CENTER_LEFT" spacing="5">
                     <Label fx:id="totalRevenueLabel" prefHeight="35.0" prefWidth="152.0" styleClass="item-tag-number" text="0.00" />
                     <Label styleClass="item-tag-unit" text="VND" />
@@ -116,9 +115,9 @@
                 <Button fx:id="viewRevenueButton" onAction="#onViewRevenueButtonClicked" prefHeight="30.0" styleClass="view-button" text="Xem" />
             </HBox>
             <ProgressBar fx:id="chartProgressBar" layoutX="10.0" layoutY="60.0" prefWidth="200.0" visible="false" />
-            <BarChart fx:id="summaryChart" animated="false" legendVisible="false" maxHeight="Infinity" maxWidth="Infinity" minHeight="400" title="Tổng quan doanh thu">
+            <BarChart fx:id="summaryChart" animated="false" legendVisible="false" maxHeight="Infinity" maxWidth="Infinity" minHeight="400">
                 <xAxis>
-                    <CategoryAxis label="Tháng" />
+                    <CategoryAxis />
                 </xAxis>
                 <yAxis>
                     <NumberAxis label="Doanh thu (triệu VND)" />
@@ -130,30 +129,13 @@
                 <padding>
                     <Insets bottom="20" right="10" />
                 </padding>
-                <Label prefHeight="21.0" prefWidth="270.0" styleClass="main-statistic-text" text="Tổng hóa đơn gần đây" />
-                <ChoiceBox prefHeight="30.0" prefWidth="160">
+                <Label prefHeight="30.0" prefWidth="399.0" styleClass="main-statistic-text" text="Tổng hóa đơn gần đây" />
+                <ChoiceBox fx:id="monthChoiceBox" prefHeight="30.0" prefWidth="160">
                     <styleClass>
                         <String fx:value="choice-box-filter" />
                         <String fx:value="yellow" />
                     </styleClass>
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Tháng 1" />
-                            <String fx:value="Tháng 2" />
-                            <String fx:value="Tháng 3" />
-                            <String fx:value="Tháng 4" />
-                            <String fx:value="Tháng 5" />
-                            <String fx:value="Tháng 6" />
-                            <String fx:value="Tháng 7" />
-                            <String fx:value="Tháng 8" />
-                            <String fx:value="Tháng 9" />
-                            <String fx:value="Tháng 10" />
-                            <String fx:value="Tháng 11" />
-                            <String fx:value="Tháng 12" />
-                        </FXCollections>
-                    </items>
                 </ChoiceBox>
-                <Button fx:id="viewRecentOrdersButton" onAction="#onViewRecentOrdersButtonClicked" prefHeight="30.0" styleClass="view-button" text="Xem" />
             </HBox>
             <ProgressBar fx:id="tableProgressBar" layoutX="10.0" layoutY="60.0" prefWidth="200.0" visible="false" />
             <TableView fx:id="recentOrdersTable" minHeight="400" minWidth="600" styleClass="table-view" HBox.hgrow="ALWAYS">
@@ -161,10 +143,10 @@
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                 </columnResizePolicy>
                 <columns>
-                    <TableColumn prefWidth="100" text="Mã HD" />
-                    <TableColumn prefWidth="150" text="Khách hàng" />
-                    <TableColumn prefWidth="100" text="Ngày" />
-                    <TableColumn prefWidth="100" text="Tổng tiền" />
+                    <TableColumn fx:id="colBillID" prefWidth="100" text="Mã hóa đơn" />
+                    <TableColumn fx:id="colNameCustomer" prefWidth="150" text="Khách hàng" />
+                    <TableColumn fx:id="colTime" prefWidth="100" text="Thời gian" />
+                    <TableColumn fx:id="colTotalMoney" prefWidth="100" text="Tổng tiền" />
                 </columns>
             </TableView>
         </VBox>

@@ -18,75 +18,73 @@ import java.util.Map;
 
 public class RevenueController {
 
-    @FXML private Label totalRevenueValueLabel;
-    @FXML private DatePicker revenueChartFilter1;
-    @FXML private DatePicker revenueChartFilter2;
-    @FXML private Label monthlyRevenueLabel;
-    @FXML private Label lastMonthRevenueLabel;
-    @FXML private Label revenueRatioLabel;
     @FXML private TableView<StaffRevenueStats> staffRevenueTable;
     @FXML private BarChart<String, Number> summaryChart;
-    @FXML private Button viewChartButton;
-    @FXML private ChoiceBox<String> staffRevenueFilter;
     @FXML private ProgressBar chartProgressBar;
     @FXML private ProgressBar staffTableProgressBar;
+    @FXML private ChoiceBox<String> monthChoiceBox;
 
-    // === Initialize ===
     @FXML
     public void initialize() {
-        initializeStaffRevenueFilters();
+        setupChoiceBoxes();
         loadDefaultRevenueStatistics();
+        setupChartStyling();
     }
 
-    private void initializeStaffRevenueFilters() {
-        ObservableList<String> months = FXCollections.observableArrayList(
-                "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
-                "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
-        );
-        staffRevenueFilter.setItems(months);
-        staffRevenueFilter.getSelectionModel().selectFirst();
-    }
+    private void setupChoiceBoxes() {
+        if (monthChoiceBox != null) {
+            monthChoiceBox.setItems(FXCollections.observableArrayList(
+                    "Tất cả", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+                    "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
+            ));
+            monthChoiceBox.setValue("Tất cả");
 
-    private void loadDefaultRevenueStatistics() {
-        LocalDate startDate = LocalDate.now().withDayOfMonth(1);
-        LocalDate endDate = LocalDate.now();
-
-        revenueChartFilter1.setValue(startDate);
-        revenueChartFilter2.setValue(endDate);
-
-        fetchAndDisplayRevenueStatistics(startDate, endDate);
-    }
-
-    // === Event Handlers ===
-
-    @FXML
-    private void handleViewChartButtonAction() {
-        LocalDate startDate = revenueChartFilter1.getValue();
-        LocalDate endDate = revenueChartFilter2.getValue();
-
-        if (startDate != null && endDate != null) {
-            fetchAndDisplayRevenueStatistics(startDate, endDate);
-        } else {
-            System.out.println("Vui lòng chọn cả ngày bắt đầu và ngày kết thúc.");
+            monthChoiceBox.setOnAction(e -> onMonthFilterChanged());
         }
     }
 
-    @FXML
-    private void handleViewStaffButtonAction() {
-        String selectedMonth = staffRevenueFilter.getValue();
-
-        if (selectedMonth == null) return;
-
-        int month = staffRevenueFilter.getItems().indexOf(selectedMonth) + 1;
-        int year = LocalDate.now().getYear();
-
-        LocalDate startDate = LocalDate.of(year, month, 1);
-        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
-
-        loadStaffRevenueData(startDate, endDate);
+    private void setupChartStyling() {
+        // Configure chart appearance
+        summaryChart.setAnimated(true);
+        summaryChart.setLegendVisible(false);
+        summaryChart.setTitle("Doanh thu theo nhân viên");
     }
 
-    // === Logic ===
+    private void onMonthFilterChanged() {
+        String selectedMonth = monthChoiceBox.getValue();
+
+        if (selectedMonth != null && !selectedMonth.equals("Tất cả")) {
+            try {
+                int monthNumber = Integer.parseInt(selectedMonth.replace("Tháng ", ""));
+                int year = LocalDate.now().getYear();
+                loadStaffRevenueChartByMonth(monthNumber, year);
+
+                LocalDate startDate = LocalDate.of(year, monthNumber, 1);
+                LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+                loadStaffRevenueData(startDate, endDate);
+            } catch (NumberFormatException e) {
+                System.err.println("Error parsing month number from: " + selectedMonth);
+            }
+        } else {
+            loadDefaultRevenueStatistics();
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void loadDefaultRevenueStatistics() {
+        LocalDate now = LocalDate.now();
+        LocalDate startDate = now.withDayOfYear(1);
+        LocalDate endDate = now;
+
+        fetchAndDisplayRevenueStatistics(startDate, endDate);
+    }
 
     private void fetchAndDisplayRevenueStatistics(LocalDate startDate, LocalDate endDate) {
         chartProgressBar.setVisible(true);
@@ -94,15 +92,13 @@ public class RevenueController {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() throws Exception {
-                Map<String, String> revenueStats = RevenueDAO.fetchRevenueDataFromDatabase(startDate, endDate);
-                ObservableList<XYChart.Data<String, Number>> monthlyData =
-                        RevenueDAO.fetchMonthlyRevenueDataFromDatabase(startDate, endDate);
+                ObservableList<XYChart.Data<String, Number>> staffChartData =
+                        RevenueDAO.fetchStaffRevenueChartData(startDate, endDate);
                 ArrayList<StaffRevenueStats> staffData =
                         RevenueDAO.fetchStaffRevenueDataFromDatabase(startDate, endDate);
 
                 Platform.runLater(() -> {
-                    updateRevenueLabels(revenueStats);
-                    updateBarChart(monthlyData);
+                    updateStaffRevenueChart(staffChartData);
                     updateStaffTable(staffData);
                 });
                 return null;
@@ -110,6 +106,31 @@ public class RevenueController {
 
             @Override
             protected void succeeded() {
+                chartProgressBar.setVisible(false);
+            }
+
+            @Override
+            protected void failed() {
+                chartProgressBar.setVisible(false);
+                getException().printStackTrace();
+            }
+        };
+
+        new Thread(task).start();
+    }
+
+    private void loadStaffRevenueChartByMonth(int month, int year) {
+        chartProgressBar.setVisible(true);
+
+        Task<ObservableList<XYChart.Data<String, Number>>> task = new Task<>() {
+            @Override
+            protected ObservableList<XYChart.Data<String, Number>> call() throws Exception {
+                return RevenueDAO.fetchStaffRevenueChartDataByMonth(month, year);
+            }
+
+            @Override
+            protected void succeeded() {
+                updateStaffRevenueChart(getValue());
                 chartProgressBar.setVisible(false);
             }
 
@@ -131,7 +152,6 @@ public class RevenueController {
             protected ObservableList<StaffRevenueStats> call() throws Exception {
                 ArrayList<StaffRevenueStats> staffData =
                         RevenueDAO.fetchStaffRevenueDataFromDatabase(startDate, endDate);
-                staffData.forEach(System.out::println);
                 return FXCollections.observableArrayList(staffData);
             }
 
@@ -151,17 +171,9 @@ public class RevenueController {
         new Thread(task).start();
     }
 
-    // === UI Update Helpers ===
-
-    private void updateRevenueLabels(Map<String, String> stats) {
-        totalRevenueValueLabel.setText(stats.get("totalRevenue"));
-        monthlyRevenueLabel.setText(stats.get("monthlyRevenue"));
-        lastMonthRevenueLabel.setText(stats.get("lastMonthRevenue"));
-        revenueRatioLabel.setText(stats.get("revenueRatio"));
-    }
-
-    private void updateBarChart(ObservableList<XYChart.Data<String, Number>> data) {
+    private void updateStaffRevenueChart(ObservableList<XYChart.Data<String, Number>> data) {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Doanh thu nhân viên");
         series.getData().addAll(data);
 
         summaryChart.getData().clear();

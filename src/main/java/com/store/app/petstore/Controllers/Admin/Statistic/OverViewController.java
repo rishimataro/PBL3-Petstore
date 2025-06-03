@@ -4,22 +4,22 @@ import com.store.app.petstore.DAO.StatisticDAO.OverviewDAO;
 import javafx.fxml.FXML;
 import java.sql.SQLException;
 
+import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.concurrent.Task;
 import javafx.application.Platform;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.collections.FXCollections;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 public class OverViewController {
@@ -44,31 +44,102 @@ public class OverViewController {
     @FXML
     private ProgressBar tableProgressBar;
 
+    @FXML
+    private ChoiceBox<String> monthChoiceBox;
+
 
     @FXML
     public void initialize() {
-        recentOrdersTable.getColumns().get(0).setCellValueFactory(new MapValueFactory("id"));
-        recentOrdersTable.getColumns().get(1).setCellValueFactory(new MapValueFactory("customer"));
-        recentOrdersTable.getColumns().get(2).setCellValueFactory(new MapValueFactory("date"));
-        recentOrdersTable.getColumns().get(3).setCellValueFactory(new MapValueFactory("total"));
-
+        setupTableColumns();
+        setupChoiceBoxes();
+        initializeDatePickers();
         loadDailyStatistics();
+        updateLastUpdateTime();
+    }
+
+    private void setupTableColumns() {
+        try {
+            if (recentOrdersTable != null && recentOrdersTable.getColumns().size() >= 4) {
+                recentOrdersTable.getColumns().get(0).setCellValueFactory(new MapValueFactory("id"));
+                recentOrdersTable.getColumns().get(1).setCellValueFactory(new MapValueFactory("customer"));
+                recentOrdersTable.getColumns().get(2).setCellValueFactory(new MapValueFactory("date"));
+                recentOrdersTable.getColumns().get(3).setCellValueFactory(new MapValueFactory("total"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error setting up table columns: " + e.getMessage());
+        }
+    }
+
+    private void setupChoiceBoxes() {
+        if (monthChoiceBox != null) {
+            monthChoiceBox.setItems(FXCollections.observableArrayList(
+                "Tất cả", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+                "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
+            ));
+            monthChoiceBox.setValue("Tất cả");
+
+            monthChoiceBox.setVisible(true);
+            monthChoiceBox.setManaged(true);
+
+            monthChoiceBox.setOnAction(e -> onMonthFilterChanged());
+        }
+    }
+
+    private void onMonthFilterChanged() {
+        String selectedMonth = monthChoiceBox.getValue();
+        onViewRecentOrdersButtonClicked();
+    }
+
+    private void initializeDatePickers() {
+        LocalDate now = LocalDate.now();
+        LocalDate oneYearAgo = now.minusYears(1);
+
+        startDatePicker.setValue(oneYearAgo);
+        endDatePicker.setValue(now);
+
+        startDatePicker.setOnAction(e -> onDateRangeChanged());
+        endDatePicker.setOnAction(e -> onDateRangeChanged());
+    }
+
+    private void updateLastUpdateTime() {
+        Platform.runLater(() -> {
+            String currentTime = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            System.out.println("Statistics last updated: " + currentTime);
+        });
+    }
+
+    private void onDateRangeChanged() {
+        if (startDatePicker.getValue() != null && endDatePicker.getValue() != null) {
+            if (startDatePicker.getValue().isAfter(endDatePicker.getValue())) {
+                showAlert("Lỗi", "Ngày bắt đầu không thể sau ngày kết thúc!");
+                return;
+            }
+            onViewRevenueButtonClicked();
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void loadDailyStatistics() {
         Task<Void> dailyStatsTask = new Task<Void>() {
             @Override
             protected Void call() throws SQLException {
-                updateProgress(-1, 1); // Indeterminate progress
+                updateProgress(-1, 1);
                 Map<String, String> dailyStats = OverviewDAO.getDailyStatistics(LocalDate.now());
                 List<Map<String, String>> recentOrders = OverviewDAO.getRecentOrders();
 
                 Platform.runLater(() -> {
-                    totalRevenueLabel.setText(dailyStats.get("revenue"));
-                    totalPetsSoldLabel.setText(dailyStats.get("petsSold"));
-                    totalProductsSoldLabel.setText(dailyStats.get("productsSold"));
-                    totalInvoicesLabel.setText(dailyStats.get("invoices"));
+                    updateStatisticsDisplay(dailyStats);
                     recentOrdersTable.getItems().setAll(recentOrders);
+
+                    onViewRevenueButtonClicked();
                 });
                 return null;
             }
@@ -81,15 +152,50 @@ public class OverViewController {
             Throwable e = dailyStatsTask.getException();
             e.printStackTrace();
             Platform.runLater(() -> {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Database Error");
-                alert.setContentText("Failed to load daily statistics.");
-                alert.showAndWait();
+                showAlert("Lỗi", "Không thể tải dữ liệu thống kê hàng ngày: " + e.getMessage());
+                setDefaultStatistics();
             });
         });
 
         new Thread(dailyStatsTask).start();
+    }
+
+    private void updateStatisticsDisplay(Map<String, String> dailyStats) {
+        String revenue = dailyStats.get("revenue");
+        if (revenue != null && !revenue.equals("Error")) {
+            totalRevenueLabel.setText(formatCurrency(revenue));
+        } else {
+            totalRevenueLabel.setText("0");
+        }
+
+        totalPetsSoldLabel.setText(formatNumber(dailyStats.get("petsSold")));
+        totalProductsSoldLabel.setText(formatNumber(dailyStats.get("productsSold")));
+        totalInvoicesLabel.setText(formatNumber(dailyStats.get("invoices")));
+    }
+
+    private void setDefaultStatistics() {
+        totalRevenueLabel.setText("0");
+        totalPetsSoldLabel.setText("0");
+        totalProductsSoldLabel.setText("0");
+        totalInvoicesLabel.setText("0");
+    }
+
+    private String formatCurrency(String value) {
+        try {
+            double amount = Double.parseDouble(value.replace(",", ""));
+            return String.format("%,.0f", amount);
+        } catch (NumberFormatException e) {
+            return value;
+        }
+    }
+
+    private String formatNumber(String value) {
+        try {
+            int number = Integer.parseInt(value);
+            return String.format("%,d", number);
+        } catch (NumberFormatException e) {
+            return value != null ? value : "0";
+        }
     }
 
     public Map<String, LocalDate> getRevenueDateRange() {
@@ -102,7 +208,7 @@ public class OverViewController {
             dateRange.put("endDate", endDate);
             return dateRange;
         } else {
-            return null; // Or handle as needed, e.g., return empty map or throw exception
+            return null;
         }
     }
 
@@ -125,10 +231,7 @@ public class OverViewController {
                 chartProgressBar.progressProperty().unbind();
                 chartProgressBar.setVisible(false);
                 Map<String, Number> filteredRevenue = filteredRevenueTask.getValue();
-                XYChart.Series<String, Number> series = new XYChart.Series<>();
-                filteredRevenue.forEach((month, revenue) -> series.getData().add(new XYChart.Data<>(month, revenue)));
-                summaryChart.getData().clear();
-                summaryChart.getData().add(series);
+                updateChartWithSortedData(filteredRevenue);
             });
 
             filteredRevenueTask.setOnFailed(event -> {
@@ -137,35 +240,73 @@ public class OverViewController {
                 Throwable e = filteredRevenueTask.getException();
                 e.printStackTrace();
                 Platform.runLater(() -> {
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Database Error");
-                    alert.setContentText("Failed to load revenue data for the selected date range.");
-                    alert.showAndWait();
+                    showAlert("Lỗi", "Không thể tải dữ liệu doanh thu cho khoảng thời gian đã chọn.");
                 });
             });
 
             new Thread(filteredRevenueTask).start();
 
         } else {
-            System.out.println("View Revenue button clicked. Date range not selected.");
-             Alert alert = new Alert(AlertType.WARNING);
-             alert.setTitle("Warning");
-             alert.setHeaderText(null);
-             alert.setContentText("Please select both start and end dates.");
-             alert.showAndWait();
+            showAlert("Cảnh báo", "Vui lòng chọn cả ngày bắt đầu và ngày kết thúc.");
+        }
+    }
+
+    private void updateChartWithSortedData(Map<String, Number> revenueData) {
+        try {
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            series.setName("Doanh thu");
+
+            if (revenueData == null || revenueData.isEmpty()) {
+                summaryChart.getData().clear();
+                return;
+            }
+
+            revenueData.entrySet().stream()
+                .sorted((e1, e2) -> {
+                    try {
+                        int month1 = Integer.parseInt(e1.getKey().replace("Tháng ", ""));
+                        int month2 = Integer.parseInt(e2.getKey().replace("Tháng ", ""));
+                        return Integer.compare(month1, month2);
+                    } catch (NumberFormatException ex) {
+                        return e1.getKey().compareTo(e2.getKey());
+                    }
+                })
+                .forEach(entry -> {
+                    XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
+                    series.getData().add(data);
+                });
+
+            summaryChart.getData().clear();
+            summaryChart.getData().add(series);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Không thể cập nhật biểu đồ: " + e.getMessage());
         }
     }
 
     @FXML
     private void onViewRecentOrdersButtonClicked() {
-        System.out.println("View Recent Orders button clicked.");
+        Map<String, LocalDate> dateRange = getRevenueDateRange();
+        String selectedMonth = monthChoiceBox != null ? monthChoiceBox.getValue() : "Tất cả";
 
         Task<List<Map<String, String>>> recentOrdersTask = new Task<List<Map<String, String>>>() {
             @Override
             protected List<Map<String, String>> call() throws SQLException {
                  updateProgress(-1, 1);
-                return OverviewDAO.getRecentOrders();
+
+                 if (selectedMonth != null && !selectedMonth.equals("Tất cả")) {
+                     try {
+                         int monthNumber = Integer.parseInt(selectedMonth.replace("Tháng ", ""));
+                         return OverviewDAO.getRecentOrders(monthNumber);
+                     } catch (NumberFormatException e) {
+                         return OverviewDAO.getRecentOrders();
+                     }
+                 } else if (dateRange != null) {
+                     return OverviewDAO.getOrdersByDateRange(dateRange.get("startDate"), dateRange.get("endDate"));
+                 } else {
+                     return OverviewDAO.getRecentOrders();
+                 }
             }
         };
 
@@ -175,8 +316,8 @@ public class OverViewController {
         recentOrdersTask.setOnSucceeded(event -> {
             tableProgressBar.progressProperty().unbind();
             tableProgressBar.setVisible(false);
-            List<Map<String, String>> recentOrders = recentOrdersTask.getValue();
-            recentOrdersTable.getItems().setAll(recentOrders);
+            List<Map<String, String>> orders = recentOrdersTask.getValue();
+            recentOrdersTable.getItems().setAll(orders);
         });
 
         recentOrdersTask.setOnFailed(event -> {
@@ -185,11 +326,7 @@ public class OverViewController {
             Throwable e = recentOrdersTask.getException();
             e.printStackTrace();
             Platform.runLater(() -> {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Database Error");
-                alert.setContentText("Failed to load recent orders.");
-                alert.showAndWait();
+                showAlert("Lỗi", "Không thể tải dữ liệu đơn hàng.");
             });
         });
 

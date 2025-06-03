@@ -17,7 +17,6 @@ public class ViewFactory {
     // private static final String STAFF_FXML = "";
     private static ViewFactory instance;
     private final String LOGIN_FXML = "/FXML/Login.fxml";
-    private final String DASHBOAR_FXML = "/FXML/Staff/StaffDashboard.fxml";
     private final String FORGOT_PASSWORD_FXML = "/FXML/ForgotPassword.fxml";
     private final String ORDER_FXML = "/FXML/Staff/Order.fxml";
     private final String PERSONAL_INFOR_FXML = "/FXML/Staff/PersonalInfo.fxml";
@@ -54,10 +53,6 @@ public class ViewFactory {
                 case "login":
                     root = loadFXML(LOGIN_FXML);
                     stage.setTitle("Login");
-                    break;
-                case "dashboard":
-                    root = loadFXML(DASHBOAR_FXML);
-                    stage.setTitle("Staff Dashboard");
                     break;
                 case "forgotpassword":
                     root = loadFXML(FORGOT_PASSWORD_FXML);
@@ -122,7 +117,6 @@ public class ViewFactory {
             case "customer":
                 fxmlPath = CUSTOMER_POPUP;
                 break;
-            // Thêm các popup khác nếu có
             default:
                 System.err.println("Unknown popup: " + popupName);
                 return null;
@@ -161,7 +155,6 @@ public class ViewFactory {
             case "customer":
                 fxmlPath = CUSTOMER_POPUP;
                 break;
-            // Thêm các popup khác ở đây
             default:
                 System.err.println("Unknown popup: " + popupName);
                 return null;
@@ -171,13 +164,11 @@ public class ViewFactory {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
-            // Get the controller and set the data
             Object controller = loader.getController();
             if (controller != null) {
                 if (data instanceof Customer && controller instanceof CustomerInforController) {
                     ((CustomerInforController) controller).setCustomer((Customer) data);
                 }
-                // Thêm các trường hợp khác ở đây
             }
 
             Stage popupStage = new Stage();
@@ -210,10 +201,6 @@ public class ViewFactory {
                 case "login":
                     root = loadFXML(LOGIN_FXML);
                     currentStage.setTitle("Login");
-                    break;
-                case "dashboard":
-                    root = loadFXML(DASHBOAR_FXML);
-                    currentStage.setTitle("Staff Dashboard");
                     break;
                 case "forgotpassword":
                     root = loadFXML(FORGOT_PASSWORD_FXML);

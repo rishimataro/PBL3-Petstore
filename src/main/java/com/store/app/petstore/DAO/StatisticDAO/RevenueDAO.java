@@ -149,9 +149,46 @@ public class RevenueDAO {
 
         try {
             conn = DatabaseUtil.getConnection();
+            String sql = "SELECT s.full_name, COUNT(o.order_id) as total_orders, SUM(o.total_price) as staff_revenue " +
+                    "FROM Orders o JOIN Staffs s ON o.staff_id = s.staff_id " +
+                    "WHERE o.order_date BETWEEN ? AND ? AND s.isActive = 1 " +
+                    "GROUP BY s.staff_id, s.full_name " +
+                    "ORDER BY staff_revenue DESC";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setTimestamp(1, startTimestamp);
+            pstmt.setTimestamp(2, endTimestamp);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String staffName = rs.getString("full_name");
+                int totalOrders = rs.getInt("total_orders");
+                double staffRevenue = rs.getDouble("staff_revenue");
+                data.add(new StaffRevenueStats(staffName, totalOrders, staffRevenue));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public static ObservableList<XYChart.Data<String, Number>> fetchStaffRevenueChartData(LocalDate startDate, LocalDate endDate) {
+        ObservableList<XYChart.Data<String, Number>> data = FXCollections.observableArrayList();
+        Timestamp startTimestamp = Timestamp.valueOf(startDate.atStartOfDay());
+        Timestamp endTimestamp = Timestamp.valueOf(endDate.atTime(23, 59, 59));
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DatabaseUtil.getConnection();
             String sql = "SELECT s.full_name, SUM(o.total_price) as staff_revenue " +
                     "FROM Orders o JOIN Staffs s ON o.staff_id = s.staff_id " +
-                    "WHERE o.order_date BETWEEN ? AND ? GROUP BY s.full_name";
+                    "WHERE o.order_date BETWEEN ? AND ? AND s.isActive = 1 " +
+                    "GROUP BY s.staff_id, s.full_name " +
+                    "ORDER BY staff_revenue DESC " +
+                    "LIMIT 10"; // Limit to top 10 staff members for better chart readability
             pstmt = conn.prepareStatement(sql);
             pstmt.setTimestamp(1, startTimestamp);
             pstmt.setTimestamp(2, endTimestamp);
@@ -160,7 +197,44 @@ public class RevenueDAO {
             while (rs.next()) {
                 String staffName = rs.getString("full_name");
                 double staffRevenue = rs.getDouble("staff_revenue");
-                data.add(new StaffRevenueStats(staffName, staffRevenue));
+                data.add(new XYChart.Data<>(staffName, staffRevenue));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public static ObservableList<XYChart.Data<String, Number>> fetchStaffRevenueChartDataByMonth(int month, int year) {
+        ObservableList<XYChart.Data<String, Number>> data = FXCollections.observableArrayList();
+
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+        Timestamp startTimestamp = Timestamp.valueOf(startDate.atStartOfDay());
+        Timestamp endTimestamp = Timestamp.valueOf(endDate.atTime(23, 59, 59));
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DatabaseUtil.getConnection();
+            String sql = "SELECT s.full_name, SUM(o.total_price) as staff_revenue " +
+                    "FROM Orders o JOIN Staffs s ON o.staff_id = s.staff_id " +
+                    "WHERE o.order_date BETWEEN ? AND ? AND s.isActive = 1 " +
+                    "GROUP BY s.staff_id, s.full_name " +
+                    "ORDER BY staff_revenue DESC " +
+                    "LIMIT 10";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setTimestamp(1, startTimestamp);
+            pstmt.setTimestamp(2, endTimestamp);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String staffName = rs.getString("full_name");
+                double staffRevenue = rs.getDouble("staff_revenue");
+                data.add(new XYChart.Data<>(staffName, staffRevenue));
             }
 
         } catch (SQLException e) {

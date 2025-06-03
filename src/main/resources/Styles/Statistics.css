@@ -113,7 +113,7 @@
 /* Page Title Styling */
 .page-title {
     -fx-font-size: 36px; /* Increased font size */
-    -fx-font-weight: 1600; /* Extra bold font weight */
+    -fx-font-weight: bold; /* Extra bold font weight */
     -fx-text-fill: #01C4DA; /* Use the primary theme color */
     -fx-alignment: center; /* Center the text */
 }
@@ -214,8 +214,6 @@
     -fx-background-radius: 5;
 }
 
-
-/* BarChart styling */
 .bar-chart {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -260,10 +258,9 @@
     -fx-text-fill: rgba(8, 1, 149, 1);
  }
 
-/* Page Title Styling */
 .page-title {
     -fx-font-size: 36px; /* Increased font size */
-    -fx-font-weight: 1600; /* Extra bold font weight */
+    -fx-font-weight: bold; /* Extra bold font weight */
     -fx-text-fill: #01C4DA; /* Use the primary theme color */
     -fx-alignment: center; /* Center the text */
 }

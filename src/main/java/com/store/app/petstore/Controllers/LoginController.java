@@ -112,7 +112,6 @@ public class LoginController implements Initializable  {
         }
 
         try {
-            // Tìm user theo username
             User user = UserDAO.findByUsername(username);
 
             if (user == null || user.getUsername() == null) {
@@ -120,13 +119,11 @@ public class LoginController implements Initializable  {
                 return;
             }
 
-            // Kiểm tra tên đăng nhập
             if (!user.getUsername().equals(username)) {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Tên đăng nhập không đúng");
                 return;
             }
 
-            // Kiểm tra mật khẩu
             if (!BCrypt.checkpw(password, user.getPassword())) {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Mật khẩu không đúng");
                 return;
@@ -138,14 +135,14 @@ public class LoginController implements Initializable  {
 
             if (user.getRole().equals(User.ROLE_ADMIN)) {
                 idAdminCurrent = user.getUserId();
-                AdminFactory.getInstance().switchContent("dashboard", currentStage);
+                AdminFactory.getInstance().switchContent("overview", currentStage);
             } else if (user.getRole().equals(User.ROLE_USER)) {
                 idStaffCurrent = user.getUserId();
                 Staff staff = StaffDAO.findByUserId(user.getUserId());
                 if (staff != null) {
                     SessionManager.setCurrentStaff(staff);
                 }
-                ViewFactory.getInstance().switchContent("dashboard", currentStage);
+                ViewFactory.getInstance().switchContent("order", currentStage);
             } else {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vai trò người dùng không hợp lệ");
                 SessionManager.clear();

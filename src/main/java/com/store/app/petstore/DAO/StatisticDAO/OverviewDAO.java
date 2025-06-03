@@ -105,6 +105,35 @@ public class OverviewDAO {
         return orders;
     }
 
+    public static List<Map<String, String>> getRecentOrders(int month) throws SQLException {
+        List<Map<String, String>> orders = new ArrayList<>();
+        Connection connection = DatabaseUtil.getConnection();
+
+        String sql = "SELECT o.order_id, c.full_name AS customer_name, o.order_date, o.total_price " +
+                     "FROM Orders o " +
+                     "JOIN Customers c ON o.customer_id = c.customer_id " +
+                     "WHERE MONTH(o.order_date) = ? " +
+                     "ORDER BY o.order_date DESC " +
+                     "LIMIT 10";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, month);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Map<String, String> order = new HashMap<>();
+                    order.put("id", "ORD-" + rs.getInt("order_id"));
+                    order.put("customer", rs.getString("customer_name"));
+                    order.put("date", rs.getDate("order_date").toString());
+                    order.put("total", String.format("%,.2f", rs.getDouble("total_price")));
+                    orders.add(order);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
     public static List<OrderDetailRecord> getRecentOrderDetails(int orderId) throws SQLException {
         List<OrderDetailRecord> details = new ArrayList<>();
         Connection connection = DatabaseUtil.getConnection();
@@ -156,5 +185,35 @@ public class OverviewDAO {
             e.printStackTrace();
         }
         return revenue;
+    }
+
+    public static List<Map<String, String>> getOrdersByDateRange(LocalDate startDate, LocalDate endDate) throws SQLException {
+        List<Map<String, String>> orders = new ArrayList<>();
+        Connection connection = DatabaseUtil.getConnection();
+
+        String sql = "SELECT o.order_id, c.full_name AS customer_name, o.order_date, o.total_price " +
+                     "FROM Orders o " +
+                     "JOIN Customers c ON o.customer_id = c.customer_id " +
+                     "WHERE o.order_date BETWEEN ? AND ? " +
+                     "ORDER BY o.order_date DESC " +
+                     "LIMIT 50"; // Limit to 50 orders to avoid performance issues
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setDate(1, Date.valueOf(startDate));
+            stmt.setDate(2, Date.valueOf(endDate));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Map<String, String> order = new HashMap<>();
+                    order.put("id", "ORD-" + rs.getInt("order_id"));
+                    order.put("customer", rs.getString("customer_name"));
+                    order.put("date", rs.getDate("order_date").toString());
+                    order.put("total", String.format("%,.2f", rs.getDouble("total_price")));
+                    orders.add(order);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
     }
 }
