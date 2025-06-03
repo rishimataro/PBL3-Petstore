@@ -9,19 +9,8 @@ import javafx.scene.shape.Circle;
 
 import java.io.InputStream;
 
-/**
- * Utility class for image processing operations in the application.
- * Provides methods for loading, cropping, and formatting images.
- */
 public class ImageUtils {
 
-    /**
-     * Loads an image from a resource path and returns it.
-     * If the image cannot be loaded, returns null.
-     *
-     * @param imagePath The resource path to the image
-     * @return The loaded Image object or null if loading fails
-     */
     public static Image loadImage(String imagePath) {
         try {
             InputStream imageStream = ImageUtils.class.getResourceAsStream(imagePath);
@@ -34,14 +23,6 @@ public class ImageUtils {
         return null;
     }
 
-    /**
-     * Loads an image from a resource path and returns it.
-     * If the image cannot be loaded, returns the default image.
-     *
-     * @param imagePath        The resource path to the image
-     * @param defaultImagePath The resource path to the default image
-     * @return The loaded Image object or the default image if loading fails
-     */
     public static Image loadImageWithDefault(String imagePath, String defaultImagePath) {
         Image image = loadImage(imagePath);
         if (image == null) {
@@ -50,14 +31,6 @@ public class ImageUtils {
         return image;
     }
 
-    /**
-     * Processes an image to fit a square area while maintaining aspect ratio.
-     * The image will be cropped if necessary to fill the square completely.
-     *
-     * @param image The source image to process
-     * @param size  The size of the square (width and height)
-     * @return An ImageView containing the processed image
-     */
     public static ImageView processToSquare(Image image, double size) {
         if (image == null) {
             return new ImageView();
@@ -89,14 +62,6 @@ public class ImageUtils {
         return imageView;
     }
 
-    /**
-     * Processes an image to fit a circular area while maintaining aspect ratio.
-     * The image will be cropped if necessary to fill the circle completely.
-     *
-     * @param image  The source image to process
-     * @param radius The radius of the circle
-     * @return An ImagePattern that can be used to fill a Circle shape
-     */
     public static ImagePattern processToCircle(Image image, double radius) {
         if (image == null) {
             return new ImagePattern(null);
@@ -118,15 +83,6 @@ public class ImageUtils {
         return new ImagePattern(clippedImage);
     }
 
-    /**
-     * Sets an image to an ImageView with square cropping.
-     * The image will maintain its aspect ratio and be cropped if necessary.
-     *
-     * @param imageView        The ImageView to set the image to
-     * @param imagePath        The resource path to the image
-     * @param defaultImagePath The resource path to the default image
-     * @return True if the image was set successfully, false otherwise
-     */
     public static boolean setSquareImage(ImageView imageView, String imagePath, String defaultImagePath) {
         if (imageView == null) {
             return false;
@@ -149,14 +105,6 @@ public class ImageUtils {
         return true;
     }
 
-    /**
-     * Creates a square thumbnail of the given image.
-     * The image will maintain its aspect ratio and be cropped if necessary.
-     *
-     * @param image The source image
-     * @param size  The size of the square thumbnail
-     * @return A new Image object containing the thumbnail
-     */
     public static Image createSquareThumbnail(Image image, double size) {
         if (image == null) {
             return null;

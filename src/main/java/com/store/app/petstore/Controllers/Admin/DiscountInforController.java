@@ -94,7 +94,6 @@ public class DiscountInforController implements Initializable {
         btnFix.setOnAction(event -> handleFix());
         btnSave.setOnAction(event -> handleSave());
         btnDelete.setOnAction(event -> handleDelete());
-        closeIcon.setOnMouseClicked(event -> closeWindow());
     }
 
     private void setupInitialState() {
@@ -138,13 +137,6 @@ public class DiscountInforController implements Initializable {
         dpStartDate.setValue(LocalDate.now());
         dpEndDate.setValue(LocalDate.now().plusDays(30));
         cbType.setValue("Phần trăm");
-    }
-
-    private void closeWindow() {
-        Stage stage = (Stage) discountInforPopup.getScene().getWindow();
-        if (stage != null) {
-            stage.close();
-        }
     }
 
     private void handleAdd() {

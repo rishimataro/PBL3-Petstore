@@ -4,7 +4,8 @@ import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.Models.Entities.User;
 import com.store.app.petstore.Sessions.SessionManager;
 import com.store.app.petstore.Views.AdminFactory;
-import com.store.app.petstore.Views.ViewFactory;
+import com.store.app.petstore.Views.StaffFactory;
+import com.store.app.petstore.Views.UtilsFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -205,7 +206,8 @@ public class AdminMenuController implements Initializable {
         if (ControllerUtils.showConfirmationAndWait("Đăng xuất",
                 "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
             SessionManager.clear();
-            ViewFactory.getInstance().switchContent("login", currentStage);
+            currentStage.close();
+            UtilsFactory.getInstance().showWindow("login");
         } else {
             ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đăng xuất không thành công");
         }

@@ -87,12 +87,12 @@
                                         </TableView>
                                     </children>
                                 </VBox>
-                        <HBox alignment="CENTER" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="20" spacing="5.0">
-                           <children>
-                              <Label styleClass="total-lbl" text="Tổng doanh thu:" />
-                              <TextField HBox.hgrow="ALWAYS" fx:id="totalRevenue" disable="true" prefWidth="111.0" />
-                           </children>
-                        </HBox>
+                                <HBox alignment="CENTER" layoutX="446.0" layoutY="465.0" prefHeight="38.0" prefWidth="335.0" spacing="10.0" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="0.0">
+                                    <children>
+                                        <Label styleClass="total-lbl" text="Tổng doanh thu:" />
+                                        <TextField fx:id="totalRevenue" disable="true" prefWidth="111.0" styleClass="total-textfiled" HBox.hgrow="ALWAYS" />
+                                    </children>
+                                </HBox>
                             </children>
                         </AnchorPane>
 
@@ -101,9 +101,9 @@
                             <children>
                                 <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="144.0" styleClass="anchor-pane-invoice-id">
                                     <children>
-                                        <HBox AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" alignment="CENTER"  layoutY="15.0">
+                                        <HBox alignment="CENTER" layoutY="15.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
                                             <children>
-                                                <Label fx:id="detailInvoiceID" HBox.hgrow="ALWAYS" styleClass="invoice-id" text="[Mã hóa đơn]" textAlignment="CENTER" />
+                                                <Label fx:id="detailInvoiceID" styleClass="invoice-id" text="[Mã hóa đơn]" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
                                             </children>
                                         </HBox>
                                     </children>

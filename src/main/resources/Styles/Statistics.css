@@ -1,5 +1,11 @@
-*{
-    -fx-font-family: Inter;
+* {
+    -fx-primary-color: #007acc;
+    -fx-secondary-color: #4B6EAF;
+    -fx-accent-color: #B6FF00;
+    -fx-grey-color: #b9b9b9;
+    -fx-light-grey-color: #d1d1d1;
+    -fx-lightest-grey-color: #F9F9FB;
+    -fx-focus-color: -fx-secondary-color;
 }
 
 .root{
@@ -23,16 +29,19 @@
 .btn-underline.inactive{
     -fx-stroke: transparent;
 }
+
 .btn-underline.active{
     -fx-stroke: #FFFFFF;
     -fx-stroke-width: 2;
 }
+
 .hbox-statistic{
     -fx-background-color: #F9F9F9;
     -fx-background-radius: 10;
     -fx-padding: 21 20 21 20;
     -fx-spacing: 10;
 }
+
 .statistic-item-tag {
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 10;
@@ -73,6 +82,7 @@
     -fx-font-weight: 500;
     -fx-padding: 5 0 0 0;
 }
+
 .item-tag-icon{
     -fx-fill: rgba(0, 0, 0, 0.5);
 }
@@ -89,6 +99,7 @@
     -fx-padding: 10 10 11.5 17.5;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.1, 0, 0.7);
 }
+
 .choice-box-filter{
     -fx-border-radius: 2;
     -fx-background-radius: 2;
@@ -96,10 +107,12 @@
     -fx-cursor: hand;
 
 }
+
 .choice-box-filter.cyan{
     -fx-border-color: rgba(1, 196, 218, 1);
     -fx-text-fill: rgba(0, 158, 176, 1);
 }
+
 .choice-box-filter.yellow{
     -fx-border-color: rgba(255, 181, 0, 1);
     -fx-text-fill: rgba(127, 60, 0, 1);
@@ -110,35 +123,22 @@
     -fx-text-fill: rgba(8, 1, 149, 1);
  }
 
-/* Page Title Styling */
 .page-title {
-    -fx-font-size: 36px; /* Increased font size */
-    -fx-font-weight: bold; /* Extra bold font weight */
-    -fx-text-fill: #01C4DA; /* Use the primary theme color */
-    -fx-alignment: center; /* Center the text */
-}
-
-
-/* TableView styling */
-
-* {
-    -fx-primary-color: #007acc;
-    -fx-secondary-color: #4B6EAF;
-    -fx-accent-color: #B6FF00;
-    -fx-grey-color: #b9b9b9;
-    -fx-light-grey-color: #d1d1d1;
-    -fx-lightest-grey-color: #F9F9FB;
-
-    -fx-focus-color: -fx-secondary-color;
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #01C4DA;
+    -fx-alignment: center;
 }
 
 .table-button {
     -fx-background-color: -fx-primary-color;
     -fx-cursor: hand;
 }
+
 .table-button:hover{
     -fx-background-color: transparent;
 }
+
 .table-view {
     -fx-background-color: transparent;
     -fx-border-color: #cccccc;
@@ -192,12 +192,11 @@
     -fx-background-color: #45a049;
 }
 
-/* ProgressBar styling */
 .stack-pane > .progress-bar {
-    -fx-accent: #01C4DA; /* Use a color from the existing theme */
-    -fx-pref-width: 150px; /* Set a fixed width */
-    -fx-pref-height: 10px; /* Adjust height */
-    -fx-background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    -fx-accent: #01C4DA;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 10px;
+    -fx-background-color: rgba(255, 255, 255, 0.8);
     -fx-background-radius: 5;
     -fx-padding: 2;
 }
@@ -259,14 +258,14 @@
  }
 
 .page-title {
-    -fx-font-size: 36px; /* Increased font size */
-    -fx-font-weight: bold; /* Extra bold font weight */
-    -fx-text-fill: #01C4DA; /* Use the primary theme color */
-    -fx-alignment: center; /* Center the text */
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #01C4DA;
+    -fx-alignment: center;
 }
 
 .view-button {
-    -fx-background-color: #01C4DA; /* Use a color from the theme */
+    -fx-background-color: #01C4DA;
     -fx-text-fill: #FFFFFF;
     -fx-font-weight: bold;
     -fx-background-radius: 5;
@@ -275,5 +274,5 @@
 }
 
 .view-button:hover {
-    -fx-background-color: #009fb2; /* Darker shade on hover */
+    -fx-background-color: #009fb2;
 }

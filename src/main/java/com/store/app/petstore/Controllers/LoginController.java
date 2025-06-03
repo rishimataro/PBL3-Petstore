@@ -6,7 +6,8 @@ import com.store.app.petstore.Models.Entities.Staff;
 import com.store.app.petstore.Models.Entities.User;
 import com.store.app.petstore.Sessions.SessionManager;
 import com.store.app.petstore.Views.AdminFactory;
-import com.store.app.petstore.Views.ViewFactory;
+import com.store.app.petstore.Views.StaffFactory;
+import com.store.app.petstore.Views.UtilsFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
@@ -18,7 +19,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
-import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -51,7 +51,6 @@ public class LoginController implements Initializable  {
 
     private double x, y;
 
-    // thiet lap ban dau
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupPasswordVisibility();
@@ -85,7 +84,8 @@ public class LoginController implements Initializable  {
     private void setupForgotPasswordLink() {
         forgotPasswordLink.setOnAction(event -> {
             Stage currentStage = (Stage) usernameField.getScene().getWindow();
-            ViewFactory.getInstance().switchContent("forgotpassword", currentStage);
+            currentStage.close();
+            UtilsFactory.getInstance().showWindow("forgotpassword");
         });
     }
 
@@ -135,14 +135,16 @@ public class LoginController implements Initializable  {
 
             if (user.getRole().equals(User.ROLE_ADMIN)) {
                 idAdminCurrent = user.getUserId();
-                AdminFactory.getInstance().switchContent("overview", currentStage);
+                currentStage.close();
+                AdminFactory.getInstance().showWindow("overview");
             } else if (user.getRole().equals(User.ROLE_USER)) {
                 idStaffCurrent = user.getUserId();
                 Staff staff = StaffDAO.findByUserId(user.getUserId());
                 if (staff != null) {
                     SessionManager.setCurrentStaff(staff);
                 }
-                ViewFactory.getInstance().switchContent("order", currentStage);
+                currentStage.close();
+                StaffFactory.getInstance().showWindow("order");
             } else {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vai trò người dùng không hợp lệ");
                 SessionManager.clear();

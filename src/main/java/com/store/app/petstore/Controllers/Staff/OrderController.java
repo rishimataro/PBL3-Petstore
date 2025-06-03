@@ -10,7 +10,7 @@ import com.store.app.petstore.Models.Entities.Discount;
 import com.store.app.petstore.Models.Entities.Order;
 import com.store.app.petstore.Models.Entities.OrderDetail;
 import com.store.app.petstore.Controllers.ControllerUtils;
-import com.store.app.petstore.Views.ViewFactory;
+import com.store.app.petstore.Views.StaffFactory;
 import com.store.app.petstore.Sessions.SessionManager;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.FadeTransition;
@@ -26,6 +26,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import javafx.stage.Stage;
@@ -177,16 +178,6 @@ public class OrderController implements Initializable {
             }
         });
     }
-
-    // private void setupConfirm() {
-    // if (orderVBox.getChildren().isEmpty()) {
-    // ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo",
-    // "Vui lòng tạo đơn hàng trước khi xác nhận!");
-    // return;
-    // }
-    // Stage currentStage = (Stage) root.getScene().getWindow();
-    // ViewFactory.getInstance().switchContent("payment", currentStage);
-    // }
 
     private void setupClearSearchIcon() {
         clearSearchIcon.setVisible(false);
@@ -806,11 +797,19 @@ public class OrderController implements Initializable {
 
     private void setupDiscountHandling() {
         voucherTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() >= 3) {
-                handleDiscountCode(newValue);
-            } else {
+            // Only clear discount if field is empty or too short, do not auto-check code
+            if (newValue.length() < 3) {
                 voucherValueLabel.setText("0");
                 updateAmount();
+            }
+        });
+
+        voucherTextField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                String code = voucherTextField.getText().trim();
+                if (!code.isEmpty()) {
+                    handleDiscountCode(code);
+                }
             }
         });
     }
@@ -841,63 +840,34 @@ public class OrderController implements Initializable {
     }
 
     private void handleDiscountCode(String code) {
-        Task<Discount> task = new Task<>() {
-            @Override
-            protected Discount call() {
-                try {
-                    return DiscountDAO.findByCode(code);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        };
+        try {
+            Discount discount = DiscountDAO.findByCode(code);
 
-        task.setOnSucceeded(event -> {
-            try {
-                Discount discount = task.getValue();
-
-                if (discount == null) {
-                    voucherValueLabel.setText("0");
-                    ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo",
-                            "Mã giảm giá không tồn tại!");
-                    updateAmount();
-                    return;
-                }
-
-                double totalAmount = ControllerUtils.parseCurrency(totalMoneyValueLabel.getText());
-                String validationMessage = DiscountDAO.validateDiscount(discount, totalAmount);
-
-                if (validationMessage == null) {
-                    applyDiscount(discount);
-                } else {
-                    voucherValueLabel.setText("0");
-                    ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", validationMessage);
-                }
-                updateAmount();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (discount == null) {
                 voucherValueLabel.setText("0");
-                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
-                        "Có lỗi xảy ra khi xử lý mã giảm giá!");
+                ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo",
+                        "Mã giảm giá không tồn tại!");
                 updateAmount();
+                return;
             }
-        });
 
-        task.setOnFailed(event -> {
-            Throwable exception = task.getException();
-            if (exception != null) {
-                exception.printStackTrace();
+            double totalAmount = ControllerUtils.parseCurrency(totalMoneyValueLabel.getText());
+            String validationMessage = DiscountDAO.validateDiscount(discount, totalAmount);
+
+            if (validationMessage == null) {
+                applyDiscount(discount);
+            } else {
+                voucherValueLabel.setText("0");
+                ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", validationMessage);
             }
+            updateAmount();
+        } catch (Exception e) {
+            e.printStackTrace();
             voucherValueLabel.setText("0");
             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
-                    "Không thể kiểm tra mã giảm giá! Vui lòng thử lại sau.");
+                    "Có lỗi xảy ra khi xử lý mã giảm giá!");
             updateAmount();
-        });
-
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();
+        }
     }
 
     private void applyDiscount(Discount discount) {
@@ -983,7 +953,7 @@ public class OrderController implements Initializable {
         temporarilyRemovedPetIds.clear();
 
         Stage currentStage = (Stage) root.getScene().getWindow();
-        ViewFactory.getInstance().switchContent("payment", currentStage);
+        StaffFactory.getInstance().switchContent("payment", currentStage);
     }
 
     private void loadOrderFromSession() {

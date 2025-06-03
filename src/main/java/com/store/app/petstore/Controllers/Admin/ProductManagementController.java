@@ -1,10 +1,8 @@
 package com.store.app.petstore.Controllers.Admin;
 
-import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.ProductDAO;
 import com.store.app.petstore.Models.Entities.Product;
 import com.store.app.petstore.Views.AdminFactory;
-import com.store.app.petstore.Views.ViewFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -12,18 +10,12 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;

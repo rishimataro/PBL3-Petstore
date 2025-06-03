@@ -4,7 +4,7 @@ import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.*;
 import com.store.app.petstore.Models.Entities.*;
 import com.store.app.petstore.Sessions.SessionManager;
-import com.store.app.petstore.Views.ViewFactory;
+import com.store.app.petstore.Views.StaffFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -150,7 +150,7 @@ public class PaymentController implements Initializable {
 
     private void handleAddCustomer() {
         Stage currentStage = (Stage) root.getScene().getWindow();
-        Stage popupStage = ViewFactory.getInstance().showPopup("customer", currentStage, true, customer);
+        Stage popupStage = StaffFactory.getInstance().showPopup("customer", currentStage, true, customer);
 
         if (popupStage != null) {
             popupStage.setOnHiding(event -> {
@@ -198,7 +198,7 @@ public class PaymentController implements Initializable {
         }
 
         Stage currentStage = (Stage) root.getScene().getWindow();
-        Stage popupStage = ViewFactory.getInstance().showPopup("customer", currentStage, true, customer);
+        Stage popupStage = StaffFactory.getInstance().showPopup("customer", currentStage, true, customer);
 
         if (popupStage != null) {
             popupStage.setOnHiding(event -> {
@@ -275,7 +275,7 @@ public class PaymentController implements Initializable {
 
     private void handleBack() {
         Stage currentStage = (Stage) root.getScene().getWindow();
-        ViewFactory.getInstance().switchContent("order", currentStage);
+        StaffFactory.getInstance().switchContent("order", currentStage);
     }
 
     private void setupCustomerInfo() {

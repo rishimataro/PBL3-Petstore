@@ -4,10 +4,12 @@ import com.store.app.petstore.Controllers.Admin.*;
 import com.store.app.petstore.Controllers.Admin.Statistic.OverViewController;
 import com.store.app.petstore.Models.Entities.*;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,20 +17,23 @@ import java.io.IOException;
 
 public class AdminFactory {
     private static AdminFactory instance;
+    //management
     private final String USERMANAGEMENT_FXML = "/FXML/Admin/UserManagement.fxml";
     private final String CUSTOMERMANAGEMENT_FXML = "/FXML/Admin/CustomerManagement.fxml";
     private final String DISCOUNTMANAGEMENT_FXML = "/FXML/Admin/DiscountManagement.fxml";
     private final String PETMANAGEMENT_FXML = "/FXML/Admin/PetManagement.fxml";
     private final String PRODUCTMANAGEMENT_FXML = "/FXML/Admin/ProductManagement.fxml";
     private final String STAFFMANAGEMENT_FXML = "/FXML/Admin/StaffManagement.fxml";
+    private final String INVOICEMANAGEMENT_FXML = "/FXML/Admin/InvoiceManagement.fxml";
 
+    //popup
     private final String USERTINFOR_FXML = "/FXML/Admin/UserInfor.fxml";
     private final String CUSTOMERINFOR_FXML = "/FXML/Admin/CustomerInfor.fxml";
     private final String DISCOUNTINFOR_FXML = "/FXML/Admin/DiscountInfor.fxml";
     private final String PETINFOR_FXML = "/FXML/Admin/PetInfor.fxml";
     private final String PRODUCTINFOR_FXML = "/FXML/Admin/ProductInfor.fxml";
     private final String STAFFINFOR_FXML = "/FXML/Admin/StaffInfor.fxml";
-
+    //statistics
     private final String OVERVIEW_FXML = "/FXML/Admin/Statistics/Overview.fxml";
     private final String REVENUE_FXML = "/FXML/Admin/Statistics/Revenue.fxml";
 
@@ -76,6 +81,10 @@ public class AdminFactory {
                     root = loadFXML(STAFFMANAGEMENT_FXML);
                     stage.setTitle("Staff Management");
                     break;
+                case "invoicemanagement":
+                    root = loadFXML(INVOICEMANAGEMENT_FXML);
+                    stage.setTitle("Invoice Management");
+                    break;
                 case "overview":
                     root = loadFXML(OVERVIEW_FXML);
                     stage.setTitle("Best Seller Statistics");
@@ -95,6 +104,7 @@ public class AdminFactory {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 
@@ -260,6 +270,10 @@ public class AdminFactory {
                     root = loadFXML(STAFFMANAGEMENT_FXML);
                     currentStage.setTitle("Staff Management");
                     break;
+                case "invoicemanagement":
+                    root = loadFXML(INVOICEMANAGEMENT_FXML);
+                    currentStage.setTitle("Invoice Management");
+                    break;
                 case "overview":
                     root = loadFXML(OVERVIEW_FXML);
                     currentStage.setTitle("Staff Management");
@@ -280,5 +294,13 @@ public class AdminFactory {
 
         Scene scene = new Scene(root);
         currentStage.setScene(scene);
+
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        currentStage.setX(screenBounds.getMinX());
+        currentStage.setY(screenBounds.getMinY());
+        currentStage.setWidth(screenBounds.getWidth());
+        currentStage.setHeight(screenBounds.getHeight());
+
+        currentStage.show();
     }
 }
