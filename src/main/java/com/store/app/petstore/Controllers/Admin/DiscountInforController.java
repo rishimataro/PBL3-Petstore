@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class DiscountInforController implements Initializable {
@@ -95,7 +94,6 @@ public class DiscountInforController implements Initializable {
         btnFix.setOnAction(event -> handleFix());
         btnSave.setOnAction(event -> handleSave());
         btnDelete.setOnAction(event -> handleDelete());
-        closeIcon.setOnMouseClicked(event -> closeWindow());
     }
 
     private void setupInitialState() {
@@ -141,13 +139,6 @@ public class DiscountInforController implements Initializable {
         cbType.setValue("Phần trăm");
     }
 
-    private void closeWindow() {
-        Stage stage = (Stage) discountInforPopup.getScene().getWindow();
-        if (stage != null) {
-            stage.close();
-        }
-    }
-
     private void handleAdd() {
         clearFields();
         enableEditing();
@@ -184,7 +175,8 @@ public class DiscountInforController implements Initializable {
 
     private void handleDelete() {
         if (idDiscountCurrent > 0) {
-            if (ControllerUtils.showConfirmationAndWait("Xác nhận xóa khuyến mãi", "Bạn có chắc chắn muốn xóa khuyến mãi này?")) {
+            if (ControllerUtils.showConfirmationAndWait("Xác nhận xóa khuyến mãi",
+                    "Bạn có chắc chắn muốn xóa khuyến mãi này?")) {
                 int result = DiscountDAO.delete(idDiscountCurrent);
 
                 if (result > 0) {
@@ -250,7 +242,8 @@ public class DiscountInforController implements Initializable {
                 }
 
                 if (result > 0) {
-                    ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thành công", "Lưu thông tin khuyến mãi thành công!");
+                    ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thành công",
+                            "Lưu thông tin khuyến mãi thành công!");
                     disableEditing();
                     btnFix.setDisable(false);
                     btnDelete.setDisable(false);
@@ -339,7 +332,8 @@ public class DiscountInforController implements Initializable {
     }
 
     public void setDiscount(Discount discount) {
-        if (discount == null) return;
+        if (discount == null)
+            return;
 
         isNewDiscount = false;
         idDiscountCurrent = discount.getDiscountId();

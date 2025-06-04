@@ -1,6 +1,5 @@
 package com.store.app.petstore.Models.Entities;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Staff extends User {
@@ -15,8 +14,8 @@ public class Staff extends User {
     private boolean isActive;
 
     public Staff(int userId, String username, String password, String userRole, boolean userIsActive,
-                 String fullName, String phone, String email, String address, double salary,
-                 LocalDateTime hireDate, String staffRole, boolean staffIsActive) {
+            String fullName, String phone, String email, String address, double salary,
+            LocalDateTime hireDate, String staffRole, boolean staffIsActive) {
         super(userId, username, password, userRole, LocalDateTime.now(), userIsActive);
         this.fullName = fullName;
         this.phone = phone;
@@ -29,8 +28,8 @@ public class Staff extends User {
     }
 
     public Staff(int staffId, int userId, String username, String password, String userRole, boolean userIsActive,
-                 String fullName, String phone, String email, String address, double salary,
-                 LocalDateTime hireDate, String staffRole, boolean staffIsActive) {
+            String fullName, String phone, String email, String address, double salary,
+            LocalDateTime hireDate, String staffRole, boolean staffIsActive) {
         super(userId, username, password, userRole, LocalDateTime.now(), userIsActive);
         this.staffId = staffId;
         this.fullName = fullName;

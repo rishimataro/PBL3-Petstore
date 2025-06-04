@@ -6,7 +6,8 @@ import com.store.app.petstore.Models.Entities.Staff;
 import com.store.app.petstore.Models.Entities.User;
 import com.store.app.petstore.Sessions.SessionManager;
 import com.store.app.petstore.Views.AdminFactory;
-import com.store.app.petstore.Views.ViewFactory;
+import com.store.app.petstore.Views.StaffFactory;
+import com.store.app.petstore.Views.UtilsFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
@@ -14,18 +15,22 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable {
+public class LoginController implements Initializable  {
 
     public static int idStaffCurrent;
     public static int idAdminCurrent;
-    private final SessionManager sessionManager = new SessionManager();
-    StaffDAO staffDAO = StaffDAO.getInstance();
+
+    @FXML
+    private ImageView sidebarImage;
+    @FXML
+    private AnchorPane mainPanel;
 
     @FXML
     private FontAwesomeIconView eyeIcon;
@@ -46,12 +51,13 @@ public class LoginController implements Initializable {
 
     private double x, y;
 
-    // thiet lap ban dau
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupPasswordVisibility();
         setupLoginButton();
         setupForgotPasswordLink();
+        sidebarImage.fitWidthProperty().bind(mainPanel.widthProperty());
+        sidebarImage.fitHeightProperty().bind(mainPanel.heightProperty());
     }
 
     private void setupPasswordVisibility() {
@@ -78,7 +84,8 @@ public class LoginController implements Initializable {
     private void setupForgotPasswordLink() {
         forgotPasswordLink.setOnAction(event -> {
             Stage currentStage = (Stage) usernameField.getScene().getWindow();
-            ViewFactory.getInstance().switchContent("forgotpassword", currentStage);
+            currentStage.close();
+            UtilsFactory.getInstance().showWindow("forgotpassword");
         });
     }
 
@@ -105,7 +112,6 @@ public class LoginController implements Initializable {
         }
 
         try {
-            // Tìm user theo username
             User user = UserDAO.findByUsername(username);
 
             if (user == null || user.getUsername() == null) {
@@ -113,13 +119,11 @@ public class LoginController implements Initializable {
                 return;
             }
 
-            // Kiểm tra tên đăng nhập
             if (!user.getUsername().equals(username)) {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Tên đăng nhập không đúng");
                 return;
             }
 
-            // Kiểm tra mật khẩu
             if (!BCrypt.checkpw(password, user.getPassword())) {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Mật khẩu không đúng");
                 return;
@@ -131,14 +135,16 @@ public class LoginController implements Initializable {
 
             if (user.getRole().equals(User.ROLE_ADMIN)) {
                 idAdminCurrent = user.getUserId();
-                AdminFactory.getInstance().switchContent("dashboard", currentStage);
+                currentStage.close();
+                AdminFactory.getInstance().showWindow("overview");
             } else if (user.getRole().equals(User.ROLE_USER)) {
                 idStaffCurrent = user.getUserId();
                 Staff staff = StaffDAO.findByUserId(user.getUserId());
                 if (staff != null) {
                     SessionManager.setCurrentStaff(staff);
                 }
-                ViewFactory.getInstance().switchContent("dashboard", currentStage);
+                currentStage.close();
+                StaffFactory.getInstance().showWindow("order");
             } else {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vai trò người dùng không hợp lệ");
                 SessionManager.clear();

@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -29,11 +28,7 @@
                           <children>
                               <StackPane layoutX="90.5" layoutY="63.5">
                                   <children>
-                                      <ImageView fx:id="profileImage" fitHeight="191.0" fitWidth="191.0" preserveRatio="true">
-                                          <image>
-                                              <Image url="@../../Images/Staff/staff_125_1746243419945.jpg" />
-                                          </image>
-                                      </ImageView>
+                                      <ImageView fx:id="profileImage" fitHeight="191.0" fitWidth="191.0" preserveRatio="true" />
                                       <Pane fx:id="profileMask" prefWidth="116.0" styleClass="circle-mask" />
                                   </children>
                               </StackPane>
@@ -46,8 +41,8 @@
                               <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" />
                            </graphic></Button>
                               <Label fx:id="fullNameLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="310.0" prefWidth="350.0" styleClass="fullName-label" />
-                              <Label fx:id="roleLabel" layoutX="90.0" layoutY="350.0" styleClass="role-label" />
-                              <Label fx:id="staffIDLabel" layoutX="250.0" layoutY="350.0" styleClass="staffID-label" />
+                              <Label fx:id="roleLabel" layoutX="29.0" layoutY="350.0" prefHeight="22.0" prefWidth="214.0" styleClass="role-label" />
+                              <Label fx:id="staffIDLabel" layoutX="261.0" layoutY="350.0" prefHeight="22.0" prefWidth="82.0" styleClass="staffID-label" />
                           </children>
                       </AnchorPane>
       

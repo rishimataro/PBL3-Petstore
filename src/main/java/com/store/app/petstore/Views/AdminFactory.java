@@ -4,36 +4,38 @@ import com.store.app.petstore.Controllers.Admin.*;
 import com.store.app.petstore.Controllers.Admin.Statistic.OverViewController;
 import com.store.app.petstore.Models.Entities.*;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
 
 public class AdminFactory {
-    private static final String ADMIN_FXML = "";
     private static AdminFactory instance;
-    private final String DASHBOARD_FXML = "/FXML/Admin/Dashboard.fxml";
+    //management
     private final String USERMANAGEMENT_FXML = "/FXML/Admin/UserManagement.fxml";
     private final String CUSTOMERMANAGEMENT_FXML = "/FXML/Admin/CustomerManagement.fxml";
     private final String DISCOUNTMANAGEMENT_FXML = "/FXML/Admin/DiscountManagement.fxml";
     private final String PETMANAGEMENT_FXML = "/FXML/Admin/PetManagement.fxml";
     private final String PRODUCTMANAGEMENT_FXML = "/FXML/Admin/ProductManagement.fxml";
     private final String STAFFMANAGEMENT_FXML = "/FXML/Admin/StaffManagement.fxml";
+    private final String INVOICEMANAGEMENT_FXML = "/FXML/Admin/InvoiceManagement.fxml";
 
+    //popup
     private final String USERTINFOR_FXML = "/FXML/Admin/UserInfor.fxml";
     private final String CUSTOMERINFOR_FXML = "/FXML/Admin/CustomerInfor.fxml";
     private final String DISCOUNTINFOR_FXML = "/FXML/Admin/DiscountInfor.fxml";
     private final String PETINFOR_FXML = "/FXML/Admin/PetInfor.fxml";
     private final String PRODUCTINFOR_FXML = "/FXML/Admin/ProductInfor.fxml";
     private final String STAFFINFOR_FXML = "/FXML/Admin/StaffInfor.fxml";
-
-    private final String STATISTIC_BESTSELLER_FXML = "/FXML/Admin/Statistics/BestSeller.fxml";
-//    private final String STATISTIC_OVERVIEW_FXML = "/FXML/Admin/Statistics/Overview.fxml";
-    private final String STATISTIC_REVENUE_FXML = "/FXML/Admin/Statistics/Revenue.fxml";
+    //statistics
+    private final String OVERVIEW_FXML = "/FXML/Admin/Statistics/Overview.fxml";
+    private final String REVENUE_FXML = "/FXML/Admin/Statistics/Revenue.fxml";
 
     private final Map<String, AnchorPane> views;
     private final Map<String, Stage> stages;
@@ -55,10 +57,6 @@ public class AdminFactory {
         Parent root = null;
         try {
             switch (fxmlName.toLowerCase()) {
-                case "dashboard":
-                    root = loadFXML(DASHBOARD_FXML);
-                    stage.setTitle("Admin Dashboard");
-                    break;
                 case "usermanagement":
                     root = loadFXML(USERMANAGEMENT_FXML);
                     stage.setTitle("Account Management");
@@ -83,16 +81,16 @@ public class AdminFactory {
                     root = loadFXML(STAFFMANAGEMENT_FXML);
                     stage.setTitle("Staff Management");
                     break;
-                case "bestseller":
-                    root = loadFXML(STATISTIC_BESTSELLER_FXML);
-                    stage.setTitle("Best Seller Statistics");
+                case "invoicemanagement":
+                    root = loadFXML(INVOICEMANAGEMENT_FXML);
+                    stage.setTitle("Invoice Management");
                     break;
                 case "overview":
-                    OverViewController overViewController = new OverViewController();
-                    overViewController.show(stage);
+                    root = loadFXML(OVERVIEW_FXML);
+                    stage.setTitle("Best Seller Statistics");
                     break;
                 case "revenue":
-                    root = loadFXML(STATISTIC_REVENUE_FXML);
+                    root = loadFXML(REVENUE_FXML);
                     stage.setTitle("Revenue Statistics");
                     break;
                 default:
@@ -106,6 +104,7 @@ public class AdminFactory {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
     }
 
@@ -207,20 +206,15 @@ public class AdminFactory {
             if (controller != null) {
                 if (data instanceof Customer && controller instanceof CustomerInforController) {
                     ((CustomerInforController) controller).setCustomer((Customer) data);
-                }
-                else if (data instanceof Staff && controller instanceof StaffInforController) {
+                } else if (data instanceof Staff && controller instanceof StaffInforController) {
                     ((StaffInforController) controller).setStaff((Staff) data);
-                }
-                else if (data instanceof Discount && controller instanceof DiscountInforController) {
+                } else if (data instanceof Discount && controller instanceof DiscountInforController) {
                     ((DiscountInforController) controller).setDiscount((Discount) data);
-                }
-                else if (data instanceof Pet && controller instanceof PetInforController) {
+                } else if (data instanceof Pet && controller instanceof PetInforController) {
                     ((PetInforController) controller).setPet((Pet) data);
-                }
-                else if (data instanceof Product && controller instanceof ProductInforController) {
+                } else if (data instanceof Product && controller instanceof ProductInforController) {
                     ((ProductInforController) controller).setProduct((Product) data);
-                }
-                else if (data instanceof User && controller instanceof UserInforController) {
+                } else if (data instanceof User && controller instanceof UserInforController) {
                     ((UserInforController) controller).setUser((User) data);
                 }
             }
@@ -252,10 +246,6 @@ public class AdminFactory {
         Parent root = null;
         try {
             switch (fxmlName.toLowerCase()) {
-                case "dashboard":
-                    root = loadFXML(DASHBOARD_FXML);
-                    currentStage.setTitle("Admin Dashboard");
-                    break;
                 case "usermanagement":
                     root = loadFXML(USERMANAGEMENT_FXML);
                     currentStage.setTitle("Account Management");
@@ -280,16 +270,16 @@ public class AdminFactory {
                     root = loadFXML(STAFFMANAGEMENT_FXML);
                     currentStage.setTitle("Staff Management");
                     break;
-                case "bestseller":
-                    root = loadFXML(STATISTIC_BESTSELLER_FXML);
-                    currentStage.setTitle("Best Seller Statistics");
+                case "invoicemanagement":
+                    root = loadFXML(INVOICEMANAGEMENT_FXML);
+                    currentStage.setTitle("Invoice Management");
                     break;
                 case "overview":
-                    OverViewController overViewController = new OverViewController();
-                    overViewController.show(currentStage);
+                    root = loadFXML(OVERVIEW_FXML);
+                    currentStage.setTitle("Staff Management");
                     break;
                 case "revenue":
-                    root = loadFXML(STATISTIC_REVENUE_FXML);
+                    root = loadFXML(REVENUE_FXML);
                     currentStage.setTitle("Revenue Statistics");
                     break;
 
@@ -304,5 +294,13 @@ public class AdminFactory {
 
         Scene scene = new Scene(root);
         currentStage.setScene(scene);
+
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        currentStage.setX(screenBounds.getMinX());
+        currentStage.setY(screenBounds.getMinY());
+        currentStage.setWidth(screenBounds.getWidth());
+        currentStage.setHeight(screenBounds.getHeight());
+
+        currentStage.show();
     }
 }

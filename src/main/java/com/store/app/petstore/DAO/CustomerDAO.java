@@ -1,7 +1,6 @@
 package com.store.app.petstore.DAO;
 
 import com.store.app.petstore.Models.Entities.Customer;
-import com.store.app.petstore.Models.Entities.Order;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -100,10 +99,9 @@ public class CustomerDAO {
 
             while (rs.next()) {
                 Customer customer = new Customer(
-                    rs.getInt("customer_id"),
-                    rs.getString("full_name"),
-                    rs.getString("phone")
-                );
+                        rs.getInt("customer_id"),
+                        rs.getString("full_name"),
+                        rs.getString("phone"));
                 customerList.add(customer);
             }
             return customerList;
@@ -156,10 +154,9 @@ public class CustomerDAO {
 
             while (rs.next()) {
                 Customer customer = new Customer(
-                    rs.getInt("customer_id"),
-                    rs.getString("full_name"),
-                    rs.getString("phone")
-                );
+                        rs.getInt("customer_id"),
+                        rs.getString("full_name"),
+                        rs.getString("phone"));
                 customerList.add(customer);
             }
             return customerList.isEmpty() ? null : customerList;
@@ -206,8 +203,8 @@ public class CustomerDAO {
     public static Customer findLatest() {
         String sql = "SELECT * FROM CUSTOMER ORDER BY CUSTOMER_ID DESC FETCH FIRST 1 ROW ONLY";
         try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
 
             if (rs.next()) {
                 Customer customer = new Customer();

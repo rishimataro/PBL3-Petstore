@@ -1,6 +1,5 @@
 package com.store.app.petstore.Controllers.Admin;
 
-import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.DiscountDAO;
 import com.store.app.petstore.Models.Entities.Discount;
 import com.store.app.petstore.Views.AdminFactory;
@@ -10,18 +9,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

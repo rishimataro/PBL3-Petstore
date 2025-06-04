@@ -2,7 +2,10 @@ package com.store.app.petstore.Controllers.Staff;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
@@ -13,6 +16,8 @@ import com.store.app.petstore.Models.Entities.Item;
 import com.store.app.petstore.Models.Entities.Pet;
 import com.store.app.petstore.Models.Entities.Product;
 import com.store.app.petstore.Controllers.ControllerUtils;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.InputStream;
 
@@ -23,7 +28,7 @@ import java.io.InputStream;
 public class ItemListController {
 
     @FXML
-    private FontAwesomeIconView addIcon;
+    private FontAwesomeIconView inforIcon;
     @FXML
     private FontAwesomeIconView closeIcon;
     @FXML
@@ -50,6 +55,43 @@ public class ItemListController {
         return item;
     }
 
+    public void initialize() {
+        inforIcon.setOnMouseClicked(event -> {
+            showInforPopup();
+            event.consume();
+        });
+    }
+
+    private void showInforPopup() {
+        try {
+            if (item instanceof Pet pet) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/PetInfor.fxml"));
+                Parent root = loader.load();
+                PetInforController controller = loader.getController();
+                controller.setPet(pet);
+
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setTitle("Thông tin thú cưng");
+                stage.setScene(new Scene(root));
+                stage.showAndWait();
+            } else if (item instanceof Product product) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Staff/ProductInfor.fxml"));
+                Parent root = loader.load();
+                ProductInforController controller = loader.getController();
+                controller.setProduct(product);
+
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setTitle("Thông tin sản phẩm");
+                stage.setScene(new Scene(root));
+                stage.showAndWait();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setData(Item item) {
         this.item = item;
 
@@ -66,6 +108,11 @@ public class ItemListController {
         }
 
         loadItemImage(item.getImageUrl());
+
+        inforIcon.setOnMouseClicked(event -> {
+            showInforPopup();
+            event.consume(); // Prevent event from bubbling up to parent
+        });
     }
 
     private void loadItemImage(String imagePath) {

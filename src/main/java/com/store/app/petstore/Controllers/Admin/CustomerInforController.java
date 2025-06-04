@@ -6,17 +6,13 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.event.ActionEvent;
 import com.store.app.petstore.Controllers.ControllerUtils;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
 
@@ -124,7 +120,8 @@ public class CustomerInforController implements Initializable {
             customer.setCustomerId(idCustomerCurrent);
 
             if (customerDAO.delete(customer) > 0) {
-                if(ControllerUtils.showConfirmationAndWait("Xác nhận", "Bạn có chắc chắn muốn xóa khách hàng này không?")) {
+                if (ControllerUtils.showConfirmationAndWait("Xác nhận",
+                        "Bạn có chắc chắn muốn xóa khách hàng này không?")) {
                     ControllerUtils.showAlert(AlertType.INFORMATION, "Thành công", "Xóa khách hàng thành công!");
                     clearFields();
                     setupInitialState();
@@ -202,7 +199,7 @@ public class CustomerInforController implements Initializable {
         btnDelete.setOnAction(event -> handleDelete());
         btnFix.setOnAction(event -> handleFix());
         btnSave.setOnAction(event -> handleSaveCustomer());
-        if(closeIcon != null) {
+        if (closeIcon != null) {
             closeIcon.setOnMouseClicked(event -> closeWindow());
         }
     }

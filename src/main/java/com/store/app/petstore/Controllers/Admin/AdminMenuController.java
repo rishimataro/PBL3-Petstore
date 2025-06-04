@@ -1,13 +1,11 @@
 package com.store.app.petstore.Controllers.Admin;
 
 import com.store.app.petstore.Controllers.ControllerUtils;
-import com.store.app.petstore.Models.Entities.Staff;
 import com.store.app.petstore.Models.Entities.User;
 import com.store.app.petstore.Sessions.SessionManager;
 import com.store.app.petstore.Views.AdminFactory;
-import com.store.app.petstore.Views.ModelView;
-import com.store.app.petstore.Views.ViewFactory;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import com.store.app.petstore.Views.StaffFactory;
+import com.store.app.petstore.Views.UtilsFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -86,7 +84,7 @@ public class AdminMenuController implements Initializable {
 
     private User currentUser;
 
-//    private SessionManager sessionManager;
+    // private SessionManager sessionManager;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -155,13 +153,6 @@ public class AdminMenuController implements Initializable {
     }
 
     private void setMenu() {
-        MenuItem dashboardMenuItem = new MenuItem("Trang chủ");
-        dashboardMenuItem.setOnAction(e -> {
-            Stage currentStage = (Stage) root.getScene().getWindow();
-            AdminFactory.getInstance().switchContent("dashboard", currentStage);
-        });
-        menuHome.getItems().add(dashboardMenuItem);
-
         MenuItem revenueMenuItem = new MenuItem("Doanh thu");
         revenueMenuItem.setOnAction(e -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
@@ -199,11 +190,6 @@ public class AdminMenuController implements Initializable {
             AdminFactory.getInstance().switchContent("overview", currentStage);
         });
 
-        menuItemBestSelling.setOnAction(e -> {
-            Stage currentStage = (Stage) root.getScene().getWindow();
-            AdminFactory.getInstance().switchContent("bestselling", currentStage);
-        });
-
         menuItemRevenue.setOnAction(e -> {
             Stage currentStage = (Stage) root.getScene().getWindow();
             AdminFactory.getInstance().switchContent("revenue", currentStage);
@@ -217,9 +203,11 @@ public class AdminMenuController implements Initializable {
     @FXML
     void handleLogout(ActionEvent event) {
         Stage currentStage = (Stage) root.getScene().getWindow();
-        if (ControllerUtils.showConfirmationAndWait("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
+        if (ControllerUtils.showConfirmationAndWait("Đăng xuất",
+                "Bạn có chắc chắn muốn đăng xuất không?\nNhấn OK để xác nhận.")) {
             SessionManager.clear();
-            ViewFactory.getInstance().switchContent("login", currentStage);
+            currentStage.close();
+            UtilsFactory.getInstance().showWindow("login");
         } else {
             ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Đăng xuất không thành công");
         }

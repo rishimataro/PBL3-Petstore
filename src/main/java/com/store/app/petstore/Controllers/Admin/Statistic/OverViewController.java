@@ -1,162 +1,336 @@
 package com.store.app.petstore.Controllers.Admin.Statistic;
 
-import com.store.app.petstore.Models.Entities.OrderDetail;
+import com.store.app.petstore.DAO.StatisticDAO.OverviewDAO;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import java.sql.SQLException;
+
+import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javafx.scene.control.*;
+import javafx.concurrent.Task;
+import javafx.application.Platform;
+import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.collections.FXCollections;
 
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javafx.scene.control.Alert.AlertType;
+
 public class OverViewController {
-    @FXML private Label totalRevenueLabel;
-    @FXML private BarChart<String, Number> summaryChart;
-    @FXML private Label totalPetsSoldLabel;
-    @FXML private Label totalProductsSoldLabel;
-    @FXML private Label totalInvoicesLabel;
-    @FXML private TableView<Map<String, String>> recentOrdersTable;
+    @FXML
+    private Label totalRevenueLabel;
+    @FXML
+    private BarChart<String, Number> summaryChart;
+    @FXML
+    private Label totalPetsSoldLabel;
+    @FXML
+    private Label totalProductsSoldLabel;
+    @FXML
+    private Label totalInvoicesLabel;
+    @FXML
+    private TableView<Map<String, String>> recentOrdersTable;
+    @FXML
+    private DatePicker startDatePicker;
+    @FXML
+    private DatePicker endDatePicker;
+    @FXML
+    private ProgressBar chartProgressBar;
+    @FXML
+    private ProgressBar tableProgressBar;
 
-    // Mock database service
-    private final MockDatabaseService mockDb = new MockDatabaseService();
+    @FXML
+    private ChoiceBox<String> monthChoiceBox;
 
-    public void show(Stage primaryStage) throws IOException {
-        primaryStage.setTitle("Thống kê tổng quan");
-        primaryStage.setScene(new Scene(createUI(), 900, 900));
-        primaryStage.show();
-    }
 
     @FXML
     public void initialize() {
+        setupTableColumns();
+        setupChoiceBoxes();
+        initializeDatePickers();
         loadDailyStatistics();
-        loadMonthlyRevenueChart();
+        updateLastUpdateTime();
+    }
+
+    private void setupTableColumns() {
+        try {
+            if (recentOrdersTable != null && recentOrdersTable.getColumns().size() >= 4) {
+                recentOrdersTable.getColumns().get(0).setCellValueFactory(new MapValueFactory("id"));
+                recentOrdersTable.getColumns().get(1).setCellValueFactory(new MapValueFactory("customer"));
+                recentOrdersTable.getColumns().get(2).setCellValueFactory(new MapValueFactory("date"));
+                recentOrdersTable.getColumns().get(3).setCellValueFactory(new MapValueFactory("total"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error setting up table columns: " + e.getMessage());
+        }
+    }
+
+    private void setupChoiceBoxes() {
+        if (monthChoiceBox != null) {
+            monthChoiceBox.setItems(FXCollections.observableArrayList(
+                "Tất cả", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+                "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
+            ));
+            monthChoiceBox.setValue("Tất cả");
+
+            monthChoiceBox.setVisible(true);
+            monthChoiceBox.setManaged(true);
+
+            monthChoiceBox.setOnAction(e -> onMonthFilterChanged());
+        }
+    }
+
+    private void onMonthFilterChanged() {
+        String selectedMonth = monthChoiceBox.getValue();
+        onViewRecentOrdersButtonClicked();
+    }
+
+    private void initializeDatePickers() {
+        LocalDate now = LocalDate.now();
+        LocalDate oneYearAgo = now.minusYears(1);
+
+        startDatePicker.setValue(oneYearAgo);
+        endDatePicker.setValue(now);
+
+        startDatePicker.setOnAction(e -> onDateRangeChanged());
+        endDatePicker.setOnAction(e -> onDateRangeChanged());
+    }
+
+    private void updateLastUpdateTime() {
+        Platform.runLater(() -> {
+            String currentTime = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            System.out.println("Statistics last updated: " + currentTime);
+        });
+    }
+
+    private void onDateRangeChanged() {
+        if (startDatePicker.getValue() != null && endDatePicker.getValue() != null) {
+            if (startDatePicker.getValue().isAfter(endDatePicker.getValue())) {
+                showAlert("Lỗi", "Ngày bắt đầu không thể sau ngày kết thúc!");
+                return;
+            }
+            onViewRevenueButtonClicked();
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void loadDailyStatistics() {
-        Map<String, String> dailyStats = mockDb.getDailyStatistics(LocalDate.now());
-        totalRevenueLabel.setText(dailyStats.get("revenue"));
-        totalPetsSoldLabel.setText(dailyStats.get("petsSold"));
-        totalProductsSoldLabel.setText(dailyStats.get("productsSold"));
-        totalInvoicesLabel.setText(dailyStats.get("invoices"));
-        
-        // Load and display recent orders
-        List<Map<String, String>> recentOrders = mockDb.getRecentOrders();
-        recentOrdersTable.getItems().setAll(recentOrders);
-        
-        // Add details for each order
-        for (Map<String, String> order : recentOrders) {
-            int orderId = Integer.parseInt(order.get("id").split("-")[1]);
-            List<OrderDetail> details = mockDb.getRecentOrderDetails(orderId);
-            // TODO: Display order details when row is selected
+        Task<Void> dailyStatsTask = new Task<Void>() {
+            @Override
+            protected Void call() throws SQLException {
+                updateProgress(-1, 1);
+                Map<String, String> dailyStats = OverviewDAO.getDailyStatistics(LocalDate.now());
+                List<Map<String, String>> recentOrders = OverviewDAO.getRecentOrders();
+
+                Platform.runLater(() -> {
+                    updateStatisticsDisplay(dailyStats);
+                    recentOrdersTable.getItems().setAll(recentOrders);
+
+                    onViewRevenueButtonClicked();
+                });
+                return null;
+            }
+        };
+
+        dailyStatsTask.setOnSucceeded(event -> {
+        });
+
+        dailyStatsTask.setOnFailed(event -> {
+            Throwable e = dailyStatsTask.getException();
+            e.printStackTrace();
+            Platform.runLater(() -> {
+                showAlert("Lỗi", "Không thể tải dữ liệu thống kê hàng ngày: " + e.getMessage());
+                setDefaultStatistics();
+            });
+        });
+
+        new Thread(dailyStatsTask).start();
+    }
+
+    private void updateStatisticsDisplay(Map<String, String> dailyStats) {
+        String revenue = dailyStats.get("revenue");
+        if (revenue != null && !revenue.equals("Error")) {
+            totalRevenueLabel.setText(formatCurrency(revenue));
+        } else {
+            totalRevenueLabel.setText("0");
+        }
+
+        totalPetsSoldLabel.setText(formatNumber(dailyStats.get("petsSold")));
+        totalProductsSoldLabel.setText(formatNumber(dailyStats.get("productsSold")));
+        totalInvoicesLabel.setText(formatNumber(dailyStats.get("invoices")));
+    }
+
+    private void setDefaultStatistics() {
+        totalRevenueLabel.setText("0");
+        totalPetsSoldLabel.setText("0");
+        totalProductsSoldLabel.setText("0");
+        totalInvoicesLabel.setText("0");
+    }
+
+    private String formatCurrency(String value) {
+        try {
+            double amount = Double.parseDouble(value.replace(",", ""));
+            return String.format("%,.0f", amount);
+        } catch (NumberFormatException e) {
+            return value;
         }
     }
 
-    private void loadMonthlyRevenueChart() {
-        Map<String, Number> monthlyRevenue = mockDb.getMonthlyRevenue();
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        
-        monthlyRevenue.forEach((month, revenue) -> 
-            series.getData().add(new XYChart.Data<>(month, revenue))
-        );
-        
-        summaryChart.getData().add(series);
-    }
-
-    public AnchorPane createAdminMenu() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Admin/AdminMenu.fxml"));
-        return loader.load();
-    }
-
-    public AnchorPane createStatistic() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/Admin/Statistics/Overview.fxml"));
-        return loader.load();
-    }
-
-    public VBox createUI() throws IOException {
-        VBox vBox = new VBox(10);
-        vBox.getChildren().addAll(createAdminMenu(), createStatistic());
-        return vBox;
-    }
-
-    /**
-     * Mock database service for demonstration purposes
-     */
-    private static class MockDatabaseService {
-        public Map<String, String> getDailyStatistics(LocalDate date) {
-            Map<String, String> stats = new HashMap<>();
-            stats.put("revenue", "12,450,000.00");
-            stats.put("petsSold", "15");
-            stats.put("productsSold", "42");
-            stats.put("invoices", "8");
-            return stats;
-        }
-
-        public Map<String, Number> getMonthlyRevenue() {
-            Map<String, Number> revenue = new HashMap<>();
-            revenue.put("Tháng 1", 12);
-            revenue.put("Tháng 2", 15);
-            revenue.put("Tháng 3", 18);
-            revenue.put("Tháng 4", 20);
-            revenue.put("Tháng 5", 25);
-            revenue.put("Tháng 6", 30);
-            return revenue;
-        }
-
-        public List<OrderDetail> getRecentOrderDetails(int orderId) {
-            List<OrderDetail> details = new ArrayList<>();
-            // Mock data for order details
-            details.add(new OrderDetail(orderId, "pet", 101, 1, 1500000));
-            details.add(new OrderDetail(orderId, "product", 201, 2, 250000));
-            details.add(new OrderDetail(orderId, "product", 202, 1, 350000));
-            return details;
-        }
-
-        public List<Map<String, String>> getRecentOrders() {
-            List<Map<String, String>> orders = new ArrayList<>();
-            
-            Map<String, String> order1 = new HashMap<>();
-            order1.put("id", "ORD-001");
-            order1.put("customer", "Nguyễn Văn A");
-            order1.put("date", "2023-05-01");
-            order1.put("total", "1,250,000");
-            order1.put("status", "Hoàn thành");
-            orders.add(order1);
-
-            Map<String, String> order2 = new HashMap<>();
-            order2.put("id", "ORD-002");
-            order2.put("customer", "Trần Thị B");
-            order2.put("date", "2023-05-02");
-            order2.put("total", "2,500,000");
-            order2.put("status", "Đang xử lý");
-            orders.add(order2);
-
-            Map<String, String> order3 = new HashMap<>();
-            order3.put("id", "ORD-003");
-            order3.put("customer", "Lê Văn C");
-            order3.put("date", "2023-05-03");
-            order3.put("total", "1,800,000");
-            order3.put("status", "Hoàn thành");
-            orders.add(order3);
-
-            Map<String, String> order4 = new HashMap<>();
-            order4.put("id", "ORD-004");
-            order4.put("customer", "Phạm Thị D");
-            order4.put("date", "2023-05-04");
-            order4.put("total", "3,200,000");
-            order4.put("status", "Đã hủy");
-            orders.add(order4);
-
-            return orders;
+    private String formatNumber(String value) {
+        try {
+            int number = Integer.parseInt(value);
+            return String.format("%,d", number);
+        } catch (NumberFormatException e) {
+            return value != null ? value : "0";
         }
     }
+
+    public Map<String, LocalDate> getRevenueDateRange() {
+        LocalDate startDate = startDatePicker.getValue();
+        LocalDate endDate = endDatePicker.getValue();
+
+        if (startDate != null && endDate != null) {
+            Map<String, LocalDate> dateRange = new HashMap<>();
+            dateRange.put("startDate", startDate);
+            dateRange.put("endDate", endDate);
+            return dateRange;
+        } else {
+            return null;
+        }
+    }
+
+    @FXML
+    private void onViewRevenueButtonClicked() {
+        Map<String, LocalDate> dateRange = getRevenueDateRange();
+        if (dateRange != null) {
+            Task<Map<String, Number>> filteredRevenueTask = new Task<Map<String, Number>>() {
+                @Override
+                protected Map<String, Number> call() throws SQLException {
+                     updateProgress(-1, 1);
+                    return OverviewDAO.getRevenueByDateRange(dateRange.get("startDate"), dateRange.get("endDate"));
+                }
+            };
+
+            chartProgressBar.progressProperty().bind(filteredRevenueTask.progressProperty());
+            chartProgressBar.setVisible(true);
+
+            filteredRevenueTask.setOnSucceeded(event -> {
+                chartProgressBar.progressProperty().unbind();
+                chartProgressBar.setVisible(false);
+                Map<String, Number> filteredRevenue = filteredRevenueTask.getValue();
+                updateChartWithSortedData(filteredRevenue);
+            });
+
+            filteredRevenueTask.setOnFailed(event -> {
+                chartProgressBar.progressProperty().unbind();
+                chartProgressBar.setVisible(false);
+                Throwable e = filteredRevenueTask.getException();
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    showAlert("Lỗi", "Không thể tải dữ liệu doanh thu cho khoảng thời gian đã chọn.");
+                });
+            });
+
+            new Thread(filteredRevenueTask).start();
+
+        } else {
+            showAlert("Cảnh báo", "Vui lòng chọn cả ngày bắt đầu và ngày kết thúc.");
+        }
+    }
+
+    private void updateChartWithSortedData(Map<String, Number> revenueData) {
+        try {
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            series.setName("Doanh thu");
+
+            if (revenueData == null || revenueData.isEmpty()) {
+                summaryChart.getData().clear();
+                return;
+            }
+
+            revenueData.entrySet().stream()
+                .sorted((e1, e2) -> {
+                    try {
+                        int month1 = Integer.parseInt(e1.getKey().replace("Tháng ", ""));
+                        int month2 = Integer.parseInt(e2.getKey().replace("Tháng ", ""));
+                        return Integer.compare(month1, month2);
+                    } catch (NumberFormatException ex) {
+                        return e1.getKey().compareTo(e2.getKey());
+                    }
+                })
+                .forEach(entry -> {
+                    XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
+                    series.getData().add(data);
+                });
+
+            summaryChart.getData().clear();
+            summaryChart.getData().add(series);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Không thể cập nhật biểu đồ: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void onViewRecentOrdersButtonClicked() {
+        Map<String, LocalDate> dateRange = getRevenueDateRange();
+        String selectedMonth = monthChoiceBox != null ? monthChoiceBox.getValue() : "Tất cả";
+
+        Task<List<Map<String, String>>> recentOrdersTask = new Task<List<Map<String, String>>>() {
+            @Override
+            protected List<Map<String, String>> call() throws SQLException {
+                 updateProgress(-1, 1);
+
+                 if (selectedMonth != null && !selectedMonth.equals("Tất cả")) {
+                     try {
+                         int monthNumber = Integer.parseInt(selectedMonth.replace("Tháng ", ""));
+                         return OverviewDAO.getRecentOrders(monthNumber);
+                     } catch (NumberFormatException e) {
+                         return OverviewDAO.getRecentOrders();
+                     }
+                 } else if (dateRange != null) {
+                     return OverviewDAO.getOrdersByDateRange(dateRange.get("startDate"), dateRange.get("endDate"));
+                 } else {
+                     return OverviewDAO.getRecentOrders();
+                 }
+            }
+        };
+
+        tableProgressBar.progressProperty().bind(recentOrdersTask.progressProperty());
+        tableProgressBar.setVisible(true);
+
+        recentOrdersTask.setOnSucceeded(event -> {
+            tableProgressBar.progressProperty().unbind();
+            tableProgressBar.setVisible(false);
+            List<Map<String, String>> orders = recentOrdersTask.getValue();
+            recentOrdersTable.getItems().setAll(orders);
+        });
+
+        recentOrdersTask.setOnFailed(event -> {
+            tableProgressBar.progressProperty().unbind();
+            tableProgressBar.setVisible(false);
+            Throwable e = recentOrdersTask.getException();
+            e.printStackTrace();
+            Platform.runLater(() -> {
+                showAlert("Lỗi", "Không thể tải dữ liệu đơn hàng.");
+            });
+        });
+
+        new Thread(recentOrdersTask).start();
+    }
+
 }

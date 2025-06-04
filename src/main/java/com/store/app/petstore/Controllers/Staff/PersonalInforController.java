@@ -1,272 +1,517 @@
 package com.store.app.petstore.Controllers.Staff;
 
-import com.store.app.petstore.Controllers.ControllerUtils;
-import com.store.app.petstore.Models.DatabaseManager;
+import com.store.app.petstore.DAO.StaffDAO;
+import com.store.app.petstore.DAO.UserDAO;
+import com.store.app.petstore.Models.Entities.Staff;
+import com.store.app.petstore.Models.Entities.User;
+import com.store.app.petstore.Sessions.SessionManager;
+import com.store.app.petstore.Utils.ValidationUtils;
 import javafx.fxml.FXML;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import java.io.File;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import org.mindrot.jbcrypt.BCrypt;
 
-public class PersonalInforController {
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
-   @FXML
-   private TextField staff_id;
-   @FXML
-   private TextField staff_name;
-   @FXML
-   private TextField staff_phone;
-   @FXML
-   private TextField staff_email;
-   @FXML
-   private TextField staff_role;
-   @FXML
-   private TextField staff_address;
+import static com.store.app.petstore.Controllers.ControllerUtils.showAlert;
 
-   @FXML
-   private PasswordField old_pwd;
-   @FXML
-   private PasswordField new_pwd;
+public class PersonalInforController implements Initializable {
 
-   @FXML
-   private Button info_save_btn;
-   @FXML
-   private Button pwd_save_btn;
-   @FXML
-   private Button changeImageBtn;
+    @FXML private TextField staff_id;
+    @FXML private TextField staff_name;
+    @FXML private TextField staff_phone;
+    @FXML private TextField staff_email;
+    @FXML private TextField staff_role;
+    @FXML private TextField staff_address;
+    @FXML private PasswordField old_pwd;
+    @FXML private PasswordField new_pwd;
+    @FXML private Button info_save_btn;
+    @FXML private Button pwd_save_btn;
+    @FXML private Button changeImageBtn;
+    @FXML private Label fullNameLabel;
+    @FXML private Label roleLabel;
+    @FXML private Label staffIDLabel;
+    @FXML private ImageView profileImage;
 
-   @FXML
-   private Label fullNameLabel;
-   @FXML
-   private Label roleLabel;
-   @FXML
-   private Label staffIDLabel;
-   @FXML
-   private ImageView profileImage;
+    private int userId;
+    private Staff currentStaff;
+    private User currentUser;
+    private String originalImagePath;
+    private boolean hasUnsavedChanges = false;
 
-   private int userId;
-   private String currentImagePath;
+    // Default employee information
+    private static final String DEFAULT_FULL_NAME = "Chưa cập nhật";
+    private static final String DEFAULT_PHONE = "Chưa cập nhật";
+    private static final String DEFAULT_EMAIL = "Chưa cập nhật";
+    private static final String DEFAULT_ADDRESS = "Chưa cập nhật";
+    private static final String DEFAULT_ROLE = "Nhân viên";
 
-   @FXML
-   private void initialize() {
-       info_save_btn.setOnAction(event -> handleUpdateInfo());
-       pwd_save_btn.setOnAction(event -> handleChangePassword());
-       changeImageBtn.setOnAction(event -> handleChangeImage());
-   }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setupEventHandlers();
+        setupValidation();
+        loadCurrentUserInfo();
+    }
 
-   public void setUserId(int id) {
-       this.userId = id;
-       loadStaffInfo();
-   }
+    private void loadCurrentUserInfo() {
+        currentUser = SessionManager.getCurrentUser();
+        currentStaff = SessionManager.getCurrentStaff();
+        
+        if (currentUser != null) {
+            this.userId = currentUser.getUserId();
+        loadStaffInfo();
+        } else {
+            showAlert(AlertType.ERROR, "Lỗi", "Không tìm thấy thông tin người dùng đăng nhập");
+        }
+    }
 
-   private void loadStaffInfo() {
-       try (Connection conn = DatabaseManager.connect()) {
-           String staffSql = "SELECT * FROM Staffs WHERE user_id = ?";
-           PreparedStatement staffStmt = conn.prepareStatement(staffSql);
-           staffStmt.setInt(1, userId);
-           ResultSet staffRs = staffStmt.executeQuery();
+    private void setupEventHandlers() {
+        info_save_btn.setOnAction(event -> handleUpdateInfo());
+        pwd_save_btn.setOnAction(event -> handleChangePassword());
+        changeImageBtn.setOnAction(event -> handleChangeImage());
 
-           if (staffRs.next()) {
-               staff_id.setText(String.valueOf(staffRs.getInt("staff_id")));
-               staff_name.setText(staffRs.getString("full_name"));
-               staff_phone.setText(staffRs.getString("phone"));
-               staff_email.setText(staffRs.getString("email"));
-               staff_role.setText(staffRs.getString("role"));
-               staff_address.setText(staffRs.getString("address"));
+        staff_name.textProperty().addListener((obs, oldVal, newVal) -> hasUnsavedChanges = true);
+        staff_phone.textProperty().addListener((obs, oldVal, newVal) -> hasUnsavedChanges = true);
+        staff_email.textProperty().addListener((obs, oldVal, newVal) -> hasUnsavedChanges = true);
+        staff_address.textProperty().addListener((obs, oldVal, newVal) -> hasUnsavedChanges = true);
+    }
 
-               fullNameLabel.setText(staffRs.getString("full_name"));
-               roleLabel.setText(staffRs.getString("role").toUpperCase());
-               staffIDLabel.setText(String.valueOf(staffRs.getInt("staff_id")));
-           }
+    private void setupValidation() {
+        staff_name.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && newVal.length() > 100) {
+                staff_name.setText(oldVal);
+            }
+        });
 
-           String userSql = "SELECT image_url FROM Users WHERE user_id = ?";
-           PreparedStatement userStmt = conn.prepareStatement(userSql);
-           userStmt.setInt(1, userId);
-           ResultSet userRs = userStmt.executeQuery();
+        staff_phone.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && !newVal.matches("\\d*") && !newVal.isEmpty()) {
+                staff_phone.setText(oldVal);
+        }
+            if (newVal != null && newVal.length() > 11) {
+                staff_phone.setText(oldVal);
+    }
+        });
 
-           if (userRs.next()) {
-               String imageUrl = userRs.getString("image_url");
-               if (imageUrl != null && !imageUrl.isEmpty()) {
-                   try {
-                       File imageFile = new File(imageUrl);
-                       if (imageFile.exists()) {
-                           Image image = new Image(imageFile.toURI().toString());
-                           profileImage.setImage(image);
-                           currentImagePath = imageUrl;
-                       } else {
-                           loadDefaultImage();
-                       }
-                   } catch (Exception e) {
-                       loadDefaultImage();
-                   }
-               } else {
-                   loadDefaultImage();
-               }
-           } else {
-               loadDefaultImage();
-           }
-       } catch (Exception e) {
-           e.printStackTrace();
-           ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Không thể tải thông tin: " + e.getMessage());
-       }
-   }
+        staff_email.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && newVal.length() > 100) {
+                staff_email.setText(oldVal);
+    }
+        });
 
-   private void loadDefaultImage() {
-       Image defaultImage = new Image(getClass().getResourceAsStream("/Images/dog.png"));
-       profileImage.setImage(defaultImage);
-       currentImagePath = null;
-   }
+        staff_address.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && newVal.length() > 255) {
+                staff_address.setText(oldVal);
+            }
+        });
 
-   @FXML
-   private void handleChangeImage() {
-       FileChooser fileChooser = new FileChooser();
-       fileChooser.setTitle("Chọn ảnh đại diện");
-       fileChooser.getExtensionFilters().addAll(
-           new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
-       );
+    }
 
-       File selectedFile = fileChooser.showOpenDialog(changeImageBtn.getScene().getWindow());
-       if (selectedFile != null) {
-           try {
-               File imagesDir = new File("src/main/resources/Images/User");
-               if (!imagesDir.exists()) {
-                   imagesDir.mkdirs();
-               }
+    private void loadStaffInfo() {
+            try {
+            currentStaff = StaffDAO.findByUserId(userId);
+            
+            if (currentStaff != null) {
+                populateFieldsWithStaffData();
+            } else {
+                setDefaultStaffInformation();
+            }
+            
+            loadProfileImage();
+            hasUnsavedChanges = false;
+            
+        } catch (Exception e) {
+            showAlert(AlertType.ERROR, "Lỗi", "Không thể tải thông tin nhân viên: " + e.getMessage());
+            setDefaultStaffInformation();
+        }
+    }
 
-               String newFileName = "user_" + userId + "_" + System.currentTimeMillis() + 
-                                   selectedFile.getName().substring(selectedFile.getName().lastIndexOf("."));
-               File newFile = new File(imagesDir, newFileName);
+    private void populateFieldsWithStaffData() {
+        staff_id.setText(String.valueOf(currentStaff.getStaffId()));
+        staff_name.setText(currentStaff.getFullName() != null ? currentStaff.getFullName() : DEFAULT_FULL_NAME);
+        staff_phone.setText(currentStaff.getPhone() != null ? currentStaff.getPhone() : DEFAULT_PHONE);
+        staff_email.setText(currentStaff.getEmail() != null ? currentStaff.getEmail() : DEFAULT_EMAIL);
+        staff_role.setText(currentStaff.getRole() != null ? currentStaff.getRole() : DEFAULT_ROLE);
+        staff_address.setText(currentStaff.getAddress() != null ? currentStaff.getAddress() : DEFAULT_ADDRESS);
 
-               Files.copy(selectedFile.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        fullNameLabel.setText(currentStaff.getFullName() != null ? currentStaff.getFullName() : DEFAULT_FULL_NAME);
+        roleLabel.setText(currentStaff.getRole() != null ? currentStaff.getRole().toUpperCase() : DEFAULT_ROLE.toUpperCase());
+        staffIDLabel.setText("ID: " + currentStaff.getStaffId());
+    }
 
-               Image newImage = new Image(newFile.toURI().toString());
-               profileImage.setImage(newImage);
-               currentImagePath = newFile.getAbsolutePath();
+    private void setDefaultStaffInformation() {
+        staff_id.setText("Chưa có");
+        staff_name.setText(DEFAULT_FULL_NAME);
+        staff_phone.setText(DEFAULT_PHONE);
+        staff_email.setText(DEFAULT_EMAIL);
+        staff_role.setText(DEFAULT_ROLE);
+        staff_address.setText(DEFAULT_ADDRESS);
 
-               updateImagePathInDatabase(newFile.getAbsolutePath());
+        fullNameLabel.setText(DEFAULT_FULL_NAME);
+        roleLabel.setText(DEFAULT_ROLE.toUpperCase());
+        staffIDLabel.setText("ID: Chưa có");
 
-               ControllerUtils.showAlert(AlertType.INFORMATION, "Thành công", "Cập nhật ảnh đại diện thành công!");
-           } catch (Exception e) {
-               e.printStackTrace();
-               ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Không thể cập nhật ảnh: " + e.getMessage());
-           }
-       }
-   }
+        staff_role.setEditable(true);
+    }
 
-   private void updateImagePathInDatabase(String imagePath) {
-       try (Connection conn = DatabaseManager.connect()) {
-           String sql = "UPDATE Users SET image_url = ? WHERE user_id = ?";
-           PreparedStatement stmt = conn.prepareStatement(sql);
-           stmt.setString(1, imagePath);
-           stmt.setInt(2, userId);
-           stmt.executeUpdate();
-       } catch (Exception e) {
-           e.printStackTrace();
-           ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Không thể cập nhật đường dẫn ảnh trong database: " + e.getMessage());
-       }
-   }
+    private void loadProfileImage() {
+        try {
+            String imageUrl = currentUser.getImageUrl();
+            originalImagePath = imageUrl;
 
-   @FXML
-   private void handleUpdateInfo() {
-       if (staff_name.getText().isEmpty() || staff_phone.getText().isEmpty() ||
-           staff_email.getText().isEmpty() || staff_role.getText().isEmpty() ||
-           staff_address.getText().isEmpty()) {
-           ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Vui lòng điền đầy đủ thông tin!");
-           return;
-       }
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                Image image = null;
+                if (imageUrl.startsWith("/")) {
+                    URL resource = getClass().getResource(imageUrl);
+                    if (resource != null) {
+                        image = new Image(resource.toExternalForm());
+                    } else {
+                        File imageFile = new File("src/main/resources" + imageUrl);
+                        if (imageFile.exists()) {
+                            image = new Image(imageFile.toURI().toString());
+                        }
+                    }
+                } else {
+                    File imageFile = new File(imageUrl);
+                    if (imageFile.exists()) {
+                        image = new Image(imageFile.toURI().toString());
+                    }
+                }
+                if (image != null && !image.isError()) {
+                    profileImage.setImage(image);
+                    return;
+                }
+            }
+            loadDefaultImage();
+        } catch (Exception e) {
+            System.err.println("Lỗi khi tải ảnh đại diện: " + e.getMessage());
+            loadDefaultImage();
+        }
+    }
 
-       try (Connection conn = DatabaseManager.connect()) {
-           String sql = "UPDATE Staffs SET full_name = ?, phone = ?, email = ?, role = ?, address = ? WHERE user_id = ?";
-           PreparedStatement stmt = conn.prepareStatement(sql);
-           stmt.setString(1, staff_name.getText());
-           stmt.setString(2, staff_phone.getText());
-           stmt.setString(3, staff_email.getText());
-           stmt.setString(4, staff_role.getText());
-           stmt.setString(5, staff_address.getText());
-           stmt.setInt(6, userId);
+    private void loadDefaultImage() {
+        try {
+            Image defaultImage = new Image(getClass().getResourceAsStream("/Images/User/default.jpg"));
+            profileImage.setImage(defaultImage);
+        } catch (Exception e) {
+            System.err.println("Lỗi khi tải ảnh mặc định: " + e.getMessage());
+        }
+    }
 
-           int updated = stmt.executeUpdate();
-           if (updated > 0) {
-               fullNameLabel.setText(staff_name.getText());
-               roleLabel.setText(staff_role.getText().toUpperCase());
-               ControllerUtils.showAlert(AlertType.INFORMATION, "Thành công", "Cập nhật thông tin thành công!");
-           } else {
-               ControllerUtils.showAlert(AlertType.WARNING, "Cảnh báo", "Không có thông tin nào được cập nhật!");
-           }
-       } catch (Exception e) {
-           e.printStackTrace();
-           ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Không thể cập nhật thông tin: " + e.getMessage());
-       }
-   }
+    @FXML
+    private void handleChangeImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn ảnh đại diện");
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Tất cả ảnh", "*.png", "*.jpg", "*.jpeg"),
+            new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+            new FileChooser.ExtensionFilter("PNG", "*.png"),
+            new FileChooser.ExtensionFilter("JPEG", "*.jpeg")
+        );
 
-   @FXML
-   private void handleChangePassword() {
-       String oldPassword = old_pwd.getText();
-       String newPassword = new_pwd.getText();
+        File selectedFile = fileChooser.showOpenDialog(changeImageBtn.getScene().getWindow());
+        if (selectedFile == null) {
+            return;
+        }
+        try {
+            if (!isValidImageFile(selectedFile)) {
+                showAlert(AlertType.WARNING, "Lỗi", "Vui lòng chọn file ảnh hợp lệ (PNG, JPG, JPEG) và kích thước nhỏ hơn 5MB");
+                return;
+            }
 
-       if (oldPassword.isEmpty() || newPassword.isEmpty()) {
-           ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Vui lòng điền đầy đủ mật khẩu cũ và mật khẩu mới!");
-           return;
-       }
+            String newImagePath = saveImageFile(selectedFile);
 
-       if (newPassword.length() < 6) {
-           ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Mật khẩu mới phải có ít nhất 6 ký tự!");
-           return;
-       }
+            Image newImage = new Image(new File(newImagePath).toURI().toString());
+            profileImage.setImage(newImage);
 
-       if (oldPassword.equals(newPassword)) {
-           ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Mật khẩu mới không được giống mật khẩu cũ!");
-           return;
-       }
+            String dbImagePath = "/Images/User/user" + userId + ".jpg";
+            currentUser.setImageUrl(dbImagePath);
+            if (UserDAO.update(currentUser) > 0) {
+                SessionManager.setCurrentUser(currentUser);
 
-       try (Connection conn = DatabaseManager.connect()) {
-           String checkSql = "SELECT password FROM Users WHERE user_id = ?";
-           PreparedStatement checkStmt = conn.prepareStatement(checkSql);
-           checkStmt.setInt(1, userId);
-           ResultSet rs = checkStmt.executeQuery();
+                deleteOldImageFile(originalImagePath);
+                originalImagePath = newImagePath;
 
-           if (rs.next()) {
-               String currentHashedPwd = rs.getString("password");
-               
-               if (!BCrypt.checkpw(oldPassword, currentHashedPwd)) {
-                   ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Mật khẩu cũ không đúng!");
-                   return;
-               }
-           } else {
-               ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Không tìm thấy người dùng!");
-               return;
-           }
+                refreshMenuAvatar();
+                showAlert(AlertType.INFORMATION, "Thành công", "Đã cập nhật ảnh đại diện thành công!");
+            } else {
+                loadProfileImage();
+                showAlert(AlertType.ERROR, "Lỗi", "Không thể cập nhật ảnh đại diện trong cơ sở dữ liệu");
+            }
 
-           String updateSql = "UPDATE Users SET password = ? WHERE user_id = ?";
-           PreparedStatement updateStmt = conn.prepareStatement(updateSql);
-           updateStmt.setString(1, BCrypt.hashpw(newPassword, BCrypt.gensalt()));
-           updateStmt.setInt(2, userId);
+        } catch (Exception e) {
+            showAlert(AlertType.ERROR, "Lỗi", "Không thể cập nhật ảnh đại diện: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
-           int updated = updateStmt.executeUpdate();
-           if (updated > 0) {
-               ControllerUtils.showAlert(AlertType.INFORMATION, "Thành công", "Đổi mật khẩu thành công!");
-               old_pwd.clear();
-               new_pwd.clear();
-           } else {
-               ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Không thể đổi mật khẩu!");
-           }
-       } catch (Exception e) {
-           ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Lỗi khi đổi mật khẩu: " + e.getMessage());
-           e.printStackTrace();
-       }
-   }
+    @FXML
+    private void handleUpdateInfo() {
+        try {
+            if (!validateStaffInformation()) {
+                return;
+    }
+            String fullName = staff_name.getText().trim();
+            String phone = staff_phone.getText().trim();
+            String email = staff_email.getText().trim().toLowerCase();
+            String address = staff_address.getText().trim();
+            String role = staff_role.getText().trim();
+            // Show confirmation dialog
+            if (!showConfirmationDialog("Cập nhật thông tin", 
+                "Bạn có chắc chắn muốn cập nhật thông tin cá nhân không?")) {
+                return;
+            }
+
+            boolean success = false;
+            
+            if (currentStaff != null) {
+                currentStaff.setFullName(fullName);
+                currentStaff.setPhone(phone);
+                currentStaff.setEmail(email);
+                currentStaff.setAddress(address);
+                currentStaff.setRole(role);
+                
+                success = StaffDAO.update(currentStaff) > 0;
+            } else {
+                Staff newStaff = new Staff();
+                newStaff.setUserId(userId);
+                newStaff.setFullName(fullName);
+                newStaff.setPhone(phone);
+                newStaff.setEmail(email);
+                newStaff.setAddress(address);
+                newStaff.setRole(role);
+                newStaff.setSalary(0.0);
+                newStaff.setHireDate(LocalDateTime.now());
+                newStaff.setActive(true);
+                
+                int result = StaffDAO.insert(newStaff);
+                if (result > 0) {
+                    currentStaff = StaffDAO.findByUserId(userId);
+                    success = true;
+                }
+            }
+            
+            if (success) {
+                SessionManager.setCurrentStaff(currentStaff);
+
+                fullNameLabel.setText(fullName);
+                roleLabel.setText(role.toUpperCase());
+                if (currentStaff != null) {
+                    staffIDLabel.setText("ID: " + currentStaff.getStaffId());
+                    staff_id.setText(String.valueOf(currentStaff.getStaffId()));
+                }
+                
+                hasUnsavedChanges = false;
+                showAlert(AlertType.INFORMATION, "Thành công", "Cập nhật thông tin cá nhân thành công!");
+            } else {
+                showAlert(AlertType.ERROR, "Lỗi", "Không thể cập nhật thông tin. Vui lòng thử lại.");
+            }
+            
+        } catch (Exception e) {
+            showAlert(AlertType.ERROR, "Lỗi", "Lỗi khi cập nhật thông tin: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private boolean showConfirmationDialog(String title, String content) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
+    }
+
+    @FXML
+    private void handleChangePassword() {
+        try {
+            String oldPassword = old_pwd.getText();
+            String newPassword = new_pwd.getText();
+
+            if (!validatePasswordChange(oldPassword, newPassword)) {
+                return;
+            }
+
+            if (!showConfirmationDialog("Đổi mật khẩu",
+                "Bạn có chắc chắn muốn đổi mật khẩu không?")) {
+                return;
+            }
+
+            if (!BCrypt.checkpw(oldPassword, currentUser.getPassword())) {
+                showAlert(AlertType.WARNING, "Lỗi", "Mật khẩu cũ không đúng!");
+                old_pwd.clear();
+                old_pwd.requestFocus();
+                return;
+            }
+
+            if (BCrypt.checkpw(newPassword, currentUser.getPassword())) {
+                showAlert(AlertType.WARNING, "Lỗi", "Mật khẩu mới phải khác mật khẩu cũ!");
+                new_pwd.clear();
+                new_pwd.requestFocus();
+                return;
+            }
+
+            // Hash the new password before setting it
+            String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+            currentUser.setPassword(hashedPassword);
+
+            if (UserDAO.update(currentUser) > 0) {
+                SessionManager.setCurrentUser(currentUser);
+
+                old_pwd.clear();
+                new_pwd.clear();
+
+                showAlert(AlertType.INFORMATION, "Thành công", "Đổi mật khẩu thành công!");
+            } else {
+                showAlert(AlertType.ERROR, "Lỗi", "Không thể đổi mật khẩu. Vui lòng thử lại.");
+            }
+
+        } catch (Exception e) {
+            showAlert(AlertType.ERROR, "Lỗi", "Lỗi khi đổi mật khẩu: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private boolean validateStaffInformation() {
+        String fullName = staff_name.getText().trim();
+        String phone = staff_phone.getText().trim();
+        String email = staff_email.getText().trim();
+        String address = staff_address.getText().trim();
+
+        if (fullName.isEmpty() || fullName.equals(DEFAULT_FULL_NAME)) {
+            showAlert(AlertType.WARNING, "Lỗi", "Vui lòng nhập họ tên!");
+            staff_name.requestFocus();
+            return false;
+    }
+
+        if (fullName.length() < 6 || fullName.length() > 100) {
+            showAlert(AlertType.WARNING, "Lỗi", "Họ tên phải từ 6 đến 100 ký tự!");
+            staff_name.requestFocus();
+            return false;
+        }
+
+        if (phone.isEmpty() || phone.equals(DEFAULT_PHONE)) {
+            showAlert(AlertType.WARNING, "Lỗi", "Vui lòng nhập số điện thoại!");
+            staff_phone.requestFocus();
+            return false;
+        }
+
+        if (!ValidationUtils.isValidPhone(phone)) {
+            showAlert(AlertType.WARNING, "Lỗi", "Số điện thoại không hợp lệ!");
+            staff_phone.requestFocus();
+            return false;
+        }
+
+        if (email.isEmpty() || email.equals(DEFAULT_EMAIL)) {
+            showAlert(AlertType.WARNING, "Lỗi", "Vui lòng nhập email!");
+            staff_email.requestFocus();
+            return false;
+        }
+
+        if (!ValidationUtils.isValidEmail(email)) {
+            showAlert(AlertType.WARNING, "Lỗi", "Email không hợp lệ!");
+            staff_email.requestFocus();
+            return false;
+        }
+
+        if (address.isEmpty() || address.equals(DEFAULT_ADDRESS)) {
+            showAlert(AlertType.WARNING, "Lỗi", "Vui lòng nhập địa chỉ!");
+            staff_address.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validatePasswordChange(String oldPassword, String newPassword) {
+        if (oldPassword.isEmpty()) {
+            showAlert(AlertType.WARNING, "Lỗi", "Vui lòng nhập mật khẩu cũ!");
+            old_pwd.requestFocus();
+            return false;
+    }
+
+        if (newPassword.isEmpty()) {
+            showAlert(AlertType.WARNING, "Lỗi", "Vui lòng nhập mật khẩu mới!");
+            new_pwd.requestFocus();
+            return false;
+        }
+
+        if (newPassword.length() < 6) {
+            showAlert(AlertType.WARNING, "Lỗi", "Mật khẩu mới phải có ít nhất 6 ký tự!");
+            new_pwd.requestFocus();
+            return false;
+        }
+
+        if (newPassword.length() > 50) {
+            showAlert(AlertType.WARNING, "Lỗi", "Mật khẩu mới không được quá 50 ký tự!");
+            new_pwd.requestFocus();
+            return false;
+        }
+
+        if (oldPassword.equals(newPassword)) {
+            showAlert(AlertType.WARNING, "Lỗi", "Mật khẩu mới phải khác mật khẩu cũ!");
+            new_pwd.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isValidImageFile(File file) {
+        if (file == null || !file.exists()) {
+            return false;
+    }
+
+        if (file.length() > 5 * 1024 * 1024) {
+            return false;
+}
+
+        String fileName = file.getName().toLowerCase();
+        return fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg");
+    }
+
+    private String saveImageFile(File sourceFile) throws IOException {
+        Path userImagesDir = Paths.get("src/main/resources/Images/User");
+        if (!Files.exists(userImagesDir)) {
+            Files.createDirectories(userImagesDir);
+        }
+
+        String newFileName = "user" + userId + ".jpg";
+        Path targetPath = userImagesDir.resolve(newFileName);
+
+        Files.copy(sourceFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+        return targetPath.toString();
+    }
+
+    private void deleteOldImageFile(String imagePath) {
+        try {
+            if (imagePath != null && !imagePath.isEmpty()) {
+                File oldFile = new File(imagePath);
+                if (oldFile.exists() && !oldFile.getName().contains("default")) {
+                    oldFile.delete();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Không thể xóa file ảnh cũ: " + e.getMessage());
+        }
+    }
+
+    private void refreshMenuAvatar() {
+        StaffMenuController.updateAvatar();
+    }
+
 }

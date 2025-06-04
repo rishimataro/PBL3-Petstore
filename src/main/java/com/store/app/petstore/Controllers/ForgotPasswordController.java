@@ -2,7 +2,8 @@ package com.store.app.petstore.Controllers;
 
 import com.store.app.petstore.DAO.UserDAO;
 import com.store.app.petstore.Models.Entities.User;
-import com.store.app.petstore.Views.ViewFactory;
+import com.store.app.petstore.Views.StaffFactory;
+import com.store.app.petstore.Views.UtilsFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -108,7 +109,7 @@ public class ForgotPasswordController implements Initializable {
     private void handleBackToLogin() {
         Stage currentStage = (Stage) emailField.getScene().getWindow();
         currentStage.close();
-        ViewFactory.getInstance().showWindow("login");
+        UtilsFactory.getInstance().showWindow("login");
     }
 
     private void showPasswordFields() {

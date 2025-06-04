@@ -4,21 +4,19 @@ import com.github.javafaker.Faker;
 import com.store.app.petstore.Models.DatabaseManager;
 
 import java.sql.*;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class StaffTableSeeder {
     public StaffTableSeeder() {
-        Faker faker = new Faker(new Locale("vi"));
-        String[] roles = {"thu ngân", "bán hàng", "chăm sóc thú cưng", "tư vấn"};
+        Faker faker = new Faker(Locale.forLanguageTag("vi"));
+        String[] roles = { "thu ngân", "bán hàng", "chăm sóc thú cưng", "tư vấn" };
         String sql = "INSERT INTO Staffs (staff_id, user_id, full_name, phone, email, salary, hire_date, role, isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String deleteSql = "DELETE FROM Staffs";
 
         try (Connection conn = DatabaseManager.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             Statement delete = conn.createStatement();) {
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                Statement delete = conn.createStatement();) {
             delete.executeUpdate(deleteSql);
             int userId = 2;
             for (int i = 0; i < roles.length; i++) {
@@ -48,6 +46,5 @@ public class StaffTableSeeder {
             e.printStackTrace();
         }
     }
-
 
 }

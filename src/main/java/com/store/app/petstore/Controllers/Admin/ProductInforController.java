@@ -126,10 +126,6 @@ public class ProductInforController implements Initializable {
         btnDelete.setOnAction(event -> handleDelete());
         btnFix.setOnAction(event -> handleFix());
         btnSave.setOnAction(event -> handleSave());
-
-        if(closeIcon != null) {
-            closeIcon.setOnMouseClicked(event -> closeWindow());
-        }
     }
 
     private void setupInitialState() {
@@ -345,7 +341,6 @@ public class ProductInforController implements Initializable {
                     setRectangleImage(image);
                     return;
                 } catch (Exception ex) {
-                    // Ignore and continue to default image
                 }
             }
 
@@ -357,13 +352,11 @@ public class ProductInforController implements Initializable {
 
     private void loadDefaultImage() {
         try {
-            // Try to load a default product image using the standard format
-            // If idProductCurrent is set, use that ID, otherwise use a generic product image
             String imagePath = "/Images/Product/product";
             if (idProductCurrent > 0) {
                 imagePath += idProductCurrent;
             } else {
-                imagePath += "1"; // Use product1.jpg as a fallback
+                imagePath += "1";
             }
             imagePath += ".jpg";
 
@@ -371,7 +364,6 @@ public class ProductInforController implements Initializable {
             setRectangleImage(defaultImage);
         } catch (Exception ex) {
             ex.printStackTrace();
-            // Fallback to noImage.png if the product image is not found
             try {
                 Image fallbackImage = new Image(getClass().getResourceAsStream("/Images/noImage.png"));
                 setRectangleImage(fallbackImage);
@@ -438,8 +430,8 @@ public class ProductInforController implements Initializable {
         txtQuantity.clear();
         txtPrice.clear();
         txtDescription.clear();
-        tempImageUrl = null; // Reset temporary image URL
-        loadDefaultImage(); // Reset the image to default
+        tempImageUrl = null;
+        loadDefaultImage();
     }
 
     private boolean validateInput() {
@@ -465,13 +457,6 @@ public class ProductInforController implements Initializable {
         txtQuantity.setDisable(true);
         txtPrice.setDisable(true);
         txtDescription.setDisable(true);
-    }
-
-    private void closeWindow() {
-        Stage stage = (Stage) productInforPopup.getScene().getWindow();
-        if(stage != null) {
-            stage.close();
-        }
     }
 
 }

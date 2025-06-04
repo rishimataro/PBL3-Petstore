@@ -26,7 +26,7 @@ public class BillHistoryController {
     static private Map<Integer, Product> productMap;
     static private Map<Integer, Pet> petMap;
     static private Map<Integer, Customer> customerMap;
-    
+
     @FXML
     private TableView<Order> invoice_table;
     @FXML
@@ -73,13 +73,11 @@ public class BillHistoryController {
         invoice_totalBillCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.1));
         invoice_statusCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.1));
 
-        sttCol.setCellValueFactory(col ->
-                new ReadOnlyObjectWrapper<>(invoice_table.getItems().indexOf(col.getValue()) + 1)
-        );
+        sttCol.setCellValueFactory(
+                col -> new ReadOnlyObjectWrapper<>(invoice_table.getItems().indexOf(col.getValue()) + 1));
         sttCol.setSortable(false);
 
         invoice_idCol.setCellValueFactory(new PropertyValueFactory<>("orderId"));
-
 
         invoice_customerCol.setCellFactory(column -> new TableCell<Order, String>() {
             @Override
@@ -114,12 +112,14 @@ public class BillHistoryController {
             @Override
             protected void updateItem(LocalDateTime item, boolean empty) {
                 super.updateItem(item, empty);
-                setText((empty || item == null) ? null : item.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                setText((empty || item == null) ? null
+                        : item.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             }
         });
 
-//        ObservableList<Order> orders = FXCollections.observableArrayList(OrderDAO.getInstance().findAll());
-//        invoice_table.setItems(orders);
+        // ObservableList<Order> orders =
+        // FXCollections.observableArrayList(OrderDAO.getInstance().findAll());
+        // invoice_table.setItems(orders);
         LocalDate today = LocalDate.now();
         LocalDate thirtyDaysAgo = today.minusDays(30);
         start_datepicker.setValue(thirtyDaysAgo);
@@ -148,11 +148,15 @@ public class BillHistoryController {
         start_datepicker.getEditor().setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case DELETE, BACK_SPACE -> start_datepicker.setValue(null);
+                default -> {
+                }
             }
         });
         end_datepicker.getEditor().setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case DELETE, BACK_SPACE -> end_datepicker.setValue(null);
+                default -> {
+                }
             }
         });
 
@@ -175,7 +179,7 @@ public class BillHistoryController {
         DiscountInfo(order);
         detailInvoiceID.setText(order.getOrderId() + "");
         detailInvoiceValue.setText(String.format("%, .0f VNĐ", order.getTotalPrice()));
-//    detailInvoiceTotal.setText("0 VNĐ");
+        // detailInvoiceTotal.setText("0 VNĐ");
         for (OrderDetail detail : listOrderDetail) {
             Node itemNode = createItemNode(detail, productMap, petMap);
             if (itemNode != null) {
@@ -215,8 +219,10 @@ public class BillHistoryController {
     }
 
     private void loadInvoicesWithFilter() {
-        LocalDateTime startDateTime = (start_datepicker.getValue() != null) ? start_datepicker.getValue().atStartOfDay() : null;
-        LocalDateTime endDateTime = (end_datepicker.getValue() != null) ? end_datepicker.getValue().atTime(23, 59, 59) : null;
+        LocalDateTime startDateTime = (start_datepicker.getValue() != null) ? start_datepicker.getValue().atStartOfDay()
+                : null;
+        LocalDateTime endDateTime = (end_datepicker.getValue() != null) ? end_datepicker.getValue().atTime(23, 59, 59)
+                : null;
         boolean allowDeleted = allowDeletedInvoice.isSelected();
 
         customerMap = CustomerDAO.findAll()
@@ -263,7 +269,7 @@ public class BillHistoryController {
         }
 
         if (ControllerUtils.showConfirmationAndWait("Xác nhận huỷ hoá đơn", "Bạn có chắc chắn muốn huỷ hoá đơn này?")) {
-            selectedOrder.setDeleted(true);  // hoặc status khác tuỳ hệ thống
+            selectedOrder.setDeleted(true); // hoặc status khác tuỳ hệ thống
             OrderDAO.update(selectedOrder); // nhớ phải có hàm update
             loadInvoicesWithFilter(); // reload lại bảng dựa theo filter hiện tại
         }
@@ -302,5 +308,3 @@ public class BillHistoryController {
         detailInvoiceTotal.setText(String.format("%, .0f VNĐ", total_value - discount));
     }
 }
-
-

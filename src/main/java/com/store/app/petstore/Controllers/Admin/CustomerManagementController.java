@@ -1,6 +1,5 @@
 package com.store.app.petstore.Controllers.Admin;
 
-import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.CustomerDAO;
 import com.store.app.petstore.Models.Entities.Customer;
 import com.store.app.petstore.Views.AdminFactory;
@@ -9,18 +8,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -184,18 +177,15 @@ public class CustomerManagementController implements Initializable {
 
         // Then apply sorting based on total spend
         if (spendFilter.equals("Cao đến thấp")) {
-            customerTableView.setItems(filteredCustomerList.sorted((c1, c2) ->
-                Double.compare(c2.getTotalSpend(), c1.getTotalSpend())
-            ));
+            customerTableView.setItems(
+                    filteredCustomerList.sorted((c1, c2) -> Double.compare(c2.getTotalSpend(), c1.getTotalSpend())));
         } else if (spendFilter.equals("Thấp đến cao")) {
-            customerTableView.setItems(filteredCustomerList.sorted((c1, c2) ->
-                Double.compare(c1.getTotalSpend(), c2.getTotalSpend())
-            ));
+            customerTableView.setItems(
+                    filteredCustomerList.sorted((c1, c2) -> Double.compare(c1.getTotalSpend(), c2.getTotalSpend())));
         } else {
             // Default sorting by customer ID
-            customerTableView.setItems(filteredCustomerList.sorted((c1, c2) ->
-                Integer.compare(c1.getCustomerId(), c2.getCustomerId())
-            ));
+            customerTableView.setItems(
+                    filteredCustomerList.sorted((c1, c2) -> Integer.compare(c1.getCustomerId(), c2.getCustomerId())));
         }
     }
 

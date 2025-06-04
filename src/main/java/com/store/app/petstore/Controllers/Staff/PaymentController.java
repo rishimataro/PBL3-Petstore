@@ -4,7 +4,7 @@ import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.*;
 import com.store.app.petstore.Models.Entities.*;
 import com.store.app.petstore.Sessions.SessionManager;
-import com.store.app.petstore.Views.ViewFactory;
+import com.store.app.petstore.Views.StaffFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -105,7 +105,6 @@ public class PaymentController implements Initializable {
     @FXML
     private VBox orderDetailsBox;
 
-    private SessionManager sessionManager = new SessionManager();
     private Customer customer;
     private Staff staff;
     private boolean isNewCustomer = true;
@@ -151,7 +150,7 @@ public class PaymentController implements Initializable {
 
     private void handleAddCustomer() {
         Stage currentStage = (Stage) root.getScene().getWindow();
-        Stage popupStage = ViewFactory.getInstance().showPopup("customer", currentStage, true, customer);
+        Stage popupStage = StaffFactory.getInstance().showPopup("customer", currentStage, true, customer);
 
         if (popupStage != null) {
             popupStage.setOnHiding(event -> {
@@ -166,7 +165,7 @@ public class PaymentController implements Initializable {
 
     private void handleSearchCustomer() {
         String searchText = searchCustomerField.getText().trim();
-        
+
         if (searchText.isEmpty()) {
             ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng nhập thông tin tìm kiếm.");
             return;
@@ -181,8 +180,9 @@ public class PaymentController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Cảnh báo");
             alert.setHeaderText(null);
-            alert.setContentText("Không tìm thấy khách hàng nào với số điện thoại này. Bạn có muốn thêm khách hàng mới không?");
-            
+            alert.setContentText(
+                    "Không tìm thấy khách hàng nào với số điện thoại này. Bạn có muốn thêm khách hàng mới không?");
+
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 handleAddCustomer();
@@ -192,13 +192,14 @@ public class PaymentController implements Initializable {
 
     private void handleFixCustomer() {
         if (customer == null) {
-            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng chọn khách hàng trước khi sửa thông tin.");
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo",
+                    "Vui lòng chọn khách hàng trước khi sửa thông tin.");
             return;
         }
 
         Stage currentStage = (Stage) root.getScene().getWindow();
-        Stage popupStage = ViewFactory.getInstance().showPopup("customer", currentStage, true, customer);
-        
+        Stage popupStage = StaffFactory.getInstance().showPopup("customer", currentStage, true, customer);
+
         if (popupStage != null) {
             popupStage.setOnHiding(event -> {
                 if (customer != null) {
@@ -214,7 +215,8 @@ public class PaymentController implements Initializable {
 
     private void handleConfirmPayment() {
         if (customer == null) {
-            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng chọn khách hàng trước khi thanh toán.");
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo",
+                    "Vui lòng chọn khách hàng trước khi thanh toán.");
             return;
         }
 
@@ -228,7 +230,8 @@ public class PaymentController implements Initializable {
             return;
         }
 
-        if (ControllerUtils.showConfirmationAndWait("Xác nhận thanh toán", "Bạn có chắc chắn muốn thanh toán đơn hàng này không?")) {
+        if (ControllerUtils.showConfirmationAndWait("Xác nhận thanh toán",
+                "Bạn có chắc chắn muốn thanh toán đơn hàng này không?")) {
             currentOrder.setCustomerId(customer.getCustomerId());
             if (currentDiscount != null) {
                 currentOrder.setDiscountId(currentDiscount.getDiscountId());
@@ -264,7 +267,7 @@ public class PaymentController implements Initializable {
             if (currentTab != null) {
                 SessionManager.setTabToRemove(currentTab);
             }
-            
+
             SessionManager.clearCurrentOrder();
             handleBack();
         }
@@ -272,7 +275,7 @@ public class PaymentController implements Initializable {
 
     private void handleBack() {
         Stage currentStage = (Stage) root.getScene().getWindow();
-        ViewFactory.getInstance().switchContent("order", currentStage);
+        StaffFactory.getInstance().switchContent("order", currentStage);
     }
 
     private void setupCustomerInfo() {
@@ -384,7 +387,8 @@ public class PaymentController implements Initializable {
         clearSearchIcon.setOnMouseClicked(event -> handleClearSearch());
     }
 
-    public void setOrderData(Order order, ArrayList<OrderDetail> details, Map<Integer, Product> products, Map<Integer, Pet> pets, Discount discount) {
+    public void setOrderData(Order order, ArrayList<OrderDetail> details, Map<Integer, Product> products,
+            Map<Integer, Pet> pets, Discount discount) {
         this.currentOrder = order;
         this.orderDetails = details;
         this.productMap = products;

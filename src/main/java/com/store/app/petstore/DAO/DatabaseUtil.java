@@ -28,4 +28,4 @@ public class DatabaseUtil {
     public static void closeResources(PreparedStatement stmt, Connection conn) {
         closeResources(null, stmt, conn);
     }
-} 
+}

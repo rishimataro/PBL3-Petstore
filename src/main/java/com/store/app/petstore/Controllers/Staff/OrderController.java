@@ -10,7 +10,7 @@ import com.store.app.petstore.Models.Entities.Discount;
 import com.store.app.petstore.Models.Entities.Order;
 import com.store.app.petstore.Models.Entities.OrderDetail;
 import com.store.app.petstore.Controllers.ControllerUtils;
-import com.store.app.petstore.Views.ViewFactory;
+import com.store.app.petstore.Views.StaffFactory;
 import com.store.app.petstore.Sessions.SessionManager;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.FadeTransition;
@@ -26,6 +26,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import javafx.stage.Stage;
@@ -46,41 +47,54 @@ public class OrderController implements Initializable {
     private static final String DEFAULT_CATEGORY = "Thú cưng";
     private static final double SPACING = 10.0;
 
-    private final SessionManager sessionManager = new SessionManager();
+    @FXML
+    private AnchorPane root;
 
-    @FXML private AnchorPane root;
-
-    @FXML private ScrollPane scrollPane;
+    @FXML
+    private ScrollPane scrollPane;
     private final FlowPane flowPane = new FlowPane();
     private int currentColumnCount = 0;
     private final List<Item> itemList = new ArrayList<>();
     private final Map<Item, AnchorPane> itemPaneCache = new HashMap<>();
     private final Set<Integer> temporarilyRemovedPetIds = new HashSet<>();
 
-    @FXML private ChoiceBox<String> categoryChoiceBox;
-    @FXML private ChoiceBox<String> sortChoiceBox;
-    @FXML private TextField searchTextField;
-    @FXML private FontAwesomeIconView searchIcon;
-    @FXML private FontAwesomeIconView clearSearchIcon;
+    @FXML
+    private ChoiceBox<String> categoryChoiceBox;
+    @FXML
+    private ChoiceBox<String> sortChoiceBox;
+    @FXML
+    private TextField searchTextField;
+    @FXML
+    private FontAwesomeIconView searchIcon;
+    @FXML
+    private FontAwesomeIconView clearSearchIcon;
     private final PauseTransition searchDebouncer = new PauseTransition(Duration.millis(DEBOUNCE_DELAY_MS));
     private Task<List<?>> currentSearchTask = null;
     private final Map<String, List<?>> searchCache = new HashMap<>();
-    private final PauseTransition resizeDebouncer = new PauseTransition(Duration.millis(DEBOUNCE_DELAY_MS));
     private final List<Item> incrementalSearchResults = new ArrayList<>();
 
-    @FXML private AnchorPane orderContentPane;
-    @FXML private ScrollPane orderScrollPane;
+    @FXML
+    private AnchorPane orderContentPane;
+    @FXML
+    private ScrollPane orderScrollPane;
     private final VBox orderVBox = new VBox(SPACING);
 
-    @FXML private Label totalMoneyLabel;
-    @FXML private Label totalMoneyValueLabel;
-    @FXML private Label voucherLabel;
-    @FXML private TextField voucherTextField;
-    @FXML private Label voucherValueLabel;
-    @FXML private Label finalMoneyLabel;
-    @FXML private Label finalMoneyValueLabel;
-
-    @FXML private Button confirmButton;
+    @FXML
+    private Label totalMoneyLabel;
+    @FXML
+    private Label totalMoneyValueLabel;
+    @FXML
+    private Label voucherLabel;
+    @FXML
+    private TextField voucherTextField;
+    @FXML
+    private Label voucherValueLabel;
+    @FXML
+    private Label finalMoneyLabel;
+    @FXML
+    private Label finalMoneyValueLabel;
+    @FXML
+    private Button confirmButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -106,11 +120,6 @@ public class OrderController implements Initializable {
 
         loadItemsByCategory(DEFAULT_CATEGORY);
         loadOrderFromSession();
-//        orderScrollPane.setOnScroll(event -> {
-//            double deltaY = event.getDeltaY() * 10;
-//            double contentHeight = scrollPane.getContent().getBoundsInLocal().getHeight();
-//            scrollPane.setVvalue(scrollPane.getVvalue() - deltaY / contentHeight);
-//        });
     }
 
     private void setupItemDisplayArea() {
@@ -167,16 +176,6 @@ public class OrderController implements Initializable {
         });
     }
 
-    private void setupConfirm() {
-        if (orderVBox.getChildren().isEmpty()) {
-            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo",
-                "Vui lòng tạo đơn hàng trước khi xác nhận!");
-            return;
-        }
-        Stage currentStage = (Stage) root.getScene().getWindow();
-        ViewFactory.getInstance().switchContent("payment", currentStage);
-    }
-
     private void setupClearSearchIcon() {
         clearSearchIcon.setVisible(false);
         searchTextField.setPickOnBounds(true);
@@ -222,7 +221,8 @@ public class OrderController implements Initializable {
     }
 
     private void sortItems(String sortOption) {
-        if (itemList.isEmpty()) return;
+        if (itemList.isEmpty())
+            return;
 
         Comparator<Item> priceComparator = (item1, item2) -> {
             double price1 = item1.getPrice();
@@ -294,7 +294,7 @@ public class OrderController implements Initializable {
             protected void failed() {
                 getException().printStackTrace();
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
-                    "Không thể tải danh sách sản phẩm. Vui lòng thử lại sau.");
+                        "Không thể tải danh sách sản phẩm. Vui lòng thử lại sau.");
             }
         };
 
@@ -303,12 +303,13 @@ public class OrderController implements Initializable {
         thread.start();
     }
 
-    private void updateGridColumns(int newColumnCount) {
-        if (newColumnCount == currentColumnCount) return;
-
-        currentColumnCount = newColumnCount;
-        rearrangeGridItems();
-    }
+    // private void updateGridColumns(int newColumnCount) {
+    // if (newColumnCount == currentColumnCount)
+    // return;
+    //
+    // currentColumnCount = newColumnCount;
+    // rearrangeGridItems();
+    // }
 
     private void rearrangeGridItems() {
         flowPane.getChildren().clear();
@@ -344,7 +345,7 @@ public class OrderController implements Initializable {
                             }
                         } catch (IOException e) {
                             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
-                                "Không thể thêm sản phẩm vào đơn hàng.");
+                                    "Không thể thêm sản phẩm vào đơn hàng.");
                             e.printStackTrace();
                         }
                     }
@@ -355,7 +356,7 @@ public class OrderController implements Initializable {
                 }
             } catch (IOException e) {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
-                    "Không thể tải sản phẩm: " + e.getMessage());
+                        "Không thể tải sản phẩm: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -507,7 +508,8 @@ public class OrderController implements Initializable {
     }
 
     private boolean isItemInOrder(Item item) {
-        if (item == null) return false;
+        if (item == null)
+            return false;
 
         for (Node node : orderVBox.getChildren()) {
             if (node instanceof AnchorPane pane) {
@@ -593,15 +595,15 @@ public class OrderController implements Initializable {
                                             return true;
                                         }
                                         return pet.getType().toLowerCase().startsWith(searchTextLower) ||
-                                               pet.getBreed().toLowerCase().startsWith(searchTextLower);
+                                                pet.getBreed().toLowerCase().startsWith(searchTextLower);
                                     } else {
                                         return pet.getName().toLowerCase().contains(searchTextLower) ||
-                                               pet.getType().toLowerCase().contains(searchTextLower) ||
-                                               pet.getBreed().toLowerCase().contains(searchTextLower) ||
-                                               pet.getSex().toLowerCase().contains(searchTextLower) ||
-                                               pet.getDescription().toLowerCase().contains(searchTextLower) ||
-                                               String.valueOf(pet.getPrice()).contains(searchTextLower) ||
-                                               String.valueOf(pet.getAge()).contains(searchTextLower);
+                                                pet.getType().toLowerCase().contains(searchTextLower) ||
+                                                pet.getBreed().toLowerCase().contains(searchTextLower) ||
+                                                pet.getSex().toLowerCase().contains(searchTextLower) ||
+                                                pet.getDescription().toLowerCase().contains(searchTextLower) ||
+                                                String.valueOf(pet.getPrice()).contains(searchTextLower) ||
+                                                String.valueOf(pet.getAge()).contains(searchTextLower);
                                     }
                                 } else if (item instanceof Product product) {
                                     if (searchTextLower.length() <= 2) {
@@ -611,10 +613,10 @@ public class OrderController implements Initializable {
                                         return product.getCategory().toLowerCase().startsWith(searchTextLower);
                                     } else {
                                         return product.getName().toLowerCase().contains(searchTextLower) ||
-                                               product.getCategory().toLowerCase().contains(searchTextLower) ||
-                                               product.getDescription().toLowerCase().contains(searchTextLower) ||
-                                               String.valueOf(product.getPrice()).contains(searchTextLower) ||
-                                               String.valueOf(product.getStock()).contains(searchTextLower);
+                                                product.getCategory().toLowerCase().contains(searchTextLower) ||
+                                                product.getDescription().toLowerCase().contains(searchTextLower) ||
+                                                String.valueOf(product.getPrice()).contains(searchTextLower) ||
+                                                String.valueOf(product.getStock()).contains(searchTextLower);
                                     }
                                 }
                                 return false;
@@ -658,18 +660,18 @@ public class OrderController implements Initializable {
                                         return true;
                                     }
                                     return pet.getType().toLowerCase().startsWith(searchTextLower) ||
-                                           pet.getBreed().toLowerCase().startsWith(searchTextLower);
+                                            pet.getBreed().toLowerCase().startsWith(searchTextLower);
                                 } else {
                                     if (pet.getName().toLowerCase().contains(searchTextLower)) {
                                         return true;
                                     }
 
                                     return pet.getType().toLowerCase().contains(searchTextLower) ||
-                                           pet.getBreed().toLowerCase().contains(searchTextLower) ||
-                                           pet.getSex().toLowerCase().contains(searchTextLower) ||
-                                           pet.getDescription().toLowerCase().contains(searchTextLower) ||
-                                           String.valueOf(pet.getPrice()).contains(searchTextLower) ||
-                                           String.valueOf(pet.getAge()).contains(searchTextLower);
+                                            pet.getBreed().toLowerCase().contains(searchTextLower) ||
+                                            pet.getSex().toLowerCase().contains(searchTextLower) ||
+                                            pet.getDescription().toLowerCase().contains(searchTextLower) ||
+                                            String.valueOf(pet.getPrice()).contains(searchTextLower) ||
+                                            String.valueOf(pet.getAge()).contains(searchTextLower);
                                 }
                             })
                             .limit(SEARCH_LIMIT)
@@ -716,9 +718,9 @@ public class OrderController implements Initializable {
                                     }
 
                                     return product.getCategory().toLowerCase().contains(searchTextLower) ||
-                                           product.getDescription().toLowerCase().contains(searchTextLower) ||
-                                           String.valueOf(product.getPrice()).contains(searchTextLower) ||
-                                           String.valueOf(product.getStock()).contains(searchTextLower);
+                                            product.getDescription().toLowerCase().contains(searchTextLower) ||
+                                            String.valueOf(product.getPrice()).contains(searchTextLower) ||
+                                            String.valueOf(product.getStock()).contains(searchTextLower);
                                 }
                             })
                             .limit(SEARCH_LIMIT)
@@ -782,7 +784,7 @@ public class OrderController implements Initializable {
         currentSearchTask.setOnFailed(event -> {
             currentSearchTask.getException().printStackTrace();
             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
-                "Không thể tìm kiếm sản phẩm. Vui lòng thử lại sau.");
+                    "Không thể tìm kiếm sản phẩm. Vui lòng thử lại sau.");
         });
 
         Thread searchThread = new Thread(currentSearchTask);
@@ -792,11 +794,19 @@ public class OrderController implements Initializable {
 
     private void setupDiscountHandling() {
         voucherTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() >= 3) {
-                handleDiscountCode(newValue);
-            } else {
+            // Only clear discount if field is empty or too short, do not auto-check code
+            if (newValue.length() < 3) {
                 voucherValueLabel.setText("0");
                 updateAmount();
+            }
+        });
+
+        voucherTextField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                String code = voucherTextField.getText().trim();
+                if (!code.isEmpty()) {
+                    handleDiscountCode(code);
+                }
             }
         });
     }
@@ -811,15 +821,15 @@ public class OrderController implements Initializable {
 
         if (today.isBefore(discount.getStartDate())) {
             ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo",
-                String.format("Mã giảm giá này sẽ có hiệu lực từ ngày %s",
-                discount.getStartDate().format(dateFormatter)));
+                    String.format("Mã giảm giá này sẽ có hiệu lực từ ngày %s",
+                            discount.getStartDate().format(dateFormatter)));
             return false;
         }
 
         if (today.isAfter(discount.getEndDate())) {
             ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo",
-                String.format("Mã giảm giá này đã hết hạn từ ngày %s",
-                discount.getEndDate().format(dateFormatter)));
+                    String.format("Mã giảm giá này đã hết hạn từ ngày %s",
+                            discount.getEndDate().format(dateFormatter)));
             return false;
         }
 
@@ -827,63 +837,34 @@ public class OrderController implements Initializable {
     }
 
     private void handleDiscountCode(String code) {
-        Task<Discount> task = new Task<>() {
-            @Override
-            protected Discount call() {
-                try {
-                    return DiscountDAO.findByCode(code);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw e;
-                }
-            }
-        };
+        try {
+            Discount discount = DiscountDAO.findByCode(code);
 
-        task.setOnSucceeded(event -> {
-            try {
-                Discount discount = task.getValue();
-
-                if (discount == null) {
-                    voucherValueLabel.setText("0");
-                    ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo",
-                        "Mã giảm giá không tồn tại!");
-                    updateAmount();
-                    return;
-                }
-
-                double totalAmount = ControllerUtils.parseCurrency(totalMoneyValueLabel.getText());
-                String validationMessage = DiscountDAO.validateDiscount(discount, totalAmount);
-
-                if (validationMessage == null) {
-                    applyDiscount(discount);
-                } else {
-                    voucherValueLabel.setText("0");
-                    ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", validationMessage);
-                }
-                updateAmount();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (discount == null) {
                 voucherValueLabel.setText("0");
-                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
-                    "Có lỗi xảy ra khi xử lý mã giảm giá!");
+                ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo",
+                        "Mã giảm giá không tồn tại!");
                 updateAmount();
+                return;
             }
-        });
 
-        task.setOnFailed(event -> {
-            Throwable exception = task.getException();
-            if (exception != null) {
-                exception.printStackTrace();
+            double totalAmount = ControllerUtils.parseCurrency(totalMoneyValueLabel.getText());
+            String validationMessage = DiscountDAO.validateDiscount(discount, totalAmount);
+
+            if (validationMessage == null) {
+                applyDiscount(discount);
+            } else {
+                voucherValueLabel.setText("0");
+                ControllerUtils.showAlert(Alert.AlertType.WARNING, "Thông báo", validationMessage);
             }
+            updateAmount();
+        } catch (Exception e) {
+            e.printStackTrace();
             voucherValueLabel.setText("0");
             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi",
-                "Không thể kiểm tra mã giảm giá! Vui lòng thử lại sau.");
+                    "Có lỗi xảy ra khi xử lý mã giảm giá!");
             updateAmount();
-        });
-
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();
+        }
     }
 
     private void applyDiscount(Discount discount) {
@@ -969,7 +950,7 @@ public class OrderController implements Initializable {
         temporarilyRemovedPetIds.clear();
 
         Stage currentStage = (Stage) root.getScene().getWindow();
-        ViewFactory.getInstance().switchContent("payment", currentStage);
+        StaffFactory.getInstance().switchContent("payment", currentStage);
     }
 
     private void loadOrderFromSession() {

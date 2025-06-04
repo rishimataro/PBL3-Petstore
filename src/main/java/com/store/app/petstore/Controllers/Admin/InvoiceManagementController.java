@@ -23,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InvoiceManagementController {
@@ -86,9 +85,8 @@ public class InvoiceManagementController {
         invoice_totalBillCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.1));
         invoice_statusCol.prefWidthProperty().bind(invoice_table.widthProperty().multiply(0.1));
 
-        sttCol.setCellValueFactory(col ->
-                new ReadOnlyObjectWrapper<>(invoice_table.getItems().indexOf(col.getValue()) + 1)
-        );
+        sttCol.setCellValueFactory(
+                col -> new ReadOnlyObjectWrapper<>(invoice_table.getItems().indexOf(col.getValue()) + 1));
         sttCol.setSortable(false);
 
         invoice_idCol.setCellValueFactory(new PropertyValueFactory<>("orderId"));
@@ -109,7 +107,7 @@ public class InvoiceManagementController {
 
         invoice_timeCol.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
         invoice_totalBillCol.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
-        invoice_statusCol.setCellFactory(column -> new TableCell<Order, String>(){
+        invoice_statusCol.setCellFactory(column -> new TableCell<Order, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -127,7 +125,8 @@ public class InvoiceManagementController {
             @Override
             protected void updateItem(LocalDateTime item, boolean empty) {
                 super.updateItem(item, empty);
-                setText((empty || item == null) ? null : item.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                setText((empty || item == null) ? null
+                        : item.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             }
         });
         LocalDate today = LocalDate.now();
@@ -137,7 +136,7 @@ public class InvoiceManagementController {
         loadInvoicesWithFilter();
 
         invoice_table.setOnMouseClicked(event -> {
-            if(event.getClickCount() == 1) {
+            if (event.getClickCount() == 1) {
                 Order order = invoice_table.getSelectionModel().getSelectedItem();
                 if (order != null) {
                     loadProductDetails(order);
@@ -158,11 +157,16 @@ public class InvoiceManagementController {
         start_datepicker.getEditor().setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case DELETE, BACK_SPACE -> start_datepicker.setValue(null);
+                default -> {
+                }
             }
         });
         end_datepicker.getEditor().setOnKeyPressed(event -> {
             switch (event.getCode()) {
                 case DELETE, BACK_SPACE -> end_datepicker.setValue(null);
+
+                default -> {
+                }
             }
         });
         //
@@ -174,7 +178,7 @@ public class InvoiceManagementController {
     }
 
     @FXML
-    private void onSearchClicked(){
+    private void onSearchClicked() {
         loadInvoicesWithFilter();
     }
 
@@ -224,8 +228,10 @@ public class InvoiceManagementController {
     }
 
     private void loadInvoicesWithFilter() {
-        LocalDateTime startDateTime = (start_datepicker.getValue() != null) ? start_datepicker.getValue().atStartOfDay() : null;
-        LocalDateTime endDateTime = (end_datepicker.getValue() != null) ? end_datepicker.getValue().atTime(23, 59, 59) : null;
+        LocalDateTime startDateTime = (start_datepicker.getValue() != null) ? start_datepicker.getValue().atStartOfDay()
+                : null;
+        LocalDateTime endDateTime = (end_datepicker.getValue() != null) ? end_datepicker.getValue().atTime(23, 59, 59)
+                : null;
         boolean allowDeleted = allowDeletedInvoice.isSelected();
         customerMap = Objects.requireNonNull(CustomerDAO.findAll())
                 .stream()
@@ -259,6 +265,7 @@ public class InvoiceManagementController {
         invoice_table.setItems(FXCollections.observableArrayList(filtered));
         calculateTotalRevenue(filtered);
     }
+
     private void calculateTotalRevenue(List<Order> filteredOrders) {
         double total = 0;
         for (Order order : filteredOrders) {
@@ -269,8 +276,9 @@ public class InvoiceManagementController {
 
         totalRevenue.setText(String.format("%, .0f VNĐ", total));
     }
+
     @FXML
-    private void DeleteInvoiceClicked(){
+    private void DeleteInvoiceClicked() {
         Order selectedOrder = invoice_table.getSelectionModel().getSelectedItem();
 
         if (selectedOrder == null) {
@@ -278,7 +286,8 @@ public class InvoiceManagementController {
             return;
         }
 
-        if(ControllerUtils.showConfirmationAndWait("Xác nhận huỷ hoá đơn", "Bạn có chắc chắn muốn huỷ hoá đơn này không?")){
+        if (ControllerUtils.showConfirmationAndWait("Xác nhận huỷ hoá đơn",
+                "Bạn có chắc chắn muốn huỷ hoá đơn này không?")) {
             selectedOrder.setDeleted(true);
             OrderDAO.update(selectedOrder);
             loadInvoicesWithFilter();
@@ -286,7 +295,7 @@ public class InvoiceManagementController {
 
     }
 
-    private void DiscountInfo(Order order){
+    private void DiscountInfo(Order order) {
         Discount dc = DiscountDAO.findById(order.getDiscountId());
         double total_value = order.getTotalPrice();
 
@@ -295,7 +304,7 @@ public class InvoiceManagementController {
         double discount_min_value = 0.0;
         String discount_type = "";
         String discount_code = "";
-        if(dc != null){
+        if (dc != null) {
             max_discount_value = dc.getMaxDiscountValue();
             discount_value = dc.getValue();
             discount_min_value = dc.getMinOrderValue();
@@ -306,13 +315,12 @@ public class InvoiceManagementController {
         double discount = 0.0;
         if (discount_min_value > total_value) {
             discount = 0.0;
-        }
-        else if(discount_type.equals("percent")){
+        } else if (discount_type.equals("percent")) {
             discount = ((total_value * discount_value) / 100);
             if (discount > max_discount_value) {
                 discount = max_discount_value;
             }
-        }else if(discount_type.equals("fixed")){
+        } else if (discount_type.equals("fixed")) {
             discount = discount_value;
         }
         discountCode.setText(discount_code);

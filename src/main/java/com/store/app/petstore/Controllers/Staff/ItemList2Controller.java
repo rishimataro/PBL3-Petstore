@@ -167,6 +167,7 @@ public class ItemList2Controller {
     public void setOnStockChanged(Runnable callback) {
         this.onStockChanged = callback;
     }
+
     public void setOnQuantityChanged(Runnable callback) {
         this.onQuantityChanged = callback;
     }
@@ -192,6 +193,7 @@ public class ItemList2Controller {
     public void setOnDeleteCallback(Consumer<AnchorPane> callback) {
         this.onDeleteCallback = callback;
     }
+
     public void setParentPane(AnchorPane pane) {
         this.parentPane = pane;
     }
@@ -200,7 +202,7 @@ public class ItemList2Controller {
     private void handleUpIcon() {
         int currentAmount = getQuantity();
 
-        if (item instanceof Product product) {
+        if (item instanceof Product) {
             if (currentAmount < initialStock) {
                 quantity.setText(String.valueOf(currentAmount + 1));
                 updateTotal();
@@ -217,7 +219,7 @@ public class ItemList2Controller {
 
     @FXML
     private void handleDownIcon() {
-        if (item instanceof Product product) {
+        if (item instanceof Product) {
             if (initialStock == 0) {
                 ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Sản phẩm đã hết hàng!");
                 return;

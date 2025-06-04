@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane fx:id="productInforPopup" prefHeight="465.0" prefWidth="600.0" styleClass="root" stylesheets="@../../Styles/Infor.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.ProductInforController">
+    <children>
+        <AnchorPane prefHeight="40.0" prefWidth="600.0" styleClass="nav-pane">
+            <children>
+                <Label layoutX="239.0" layoutY="9.0" styleClass="title" text="Thông tin chi tiết" />
+            </children>
+        </AnchorPane>
+        <Rectangle fx:id="imgProduct" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="250.0" layoutX="24.0" layoutY="38.0" stroke="BLACK" strokeType="INSIDE" styleClass="shape-img" width="200.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0" />
+        <GridPane hgap="5.0" layoutX="244.0" layoutY="51.0" prefHeight="231.0" prefWidth="332.0" vgap="10.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="189.59998779296876" minWidth="10.0" prefWidth="82.39996337890625" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.99996337890624" minWidth="10.0" prefWidth="220.00003662109373" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label styleClass="lblInfor" text="Mã số:" />
+                <Label styleClass="lblInfor" text="Tên:" GridPane.rowIndex="1" />
+                <Label styleClass="lblInfor" text="Danh mục:" GridPane.rowIndex="2" />
+                <Label styleClass="lblInfor" text="Số lượng:" GridPane.rowIndex="3" />
+                <Label styleClass="lblInfor" text="Giá:" GridPane.rowIndex="4" />
+                <TextField fx:id="txtProductId" editable="false" promptText="Mã thú cưng" GridPane.columnIndex="1" />
+                <TextField fx:id="txtName" promptText="Tên thú cưng" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="txtQuantity" promptText="Số lượng" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="txtPrice" promptText="Giá bán" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ChoiceBox fx:id="cmbCatelogy" prefHeight="37.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            </children>
+        </GridPane>
+        <VBox layoutX="244.0" layoutY="298.0" prefHeight="142.0" prefWidth="332.0" spacing="10.0">
+            <children>
+                <Label styleClass="lblInfor" text="Mô tả:">
+                    <VBox.margin>
+                        <Insets bottom="5.0" />
+                    </VBox.margin></Label>
+                <TextArea fx:id="txtDescription" prefHeight="200.0" prefWidth="242.0" promptText="Mô tả về sản phẩm" />
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

@@ -195,6 +195,7 @@
 }
 .func_icon{
     -fx-fill: #FFFFFF;
+    -fx-font-weight: bold;
 }
 ._date_picker{
 
@@ -259,4 +260,20 @@
     -fx-font-weight: 700;
     -fx-font-size: 14;
     -fx-text-fill: #017FCB;
+}
+
+.total-textfiled {
+    -fx-font-size: 16px;
+    -fx-background-color: #34D0E1;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 5px;
+    -fx-border-color: transparent;
+    -fx-opacity: 1;
+}
+
+.total-textfiled:disabled {
+    -fx-opacity: 1.0;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #34D0E1;
 }

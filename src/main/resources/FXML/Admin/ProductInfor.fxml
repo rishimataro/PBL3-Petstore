@@ -57,10 +57,10 @@
                 <Label styleClass="lblInfor" text="Danh mục:" GridPane.rowIndex="2" />
                 <Label styleClass="lblInfor" text="Số lượng:" GridPane.rowIndex="3" />
                 <Label styleClass="lblInfor" text="Giá:" GridPane.rowIndex="4" />
-                <TextField fx:id="txtProductId" editable="false" GridPane.columnIndex="1" />
-                <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField fx:id="txtQuantity" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <TextField fx:id="txtPrice" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <TextField fx:id="txtProductId" editable="false" promptText="Mã thú cưng" GridPane.columnIndex="1" />
+                <TextField fx:id="txtName" promptText="Tên thú cưng" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="txtQuantity" promptText="Số lượng" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="txtPrice" promptText="Giá bán" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <ChoiceBox fx:id="cmbCatelogy" prefHeight="37.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </children>
         </GridPane>
@@ -70,7 +70,7 @@
                     <VBox.margin>
                         <Insets bottom="5.0" />
                     </VBox.margin></Label>
-                <TextArea fx:id="txtDescription" prefHeight="200.0" prefWidth="242.0" />
+                <TextArea fx:id="txtDescription" prefHeight="200.0" prefWidth="242.0" promptText="Mô tả về sản phẩm" />
             </children>
         </VBox>
         <FontAwesomeIconView fx:id="btnChange" accessibleRole="BUTTON" fill="WHITE" glyphName="REFRESH" layoutX="200.0" layoutY="292.0" size="20" stroke="BLACK">
