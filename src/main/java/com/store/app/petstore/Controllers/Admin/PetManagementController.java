@@ -94,8 +94,8 @@ public class PetManagementController implements Initializable {
 
     private void setupTableSize() {
         colID.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.05));
-        colName.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.15));
-        colType.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.15));
+        colName.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.2));
+        colType.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.2));
         colBreed.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.15));
         colSex.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.10));
         colPrice.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.15));
