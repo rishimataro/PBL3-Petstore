@@ -14,11 +14,11 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.OrderController">
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.OrderController">
     <children>
-        <fx:include source="StaffMenu.fxml" />
+        <fx:include source="StaffMenu.fxml" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
 
-        <AnchorPane fx:id="root" styleClass="root" stylesheets="@../../Styles/Staff/Order.css" VBox.vgrow="ALWAYS">
+        <AnchorPane fx:id="root" styleClass="root" stylesheets="@../../Styles/Staff/Order.css" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="70">
             <children>
 
                       <!-- Left pane - Sản phẩm -->
@@ -61,7 +61,7 @@
 <!--                              </AnchorPane>-->
 <!--                             <AnchorPane fx:id="orderContentPane"  AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">-->
 
-                         <ScrollPane fx:id="orderScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="280.0" prefWidth="420.0" vbarPolicy="NEVER" VBox.vgrow="ALWAYS" />
+                         <ScrollPane fx:id="orderScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="280.0" prefWidth="420.0" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS" />
 
 <!--                             </AnchorPane>-->
                                        <GridPane hgap="10.0" prefHeight="80.0" prefWidth="410.0">
@@ -97,4 +97,4 @@
             </children>
         </AnchorPane>
     </children>
-</VBox>
+</AnchorPane>

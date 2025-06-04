@@ -106,6 +106,11 @@ public class OrderController implements Initializable {
 
         loadItemsByCategory(DEFAULT_CATEGORY);
         loadOrderFromSession();
+//        orderScrollPane.setOnScroll(event -> {
+//            double deltaY = event.getDeltaY() * 10;
+//            double contentHeight = scrollPane.getContent().getBoundsInLocal().getHeight();
+//            scrollPane.setVvalue(scrollPane.getVvalue() - deltaY / contentHeight);
+//        });
     }
 
     private void setupItemDisplayArea() {
