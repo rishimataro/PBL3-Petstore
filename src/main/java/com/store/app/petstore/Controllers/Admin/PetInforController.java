@@ -75,9 +75,6 @@ public class PetInforController implements Initializable {
     @FXML
     private ChoiceBox<String> cmbSex;
 
-    @FXML
-    private FontAwesomeIconView closeIcon;
-
     private int idPetCurrent;
     private boolean isNewPet = true;
     private String tempImageUrl;
@@ -92,16 +89,14 @@ public class PetInforController implements Initializable {
         txtPrice.setDisable(true);
         txtDescription.setDisable(true);
 
-        // Set up type radio buttons
         typeGroup = new ToggleGroup();
         rbtnDog.setToggleGroup(typeGroup);
         rbtnCat.setToggleGroup(typeGroup);
         rbtnDog.setDisable(true);
         rbtnCat.setDisable(true);
 
-        // Set up sex choice box
         cmbSex.getItems().addAll("Đực", "Cái");
-        cmbSex.setValue("Đực"); // Default value
+        cmbSex.setValue("Đực");
         cmbSex.setDisable(true);
 
         setupButtonActions();
@@ -117,20 +112,17 @@ public class PetInforController implements Initializable {
             txtPrice.setText(String.valueOf(pet.getPrice()));
             txtDescription.setText(pet.getDescription());
 
-            // Set the type radio button
             if ("chó".equals(pet.getType())) {
                 rbtnDog.setSelected(true);
             } else if ("mèo".equals(pet.getType())) {
                 rbtnCat.setSelected(true);
             }
 
-            // Set the sex choice box
             String sex = pet.getSex();
             if (sex != null && !sex.isEmpty()) {
                 if (cmbSex.getItems().contains(sex)) {
                     cmbSex.setValue(sex);
                 } else {
-                    // Default to "Đực" if the sex value is not in the choice box
                     cmbSex.setValue("Đực");
                 }
             }
@@ -156,10 +148,6 @@ public class PetInforController implements Initializable {
         btnDelete.setOnAction(event -> handleDelete());
         btnFix.setOnAction(event -> handleFix());
         btnSave.setOnAction(event -> handleSave());
-
-        if(closeIcon != null) {
-            closeIcon.setOnMouseClicked(event -> closeWindow());
-        }
     }
 
     private void setupInitialState() {
@@ -512,12 +500,5 @@ public class PetInforController implements Initializable {
         rbtnDog.setDisable(true);
         rbtnCat.setDisable(true);
         cmbSex.setDisable(true);
-    }
-
-    private void closeWindow() {
-        Stage stage = (Stage) petInforPopup.getScene().getWindow();
-        if(stage != null) {
-            stage.close();
-        }
     }
 }

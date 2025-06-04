@@ -38,10 +38,10 @@
                   <Label fx:id="itemGender" styleClass="label-sex" text="Đực" GridPane.columnIndex="2" />
                </children>
             </GridPane>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="92.0">
                <children>
                   <Label fx:id="itemPrice" prefHeight="15.0" prefWidth="75.0" styleClass="price-box" text="\$10 000 000" />
-                  <FontAwesomeIconView fx:id="addIcon" accessibleRole="BUTTON" glyphName="PLUS_CIRCLE" styleClass="icon-button" />
+                  <FontAwesomeIconView fx:id="inforIcon" accessibleRole="BUTTON" glyphName="INFO" styleClass="icon-button" />
                </children>
             </HBox>
          </children>

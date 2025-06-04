@@ -71,8 +71,6 @@ public class OrderController implements Initializable {
     private final PauseTransition searchDebouncer = new PauseTransition(Duration.millis(DEBOUNCE_DELAY_MS));
     private Task<List<?>> currentSearchTask = null;
     private final Map<String, List<?>> searchCache = new HashMap<>();
-    // private final PauseTransition resizeDebouncer = new
-    // PauseTransition(Duration.millis(DEBOUNCE_DELAY_MS));
     private final List<Item> incrementalSearchResults = new ArrayList<>();
 
     @FXML
@@ -95,7 +93,6 @@ public class OrderController implements Initializable {
     private Label finalMoneyLabel;
     @FXML
     private Label finalMoneyValueLabel;
-
     @FXML
     private Button confirmButton;
 
