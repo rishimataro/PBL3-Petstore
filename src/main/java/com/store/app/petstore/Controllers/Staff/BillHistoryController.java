@@ -180,6 +180,7 @@ public class BillHistoryController {
         detailInvoiceID.setText(order.getOrderId() + "");
         detailInvoiceValue.setText(String.format("%, .0f VNĐ", order.getTotalPrice()));
         // detailInvoiceTotal.setText("0 VNĐ");
+
         for (OrderDetail detail : listOrderDetail) {
             Node itemNode = createItemNode(detail, productMap, petMap);
             if (itemNode != null) {
