@@ -32,8 +32,12 @@ public class PetItemDetailController {
         quality.setText(quantity + "");
         total.setText(totalValue + "");
         InputStream imageStream = null;
-        if (pet.getImageUrl() != null) {
-            imageStream = getClass().getResourceAsStream(pet.getImageUrl());
+        try {
+            if (pet.getImageUrl() != null) {
+                imageStream = getClass().getResourceAsStream(pet.getImageUrl());
+            }
+        } catch (Exception e) {
+            // Log the error if needed
         }
 
         Image img;
@@ -45,3 +49,4 @@ public class PetItemDetailController {
         petImg.setImage(img);
     }
 }
+

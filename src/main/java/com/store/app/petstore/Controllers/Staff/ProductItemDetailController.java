@@ -33,8 +33,12 @@ public class ProductItemDetailController {
         total.setText(totalValue + "");
 
         InputStream imageStream = null;
-        if (product.getImageUrl() != null) {
-            imageStream = getClass().getResourceAsStream(product.getImageUrl());
+        try {
+            if (product.getImageUrl() != null) {
+                imageStream = getClass().getResourceAsStream(product.getImageUrl());
+            }
+        } catch (Exception e) {
+            // Log the error if needed
         }
 
         Image img;
