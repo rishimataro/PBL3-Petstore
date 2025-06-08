@@ -25,10 +25,19 @@ public class HoaDonPDF {
     private static final String ACCOUNT_NUMBER = "07692472801";
     private static final String ACCOUNT_NAME = "NGUYEN THAI NGOC THAO";
 
-    public static void xuatHoaDonPDF(String tenFile, Order order, ArrayList<OrderDetail> details,
+    public static void xuatHoaDonPDF(String folderPath, Order order, ArrayList<OrderDetail> details,
                                      Map<Integer, Product> products, Map<Integer, Pet> pets, Discount discount) throws IOException {
         Document document = new Document();
         String qrPath = null;
+
+        File directory = new File(folderPath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        // Tạo tên file: ví dụ "BillPDF/hoadon_123.pdf"
+        String tenFile = folderPath + "/hoadon_" + order.getOrderId() + ".pdf";
+
         try {
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(tenFile));
             document.open();

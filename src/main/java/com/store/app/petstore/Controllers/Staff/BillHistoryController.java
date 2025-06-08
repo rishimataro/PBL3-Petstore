@@ -196,7 +196,7 @@ public class BillHistoryController {
 
             switch (detail.getItemType()) {
                 case "product":
-                    loader = new FXMLLoader(getClass().getResource("/FXML/Staff/ProductItemDetail.fxml"));
+                    loader = new FXMLLoader(getClass().getResource("/FXML/Staff/ProductItemgit Detail.fxml"));
                     node = loader.load();
                     ProductItemDetailController prodCtrl = loader.getController();
                     prodCtrl.setData(productMap.get(detail.getItemId()), detail);

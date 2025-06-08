@@ -244,8 +244,6 @@ public class PaymentController implements Initializable {
                 return;
             }
 
-            ArrayList<OrderDetail> details = null;
-
             for (OrderDetail detail : orderDetails) {
                 detail.setOrderId(orderId);
                 OrderDetailDAO.insert(detail);
@@ -263,11 +261,10 @@ public class PaymentController implements Initializable {
                         ProductDAO.update(product);
                     }
                 }
-                details.add(detail);
             }
 
-            String fileName = "hoadon_" + orderId + ".pdf";
-            HoaDonPDF.xuatHoaDonPDF(fileName, currentOrder, orderDetails, productMap, petMap, currentDiscount);
+            String folder = "src/main/resources/BillPDF";
+            HoaDonPDF.xuatHoaDonPDF(folder, currentOrder, orderDetails, productMap, petMap, currentDiscount);
 
             Tab currentTab = SessionManager.getCurrentTab();
             if (currentTab != null) {
