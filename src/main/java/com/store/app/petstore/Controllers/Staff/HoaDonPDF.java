@@ -33,7 +33,6 @@ public class HoaDonPDF {
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(tenFile));
             document.open();
 
-            // Font setup
             BaseFont bf = BaseFont.createFont("src/main/resources/Font/Inter-Regular.otf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font fontTieuDe = new Font(bf, 18, Font.BOLD, new BaseColor(1, 127, 203));
             Font fontThuong = new Font(bf, 12, Font.NORMAL, BaseColor.GRAY);
@@ -41,13 +40,11 @@ public class HoaDonPDF {
             Font fontThuongNghieng = new Font(bf, 12, Font.ITALIC, BaseColor.GRAY);
             Font fontTong = new Font(bf, 14, Font.BOLD, new BaseColor(169, 228, 77));
 
-            // Title
             Paragraph title = new Paragraph("HÓA ĐƠN BÁN HÀNG", fontTieuDe);
             title.setAlignment(Element.ALIGN_CENTER);
             title.setSpacingAfter(20);
             document.add(title);
 
-            // Calculate total amount first (needed for QR code)
             double tongTien = 0;
             for (OrderDetail detail : details) {
                 Product product = "product".equals(detail.getItemType()) ? products.get(detail.getItemId()) : null;
@@ -56,7 +53,6 @@ public class HoaDonPDF {
                 tongTien += giaBan * detail.getQuantity();
             }
 
-            // Calculate discount amount
             double discountAmount = 0;
             if (discount != null) {
                 if ("percent".equals(discount.getDiscountType())) {
@@ -118,10 +114,8 @@ public class HoaDonPDF {
                 table.addCell(headerCell);
             }
 
-            // Reset tongTien for table calculation
             tongTien = 0;
 
-            // Table data
             for (int i = 0; i < details.size(); i++) {
                 OrderDetail detail = details.get(i);
                 Product product = "product".equals(detail.getItemType()) ? products.get(detail.getItemId()) : null;
@@ -230,7 +224,7 @@ public class HoaDonPDF {
             // Create a table for payment info and QR code layout
             PdfPTable paymentTable = new PdfPTable(2);
             paymentTable.setWidthPercentage(100);
-            paymentTable.setWidths(new float[]{3f, 2f}); // Left column wider for text, right for QR
+            paymentTable.setWidths(new float[]{3f, 2f});
             paymentTable.setSpacingBefore(10);
 
             // Left cell - Payment information

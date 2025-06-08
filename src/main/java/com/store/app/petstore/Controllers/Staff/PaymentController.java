@@ -29,6 +29,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
 
+import static com.store.app.petstore.Controllers.Staff.HoaDonPDF.xuatHoaDonPDF;
+
 public class PaymentController implements Initializable {
     @FXML
     private AnchorPane root;
@@ -213,7 +215,7 @@ public class PaymentController implements Initializable {
         }
     }
 
-    private void handleConfirmPayment() {
+    private void handleConfirmPayment() throws IOException {
         if (customer == null) {
             ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo",
                     "Vui lòng chọn khách hàng trước khi thanh toán.");
@@ -242,6 +244,8 @@ public class PaymentController implements Initializable {
                 return;
             }
 
+            ArrayList<OrderDetail> details = null;
+
             for (OrderDetail detail : orderDetails) {
                 detail.setOrderId(orderId);
                 OrderDetailDAO.insert(detail);
@@ -259,9 +263,11 @@ public class PaymentController implements Initializable {
                         ProductDAO.update(product);
                     }
                 }
+                details.add(detail);
             }
 
-            ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Thanh toán thành công!");
+            String fileName = "hoadon_" + orderId + ".pdf";
+            HoaDonPDF.xuatHoaDonPDF(fileName, currentOrder, orderDetails, productMap, petMap, currentDiscount);
 
             Tab currentTab = SessionManager.getCurrentTab();
             if (currentTab != null) {
@@ -381,7 +387,13 @@ public class PaymentController implements Initializable {
     private void setupButtonActions() {
         addCustomerBtn.setOnAction(event -> handleAddCustomer());
         fixCustomerbtn.setOnAction(event -> handleFixCustomer());
-        paymentBtn.setOnAction(event -> handleConfirmPayment());
+        paymentBtn.setOnAction(event -> {
+            try {
+                handleConfirmPayment();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         backbtn.setOnAction(event -> handleBack());
         searchIcon.setOnMouseClicked(event -> handleSearchCustomer());
         clearSearchIcon.setOnMouseClicked(event -> handleClearSearch());
