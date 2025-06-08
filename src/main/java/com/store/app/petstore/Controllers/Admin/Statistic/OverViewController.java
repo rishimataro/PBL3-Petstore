@@ -47,7 +47,6 @@ public class OverViewController {
     @FXML
     private ChoiceBox<String> monthChoiceBox;
 
-
     @FXML
     public void initialize() {
         setupTableColumns();

@@ -136,7 +136,7 @@ public class UserInforController implements Initializable {
         if (user != null) {
             txtUserid.setText(String.valueOf(user.getUserId()));
             txtUsername.setText(user.getUsername());
-            txtPassword.setText("********");
+            txtPassword.setText(user.getPassword()); // Display the actual password for editing
 
             if (User.ROLE_ADMIN.equals(user.getRole())) {
                 rbtnAdmin.setSelected(true);
@@ -243,25 +243,11 @@ public class UserInforController implements Initializable {
                 user.setUserId(idUserCurrent);
             }
             user.setUsername(txtUsername.getText());
-            user.setPassword(txtPassword.getText());
+            user.setPassword(txtPassword.getText()); // Save the updated password
 
-            boolean isAdmin = false;
-            if (roleGroup.getSelectedToggle() == rbtnAdmin) {
-                isAdmin = true;
-            } else if (roleGroup.getSelectedToggle() == rbtnStaff) {
-                isAdmin = false;
-            } else if (rbtnAdmin.isSelected()) {
-                isAdmin = true;
-            } else if (rbtnStaff.isSelected()) {
-                isAdmin = false;
-            } else {
-                rbtnStaff.setSelected(true);
-                roleGroup.selectToggle(rbtnStaff);
-                isAdmin = false;
-            }
+            boolean isAdmin = roleGroup.getSelectedToggle() == rbtnAdmin;
 
             user.setRole(isAdmin ? User.ROLE_ADMIN : User.ROLE_USER);
-
             user.setCreatedAt(LocalDateTime.now());
             user.setActive(true);
 
@@ -316,7 +302,7 @@ public class UserInforController implements Initializable {
 
     private void enableEditing() {
         txtUsername.setDisable(false);
-
+        txtPassword.setDisable(false);
         rbtnAdmin.setDisable(false);
         rbtnStaff.setDisable(false);
     }
@@ -324,12 +310,12 @@ public class UserInforController implements Initializable {
     private void disableEditing() {
         rbtnAdmin.setDisable(true);
         rbtnStaff.setDisable(true);
-
         txtUsername.setDisable(true);
+        txtPassword.setDisable(true);
     }
 
     private boolean validateInput() {
-        if (txtUsername.getText().isEmpty() || txtPassword.getText().isEmpty()) {
+        if (txtUsername.getText().isEmpty() || txtPassword.getText().isEmpty()) { // Ensure password is not empty
             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng điền đầy đủ thông tin!");
             return false;
         }
