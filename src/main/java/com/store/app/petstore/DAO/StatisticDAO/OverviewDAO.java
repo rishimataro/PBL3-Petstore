@@ -12,6 +12,42 @@ import java.util.HashMap;
 
 public class OverviewDAO {
 
+    public static Map<String, String> getOverallStatistics() throws SQLException {
+        Map<String, String> stats = new HashMap<>();
+        Connection connection = DatabaseUtil.getConnection();
+
+        String sql = "SELECT " +
+                "SUM(CASE WHEN od.item_type = 'pet' THEN od.quantity ELSE 0 END) AS total_pets_sold, " +
+                "SUM(CASE WHEN od.item_type = 'product' THEN od.quantity ELSE 0 END) AS total_products_sold, " +
+                "SUM(o.total_price) AS total_revenue, " +
+                "COUNT(DISTINCT o.order_id) AS total_invoices " +
+                "FROM Orders o " +
+                "JOIN OrderDetails od ON o.order_id = od.order_id";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                stats.put("petsSold", String.valueOf(rs.getInt("total_pets_sold")));
+                stats.put("productsSold", String.valueOf(rs.getInt("total_products_sold")));
+                stats.put("revenue", String.format("%.2f", rs.getDouble("total_revenue")));
+                stats.put("invoices", String.valueOf(rs.getInt("total_invoices")));
+            } else {
+                stats.put("petsSold", "0");
+                stats.put("productsSold", "0");
+                stats.put("revenue", "0.00");
+                stats.put("invoices", "0");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            stats.put("petsSold", "Error");
+            stats.put("productsSold", "Error");
+            stats.put("revenue", "Error");
+            stats.put("invoices", "Error");
+        }
+
+        return stats;
+    }
+
     public static Map<String, String> getDailyStatistics(LocalDate date) throws SQLException {
         Map<String, String> stats = new HashMap<>();
         Connection connection = DatabaseUtil.getConnection();
@@ -20,9 +56,9 @@ public class OverviewDAO {
                      "SUM(CASE WHEN od.item_type = 'pet' THEN od.quantity ELSE 0 END) AS total_pets_sold, " +
                      "SUM(CASE WHEN od.item_type = 'product' THEN od.quantity ELSE 0 END) AS total_products_sold, " +
                      "SUM(o.total_price) AS total_revenue, " +
-                     "COUNT(DISTINCT o.order_id) AS total_invoices " + // Use COUNT(DISTINCT o.order_id) to count unique orders
+                     "COUNT(DISTINCT o.order_id) AS total_invoices " +
                      "FROM Orders o " +
-                     "LEFT JOIN OrderDetails od ON o.order_id = od.order_id " +
+                     "JOIN OrderDetails od ON o.order_id = od.order_id " +
                      "WHERE DATE(o.order_date) = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -217,3 +253,4 @@ public class OverviewDAO {
         return orders;
     }
 }
+

@@ -1,5 +1,6 @@
 package com.store.app.petstore.Controllers.Admin;
 
+import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.ProductDAO;
 import com.store.app.petstore.Models.Entities.Product;
 import com.store.app.petstore.Views.AdminFactory;
@@ -17,8 +18,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ProductManagementController implements Initializable {
@@ -48,7 +51,7 @@ public class ProductManagementController implements Initializable {
     private TableColumn<Product, String> colName;
 
     @FXML
-    private TableColumn<Product, Integer> colPrice;
+    private TableColumn<Product, String> colPrice;
 
     @FXML
     private TableColumn<Product, String> colStatus;
@@ -92,11 +95,15 @@ public class ProductManagementController implements Initializable {
         colStatus.prefWidthProperty().bind(productTableView.widthProperty().multiply(0.16));
     }
 
+
     private void setupTableView() {
         colID.setCellValueFactory(new PropertyValueFactory<>("productId"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colCatelogy.setCellValueFactory(new PropertyValueFactory<>("category"));
-        colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        colPrice.setCellValueFactory(cellData -> {
+            String formattedPrice = ControllerUtils.formatCurrency(cellData.getValue().getPrice());
+            return new SimpleStringProperty(formattedPrice);
+        });
         colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         colStatus.setCellValueFactory(cellData -> {
             boolean isSold = cellData.getValue().getIsSold();

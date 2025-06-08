@@ -29,8 +29,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
 
-import static com.store.app.petstore.Controllers.Staff.HoaDonPDF.xuatHoaDonPDF;
-
 public class PaymentController implements Initializable {
     @FXML
     private AnchorPane root;
@@ -243,6 +241,7 @@ public class PaymentController implements Initializable {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu đơn hàng vào cơ sở dữ liệu.");
                 return;
             }
+            currentOrder.setOrderId(orderId); // Đảm bảo order có orderId đúng
 
             for (OrderDetail detail : orderDetails) {
                 detail.setOrderId(orderId);

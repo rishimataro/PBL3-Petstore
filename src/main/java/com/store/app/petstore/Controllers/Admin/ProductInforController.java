@@ -262,10 +262,6 @@ public class ProductInforController implements Initializable {
                 product.setPrice(Integer.parseInt(txtPrice.getText()));
             }
             product.setDescription(txtDescription.getText());
-
-            // Show warning that the product hasn't been saved yet
-            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo",
-                "Sản phẩm chưa được lưu vào cơ sở dữ liệu. Hình ảnh sẽ được cập nhật khi bạn lưu sản phẩm.");
         } else {
             // For existing products
             product = ProductDAO.findById(idProductCurrent);
@@ -352,13 +348,7 @@ public class ProductInforController implements Initializable {
 
     private void loadDefaultImage() {
         try {
-            String imagePath = "/Images/Product/product";
-            if (idProductCurrent > 0) {
-                imagePath += idProductCurrent;
-            } else {
-                imagePath += "1";
-            }
-            imagePath += ".jpg";
+            String imagePath = "/Images/noImage.png";
 
             Image defaultImage = new Image(getClass().getResourceAsStream(imagePath));
             setRectangleImage(defaultImage);
