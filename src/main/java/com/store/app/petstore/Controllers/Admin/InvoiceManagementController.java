@@ -15,6 +15,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -26,7 +28,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class InvoiceManagementController {
-
+    @FXML
+    private HBox root;
+    @FXML
+    private AnchorPane left_pane, right_pane;
     @FXML
     private TableView<Order> invoice_table;
     @FXML
@@ -170,7 +175,8 @@ public class InvoiceManagementController {
             }
         });
         //
-
+        left_pane.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
+        right_pane.prefWidthProperty().bind(root.widthProperty().multiply(0.4));
         productMap = ProductDAO.findAll().stream()
                 .collect(Collectors.toMap(Product::getProductId, p -> p));
         petMap = Objects.requireNonNull(PetDAO.findAll()).stream()

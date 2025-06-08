@@ -12,9 +12,9 @@
             <Image url="@../../Images/noImage.png" />
          </image>
       </ImageView>
-      <Label fx:id="petName" layoutX="54.0" layoutY="14.0" styleClass="pet-name" text="LUCKY" AnchorPane.bottomAnchor="12.0" AnchorPane.topAnchor="12.0" />
-      <Label fx:id="quality" layoutX="193.5" layoutY="11.0" styleClass="quantity" text="01" />
-      <Label fx:id="unitPrice" layoutX="222.5" layoutY="17.0" styleClass="unitprice" text="10 000 000" textAlignment="RIGHT" />
-      <Label fx:id="total" layoutX="292.0" layoutY="14.0" prefHeight="20.0" prefWidth="80.0" styleClass="total" text="10 000 000" textAlignment="RIGHT" />
+      <Label fx:id="petName" layoutX="54.0" layoutY="14.0" prefHeight="26.0" styleClass="pet-name" text="LUCKY" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="54.0" AnchorPane.rightAnchor="209.42857142857144" AnchorPane.topAnchor="12.0" />
+      <Label fx:id="quality" layoutX="193.5" layoutY="11.0" styleClass="quantity" text="01" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="177.64285714285714" AnchorPane.topAnchor="12.0" />
+      <Label fx:id="unitPrice" layoutX="222.5" layoutY="17.0" styleClass="unitprice" text="10 000 000" textAlignment="RIGHT" AnchorPane.bottomAnchor="17.42857142857143" AnchorPane.rightAnchor="118.35714285714286" AnchorPane.topAnchor="17.0" />
+      <Label fx:id="total" layoutX="292.0" layoutY="14.0" prefHeight="20.0" prefWidth="80.0" styleClass="total" text="10 000 000" textAlignment="RIGHT" AnchorPane.bottomAnchor="15.714285714285715" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="14.0" />
    </children>
 </AnchorPane>

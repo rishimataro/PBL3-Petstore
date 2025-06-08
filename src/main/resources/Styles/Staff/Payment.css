@@ -195,3 +195,6 @@
 .btn-fix:hover {
     -fx-background-color: #005cb2;
 }
+.vbox-invoice-detail{
+    -fx-padding: 10 10 10 10;
+}
