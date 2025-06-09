@@ -49,7 +49,7 @@ public class ItemListController {
     private Label itemGender;
     @FXML private Item item;
 
-    private static final String DEFAULT_IMAGE_PATH = "/images/logo.png";
+    private static final String DEFAULT_IMAGE_PATH = "/Images/noImage.png";
 
     public Item getItem() {
         return item;

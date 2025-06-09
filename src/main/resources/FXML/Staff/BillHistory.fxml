@@ -27,11 +27,11 @@
 
         <AnchorPane id="main_anchor" styleClass="root" stylesheets="@../../Styles/Staff/Invoice.css" VBox.vgrow="ALWAYS">
             <children>
-            <HBox spacing="20" styleClass="main-HBox" AnchorPane.bottomAnchor="22" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="2">
+            <HBox fx:id="main_hbox" styleClass="main-HBox" AnchorPane.bottomAnchor="22" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="2">
                <children>
       
                       <!-- Bảng hóa đơn bên trái -->
-                      <AnchorPane id="left_pane" HBox.hgrow="ALWAYS">
+                      <AnchorPane id="left_pane" fx:id="left_pane" HBox.hgrow="ALWAYS">
                           <children>
                         <HBox alignment="CENTER" spacing="10" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="15.0">
                            <children>
@@ -91,9 +91,9 @@
                       </AnchorPane>
       
                       <!-- Chi tiết hóa đơn bên phải -->
-                      <AnchorPane id="right_pane">
+                      <AnchorPane id="right_pane" fx:id="right_pane" HBox.hgrow="ALWAYS">
                           <children>
-                              <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="144.0" styleClass="anchor-pane-invoice-id">
+                              <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="47.0" prefWidth="144.0" styleClass="anchor-pane-invoice-id" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
                                   <children>
                               <HBox alignment="CENTER" layoutY="15.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
                                  <children>
@@ -102,16 +102,16 @@
                               </HBox>
                                   </children>
                               </AnchorPane>
-                        <ScrollPane prefWidth="410" AnchorPane.bottomAnchor="135.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="52.0">
+                        <ScrollPane fitToWidth="true" prefWidth="410" AnchorPane.bottomAnchor="135.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="52.0">
                            <content>
                               <VBox fx:id="productListVBox" spacing="10" styleClass="vbox-invoice-detail" />
                            </content></ScrollPane>
       
-                              <GridPane hgap="10.0" prefHeight="80.0" prefWidth="410.0" AnchorPane.bottomAnchor="57" AnchorPane.leftAnchor="8.0">
+                              <GridPane hgap="10.0" prefHeight="80.0" prefWidth="410.0" AnchorPane.bottomAnchor="57" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="2.2857142857142776">
                                   <columnConstraints>
                                       <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="108.0" />
                                       <ColumnConstraints hgrow="SOMETIMES" prefWidth="162.0" />
-                                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="140.0" />
+                                      <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" prefWidth="140.0" />
                                   </columnConstraints>
                                   <rowConstraints>
                                       <RowConstraints prefHeight="30.0" />
@@ -140,25 +140,21 @@
                               <TextField fx:id="discountCode" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                   </children>
                               </GridPane>
-                        <AnchorPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="15.0">
-                           <children>
-            
-                                    <Button layoutX="227.0" layoutY="21.5" mnemonicParsing="false" onAction="#DeleteInvoiceClicked" prefHeight="30.0" prefWidth="175.0" text="">
-                                        <styleClass>
-                                            <String fx:value="crud_func" />
-                                            <String fx:value="delete-btn" />
-                                        </styleClass>
-                                        <graphic>
-                                            <HBox alignment="CENTER" spacing="5.0">
-                                                <children>
-                                                    <Text styleClass="func_icon" text="Huỷ hoá đơn" />
-                                                    <FontAwesomeIconView glyphName="TRASH" styleClass="func_icon" />
-                                                </children>
-                                            </HBox>
-                                        </graphic>
-                                    </Button>
-                           </children>
-                        </AnchorPane>
+      
+                                    <Button layoutX="241.85714721679688" layoutY="419.78570556640625" mnemonicParsing="false" onAction="#DeleteInvoiceClicked" prefHeight="30.0" prefWidth="175.0" text="" AnchorPane.bottomAnchor="0.2142944335937429" AnchorPane.rightAnchor="3.285709926060264">
+                                  <styleClass>
+                                      <String fx:value="crud_func" />
+                                      <String fx:value="delete-btn" />
+                                  </styleClass>
+                                  <graphic>
+                                      <HBox alignment="CENTER" spacing="5.0">
+                                          <children>
+                                              <Text styleClass="func_icon" text="Huỷ hoá đơn" />
+                                              <FontAwesomeIconView glyphName="TRASH" styleClass="func_icon" />
+                                          </children>
+                                      </HBox>
+                                  </graphic>
+                              </Button>
                           </children>
                       </AnchorPane>
                </children>

@@ -15,6 +15,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -26,7 +28,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class InvoiceManagementController {
-
+    @FXML
+    private HBox root;
+    @FXML
+    private AnchorPane left_pane, right_pane;
     @FXML
     private TableView<Order> invoice_table;
     @FXML
@@ -170,7 +175,8 @@ public class InvoiceManagementController {
             }
         });
         //
-
+        left_pane.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
+        right_pane.prefWidthProperty().bind(root.widthProperty().multiply(0.4));
         productMap = ProductDAO.findAll().stream()
                 .collect(Collectors.toMap(Product::getProductId, p -> p));
         petMap = Objects.requireNonNull(PetDAO.findAll()).stream()
@@ -297,34 +303,35 @@ public class InvoiceManagementController {
 
     private void DiscountInfo(Order order) {
         Discount dc = DiscountDAO.findById(order.getDiscountId());
-        double total_value = order.getTotalPrice();
-
-        double max_discount_value = 0.0;
-        double discount_value = 0.0;
-        double discount_min_value = 0.0;
-        String discount_type = "";
-        String discount_code = "";
-        if (dc != null) {
-            max_discount_value = dc.getMaxDiscountValue();
-            discount_value = dc.getValue();
-            discount_min_value = dc.getMinOrderValue();
-            discount_type = dc.getDiscountType();
-            discount_code = dc.getCode();
-        }
-
+        double totalValue = order.getTotalPrice();
         double discount = 0.0;
-        if (discount_min_value > total_value) {
-            discount = 0.0;
-        } else if (discount_type.equals("percent")) {
-            discount = ((total_value * discount_value) / 100);
-            if (discount > max_discount_value) {
-                discount = max_discount_value;
-            }
-        } else if (discount_type.equals("fixed")) {
-            discount = discount_value;
+        String discountCodeStr = "";
+        double discountValue = 0.0;
+        double maxDiscountValue = 0.0;
+        double minOrderValue = 0.0;
+        String discountType = "";
+
+        if (dc != null) {
+            discountCodeStr = dc.getCode();
+            discountValue = dc.getValue();
+            maxDiscountValue = dc.getMaxDiscountValue();
+            minOrderValue = dc.getMinOrderValue();
+            discountType = dc.getDiscountType();
         }
-        discountCode.setText(discount_code);
-        detailDiscountValue.setText(String.format("%, .0f VNĐ", discount_value));
-        detailInvoiceTotal.setText(String.format("%, .0f VNĐ", total_value - discount));
+
+        if (dc == null || minOrderValue > totalValue) {
+            discount = 0.0;
+        } else if ("percent".equalsIgnoreCase(discountType)) {
+            discount = totalValue * discountValue / 100.0;
+            if (discount > maxDiscountValue) {
+                discount = maxDiscountValue;
+            }
+        } else if ("fixed".equalsIgnoreCase(discountType)) {
+            discount = discountValue;
+        }
+
+        this.discountCode.setText(discountCodeStr);
+        this.detailDiscountValue.setText(String.format("%,.0f VNĐ", discount));
+        this.detailInvoiceTotal.setText(String.format("%,.0f VNĐ", totalValue - discount));
     }
 }

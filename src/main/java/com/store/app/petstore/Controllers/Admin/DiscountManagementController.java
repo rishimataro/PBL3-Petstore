@@ -1,5 +1,6 @@
 package com.store.app.petstore.Controllers.Admin;
 
+import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.DiscountDAO;
 import com.store.app.petstore.Models.Entities.Discount;
 import com.store.app.petstore.Views.AdminFactory;
@@ -41,10 +42,10 @@ public class DiscountManagementController implements Initializable {
     private TableColumn<Discount, Integer> colID;
 
     @FXML
-    private TableColumn<Discount, Double> colMaxDiscount;
+    private TableColumn<Discount, String> colMaxDiscount;
 
     @FXML
-    private TableColumn<Discount, Double> colMinOrder;
+    private TableColumn<Discount, String> colMinOrder;
 
     @FXML
     private TableColumn<Discount, LocalDate> colStartDate;
@@ -56,7 +57,7 @@ public class DiscountManagementController implements Initializable {
     private TableColumn<Discount, String> colType;
 
     @FXML
-    private TableColumn<Discount, Double> colDiscountValue;
+    private TableColumn<Discount, String> colDiscountValue;
 
     @FXML
     private TableView<Discount> discountTableView;
@@ -115,9 +116,18 @@ public class DiscountManagementController implements Initializable {
             return new SimpleStringProperty(displayType);
         });
 
-        colDiscountValue.setCellValueFactory(new PropertyValueFactory<>("value"));
-        colMaxDiscount.setCellValueFactory(new PropertyValueFactory<>("maxDiscountValue"));
-        colMinOrder.setCellValueFactory(new PropertyValueFactory<>("minOrderValue"));
+        colDiscountValue.setCellValueFactory(cellData -> {
+            String formattedPrice = ControllerUtils.formatCurrency(cellData.getValue().getValue());
+            return new SimpleStringProperty(formattedPrice);
+        });
+        colMaxDiscount.setCellValueFactory(cellData -> {
+            String formattedPrice = ControllerUtils.formatCurrency(cellData.getValue().getMaxDiscountValue());
+            return new SimpleStringProperty(formattedPrice);
+        });
+        colMinOrder.setCellValueFactory(cellData -> {
+            String formattedPrice = ControllerUtils.formatCurrency(cellData.getValue().getMinOrderValue());
+            return new SimpleStringProperty(formattedPrice);
+        });
 
         colStartDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
         colStartDate.setCellFactory(column -> new TableCell<Discount, LocalDate>() {

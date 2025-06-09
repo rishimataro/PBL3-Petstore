@@ -1,5 +1,6 @@
 package com.store.app.petstore.Controllers.Staff;
 
+import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.Models.Entities.OrderDetail;
 import com.store.app.petstore.Models.Entities.Product;
 import javafx.fxml.FXML;
@@ -28,9 +29,9 @@ public class ProductItemDetailController {
         double unitPriceValue = orderDetail.getUnitPrice();
         double totalValue = quantity * unitPriceValue;
         productName.setText(product.getName());
-        unitPrice.setText(unitPriceValue + "");
+        unitPrice.setText(ControllerUtils.formatCurrency(unitPriceValue));
         quality.setText(quantity + "");
-        total.setText(totalValue + "");
+        total.setText(ControllerUtils.formatCurrency(totalValue));
 
         InputStream imageStream = null;
         try {

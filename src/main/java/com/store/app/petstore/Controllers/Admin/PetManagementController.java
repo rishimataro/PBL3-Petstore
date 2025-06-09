@@ -53,7 +53,7 @@ public class PetManagementController implements Initializable {
     private TableColumn<Pet, String> colName;
 
     @FXML
-    private TableColumn<Pet, Integer> colPrice;
+    private TableColumn<Pet, String> colPrice;
 
     @FXML
     private TableColumn<Pet, String> colSex;
@@ -94,8 +94,8 @@ public class PetManagementController implements Initializable {
 
     private void setupTableSize() {
         colID.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.05));
-        colName.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.15));
-        colType.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.15));
+        colName.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.2));
+        colType.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.2));
         colBreed.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.15));
         colSex.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.10));
         colPrice.prefWidthProperty().bind(petTableView.widthProperty().multiply(0.15));
@@ -109,7 +109,10 @@ public class PetManagementController implements Initializable {
         colType.setCellValueFactory(new PropertyValueFactory<>("type"));
         colBreed.setCellValueFactory(new PropertyValueFactory<>("breed"));
         colSex.setCellValueFactory(new PropertyValueFactory<>("sex"));
-        colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        colPrice.setCellValueFactory(cellData -> {
+            String formattedPrice = ControllerUtils.formatCurrency(cellData.getValue().getPrice());
+            return new SimpleStringProperty(formattedPrice);
+        });
         colStatus.setCellValueFactory(cellData -> {
             boolean isSold = cellData.getValue().getIsSold();
             return new SimpleStringProperty(isSold ? "Đã bán" : "Còn");

@@ -7,17 +7,24 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox prefHeight="442.0" prefWidth="990.0" stylesheets="@../../Styles/Admin/AdminCommon.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.CustomerManagementController">
    <children>
        <fx:include source="AdminMenu.fxml" />
-      <AnchorPane fx:id="root" layoutY="42.0" prefHeight="442.0" prefWidth="990.0" styleClass="search-section" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="root" layoutY="42.0" prefHeight="442.0" prefWidth="990.0" styleClass="search-section" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
          <children>
-            <TextField fx:id="searchTextField" layoutX="13.0" layoutY="15.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm khách hàng" styleClass="find-textfield" />
-            <FontAwesomeIconView fx:id="searchIcon" glyphName="SEARCH" layoutX="24.0" layoutY="34.0" size="13" styleClass="icon" />
-            <ChoiceBox fx:id="cmbTotalSpend" layoutX="305.0" layoutY="15.0" prefWidth="110.0" styleClass="filter-combo-box" />
-            <TableView fx:id="customerTableView" layoutX="13.0" layoutY="53.0" prefHeight="380.0" prefWidth="965.0">
+            <TextField fx:id="searchTextField" layoutX="13.0" layoutY="15.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm khách hàng" styleClass="find-textfield" AnchorPane.leftAnchor="13.142857142857167" AnchorPane.rightAnchor="357.0" AnchorPane.topAnchor="15.0" />
+            <FontAwesomeIconView fx:id="searchIcon" glyphName="SEARCH" layoutX="24.0" layoutY="34.0" size="13" styleClass="icon" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="22.857142448425293" />
+            <HBox layoutX="305.0" layoutY="13.0" spacing="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="16.0">
+               <children>
+                  <ChoiceBox fx:id="cmbTotalSpend" prefWidth="110.0" styleClass="filter-combo-box" />
+                  <Button fx:id="addCustomerButton" mnemonicParsing="false" styleClass="add-button" text="Thêm khách hàng" />
+                  <Button fx:id="viewDetailsButton" mnemonicParsing="false" styleClass="add-button" text="Xem chi tiết" />
+               </children>
+            </HBox>
+            <TableView fx:id="customerTableView" layoutX="13.0" layoutY="53.0" prefHeight="380.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.5714285714285552" AnchorPane.leftAnchor="13.142857142857224" AnchorPane.rightAnchor="12.142857142857224" AnchorPane.topAnchor="53.0">
               <columns>
                 <TableColumn fx:id="colID" styleClass="stt-column" text="ID" />
                 <TableColumn fx:id="colName" text="Tên khách hàng" />
@@ -25,9 +32,7 @@
                 <TableColumn fx:id="colTotalSpend" text="Tổng chi" />
               </columns>
             </TableView>
-            <Button fx:id="addCustomerButton" layoutX="426.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Thêm khách hàng" />
-            <Button fx:id="viewDetailsButton" layoutX="546.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Xem chi tiết" />
-            <FontAwesomeIconView fx:id="closeIcon" glyphName="CLOSE" layoutX="262.0" layoutY="35.0" size="13" styleClass="icon" />
+            <FontAwesomeIconView fx:id="closeIcon" glyphName="CLOSE" layoutX="262.0" layoutY="35.0" size="13" styleClass="icon" AnchorPane.rightAnchor="368.0" AnchorPane.topAnchor="23.857142448425293" />
          </children>
       </AnchorPane>
    </children>

@@ -12,17 +12,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.OrderController">
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Staff.OrderController">
     <children>
-        <fx:include source="StaffMenu.fxml" />
+        <fx:include source="StaffMenu.fxml" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
 
-        <AnchorPane fx:id="root" styleClass="root" stylesheets="@../../Styles/Staff/Order.css" VBox.vgrow="ALWAYS">
+        <HBox fx:id="root" styleClass="root" stylesheets="@../../Styles/Staff/Order.css" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="70">
             <children>
 
                       <!-- Left pane - Sản phẩm -->
-                <AnchorPane id="left_panel" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="470" AnchorPane.topAnchor="0.0">
+                <AnchorPane id="left_panel" fx:id="left_pane" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="470" AnchorPane.topAnchor="0.0">
                     <children>
                   <HBox alignment="CENTER" fillHeight="false" spacing="10" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="10">
                      <children>
@@ -50,10 +49,8 @@
                 </AnchorPane>
 
                       <!-- Right pane - Đơn hàng -->
-                <AnchorPane id="right_panel" prefWidth="440.0" AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="0.0">
+                <AnchorPane id="right_panel" fx:id="right_pane" AnchorPane.bottomAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="0.0">
                     <children>
-                  <VBox AnchorPane.bottomAnchor="50" AnchorPane.topAnchor="60">
-                     <children>
 <!--                              <AnchorPane fx:id="orderContentPane" layoutX="10.0" layoutY="14.0" prefHeight="280.0" prefWidth="420.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">-->
 <!--                           <children>-->
 <!--                                     <ScrollPane fx:id="orderScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="280.0" prefWidth="420.0" vbarPolicy="NEVER" />-->
@@ -61,40 +58,38 @@
 <!--                              </AnchorPane>-->
 <!--                             <AnchorPane fx:id="orderContentPane"  AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">-->
 
-                         <ScrollPane fx:id="orderScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="280.0" prefWidth="420.0" vbarPolicy="NEVER" VBox.vgrow="ALWAYS" />
+                   <ScrollPane fx:id="orderScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutY="60.0" pannable="true" prefHeight="280.0" prefWidth="420.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="60.0" />
 
 <!--                             </AnchorPane>-->
-                                       <GridPane hgap="10.0" prefHeight="80.0" prefWidth="410.0">
-                                  <columnConstraints>
-                                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="108.0" />
-                                      <ColumnConstraints hgrow="SOMETIMES" prefWidth="162.0" />
-                                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="140.0" />
-                                  </columnConstraints>
-                                  <rowConstraints>
-                                      <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
-                                      <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
-                                      <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
-                                  </rowConstraints>
-                                  <children>
-                                      <Label fx:id="totalMoneyLabel" styleClass="infomoney-label" text="Tổng tiền:" />
-                                      <Label fx:id="voucherLabel" styleClass="infomoney-label" text="Voucher:" GridPane.rowIndex="1" />
-                                      <Label fx:id="finalMoneyLabel" styleClass="infomoney-label" text="Khách cần trả:" GridPane.rowIndex="2" />
+                                 <GridPane hgap="10.0" layoutY="340.0" prefHeight="80.0" prefWidth="410.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="30.0">
+                            <columnConstraints>
+                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" prefWidth="108.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" prefWidth="162.0" />
+                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" prefWidth="140.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label fx:id="totalMoneyLabel" styleClass="infomoney-label" text="Tổng tiền:" />
+                                <Label fx:id="voucherLabel" styleClass="infomoney-label" text="Voucher:" GridPane.rowIndex="1" />
+                                <Label fx:id="finalMoneyLabel" styleClass="infomoney-label" text="Khách cần trả:" GridPane.rowIndex="2" />
 
-                                               <TextField fx:id="voucherTextField" promptText="Nhập code (nếu có)" styleClass="code-textfield" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                         <TextField fx:id="voucherTextField" promptText="Nhập code (nếu có)" styleClass="code-textfield" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                                               <Label fx:id="totalMoneyValueLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" />
-                                      <Label fx:id="voucherValueLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                      <Label fx:id="finalMoneyValueLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                  </children>
-                              </GridPane>
-                     </children>
-                  </VBox>
+                                         <Label fx:id="totalMoneyValueLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" />
+                                <Label fx:id="voucherValueLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                <Label fx:id="finalMoneyValueLabel" styleClass="money-label" text="0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                            </children>
+                        </GridPane>
 
                               <Button fx:id="confirmButton" layoutX="368.0" layoutY="386.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="119.0" text="Xác nhận" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
                     </children>
                 </AnchorPane>
 
             </children>
-        </AnchorPane>
+        </HBox>
     </children>
-</VBox>
+</AnchorPane>

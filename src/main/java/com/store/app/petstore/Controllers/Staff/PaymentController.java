@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
@@ -31,8 +32,11 @@ import java.util.ArrayList;
 
 public class PaymentController implements Initializable {
     @FXML
-    private AnchorPane root;
-
+    private HBox root;
+    @FXML
+    private AnchorPane left_pane;
+    @FXML
+    private AnchorPane right_pane;
     @FXML
     private Button addCustomerBtn;
 
@@ -49,7 +53,7 @@ public class PaymentController implements Initializable {
     private TextField customerIdField;
 
     @FXML
-    private VBox customerInfoBox;
+    private AnchorPane customerInfoBox;
 
     @FXML
     private Label customerInfoLabel;
@@ -137,7 +141,8 @@ public class PaymentController implements Initializable {
                 handleSearchCustomer();
             }
         });
-
+        left_pane.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
+        right_pane.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
         Order order = SessionManager.getCurrentOrder();
         ArrayList<OrderDetail> orderDetails = SessionManager.getCurrentOrderDetails();
         Map<Integer, Product> products = SessionManager.getCurrentOrderProducts();
@@ -213,7 +218,7 @@ public class PaymentController implements Initializable {
         }
     }
 
-    private void handleConfirmPayment() {
+    private void handleConfirmPayment() throws IOException {
         if (customer == null) {
             ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo",
                     "Vui lòng chọn khách hàng trước khi thanh toán.");
@@ -241,6 +246,7 @@ public class PaymentController implements Initializable {
                 ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu đơn hàng vào cơ sở dữ liệu.");
                 return;
             }
+            currentOrder.setOrderId(orderId); // Đảm bảo order có orderId đúng
 
             for (OrderDetail detail : orderDetails) {
                 detail.setOrderId(orderId);
@@ -261,7 +267,8 @@ public class PaymentController implements Initializable {
                 }
             }
 
-            ControllerUtils.showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Thanh toán thành công!");
+            String folder = "src/main/resources/BillPDF";
+            HoaDonPDF.xuatHoaDonPDF(folder, currentOrder, orderDetails, productMap, petMap, currentDiscount);
 
             Tab currentTab = SessionManager.getCurrentTab();
             if (currentTab != null) {
@@ -381,7 +388,13 @@ public class PaymentController implements Initializable {
     private void setupButtonActions() {
         addCustomerBtn.setOnAction(event -> handleAddCustomer());
         fixCustomerbtn.setOnAction(event -> handleFixCustomer());
-        paymentBtn.setOnAction(event -> handleConfirmPayment());
+        paymentBtn.setOnAction(event -> {
+            try {
+                handleConfirmPayment();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         backbtn.setOnAction(event -> handleBack());
         searchIcon.setOnMouseClicked(event -> handleSearchCustomer());
         clearSearchIcon.setOnMouseClicked(event -> handleClearSearch());

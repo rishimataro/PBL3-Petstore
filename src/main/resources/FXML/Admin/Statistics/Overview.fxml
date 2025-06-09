@@ -29,7 +29,7 @@
                 <FontAwesomeIconView glyphName="DOLLAR" layoutX="8.0" layoutY="38.0" size="40" styleClass="item-tag-icon" />
             </Pane>
             <VBox maxWidth="400" prefHeight="62.0" prefWidth="191.0" spacing="5">
-                <Label styleClass="item-tag-title" text="Tổng doanh thu trong ngày:" />
+                <Label styleClass="item-tag-title" text="Tổng doanh thu:" />
                 <HBox alignment="CENTER_LEFT" spacing="5">
                     <Label fx:id="totalRevenueLabel" prefHeight="35.0" prefWidth="152.0" styleClass="item-tag-number" text="0.00" />
                     <Label styleClass="item-tag-unit" text="VND" />
@@ -41,7 +41,7 @@
                 <FontAwesomeIconView glyphName="PAW" layoutX="-4.0" layoutY="28.0" size="35" styleClass="item-tag-icon" />
             </Pane>
             <VBox maxWidth="Infinity" prefHeight="50.0">
-                <Label styleClass="item-tag-title" text="Tổng thú cưng đã bán trong ngày:" />
+                <Label styleClass="item-tag-title" text="Tổng thú cưng đã bán:" />
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <Label fx:id="totalPetsSoldLabel" prefHeight="17.0" prefWidth="141.0" text="0.00">
@@ -61,7 +61,7 @@
                 <FontAwesomeIconView glyphName="ARCHIVE" layoutX="-4.0" layoutY="29.0" size="35" styleClass="item-tag-icon" />
             </Pane>
             <VBox maxWidth="Infinity" prefHeight="50.0">
-                <Label styleClass="item-tag-title" text="Tổng sản phẩm đã bán trong ngày:" />
+                <Label styleClass="item-tag-title" text="Tổng sản phẩm đã bán:" />
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <Label fx:id="totalProductsSoldLabel" prefHeight="17.0" prefWidth="141.0" text="0">
                         <styleClass>
@@ -79,7 +79,7 @@
                 <FontAwesomeIconView glyphName="CALCULATOR" layoutX="-4.0" layoutY="29.0" size="35" styleClass="item-tag-icon" />
             </Pane>
             <VBox maxWidth="Infinity" prefHeight="50.0">
-                <Label styleClass="item-tag-title" text="Tổng hóa đơn trong ngày:" />
+                <Label styleClass="item-tag-title" text="Tổng hóa đơn:" />
                 <HBox prefHeight="100.0" prefWidth="200.0">
                     <Label fx:id="totalInvoicesLabel" prefHeight="17.0" prefWidth="121.0" text="0">
                         <styleClass>

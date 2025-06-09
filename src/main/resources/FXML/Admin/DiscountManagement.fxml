@@ -8,21 +8,22 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox prefHeight="442.0" prefWidth="990.0" stylesheets="@../../Styles/Admin/AdminCommon.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.DiscountManagementController">
    <children>
        <fx:include source="AdminMenu.fxml" />
-      <AnchorPane fx:id="root" layoutY="42.0" prefHeight="442.0" prefWidth="990.0" styleClass="search-section" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="root" layoutY="42.0" prefHeight="442.0" prefWidth="990.0" styleClass="search-section" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
          <children>
-            <TextField fx:id="searchTextField" layoutX="13.0" layoutY="15.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm khuyến mãi" styleClass="find-textfield" />
-            <FontAwesomeIconView fx:id="searchIcon" glyphName="SEARCH" layoutX="24.0" layoutY="34.0" size="13" styleClass="icon" />
+            <TextField fx:id="searchTextField" layoutX="13.0" layoutY="15.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm khuyến mãi" styleClass="find-textfield" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="560.0" />
+            <FontAwesomeIconView fx:id="searchIcon" glyphName="SEARCH" layoutX="24.0" layoutY="34.0" size="13" styleClass="icon" AnchorPane.bottomAnchor="397.8571428571429" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="22.85714285714286" />
             <FontAwesomeIconView glyphName="CLOSE" layoutX="262.0" layoutY="35.0" styleClass="icon" text="">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </FontAwesomeIconView>
-            <TableView fx:id="discountTableView" layoutX="13.0" layoutY="53.0" prefHeight="380.0" prefWidth="965.0">
+            <TableView fx:id="discountTableView" layoutX="13.0" layoutY="53.0" prefHeight="380.0" prefWidth="965.0" AnchorPane.bottomAnchor="1.1428571428571104" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="12.000000000000114" AnchorPane.topAnchor="53.0">
               <columns>
                 <TableColumn fx:id="colID" styleClass="stt-column" text="ID" />
                 <TableColumn fx:id="colCode" text="Code" />
@@ -35,17 +36,23 @@
                 <TableColumn fx:id="colStatus" text="Tình trạng" />
               </columns>
             </TableView>
-            <Button fx:id="addDiscountButton" layoutX="632.0" layoutY="15.0" mnemonicParsing="false" styleClass="add-button" text="Thêm khuyến mãi">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></Button>
-            <Button fx:id="viewDetailsButton" layoutX="752.0" layoutY="15.0" mnemonicParsing="false" styleClass="add-button" text="Xem chi tiết">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></Button>
-            <FontAwesomeIconView fx:id="closeIcon" glyphName="CLOSE" layoutX="262.0" layoutY="35.0" size="13" styleClass="icon" />
-            <ChoiceBox fx:id="cmbType" layoutX="302.0" layoutY="15.0" prefWidth="150.0" styleClass="filter-combo-box" />
-            <ChoiceBox fx:id="cmbStatus" layoutX="469.0" layoutY="15.0" prefWidth="150.0" styleClass="filter-combo-box" />
+            <HBox layoutX="302.0" layoutY="15.0" spacing="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="16.5">
+               <children>
+                  <ChoiceBox fx:id="cmbType" prefWidth="150.0" styleClass="filter-combo-box" />
+                  <ChoiceBox fx:id="cmbStatus" prefWidth="150.0" styleClass="filter-combo-box" />
+                  <Button fx:id="addDiscountButton" mnemonicParsing="false" styleClass="add-button" text="Thêm khuyến mãi">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="viewDetailsButton" mnemonicParsing="false" styleClass="add-button" text="Xem chi tiết">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </HBox>
+            <FontAwesomeIconView fx:id="closeIcon" glyphName="CLOSE" layoutX="262.0" layoutY="35.0" size="13" styleClass="icon" AnchorPane.rightAnchor="571.0" AnchorPane.topAnchor="23.0" />
          </children>
       </AnchorPane>
    </children>

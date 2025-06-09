@@ -8,25 +8,33 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox prefHeight="442.0" prefWidth="990.0" stylesheets="@../../Styles/Admin/AdminCommon.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.store.app.petstore.Controllers.Admin.UserManagementController">
     <children>
         <fx:include source="AdminMenu.fxml" />
-        <AnchorPane fx:id="root" layoutY="14.0" prefHeight="442.0" prefWidth="990.0" styleClass="search-section" AnchorPane.topAnchor="0.0">
+        <AnchorPane fx:id="root" layoutY="14.0" prefHeight="442.0" prefWidth="990.0" styleClass="search-section" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
             <children>
-                <TextField fx:id="searchTextField" layoutX="13.0" layoutY="15.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm tài khoản" styleClass="find-textfield" />
-                <FontAwesomeIconView fx:id="searchIcon" glyphName="SEARCH" layoutX="24.0" layoutY="34.0" size="13" styleClass="icon" />
-                <FontAwesomeIconView fx:id="closeIcon" glyphName="CLOSE" layoutX="262.0" layoutY="35.0" styleClass="icon">
+                <TextField fx:id="searchTextField" layoutX="13.0" layoutY="15.0" prefHeight="30.0" prefWidth="270.0" promptText="Tìm kiếm tài khoản" styleClass="find-textfield" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="465.0" AnchorPane.topAnchor="15.0" />
+                <FontAwesomeIconView fx:id="searchIcon" glyphName="SEARCH" layoutX="24.0" layoutY="34.0" size="13" styleClass="icon" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="22.857142448425293" />
+                <FontAwesomeIconView fx:id="closeIcon" glyphName="CLOSE" layoutX="262.0" layoutY="35.0" styleClass="icon" AnchorPane.rightAnchor="476.0" AnchorPane.topAnchor="24.714285850524902">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </FontAwesomeIconView>
+            <HBox layoutX="305.0" layoutY="13.0" spacing="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="16.0">
+               <children>
+      
+                      <ChoiceBox fx:id="roleChoiceBox" prefWidth="110.0" styleClass="filter-combo-box" />
+                      <ChoiceBox fx:id="statusChoiceBox" prefWidth="110.0" styleClass="filter-combo-box" />
+      
+                      <Button fx:id="addAccountButton" mnemonicParsing="false" styleClass="add-button" text="Thêm tài khoản" />
+                      <Button fx:id="viewDetailsButton" mnemonicParsing="false" styleClass="add-button" text="Xem chi tiết" />
+               </children>
+            </HBox>
 
-                <ChoiceBox fx:id="roleChoiceBox" layoutX="305.0" layoutY="15.0" prefWidth="110.0" styleClass="filter-combo-box" />
-                <ChoiceBox fx:id="statusChoiceBox" layoutX="423.0" layoutY="14.0" prefWidth="110.0" styleClass="filter-combo-box" />
-
-                <TableView fx:id="accountTableView" layoutX="13.0" layoutY="53.0" prefHeight="380.0" prefWidth="965.0">
+                <TableView fx:id="accountTableView" layoutX="13.0" layoutY="53.0" prefHeight="380.0" prefWidth="965.0" AnchorPane.bottomAnchor="0.5714285714285552" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="12.000000000000114" AnchorPane.topAnchor="53.0">
                     <columns>
                         <TableColumn fx:id="colID" styleClass="stt-column" text="ID" />
                         <TableColumn fx:id="colUsername" text="Tên đăng nhập" />
@@ -36,9 +44,6 @@
                         <TableColumn fx:id="colStatus" text="Tình trạng" />
                     </columns>
                 </TableView>
-
-                <Button fx:id="addAccountButton" layoutX="543.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Thêm tài khoản" />
-                <Button fx:id="viewDetailsButton" layoutX="649.0" layoutY="13.0" mnemonicParsing="false" styleClass="add-button" text="Xem chi tiết" />
             </children>
         </AnchorPane>
     </children>

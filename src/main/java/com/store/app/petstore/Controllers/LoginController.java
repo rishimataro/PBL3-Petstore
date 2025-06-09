@@ -10,10 +10,13 @@ import com.store.app.petstore.Views.StaffFactory;
 import com.store.app.petstore.Views.UtilsFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -50,6 +53,11 @@ public class LoginController implements Initializable  {
     private ImageView userImage;
 
     private double x, y;
+
+    @FXML
+    private void handleEnter(ActionEvent event) {
+        handleLogin();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

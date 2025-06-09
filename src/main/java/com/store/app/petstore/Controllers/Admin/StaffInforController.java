@@ -32,6 +32,7 @@ import java.nio.file.StandardCopyOption;
 
 import java.net.URL;
 import java.text.Normalizer;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -221,11 +222,11 @@ public class StaffInforController implements Initializable {
         if (validateInput()) {
             if (isNewStaff) {
                 String fullName = txtName.getText();
-                String defaultUsername = removeDiacritics(fullName).toLowerCase();
+                String defaultUsername = removeDiacritics(fullName).toLowerCase().replaceAll("\\s+", "");
                 String defaultPassword = "123456";
 
                 User user = new User();
-                user.setUsername(defaultUsername);
+                user.setUsername(defaultUsername.trim());
                 user.setPassword(defaultPassword);
                 user.setRole(User.ROLE_USER);
                 user.setCreatedAt(java.time.LocalDateTime.now());
@@ -250,7 +251,7 @@ public class StaffInforController implements Initializable {
                 staff.setEmail(txtEmail.getText());
                 staff.setSalary(Double.parseDouble(txtSalary.getText()));
                 staff.setRole(cbPosition.getValue());
-                staff.setHireDate(java.time.LocalDateTime.now());
+                staff.setHireDate(LocalDateTime.now());
                 staff.setAddress(txtAddress.getText());
 
                 if(tempImageUrl != null && !tempImageUrl.isEmpty()) {

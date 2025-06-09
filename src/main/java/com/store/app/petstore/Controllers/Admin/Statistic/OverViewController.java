@@ -47,7 +47,6 @@ public class OverViewController {
     @FXML
     private ChoiceBox<String> monthChoiceBox;
 
-
     @FXML
     public void initialize() {
         setupTableColumns();
@@ -130,47 +129,76 @@ public class OverViewController {
     private void loadDailyStatistics() {
         Task<Void> dailyStatsTask = new Task<Void>() {
             @Override
-            protected Void call() throws SQLException {
+            protected Void call() {
                 updateProgress(-1, 1);
-                Map<String, String> dailyStats = OverviewDAO.getDailyStatistics(LocalDate.now());
-                List<Map<String, String>> recentOrders = OverviewDAO.getRecentOrders();
-
+                Map<String, String> overallStats = null;
+                List<Map<String, String>> recentOrders = null;
+                try {
+                    overallStats = OverviewDAO.getOverallStatistics();
+                    recentOrders = OverviewDAO.getRecentOrders();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                final Map<String, String> finalOverallStats = overallStats;
+                final List<Map<String, String>> finalRecentOrders = recentOrders;
                 Platform.runLater(() -> {
-                    updateStatisticsDisplay(dailyStats);
-                    recentOrdersTable.getItems().setAll(recentOrders);
-
+                    updateStatisticsDisplay(finalOverallStats != null ? finalOverallStats : new HashMap<>());
+                    if (finalRecentOrders != null && !finalRecentOrders.isEmpty()) {
+                        recentOrdersTable.getItems().setAll(finalRecentOrders);
+                    } else {
+                        recentOrdersTable.getItems().clear();
+                    }
                     onViewRevenueButtonClicked();
                 });
                 return null;
             }
         };
 
-        dailyStatsTask.setOnSucceeded(event -> {
-        });
-
         dailyStatsTask.setOnFailed(event -> {
             Throwable e = dailyStatsTask.getException();
-            e.printStackTrace();
+            if (e != null) e.printStackTrace();
             Platform.runLater(() -> {
-                showAlert("Lỗi", "Không thể tải dữ liệu thống kê hàng ngày: " + e.getMessage());
+                showAlert("Lỗi", "Không thể tải dữ liệu thống kê.");
                 setDefaultStatistics();
+                recentOrdersTable.getItems().clear();
             });
         });
 
         new Thread(dailyStatsTask).start();
     }
 
-    private void updateStatisticsDisplay(Map<String, String> dailyStats) {
-        String revenue = dailyStats.get("revenue");
-        if (revenue != null && !revenue.equals("Error")) {
-            totalRevenueLabel.setText(formatCurrency(revenue));
+    private void updateStatisticsDisplay(Map<String, String> stats) {
+        // Update revenue
+        String revenue = stats.get("revenue");
+        if (revenue != null && !revenue.equals("Error") && !revenue.equals("0.00")) {
+            totalRevenueLabel.setText(formatCurrency(revenue) + " VND");
         } else {
-            totalRevenueLabel.setText("0");
+            totalRevenueLabel.setText("0 VND");
         }
 
-        totalPetsSoldLabel.setText(formatNumber(dailyStats.get("petsSold")));
-        totalProductsSoldLabel.setText(formatNumber(dailyStats.get("productsSold")));
-        totalInvoicesLabel.setText(formatNumber(dailyStats.get("invoices")));
+        // Update pets sold
+        String petsSold = stats.get("petsSold");
+        if (petsSold != null && !petsSold.equals("Error")) {
+            totalPetsSoldLabel.setText(formatNumber(petsSold));
+        } else {
+            totalPetsSoldLabel.setText("0");
+        }
+
+        // Update products sold
+        String productsSold = stats.get("productsSold");
+        if (productsSold != null && !productsSold.equals("Error")) {
+            totalProductsSoldLabel.setText(formatNumber(productsSold));
+        } else {
+            totalProductsSoldLabel.setText("0");
+        }
+
+        // Update invoices
+        String invoices = stats.get("invoices");
+        if (invoices != null && !invoices.equals("Error")) {
+            totalInvoicesLabel.setText(formatNumber(invoices));
+        } else {
+            totalInvoicesLabel.setText("0");
+        }
     }
 
     private void setDefaultStatistics() {

@@ -17,6 +17,9 @@ module com.store.app.petstore {
     requires jbcrypt;
     requires io.github.cdimascio.dotenv.java;
     requires junit;
+    requires itextpdf;
+    requires com.google.zxing;
+    requires com.google.zxing.javase;
     // requires org.testng;
 
     opens com.store.app.petstore to javafx.fxml;
