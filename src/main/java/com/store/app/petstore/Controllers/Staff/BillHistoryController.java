@@ -13,6 +13,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -27,6 +29,12 @@ public class BillHistoryController {
     static private Map<Integer, Pet> petMap;
     static private Map<Integer, Customer> customerMap;
 
+    @FXML
+    private AnchorPane left_pane;
+    @FXML
+    private AnchorPane right_pane;
+    @FXML
+    private HBox main_hbox;
     @FXML
     private TableView<Order> invoice_table;
     @FXML
@@ -159,6 +167,9 @@ public class BillHistoryController {
                 }
             }
         });
+
+        left_pane.prefWidthProperty().bind(main_hbox.widthProperty().multiply(0.6));
+        right_pane.prefWidthProperty().bind(main_hbox.widthProperty().multiply(0.4));
 
         productMap = ProductDAO.findAll().stream()
                 .collect(Collectors.toMap(Product::getProductId, p -> p));

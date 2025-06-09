@@ -40,7 +40,7 @@ public class ItemList2Controller {
     private Item item;
 
     private int initialStock;
-    private static final String DEFAULT_IMAGE_PATH = "/images/logo.png";
+    private static final String DEFAULT_IMAGE_PATH = "/Images/noImage.png";
 
     private Runnable onQuantityChanged;
     private Runnable onStockChanged;

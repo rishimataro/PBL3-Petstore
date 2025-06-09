@@ -48,8 +48,9 @@ public class OrderController implements Initializable {
     private static final double SPACING = 10.0;
 
     @FXML
-    private AnchorPane root;
-
+    private HBox root;
+    @FXML
+    private AnchorPane left_pane, right_pane;
     @FXML
     private ScrollPane scrollPane;
     private final FlowPane flowPane = new FlowPane();
@@ -117,7 +118,8 @@ public class OrderController implements Initializable {
                 parent = parent.getParent();
             }
         });
-
+        left_pane.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
+        right_pane.prefWidthProperty().bind(root.widthProperty().multiply(0.4));
         loadItemsByCategory(DEFAULT_CATEGORY);
         loadOrderFromSession();
     }

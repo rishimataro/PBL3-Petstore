@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
@@ -31,8 +32,11 @@ import java.util.ArrayList;
 
 public class PaymentController implements Initializable {
     @FXML
-    private AnchorPane root;
-
+    private HBox root;
+    @FXML
+    private AnchorPane left_pane;
+    @FXML
+    private AnchorPane right_pane;
     @FXML
     private Button addCustomerBtn;
 
@@ -49,7 +53,7 @@ public class PaymentController implements Initializable {
     private TextField customerIdField;
 
     @FXML
-    private VBox customerInfoBox;
+    private AnchorPane customerInfoBox;
 
     @FXML
     private Label customerInfoLabel;
@@ -137,7 +141,8 @@ public class PaymentController implements Initializable {
                 handleSearchCustomer();
             }
         });
-
+        left_pane.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
+        right_pane.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
         Order order = SessionManager.getCurrentOrder();
         ArrayList<OrderDetail> orderDetails = SessionManager.getCurrentOrderDetails();
         Map<Integer, Product> products = SessionManager.getCurrentOrderProducts();
