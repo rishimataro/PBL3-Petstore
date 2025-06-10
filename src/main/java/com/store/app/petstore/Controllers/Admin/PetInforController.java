@@ -4,6 +4,7 @@ import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.PetDAO;
 import com.store.app.petstore.Models.Entities.Pet;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -99,8 +100,70 @@ public class PetInforController implements Initializable {
         cmbSex.setValue("Đực");
         cmbSex.setDisable(true);
 
+        setupInputValidation();
         setupButtonActions();
         setupInitialState();
+    }
+    
+    private void setupInputValidation() {
+        // Name validation: 2-50 characters, letters and Vietnamese characters only
+        txtName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[\\p{L} ]*")) {
+                txtName.setText(newValue.replaceAll("[^\\p{L} ]", ""));
+            }
+            if (newValue.length() > 50) {
+                txtName.setText(newValue.substring(0, 50));
+            }
+        });
+        
+        // Breed validation: 2-50 characters, letters and Vietnamese characters only
+        txtBreed.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[\\p{L} ]*")) {
+                txtBreed.setText(newValue.replaceAll("[^\\p{L} ]", ""));
+            }
+            if (newValue.length() > 50) {
+                txtBreed.setText(newValue.substring(0, 50));
+            }
+        });
+        
+        // Age validation: numbers only, 0-100
+        txtAge.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtAge.setText(oldValue);
+            } else if (!newValue.isEmpty()) {
+                try {
+                    int age = Integer.parseInt(newValue);
+                    if (age > 100) {
+                        txtAge.setText("100");
+                    }
+                } catch (NumberFormatException e) {
+                    // Ignore parse errors
+                }
+            }
+        });
+        
+        // Price validation: numbers only, minimum 1000
+        txtPrice.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtPrice.setText(oldValue);
+            } else if (!newValue.isEmpty()) {
+                try {
+                    long price = Long.parseLong(newValue);
+                    if (price > 1_000_000_000) { // 1 billion VNĐ max
+                        txtPrice.setText("1000000000");
+                    }
+                } catch (NumberFormatException e) {
+                    // Ignore parse errors
+                }
+            }
+        });
+        
+        // Description validation: max 500 characters
+        txtDescription.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 500) {
+                txtDescription.setText(newValue.substring(0, 500));
+            }
+        });
     }
 
     public void setPet(Pet pet) {
@@ -470,13 +533,73 @@ public class PetInforController implements Initializable {
     }
 
     private boolean validateInput() {
-        if(txtName.getText().trim().isEmpty() || txtBreed.getText().trim().isEmpty()
-                || txtAge.getText().isEmpty() || txtPrice.getText().isEmpty()
-                || (!rbtnDog.isSelected() && !rbtnCat.isSelected())
-                || cmbSex.getValue() == null) {
+        // Check required fields
+        if (txtName.getText().trim().isEmpty() || 
+            txtBreed.getText().trim().isEmpty() || 
+            txtAge.getText().isEmpty() || 
+            txtPrice.getText().isEmpty() ||
+            (!rbtnDog.isSelected() && !rbtnCat.isSelected())) {
+            
             ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng điền đầy đủ thông tin thú cưng!");
             return false;
         }
+        
+        // Name validation
+        String name = txtName.getText().trim();
+        if (name.length() < 2 || name.length() > 50) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Tên thú cưng phải có từ 2 đến 50 ký tự!");
+            txtName.requestFocus();
+            return false;
+        }
+        
+        // Breed validation
+        String breed = txtBreed.getText().trim();
+        if (breed.length() < 2 || breed.length() > 50) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giống thú cưng phải có từ 2 đến 50 ký tự!");
+            txtBreed.requestFocus();
+            return false;
+        }
+        
+        // Age validation
+        try {
+            int age = Integer.parseInt(txtAge.getText().trim());
+            if (age < 0 || age > 100) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Tuổi phải từ 0 đến 100!");
+                txtAge.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Tuổi phải là số!");
+            txtAge.requestFocus();
+            return false;
+        }
+        
+        // Price validation
+        try {
+            long price = Long.parseLong(txtPrice.getText().trim());
+            if (price < 1000) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá phải từ 1,000 VNĐ trở lên!");
+                txtPrice.requestFocus();
+                return false;
+            }
+            if (price > 1_000_000_000) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá không được vượt quá 1,000,000,000 VNĐ!");
+                txtPrice.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá không hợp lệ!");
+            txtPrice.requestFocus();
+            return false;
+        }
+        
+        // Description length check (optional field)
+        if (txtDescription.getText().length() > 500) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Mô tả không được vượt quá 500 ký tự!");
+            txtDescription.requestFocus();
+            return false;
+        }
+        
         return true;
     }
 
@@ -489,6 +612,9 @@ public class PetInforController implements Initializable {
         rbtnDog.setDisable(false);
         rbtnCat.setDisable(false);
         cmbSex.setDisable(false);
+        
+        // Focus on name field when enabling editing
+        Platform.runLater(() -> txtName.requestFocus());
     }
 
     private void disableEditing() {

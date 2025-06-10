@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.application.Platform;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,8 +36,68 @@ public class ForgotPasswordController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setupInputValidation();
         setupEventHandlers();
         hidePasswordFields();
+    }
+    
+    private void setupInputValidation() {
+        // Email validation
+        emailField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 100) {
+                emailField.setText(oldValue);
+                return;
+            }
+            
+            if (!newValue.isEmpty() && !checkFormEmail(newValue)) {
+                emailField.setStyle("-fx-border-color: #F44336; -fx-border-width: 1;");
+            } else {
+                emailField.setStyle("");
+            }
+        });
+        
+        // New password validation
+        newPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 50) {
+                newPasswordField.setText(oldValue);
+                return;
+            }
+            
+            if (newValue.length() > 0 && newValue.length() < 6) {
+                newPasswordField.setStyle("-fx-border-color: #F44336; -fx-border-width: 1;");
+            } else {
+                newPasswordField.setStyle("");
+                // Check if passwords match if confirm password is not empty
+                if (!confirmPasswordField.getText().isEmpty()) {
+                    validatePasswordMatch();
+                }
+            }
+        });
+        
+        // Confirm password validation
+        confirmPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 50) {
+                confirmPasswordField.setText(oldValue);
+                return;
+            }
+            validatePasswordMatch();
+        });
+    }
+    
+    private void validatePasswordMatch() {
+        String newPassword = newPasswordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
+        
+        if (confirmPassword.isEmpty() || newPassword.isEmpty()) {
+            confirmPasswordField.setStyle("");
+            return;
+        }
+        
+        if (!newPassword.equals(confirmPassword)) {
+            confirmPasswordField.setStyle("-fx-border-color: #F44336; -fx-border-width: 1;");
+        } else {
+            confirmPasswordField.setStyle("-fx-border-color: #4CAF50; -fx-border-width: 1;");
+        }
     }
 
     private void setupEventHandlers() {
@@ -45,7 +106,7 @@ public class ForgotPasswordController implements Initializable {
     }
 
     private boolean checkFormEmail(String email) {
-        return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+        return email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
     }
 
     private void handleResetPassword() {
@@ -53,11 +114,15 @@ public class ForgotPasswordController implements Initializable {
 
         if (email.isEmpty()) {
             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập email của bạn");
+            emailField.requestFocus();
             return;
         }
 
         if (!checkFormEmail(email)) {
-            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Email không hợp lệ");
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", 
+                "Email không hợp lệ.\n" +
+                "Ví dụ: example@domain.com");
+            emailField.requestFocus();
             return;
         }
 
@@ -79,16 +144,29 @@ public class ForgotPasswordController implements Initializable {
 
         if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập đầy đủ mật khẩu mới");
-            return;
-        }
-
-        if (!newPassword.equals(confirmPassword)) {
-            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Mật khẩu xác nhận không khớp");
+            if (newPassword.isEmpty()) newPasswordField.requestFocus();
+            else confirmPasswordField.requestFocus();
             return;
         }
 
         if (newPassword.length() < 6) {
-            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Mật khẩu phải có ít nhất 6 ký tự");
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", 
+                "Mật khẩu phải có ít nhất 6 ký tự");
+            newPasswordField.requestFocus();
+            return;
+        }
+        
+        if (newPassword.length() > 50) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", 
+                "Mật khẩu không được vượt quá 50 ký tự");
+            newPasswordField.requestFocus();
+            return;
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", 
+                "Mật khẩu xác nhận không khớp");
+            confirmPasswordField.requestFocus();
             return;
         }
 
@@ -117,6 +195,9 @@ public class ForgotPasswordController implements Initializable {
         passwordFields.setManaged(true);
         confirmPasswordFields.setVisible(true);
         confirmPasswordFields.setManaged(true);
+        
+        // Focus on new password field when shown
+        Platform.runLater(() -> newPasswordField.requestFocus());
     }
 
     private void hidePasswordFields() {

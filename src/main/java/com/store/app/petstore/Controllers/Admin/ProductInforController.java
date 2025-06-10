@@ -4,6 +4,7 @@ import com.store.app.petstore.Controllers.ControllerUtils;
 import com.store.app.petstore.DAO.ProductDAO;
 import com.store.app.petstore.Models.Entities.Product;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -87,9 +88,61 @@ public class ProductInforController implements Initializable {
         txtPrice.setDisable(true);
         txtDescription.setDisable(true);
 
+        setupInputValidation();
         setupButtonActions();
         setupInitialState();
         setupChoiceBoxes();
+    }
+    
+    private void setupInputValidation() {
+        // Name validation: 2-100 characters, letters, numbers, spaces, and common punctuation
+        txtName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[\\p{L}0-9 .,!?()-]*")) {
+                txtName.setText(newValue.replaceAll("[^\\p{L}0-9 .,!?()-]", ""));
+            }
+            if (newValue.length() > 100) {
+                txtName.setText(newValue.substring(0, 100));
+            }
+        });
+        
+        // Quantity validation: non-negative integers only, max 10,000
+        txtQuantity.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtQuantity.setText(oldValue);
+            } else if (!newValue.isEmpty()) {
+                try {
+                    int quantity = Integer.parseInt(newValue);
+                    if (quantity > 10000) {
+                        txtQuantity.setText("10000");
+                    }
+                } catch (NumberFormatException e) {
+                    // Ignore parse errors
+                }
+            }
+        });
+        
+        // Price validation: positive integers only, min 1000, max 1,000,000,000
+        txtPrice.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtPrice.setText(oldValue);
+            } else if (!newValue.isEmpty()) {
+                try {
+                    long price = Long.parseLong(newValue);
+                    if (price > 1_000_000_000) {
+                        txtPrice.setText("1000000000");
+                    }
+                } catch (NumberFormatException e) {
+                    // Ignore parse errors
+                }
+            }
+        });
+        
+        // Description validation: max 500 characters
+        txtDescription.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 500) {
+                txtDescription.setText(newValue.substring(0, 500));
+            }
+        });
     }
 
     private void setupChoiceBoxes() {
@@ -425,11 +478,64 @@ public class ProductInforController implements Initializable {
     }
 
     private boolean validateInput() {
-        if(txtName.getText().trim().isEmpty() || cmbCatelogy.getValue() == null
-                || txtQuantity.getText().isEmpty() || txtPrice.getText().isEmpty()) {
+        // Check required fields
+        if (txtName.getText().trim().isEmpty() || 
+            cmbCatelogy.getValue() == null ||
+            txtQuantity.getText().isEmpty() || 
+            txtPrice.getText().isEmpty()) {
+            
             ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng điền đầy đủ thông tin sản phẩm!");
             return false;
         }
+        
+        // Name validation
+        String name = txtName.getText().trim();
+        if (name.length() < 2 || name.length() > 100) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Tên sản phẩm phải có từ 2 đến 100 ký tự!");
+            txtName.requestFocus();
+            return false;
+        }
+        
+        // Quantity validation
+        try {
+            int quantity = Integer.parseInt(txtQuantity.getText().trim());
+            if (quantity < 0) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Số lượng không được âm!");
+                txtQuantity.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Số lượng không hợp lệ!");
+            txtQuantity.requestFocus();
+            return false;
+        }
+        
+        // Price validation
+        try {
+            long price = Long.parseLong(txtPrice.getText().trim());
+            if (price < 1000) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá phải từ 1,000 VNĐ trở lên!");
+                txtPrice.requestFocus();
+                return false;
+            }
+            if (price > 1_000_000_000) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá không được vượt quá 1,000,000,000 VNĐ!");
+                txtPrice.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá không hợp lệ!");
+            txtPrice.requestFocus();
+            return false;
+        }
+        
+        // Description length check (optional field)
+        if (txtDescription.getText().length() > 500) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Mô tả không được vượt quá 500 ký tự!");
+            txtDescription.requestFocus();
+            return false;
+        }
+        
         return true;
     }
 
@@ -439,6 +545,9 @@ public class ProductInforController implements Initializable {
         txtQuantity.setDisable(false);
         txtPrice.setDisable(false);
         txtDescription.setDisable(false);
+        
+        // Focus on name field when enabling editing
+        Platform.runLater(() -> txtName.requestFocus());
     }
 
     private void disableEditing() {

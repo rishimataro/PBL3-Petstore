@@ -70,6 +70,7 @@ public class DiscountInforController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setupTypeChoiceBox();
         setupEventHandlers();
+        setupInputValidation();
         setupInitialState();
     }
 
@@ -84,6 +85,18 @@ public class DiscountInforController implements Initializable {
 
                 if (isFixed) {
                     txtMaxDiscountValue.clear();
+                } else {
+                    // When switching to percentage, ensure value doesn't exceed 100
+                    try {
+                        if (!txtDiscountValue.getText().isEmpty()) {
+                            double value = Double.parseDouble(txtDiscountValue.getText());
+                            if (value > 100) {
+                                txtDiscountValue.setText("100");
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        // Ignore parse errors, they'll be caught in validation
+                    }
                 }
             }
         });
@@ -94,6 +107,127 @@ public class DiscountInforController implements Initializable {
         btnFix.setOnAction(event -> handleFix());
         btnSave.setOnAction(event -> handleSave());
         btnDelete.setOnAction(event -> handleDelete());
+
+        // Add focus listeners to format numbers on focus lost
+        txtDiscountValue.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) { // When focus is lost
+                formatNumberField(txtDiscountValue);
+            }
+        });
+        
+        txtMinOrderValue.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                formatNumberField(txtMinOrderValue);
+            }
+        });
+        
+        txtMaxDiscountValue.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                formatNumberField(txtMaxDiscountValue);
+            }
+        });
+    }
+    
+    private void formatNumberField(TextField field) {
+        try {
+            if (!field.getText().isEmpty()) {
+                double value = Double.parseDouble(field.getText().replace(",", ""));
+                field.setText(String.format("%.2f", value));
+            }
+        } catch (NumberFormatException e) {
+            // If parsing fails, leave as is (will be caught in validation)
+        }
+    }
+    
+    private void setupInputValidation() {
+        // Discount code validation: alphanumeric, underscore, hyphen, max 20 chars, auto-uppercase
+        txtCode.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[a-zA-Z0-9_\\-]*")) {
+                txtCode.setText(newValue.replaceAll("[^a-zA-Z0-9_\\-]", ""));
+            }
+            if (newValue.length() > 20) {
+                txtCode.setText(newValue.substring(0, 20));
+            }
+            txtCode.setText(newValue.toUpperCase());
+        });
+
+        // Discount value validation: numbers and one decimal point
+        txtDiscountValue.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*\\.?\\d*")) {
+                txtDiscountValue.setText(oldValue);
+            } else if (!newValue.isEmpty()) {
+                // For percentage, limit to 100
+                if (cbType.getValue().equals("Phần trăm")) {
+                    try {
+                        double value = Double.parseDouble(newValue);
+                        if (value > 100) {
+                            txtDiscountValue.setText("100");
+                        } else if (value < 0) {
+                            txtDiscountValue.setText("0");
+                        }
+                    } catch (NumberFormatException e) {
+                        // Ignore parse errors
+                    }
+                } else {
+                    // For fixed amount, ensure non-negative
+                    try {
+                        double value = Double.parseDouble(newValue);
+                        if (value < 0) {
+                            txtDiscountValue.setText("0");
+                        }
+                    } catch (NumberFormatException e) {
+                        // Ignore parse errors
+                    }
+                }
+
+                // Limit to 2 decimal places
+                if (newValue.contains(".") && newValue.substring(newValue.indexOf(".")).length() > 3) {
+                    txtDiscountValue.setText(oldValue);
+                }
+            }
+        });
+        
+        // Min order value validation: positive numbers with 2 decimal places
+        txtMinOrderValue.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*\\.?\\d*")) {
+                txtMinOrderValue.setText(oldValue);
+            } else if (!newValue.isEmpty()) {
+                try {
+                    double value = Double.parseDouble(newValue);
+                    if (value < 0) {
+                        txtMinOrderValue.setText("0");
+                    }
+                } catch (NumberFormatException e) {
+                    // Ignore parse errors
+                }
+                
+                // Limit to 2 decimal places
+                if (newValue.contains(".") && newValue.substring(newValue.indexOf(".")).length() > 3) {
+                    txtMinOrderValue.setText(oldValue);
+                }
+            }
+        });
+        
+        // Max discount value validation: positive numbers with 2 decimal places
+        txtMaxDiscountValue.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*\\.?\\d*")) {
+                txtMaxDiscountValue.setText(oldValue);
+            } else if (!newValue.isEmpty()) {
+                try {
+                    double value = Double.parseDouble(newValue);
+                    if (value < 0) {
+                        txtMaxDiscountValue.setText("0");
+                    }
+                } catch (NumberFormatException e) {
+                    // Ignore parse errors
+                }
+                
+                // Limit to 2 decimal places
+                if (newValue.contains(".") && newValue.substring(newValue.indexOf(".")).length() > 3) {
+                    txtMaxDiscountValue.setText(oldValue);
+                }
+            }
+        });
     }
 
     private void setupInitialState() {
@@ -263,13 +397,48 @@ public class DiscountInforController implements Initializable {
     }
 
     private boolean validateInput() {
-        if (txtCode.getText().trim().isEmpty()) {
+        String code = txtCode.getText().trim();
+        if (code.isEmpty()) {
             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập mã khuyến mãi!");
+            txtCode.requestFocus();
+            return false;
+        }
+        
+        if (code.length() < 3) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Mã khuyến mãi phải có ít nhất 3 ký tự!");
+            txtCode.requestFocus();
             return false;
         }
 
-        if (txtDiscountValue.getText().trim().isEmpty()) {
+        String discountValueStr = txtDiscountValue.getText().trim();
+        if (discountValueStr.isEmpty()) {
             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập giá trị giảm giá!");
+            txtDiscountValue.requestFocus();
+            return false;
+        }
+        
+        try {
+            double discountValue = Double.parseDouble(discountValueStr);
+            if (discountValue < 0) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá trị giảm giá phải lớn hơn 0!");
+                txtDiscountValue.requestFocus();
+                return false;
+            }
+
+            if (cbType.getValue().equals("Cố định") && discountValue < 1000) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá trị giảm giá phải lớn hơn 1 000 VNĐ!");
+                txtDiscountValue.requestFocus();
+                return false;
+            }
+            
+            if (cbType.getValue().equals("Phần trăm") && discountValue > 100) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá trị phần trăm không thể lớn hơn 100!");
+                txtDiscountValue.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá trị giảm giá không hợp lệ!");
+            txtDiscountValue.requestFocus();
             return false;
         }
 
@@ -293,39 +462,40 @@ public class DiscountInforController implements Initializable {
             return false;
         }
 
-        try {
-            if (!txtDiscountValue.getText().trim().isEmpty()) {
-                double value = Double.parseDouble(txtDiscountValue.getText().trim());
-                if (value <= 0) {
-                    ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá trị giảm giá phải lớn hơn 0!");
-                    return false;
-                }
-
-                // If percent type, check that value is <= 100
-                if (cbType.getValue().equals("Phần trăm") && value > 100) {
-                    ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá trị phần trăm không thể lớn hơn 100!");
-                    return false;
-                }
-            }
-
-            if (!txtMinOrderValue.getText().trim().isEmpty()) {
-                double minOrderValue = Double.parseDouble(txtMinOrderValue.getText().trim());
+        // Validate min order value
+        String minOrderValueStr = txtMinOrderValue.getText().trim();
+        if (!minOrderValueStr.isEmpty()) {
+            try {
+                double minOrderValue = Double.parseDouble(minOrderValueStr);
                 if (minOrderValue < 0) {
                     ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá trị đơn hàng tối thiểu không thể âm!");
+                    txtMinOrderValue.requestFocus();
                     return false;
                 }
+            } catch (NumberFormatException e) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá trị đơn hàng tối thiểu không hợp lệ!");
+                txtMinOrderValue.requestFocus();
+                return false;
             }
+        }
 
-            if (!txtMaxDiscountValue.getText().trim().isEmpty() && !cbType.getValue().equals("Cố định")) {
-                double maxDiscountValue = Double.parseDouble(txtMaxDiscountValue.getText().trim());
-                if (maxDiscountValue <= 0) {
-                    ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá trị giảm tối đa phải lớn hơn 0!");
+        // Validate max discount value (only for percentage type)
+        if (!cbType.getValue().equals("Cố định") && !txtMaxDiscountValue.isDisable()) {
+            String maxDiscountValueStr = txtMaxDiscountValue.getText().trim();
+            if (!maxDiscountValueStr.isEmpty()) {
+                try {
+                    double maxDiscountValue = Double.parseDouble(maxDiscountValueStr);
+                    if (maxDiscountValue <= 0) {
+                        ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá trị giảm tối đa phải lớn hơn 0!");
+                        txtMaxDiscountValue.requestFocus();
+                        return false;
+                    }
+                } catch (NumberFormatException e) {
+                    ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá trị giảm tối đa không hợp lệ!");
+                    txtMaxDiscountValue.requestFocus();
                     return false;
                 }
             }
-        } catch (NumberFormatException e) {
-            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Giá trị không hợp lệ. Vui lòng nhập số!");
-            return false;
         }
 
         return true;

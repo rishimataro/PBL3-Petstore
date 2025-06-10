@@ -5,7 +5,7 @@ import com.store.app.petstore.DAO.UserDAO;
 import com.store.app.petstore.Models.Entities.Staff;
 import com.store.app.petstore.Models.Entities.User;
 import com.store.app.petstore.Sessions.SessionManager;
-import com.store.app.petstore.Utils.ValidationUtils;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -90,33 +90,113 @@ public class PersonalInforController implements Initializable {
     }
 
     private void setupValidation() {
+        // Name validation (2-50 characters, letters and Vietnamese characters only)
         staff_name.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null && newVal.length() > 100) {
-                staff_name.setText(oldVal);
+            if (newVal == null) return;
+            
+            // Only allow letters, spaces, and Vietnamese characters
+            if (!newVal.matches("[\\p{L} ]*")) {
+                staff_name.setText(oldVal != null ? oldVal : "");
+                return;
+            }
+            
+            // Limit length to 50 characters
+            if (newVal.length() > 50) {
+                staff_name.setText(oldVal != null ? oldVal : newVal.substring(0, 50));
+            }
+            
+            // Update hasUnsavedChanges
+            if (!newVal.equals(oldVal)) {
+                hasUnsavedChanges = true;
             }
         });
 
+        // Phone validation (exactly 10 digits)
         staff_phone.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null && !newVal.matches("\\d*") && !newVal.isEmpty()) {
-                staff_phone.setText(oldVal);
-        }
-            if (newVal != null && newVal.length() > 11) {
-                staff_phone.setText(oldVal);
-    }
-        });
-
-        staff_email.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null && newVal.length() > 100) {
-                staff_email.setText(oldVal);
-    }
-        });
-
-        staff_address.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null && newVal.length() > 255) {
-                staff_address.setText(oldVal);
+            if (newVal == null) return;
+            
+            // Only allow digits
+            if (!newVal.matches("\\d*")) {
+                staff_phone.setText(oldVal != null ? oldVal : "");
+                return;
+            }
+            
+            // Limit to 10 digits
+            if (newVal.length() > 10) {
+                staff_phone.setText(oldVal != null ? oldVal : newVal.substring(0, 10));
+            }
+            
+            // Update hasUnsavedChanges
+            if (!newVal.equals(oldVal)) {
+                hasUnsavedChanges = true;
             }
         });
 
+        // Email validation
+        staff_email.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) return;
+            
+            // Limit length to 100 characters
+            if (newVal.length() > 100) {
+                staff_email.setText(oldVal != null ? oldVal : newVal.substring(0, 100));
+                return;
+            }
+            
+            // Show validation feedback
+            if (!newVal.isEmpty() && !newVal.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
+                staff_email.setStyle("-fx-border-color: #F44336; -fx-border-width: 1;");
+            } else {
+                staff_email.setStyle("");
+            }
+            
+            // Update hasUnsavedChanges
+            if (!newVal.equals(oldVal)) {
+                hasUnsavedChanges = true;
+            }
+        });
+
+        // Address validation (max 200 characters)
+        staff_address.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) return;
+            
+            // Limit length to 200 characters
+            if (newVal.length() > 200) {
+                staff_address.setText(oldVal != null ? oldVal : newVal.substring(0, 200));
+                return;
+            }
+            
+            // Update hasUnsavedChanges
+            if (!newVal.equals(oldVal)) {
+                hasUnsavedChanges = true;
+            }
+        });
+        
+        // Password validation
+        old_pwd.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && newVal.length() > 50) {
+                old_pwd.setText(oldVal);
+            }
+        });
+        
+        new_pwd.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && newVal.length() > 50) {
+                new_pwd.setText(oldVal);
+            }
+            updatePasswordStrength(newVal);
+        });
+    }
+    
+    private void updatePasswordStrength(String password) {
+        if (password == null || password.isEmpty()) {
+            new_pwd.setStyle("");
+            return;
+        }
+        
+        if (password.length() < 6) {
+            new_pwd.setStyle("-fx-border-color: #F44336; -fx-border-width: 1;");
+        } else {
+            new_pwd.setStyle("-fx-border-color: #4CAF50; -fx-border-width: 1;");
+        }
     }
 
     private void loadStaffInfo() {
@@ -388,17 +468,24 @@ public class PersonalInforController implements Initializable {
     private boolean validateStaffInformation() {
         String fullName = staff_name.getText().trim();
         String phone = staff_phone.getText().trim();
-        String email = staff_email.getText().trim();
+        String email = staff_email.getText().trim().toLowerCase();
         String address = staff_address.getText().trim();
 
+        // Name validation
         if (fullName.isEmpty() || fullName.equals(DEFAULT_FULL_NAME)) {
             showAlert(AlertType.WARNING, "Lỗi", "Vui lòng nhập họ tên!");
             staff_name.requestFocus();
             return false;
-    }
+        }
 
-        if (fullName.length() < 6 || fullName.length() > 100) {
-            showAlert(AlertType.WARNING, "Lỗi", "Họ tên phải từ 6 đến 100 ký tự!");
+        if (fullName.length() < 2 || fullName.length() > 50) {
+            showAlert(AlertType.WARNING, "Lỗi", "Họ tên phải từ 2 đến 50 ký tự!");
+            staff_name.requestFocus();
+            return false;
+        }
+        
+        if (!fullName.matches("^[\\p{L} ]+$")) {
+            showAlert(AlertType.WARNING, "Lỗi", "Họ tên chỉ được chứa chữ cái và dấu cách!");
             staff_name.requestFocus();
             return false;
         }
@@ -409,26 +496,28 @@ public class PersonalInforController implements Initializable {
             return false;
         }
 
-        if (!ValidationUtils.isValidPhone(phone)) {
-            showAlert(AlertType.WARNING, "Lỗi", "Số điện thoại không hợp lệ!");
+        if (!phone.matches("^\\d{10}$")) {
+            showAlert(AlertType.WARNING, "Lỗi", "Số điện thoại phải có đúng 10 chữ số!");
             staff_phone.requestFocus();
             return false;
         }
 
         if (email.isEmpty() || email.equals(DEFAULT_EMAIL)) {
-            showAlert(AlertType.WARNING, "Lỗi", "Vui lòng nhập email!");
+            showAlert(AlertType.WARNING, "Lỗi", "Vui lòng nhập địa chỉ email!");
             staff_email.requestFocus();
             return false;
         }
 
-        if (!ValidationUtils.isValidEmail(email)) {
-            showAlert(AlertType.WARNING, "Lỗi", "Email không hợp lệ!");
+        if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
+            showAlert(AlertType.WARNING, "Lỗi", 
+                "Địa chỉ email không hợp lệ!\n" +
+                "Ví dụ: example@domain.com");
             staff_email.requestFocus();
             return false;
         }
 
-        if (address.isEmpty() || address.equals(DEFAULT_ADDRESS)) {
-            showAlert(AlertType.WARNING, "Lỗi", "Vui lòng nhập địa chỉ!");
+        if (address.length() > 200) {
+            showAlert(AlertType.WARNING, "Lỗi", "Địa chỉ không được vượt quá 200 ký tự!");
             staff_address.requestFocus();
             return false;
         }
@@ -441,7 +530,7 @@ public class PersonalInforController implements Initializable {
             showAlert(AlertType.WARNING, "Lỗi", "Vui lòng nhập mật khẩu cũ!");
             old_pwd.requestFocus();
             return false;
-    }
+        }
 
         if (newPassword.isEmpty()) {
             showAlert(AlertType.WARNING, "Lỗi", "Vui lòng nhập mật khẩu mới!");
@@ -456,7 +545,7 @@ public class PersonalInforController implements Initializable {
         }
 
         if (newPassword.length() > 50) {
-            showAlert(AlertType.WARNING, "Lỗi", "Mật khẩu mới không được quá 50 ký tự!");
+            showAlert(AlertType.WARNING, "Lỗi", "Mật khẩu không được vượt quá 50 ký tự!");
             new_pwd.requestFocus();
             return false;
         }

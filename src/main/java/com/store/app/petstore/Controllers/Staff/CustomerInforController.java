@@ -43,6 +43,7 @@ public class CustomerInforController implements Initializable {
         txtName.setDisable(true);
         txtPhone.setDisable(true);
 
+        setupInputValidation();
         setupButtonActions();
         setupInitialState();
     }
@@ -51,6 +52,23 @@ public class CustomerInforController implements Initializable {
         btnAdd.setDisable(false);
         btnFix.setDisable(true);
         btnSave.setDisable(true);
+    }
+
+    private void setupInputValidation() {
+        txtName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[\\p{L} ]*")) {
+                txtName.setText(newValue.replaceAll("[^\\p{L} ]", ""));
+            }
+        });
+
+        txtPhone.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtPhone.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+            if (newValue.length() > 10) {
+                txtPhone.setText(newValue.substring(0, 10));
+            }
+        });
     }
 
     public void setCustomer(Customer customer) {
@@ -101,11 +119,21 @@ public class CustomerInforController implements Initializable {
 
     @FXML
     void handleSaveCustomer() {
-        String name = txtName.getText();
-        String phone = txtPhone.getText();
+        String name = txtName.getText().trim();
+        String phone = txtPhone.getText().trim();
 
         if (name.isEmpty() || phone.isEmpty()) {
             ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Vui lòng nhập đầy đủ thông tin!");
+            return;
+        }
+
+        if (name.length() < 2 || name.length() > 50) {
+            ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Tên phải có từ 2 đến 50 ký tự!");
+            return;
+        }
+
+        if (!phone.matches("\\d{10}")) {
+            ControllerUtils.showAlert(AlertType.ERROR, "Lỗi", "Số điện thoại phải có đúng 10 chữ số!");
             return;
         }
 

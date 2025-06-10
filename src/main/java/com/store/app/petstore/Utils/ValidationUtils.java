@@ -1,6 +1,11 @@
 package com.store.app.petstore.Utils;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.regex.Pattern;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 public class ValidationUtils {
     
@@ -17,6 +22,16 @@ public class ValidationUtils {
     // Name validation pattern (Vietnamese characters)
     private static final Pattern NAME_PATTERN = Pattern.compile(
         "^[a-zA-ZÀ-ỹ\\s]{2,100}$"
+    );
+    
+    // Amount pattern (positive number with optional decimal points)
+    private static final Pattern AMOUNT_PATTERN = Pattern.compile(
+            "^\\d{1,3}(\\.\\d{3})*(,\\d{1,2})?$|^\\d+(,\\d{1,2})?$"
+    );
+    
+    // Date pattern (yyyy-MM-dd)
+    private static final Pattern DATE_PATTERN = Pattern.compile(
+        "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
     );
     
     /**
@@ -106,6 +121,92 @@ public class ValidationUtils {
         
         int length = str.trim().length();
         return length >= minLength && length <= maxLength;
+    }
+    
+    /**
+     * Validate amount (minimum 1000 VND)
+     * @param amountStr amount as string (can include thousand separators and decimal comma)
+     * @return true if amount is valid and >= 1000 VND
+     */
+    public static boolean isValidAmount(String amountStr) {
+        if (amountStr == null || amountStr.trim().isEmpty()) {
+            return false;
+        }
+        
+        try {
+            // Remove thousand separators and replace decimal comma with dot
+            String cleanAmount = amountStr.trim().replaceAll("\\.", "").replace(",", ".");
+            double amount = Double.parseDouble(cleanAmount);
+            return amount >= 1000.0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+    
+    /**
+     * Format amount as VND currency
+     */
+    public static String formatCurrency(double amount) {
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return formatter.format(amount);
+    }
+    
+    /**
+     * Parse currency string to double
+     */
+    public static double parseCurrency(String currency) {
+        if (currency == null || currency.trim().isEmpty()) {
+            return 0.0;
+        }
+        
+        try {
+            String clean = currency.replaceAll("[^\\d,.-]+", "").replace(",", ".");
+            return Double.parseDouble(clean);
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
+    
+    /**
+     * Validate pet's age (0-30 years)
+     */
+    public static boolean isValidPetAge(int age) {
+        return age >= 0 && age <= 30;
+    }
+    
+    /**
+     * Validate date of birth (must be in the past)
+     */
+    public static boolean isValidDateOfBirth(String dateStr) {
+        if (dateStr == null || !DATE_PATTERN.matcher(dateStr).matches()) {
+            return false;
+        }
+        
+        try {
+            LocalDate dob = LocalDate.parse(dateStr);
+            return !dob.isAfter(LocalDate.now());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    /**
+     * Calculate age from date of birth
+     */
+    public static int calculateAge(String dateOfBirth) {
+        if (!isValidDateOfBirth(dateOfBirth)) {
+            return -1;
+        }
+        
+        LocalDate dob = LocalDate.parse(dateOfBirth);
+        return Period.between(dob, LocalDate.now()).getYears();
+    }
+    
+    /**
+     * Check if a date string is in valid format (yyyy-MM-dd)
+     */
+    public static boolean isValidDateFormat(String dateStr) {
+        return dateStr != null && DATE_PATTERN.matcher(dateStr).matches();
     }
     
     /**

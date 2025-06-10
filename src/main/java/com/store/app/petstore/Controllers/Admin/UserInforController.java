@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.application.Platform;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -83,8 +84,28 @@ public class UserInforController implements Initializable {
         rbtnStaff.setSelected(true);
         roleGroup.selectToggle(rbtnStaff);
 
+        setupInputValidation();
         setupButtonActions();
         setupInitialState();
+    }
+    
+    private void setupInputValidation() {
+        // Username validation: 3-50 characters, letters, numbers, underscores, dots
+        // Must start with a letter, no consecutive special characters
+        txtUsername.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("^[a-zA-Z][a-zA-Z0-9_.]*$")) {
+                txtUsername.setText(oldValue);
+            } else if (newValue.length() > 50) {
+                txtUsername.setText(oldValue);
+            }
+        });
+        
+        // Password strength indicator
+        txtPassword.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 50) {
+                txtPassword.setText(oldValue);
+            }
+        });
     }
 
     private void setupButtonActions() {
@@ -305,6 +326,15 @@ public class UserInforController implements Initializable {
         txtPassword.setDisable(false);
         rbtnAdmin.setDisable(false);
         rbtnStaff.setDisable(false);
+        
+        // Focus on username field when enabling editing
+        Platform.runLater(() -> {
+            if (txtUsername.getText().isEmpty()) {
+                txtUsername.requestFocus();
+            } else {
+                txtPassword.requestFocus();
+            }
+        });
     }
 
     private void disableEditing() {
@@ -315,14 +345,53 @@ public class UserInforController implements Initializable {
     }
 
     private boolean validateInput() {
-        if (txtUsername.getText().isEmpty() || txtPassword.getText().isEmpty()) { // Ensure password is not empty
-            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng điền đầy đủ thông tin!");
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText();
+        
+        // Check required fields
+        if (username.isEmpty() || password.isEmpty()) {
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng điền đầy đủ thông tin!");
+            if (username.isEmpty()) txtUsername.requestFocus();
+            else txtPassword.requestFocus();
             return false;
         }
+        
+        // Username validation
+        if (username.length() < 3 || username.length() > 50) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Tên đăng nhập phải từ 3 đến 50 ký tự!");
+            txtUsername.requestFocus();
+            return false;
+        }
+        if (!username.matches("^[a-zA-Z][a-zA-Z0-9_.]*$")) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", 
+                "Tên đăng nhập không hợp lệ!\n" +
+                "- Bắt đầu bằng chữ cái\n" +
+                "- Chỉ chứa chữ cái, số, dấu gạch dưới (_) và dấu chấm (.)\n" +
+                "- Không có ký tự đặc biệt khác");
+            txtUsername.requestFocus();
+            return false;
+        }
+        if (username.matches(".*[_.]{2,}.*")) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", 
+                "Tên đăng nhập không được chứa các ký tự đặc biệt liên tiếp!");
+            txtUsername.requestFocus();
+            return false;
+        }
+        
+        // Password validation
+        if (password.length() < 6 || password.length() > 50) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Mật khẩu phải từ 6 đến 50 ký tự!");
+            txtPassword.requestFocus();
+            return false;
+        }
+        
+        // Role validation
         if (roleGroup.getSelectedToggle() == null) {
             ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn vai trò người dùng!");
+            if (rbtnAdmin != null) rbtnAdmin.requestFocus();
             return false;
         }
+        
         return true;
     }
 

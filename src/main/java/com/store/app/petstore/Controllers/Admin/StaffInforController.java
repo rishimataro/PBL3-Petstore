@@ -24,6 +24,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.application.Platform;
 
 import java.io.File;
 import java.io.InputStream;
@@ -102,9 +103,62 @@ public class StaffInforController implements Initializable {
         cbPosition.setDisable(true);
         cbStatus.setDisable(true);
 
+        setupInputValidation();
         setupInitialState();
         setupButtonActions();
         setupChoiceBoxes();
+    }
+    
+    private void setupInputValidation() {
+        // Name validation: 2-50 characters, letters and Vietnamese characters only
+        txtName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[\\p{L} ]*")) {
+                txtName.setText(newValue.replaceAll("[^\\p{L} ]", ""));
+            }
+            if (newValue.length() > 50) {
+                txtName.setText(newValue.substring(0, 50));
+            }
+        });
+        
+        // Phone validation: exactly 10 digits
+        txtPhone.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtPhone.setText(oldValue);
+            }
+            if (newValue.length() > 10) {
+                txtPhone.setText(newValue.substring(0, 10));
+            }
+        });
+        
+        // Email validation: basic email format, 5-100 characters
+        txtEmail.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 100) {
+                txtEmail.setText(oldValue);
+            }
+        });
+        
+        // Salary validation: positive numbers, min 1,000,000, max 100,000,000
+        txtSalary.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtSalary.setText(oldValue);
+            } else if (!newValue.isEmpty()) {
+                try {
+                    long salary = Long.parseLong(newValue);
+                    if (salary > 100_000_000) {
+                        txtSalary.setText("100000000");
+                    }
+                } catch (NumberFormatException e) {
+                    // Ignore parse errors
+                }
+            }
+        });
+        
+        // Address validation: max 200 characters
+        txtAddress.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 200) {
+                txtAddress.setText(newValue.substring(0, 200));
+            }
+        });
     }
 
     private void setupChoiceBoxes() {
@@ -312,6 +366,9 @@ public class StaffInforController implements Initializable {
         txtAddress.setDisable(false);
         cbPosition.setDisable(false);
         cbStatus.setDisable(false);
+        
+        // Focus on name field when enabling editing
+        Platform.runLater(() -> txtName.requestFocus());
     }
 
     private void disableEditing() {
@@ -325,12 +382,73 @@ public class StaffInforController implements Initializable {
     }
 
     private boolean validateInput() {
-        if (txtName.getText().isEmpty() || txtPhone.getText().isEmpty() ||
-                txtEmail.getText().isEmpty() || txtSalary.getText().isEmpty() ||
-                cbPosition.getValue() == null || cbStatus.getValue() == null) {
-            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng điền đầy đủ thông tin!");
+        // Check required fields
+        if (txtName.getText().trim().isEmpty() || 
+            txtPhone.getText().trim().isEmpty() ||
+            txtEmail.getText().trim().isEmpty() || 
+            txtSalary.getText().trim().isEmpty() ||
+            cbPosition.getValue() == null || 
+            cbStatus.getValue() == null) {
+            
+            ControllerUtils.showAlert(Alert.AlertType.WARNING, "Cảnh báo", "Vui lòng điền đầy đủ thông tin!");
             return false;
         }
+        
+        // Name validation
+        String name = txtName.getText().trim();
+        if (name.length() < 2 || name.length() > 50) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Họ tên phải có từ 2 đến 50 ký tự!");
+            txtName.requestFocus();
+            return false;
+        }
+        
+        // Phone validation
+        String phone = txtPhone.getText().trim();
+        if (!phone.matches("\\d{10}")) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Số điện thoại phải có đúng 10 chữ số!");
+            txtPhone.requestFocus();
+            return false;
+        }
+        
+        // Email validation
+        String email = txtEmail.getText().trim();
+        if (email.length() < 5 || email.length() > 100) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Email phải có từ 5 đến 100 ký tự!");
+            txtEmail.requestFocus();
+            return false;
+        }
+
+        if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Email không đúng định dạng!");
+            txtEmail.requestFocus();
+            return false;
+        }
+        // Salary validation
+        try {
+            long salary = Long.parseLong(txtSalary.getText().trim());
+            if (salary < 1_000_000) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Lương tối thiểu là 1,000,000 VNĐ!");
+                txtSalary.requestFocus();
+                return false;
+            }
+            if (salary > 100_000_000) {
+                ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Lương tối đa là 100,000,000 VNĐ!");
+                txtSalary.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Lương không hợp lệ!");
+            txtSalary.requestFocus();
+            return false;
+        }
+        
+        // Address length check (optional field)
+        if (txtAddress.getText().length() > 200) {
+            ControllerUtils.showAlert(Alert.AlertType.ERROR, "Lỗi", "Địa chỉ không được vượt quá 200 ký tự!");
+            txtAddress.requestFocus();
+            return false;
+        }
+        
         return true;
     }
 
