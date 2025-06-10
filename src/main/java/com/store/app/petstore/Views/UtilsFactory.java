@@ -38,6 +38,7 @@ public class UtilsFactory {
                 case "login":
                     root = loadFXML(LOGIN_FXML);
                     stage.setTitle("Login");
+                    stage.setResizable(false);
                     break;
                 case "forgotpassword":
                     root = loadFXML(FORGOT_PASSWORD_FXML);
