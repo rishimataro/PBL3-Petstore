@@ -444,9 +444,8 @@ public class PersonalInforController implements Initializable {
                 return;
             }
 
-            // Hash the new password before setting it
-            String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
-            currentUser.setPassword(hashedPassword);
+            // Set the plain text password - it will be hashed in UserDAO
+            currentUser.setPassword(newPassword);
 
             if (UserDAO.update(currentUser) > 0) {
                 SessionManager.setCurrentUser(currentUser);

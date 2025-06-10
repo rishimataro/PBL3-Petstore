@@ -31,6 +31,9 @@ public class LoginController implements Initializable  {
     public static int idAdminCurrent;
 
     @FXML
+    private Button exitButton;
+
+    @FXML
     private ImageView sidebarImage;
     @FXML
     private AnchorPane mainPanel;
@@ -63,6 +66,7 @@ public class LoginController implements Initializable  {
     public void initialize(URL location, ResourceBundle resources) {
         setupPasswordVisibility();
         setupLoginButton();
+        setupExitButton();
         setupForgotPasswordLink();
         sidebarImage.fitWidthProperty().bind(mainPanel.widthProperty());
         sidebarImage.fitHeightProperty().bind(mainPanel.heightProperty());
@@ -87,6 +91,10 @@ public class LoginController implements Initializable  {
 
     private void setupLoginButton() {
         loginButton.setOnAction(event -> handleLogin());
+    }
+
+    private void setupExitButton() {
+        exitButton.setOnAction(event -> System.exit(0));
     }
 
     private void setupForgotPasswordLink() {

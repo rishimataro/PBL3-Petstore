@@ -29,7 +29,7 @@
                 <Label layoutX="38.0" layoutY="172.0" prefHeight="15.0" prefWidth="305.0" styleClass="lblHello" text="Chào mừng bạn quay trở lại! Hãy đăng nhập vào tài khoản của bạn!" />
                 <TextField fx:id="usernameField" layoutX="40.0" layoutY="235.0" prefHeight="26.0" prefWidth="277.0" promptText="Nhập tên tài khoản" styleClass="txtField" />
                 <TextField fx:id="showPassword" layoutX="40.0" layoutY="308.0" prefHeight="26.0" prefWidth="277.0" promptText="Nhập mật khẩu" styleClass="txtField" />
-                <PasswordField fx:id="passwordField" layoutX="40.0" layoutY="308.0" prefHeight="26.0" prefWidth="278.0" promptText="Nhập mật khẩu" styleClass="txtField" onAction="#handleEnter"/>
+                <PasswordField fx:id="passwordField" layoutX="40.0" layoutY="308.0" onAction="#handleEnter" prefHeight="26.0" prefWidth="278.0" promptText="Nhập mật khẩu" styleClass="txtField" />
                 <Label layoutX="41.0" layoutY="213.0" styleClass="lbl" text="Tên tài khoản" />
                 <Label layoutX="41.0" layoutY="286.0" styleClass="lbl" text="Mật khẩu" />
                 <Label fx:id="errorLabel" layoutX="40.0" layoutY="354.0" styleClass="error-label" text="" visible="false" />
@@ -39,6 +39,7 @@
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor></FontAwesomeIconView>
+            <Button fx:id="exitButton" layoutX="256.0" layoutY="390.0" mnemonicParsing="false" prefWidth="54.0" styleClass="btnExit" text="Thoát" />
             </children>
         </AnchorPane>
     </children>
