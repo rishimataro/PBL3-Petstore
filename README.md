@@ -31,8 +31,6 @@ The system helps employees and managers track store operations **more efficientl
 * View invoice history.
 * Logout.
 
-![Image](https://github.com/user-attachments/assets/1a3fd22f-4086-4cba-9ff3-380c59594a9f)
-
 ### 2. **Manager Functions**
 
 * Login.
@@ -99,7 +97,7 @@ src/
 
 ## V. Input and Output
 
-> 📌 *Screenshots and data samples can be inserted here to demonstrate system inputs and outputs.*
+![Image](https://github.com/user-attachments/assets/e2aaa436-1350-4e2c-a094-77eb3d6aa1f4)
 
 ---
 
@@ -107,7 +105,21 @@ src/
 
 ### 1. Staff Interface
 
-> *(Insert staff interface screenshot here)*
+![Image](https://github.com/user-attachments/assets/2a5811ed-d509-4a0b-9a3e-0b2ae088d1ea)
+
+<img width="566" height="683" alt="Image" src="https://github.com/user-attachments/assets/ed49e81f-0e17-49b4-b008-19a7dd7eafba" />
+
+![Image](https://github.com/user-attachments/assets/46832e62-ea31-491f-90ac-7c1ed87eb988)
+
+![Image](https://github.com/user-attachments/assets/43cd4371-2aab-49b0-8254-eeed52675c43)
+
+![Image](https://github.com/user-attachments/assets/a37625f0-84e5-480e-a011-8b238ede6c18)
+
+![Image](https://github.com/user-attachments/assets/6f65e428-0cb0-4da4-adae-2f66179acbcc)
+
+![Image](https://github.com/user-attachments/assets/a4bfc7e7-a561-4041-90d3-25f134fa1414)
+
+![Image](https://github.com/user-attachments/assets/e559d49a-b707-4c21-b529-03c1d19c3e5c)
 
 ### 2. Manager Interface
 
