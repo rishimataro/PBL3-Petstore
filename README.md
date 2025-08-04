@@ -123,7 +123,15 @@ src/
 
 ### 2. Manager Interface
 
-> *(Insert manager interface screenshot here)*
+![Image](https://github.com/user-attachments/assets/75a73037-2d02-42fe-a72a-53d6f20d4a78)
+
+![Image](https://github.com/user-attachments/assets/74edcb5b-52b7-402a-9d05-1843574b9962)
+
+![Image](https://github.com/user-attachments/assets/3256f17e-26a6-4a9a-9985-341bee918fd2)
+
+![Image](https://github.com/user-attachments/assets/b70be171-03d6-42cc-897c-5d8fc54d6edb)
+
+![Image](https://github.com/user-attachments/assets/daedbdd2-b105-4d92-9d6a-7867c31f0988)
 
 ---
 
