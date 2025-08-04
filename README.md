@@ -1,6 +1,5 @@
 
 # Pet Store Management System – Four Little Paws
----
 ## I. Project Overview
 
 The project **"Pet Store Management Application – Four Little Paws"** aims to develop a software application that facilitates the management of pets, orders, customers, and products in pet stores.
@@ -31,6 +30,8 @@ The system helps employees and managers track store operations **more efficientl
   * Cancel orders.
 * View invoice history.
 * Logout.
+
+![Image](https://github.com/user-attachments/assets/1a3fd22f-4086-4cba-9ff3-380c59594a9f)
 
 ### 2. **Manager Functions**
 
