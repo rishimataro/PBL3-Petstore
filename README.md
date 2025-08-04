@@ -1,97 +1,207 @@
-# PBL3-Petstore
 
-Đây là ứng dụng Quản lý Cửa hàng Thú cưng được xây dựng bằng JavaFX và Maven.
+# Pet Store Management System – Four Little Paws
+---
+## I. Project Overview
 
-## Thông tin dự án
+The project **"Pet Store Management Application – Four Little Paws"** aims to develop a software application that facilitates the management of pets, orders, customers, and products in pet stores.
 
-- **IDE:** IntelliJ IDEA (Khuyến nghị)
-- **Loại dự án:** Maven - JavaFX
-- **Phiên bản JDK:** JDK 21 trở lên (dựa trên pom.xml)
+The system helps employees and managers track store operations **more efficiently, accurately, and conveniently** than traditional manual methods. It is designed using **Object-Oriented Programming (OOP)** principles with a user-friendly interface and clearly defined functionalities.
 
-## Cấu trúc dự án
+### Objectives
 
-- `src/main/java/com/store/app/petstore/`: Chứa mã nguồn Java chính của ứng dụng.
-  - `Controllers/`: Chứa các controller cho các tệp FXML.
-    - `Admin/`: Controller cho bảng điều khiển quản trị viên.
-    - `Staff/`: Controller cho bảng điều khiển nhân viên.
-  - `DAO/`: Data Access Object để tương tác với cơ sở dữ liệu.
-    - `StatisticDAO/`: DAO dành riêng cho thống kê.
-  - `Models/`: Chứa các mô hình dữ liệu của ứng dụng và các lớp liên quan.
-    - `Entities/`: Các mô hình thực thể cơ sở dữ liệu.
-    - `Records/`: Các bản ghi Java.
-    - `Seeder/`: Các lớp để gieo dữ liệu ban đầu vào cơ sở dữ liệu.
-  - `Sessions/`: Quản lý phiên người dùng.
-  - `Utils/`: Các lớp tiện ích.
-    - `Mappers/`: Các lớp để ánh xạ kết quả truy vấn cơ sở dữ liệu sang mô hình.
-- `src/main/resources/`: Chứa các tài nguyên của ứng dụng.
-  - `Font/`: Các phông chữ tùy chỉnh được sử dụng trong ứng dụng.
-  - `FXML/`: Các tệp FXML định nghĩa bố cục giao diện người dùng.
-    - `Admin/`: Các tệp FXML cho bảng điều khiển quản trị viên.
-    - `Staff/`: Các tệp FXML cho bảng điều khiển nhân viên.
-    - `Statistics/`: Các tệp FXML cho các chế độ xem thống kê.
-  - `Images/`: Các tài sản hình ảnh được sử dụng trong ứng dụng.
-    - `Pet/`: Hình ảnh thú cưng.
-    - `Product/`: Hình ảnh sản phẩm.
-    - `Staff/`: Hình ảnh nhân viên.
-    - `User/`: Hình ảnh người dùng.
-  - `Styles/`: Các tệp CSS để tạo kiểu cho ứng dụng.
-    - `Admin/`: Các tệp CSS cho bảng điều khiển quản trị viên.
-    - `Staff/`: Các tệp CSS cho bảng điều khiển nhân viên.
+* Optimize store operations and workflows.
+* Save time and minimize human errors.
+* Improve customer service quality amid increasing demand for pet care services.
 
-## Tính năng
+---
 
-- Xác thực người dùng (Đăng nhập, Quên mật khẩu)
-- Bảng điều khiển quản trị viên:
-  - Trang tổng quan
-  - Quản lý khách hàng
-  - Quản lý giảm giá
-  - Quản lý kho hàng
-  - Quản lý hóa đơn
-  - Quản lý thú cưng
-  - Quản lý sản phẩm
-  - Quản lý nhân viên
-  - Quản lý người dùng
-  - Thống kê (Bán chạy nhất, Tổng quan, Doanh thu)
-- Bảng điều khiển nhân viên:
-  - Lịch sử hóa đơn
-  - Thông tin khách hàng
-  - Danh sách mặt hàng
-  - Quản lý đơn hàng
-  - Xử lý thanh toán
-  - Thông tin cá nhân
-  - Xem chi tiết mặt hàng thú cưng và sản phẩm
-  - Trang tổng quan
+## II. Main Features
 
-## Cơ sở dữ liệu
+### 1. **Staff Functions**
 
-Ứng dụng sử dụng trình điều khiển JDBC cho Oracle và MySQL, cho thấy hỗ trợ cho cả hai hệ quản trị cơ sở dữ liệu này. Chi tiết kết nối cơ sở dữ liệu có thể được cấu hình thông qua các biến môi trường sử dụng `dotenv-java`.
+* Login and password recovery.
+* Edit personal account information.
+* Create orders:
 
-## Xây dựng và chạy ứng dụng
+  * View inventory.
+  * Add products to orders.
+  * Edit order details.
+  * Confirm order completion.
+  * Export PDF invoices.
+  * Cancel orders.
+* View invoice history.
+* Logout.
 
-1.  **Điều kiện tiên quyết:**
-    - Cài đặt Java Development Kit (JDK) phiên bản 21 trở lên.
-    - Cài đặt Apache Maven.
-    - Thiết lập cơ sở dữ liệu Oracle hoặc MySQL và cập nhật chi tiết kết nối (có thể trong tệp `.env` dựa trên dependency `dotenv-java`).
-2.  **Clone repository:**
-    ```bash
-    git clone <repository_url>
-    cd PBL3-Petstore
-    ```
-3.  **Xây dựng dự án bằng Maven:**
-    ```bash
-    mvn clean package
-    ```
-4.  **Chạy ứng dụng:**
-    ```bash
-    mvn clean javafx:run
-    ```
+### 2. **Manager Functions**
 
-## Các Dependency
+* Login.
+* Account management: search, add, view details.
+* Customer management: search, add, view details.
+* Pet & product management: search, add, view details.
+* Promotion management: search, add, view details.
+* View statistics: number of orders, daily/monthly/yearly revenue.
+* Logout.
 
-Dự án sử dụng các dependency chính sau:
+---
 
-- JavaFX (cho giao diện người dùng đồ họa)
-- ControlsFX, FormsFX, Ikonli-javafx, BootstrapFX, TilesFX (cho các điều khiển UI nâng cao và tạo kiểu)
-- Trình điều khiển JDBC cho Oracle và MySQL (để kết nối cơ sở dữ liệu)
-- jbcrypt (để băm mật khẩu)
-- dotenv-java (để tải biến môi trường)
+## III. Technologies Used
+
+| Category               | Technology    |
+| ---------------------- | ------------- |
+| IDE                    | IntelliJ IDEA |
+| Programming Language   | Java          |
+| UI Framework           | JavaFX        |
+| Font                   | Inter         |
+| Database               | MySQL         |
+| DB Connection          | JDBC          |
+| Diagram Design         | Draw\.io      |
+| Source Code Management | GitHub        |
+
+---
+
+## IV. Project Structure
+
+```
+src/
+ └── main/
+     ├── java/com/store/app/petstore/
+     │   ├── Controllers/
+     │   │   ├── Admin/              # Controllers for admin dashboard UI actions
+     │   │   └── Staff/              # Controllers for staff dashboard UI actions
+     │   ├── DAO/                    # Data Access Objects to handle database operations
+     │   │   └── StatisticDAO/       # Specialized DAO classes for statistical data
+     │   ├── Models/                 # Data models and related logic
+     │   │   ├── Entities/           # Database entity classes mapped to tables (e.g., User, Product)
+     │   │   ├── Records/            # Java record types for lightweight data handling
+     │   │   └── Seeder/             # Classes used to seed sample/demo data into the database
+     │   ├── Sessions/               # Manages user sessions and login status
+     │   └── Utils/                  # Utility/helper classes
+     │       └── Mappers/           # Classes that map SQL result sets to Java models
+     └── resources/
+         ├── Font/                   # Custom fonts used in the application (e.g., Inter)
+         ├── FXML/                   # FXML files defining UI layout for JavaFX
+         │   ├── Admin/              # FXML files for admin dashboard (e.g., user management, reports)
+         │   ├── Staff/              # FXML files for staff dashboard (e.g., order management)
+         │   └── Statistics/         # FXML files for statistics and charts UI
+         ├── Images/                 # Image assets used in the app
+         │   ├── Pet/                # Images of pets
+         │   ├── Product/            # Images of products
+         │   ├── Staff/              # Profile images of staff members
+         │   └── User/               # Profile images of customers/users
+         └── Styles/                 # CSS stylesheets for customizing JavaFX UI appearance
+             ├── Admin/              # Stylesheets specific to the admin dashboard
+             └── Staff/              # Stylesheets specific to the staff dashboard
+
+```
+
+---
+
+## V. Input and Output
+
+> 📌 *Screenshots and data samples can be inserted here to demonstrate system inputs and outputs.*
+
+---
+
+## VI. Demo Screenshots
+
+### 1. Staff Interface
+
+> *(Insert staff interface screenshot here)*
+
+### 2. Manager Interface
+
+> *(Insert manager interface screenshot here)*
+
+---
+
+## VII. Project Installation Guide
+
+### Prerequisites
+
+Before you begin, make sure the following tools are installed on your machine:
+
+1. **Java Development Kit (JDK)**
+
+  * Version: **21 or higher**
+  * Download: [https://jdk.java.net/](https://jdk.java.net/)
+
+2. **Apache Maven**
+
+  * Build tool used to manage dependencies and build the project
+  * Download: [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)
+
+3. **Database Setup**
+
+  * You can use either:
+
+    * **MySQL** (recommended for ease of integration)
+    * **Oracle** (optional)
+  * Create a database named (e.g., `petstore_db`) and update connection credentials in the environment file.
+
+4. **Environment Configuration**
+
+  * Create a `.env` file in the root directory to store database connection details.
+  * The project uses `dotenv-java` to load environment variables.
+
+   Example `.env` file:
+
+   ```env
+   DB_URL=jdbc:mysql://localhost:3306/petstore_db
+   DB_USERNAME=root
+   DB_PASSWORD=your_password
+   ```
+
+---
+
+### Clone the Repository
+
+```bash
+git clone <repository_url>
+cd PBL3-Petstore
+```
+
+> Replace `<repository_url>` with the actual URL of the GitHub repository.
+
+---
+
+### Build the Project with Maven
+
+Make sure you're inside the root project directory (`PBL3-Petstore`), then run:
+
+```bash
+mvn clean package
+```
+
+This will compile the code and resolve all dependencies.
+
+---
+
+###  Run the Application
+
+You can launch the application using the following Maven command:
+
+```bash
+mvn clean javafx:run
+```
+
+> Make sure your system supports JavaFX runtime or set it up via `--module-path` if needed.
+
+---
+
+## VIII. Dependencies Used
+
+This project uses the following key libraries and dependencies:
+
+| Dependency        | Purpose                                                                 |
+| ----------------- | ----------------------------------------------------------------------- |
+| **JavaFX**        | Main library for building graphical user interfaces                     |
+| **ControlsFX**    | UI controls enhancement for JavaFX                                      |
+| **FormsFX**       | Building forms quickly and declaratively in JavaFX                      |
+| **Ikonli-javafx** | Icon packs for JavaFX applications (e.g., FontAwesome, Material Design) |
+| **BootstrapFX**   | Bootstrap-style theming for JavaFX                                      |
+| **TilesFX**       | JavaFX-based tiles for dashboards and statistics                        |
+| **JDBC Driver**   | Connects to either MySQL or Oracle databases                            |
+| **jbcrypt**       | Secure password hashing and checking                                    |
+| **dotenv-java**   | Loads environment variables from a `.env` file                          |
+
+
