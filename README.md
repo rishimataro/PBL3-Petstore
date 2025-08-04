@@ -103,36 +103,6 @@ src/
 
 ## VI. Demo Screenshots
 
-Dưới đây là phần **chú thích hình ảnh (image captions)** được viết bằng tiếng Anh, phù hợp để bạn sử dụng trong README, báo cáo kỹ thuật, hoặc slide trình bày. Mỗi hình đều được đánh số và mô tả rõ ràng:
-
----
-
-## 📸 Screenshots & Descriptions
-
-### 👤 Staff Interface
-
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-* 
-
-### 🛠️ Admin/Manager Interface
-
-* 
-* 
-* 
-* 
-* 
-
----
-
-👉 Nếu bạn muốn mình **chèn hình mẫu với mã Markdown hoặc HTML**, hoặc **thiết kế layout trình bày hình ảnh trong báo cáo** (ví dụ: lưới 2 cột, slide, PDF export), hãy nói rõ nhé!
-
-
 ### 1. Staff Interface
 
 ![Image](https://github.com/user-attachments/assets/2a5811ed-d509-4a0b-9a3e-0b2ae088d1ea)
